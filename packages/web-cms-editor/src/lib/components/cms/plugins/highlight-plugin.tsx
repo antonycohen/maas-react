@@ -1,3 +1,5 @@
+import { Highlighter } from 'lucide-react';
+
 import { EditorPlugin } from "../../../types";
 import { HighlightBlock } from "../blocks/highlight-block";
 import { CMSHighlightBlock, highlightSHape } from '@maas/core-api-models';
@@ -10,7 +12,7 @@ export const HighlightPlugin: EditorPlugin<
   name: "Highlight",
   displayName: "Highlight",
   enabled: true,
-  icon: "CmsHighlight",
+  icon: <Highlighter />,
   blockType: "highlight",
   shape: highlightSHape,
   inputsSections: [

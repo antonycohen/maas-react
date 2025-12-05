@@ -1,3 +1,5 @@
+import { CalendarDays } from 'lucide-react';
+
 import { EditorPlugin } from "../../../types";
 import { CardEventBlock } from "../blocks/card-event-block";
 import { cardEventShape, CMSEventBlock } from '@maas/core-api-models';
@@ -6,7 +8,7 @@ export const CardEventPlugin: EditorPlugin<"Card Event", CMSEventBlock, any> = {
   name: "Card Event",
   displayName: "Card Event",
   enabled: true,
-  icon: "EventPlugin",
+  icon: <CalendarDays />,
   blockType: "card-event",
   shape: cardEventShape,
   inputsSections: [

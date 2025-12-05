@@ -1,3 +1,5 @@
+import { Microscope } from 'lucide-react';
+
 import { EditorPlugin } from "../../../types";
 import { AnalyzeBlock } from "../blocks/analyze-block";
 import { analyzeBlockShape, CMSAnalyzeBlock } from '@maas/core-api-models';
@@ -6,7 +8,7 @@ export const AnalyzePlugin: EditorPlugin<"Analyze", CMSAnalyzeBlock, any> = {
   name: "Analyze",
   displayName: "Analyze",
   enabled: true,
-  icon: "CmsAnalyze",
+  icon: <Microscope />,
   blockType: "analyze",
   shape: analyzeBlockShape,
   inputsSections: [

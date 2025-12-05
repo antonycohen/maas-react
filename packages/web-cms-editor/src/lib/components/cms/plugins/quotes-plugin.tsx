@@ -1,3 +1,5 @@
+import { Quote } from 'lucide-react';
+
 import { EditorPlugin } from "../../../types";
 import { QuotesBlock } from "../blocks/quotes-block";
 import {
@@ -13,7 +15,7 @@ export const QuotesPlugin: EditorPlugin<
   name: "CardsQuote",
   displayName: "Card Citation(s)",
   enabled: true,
-  icon: "CardQuote",
+  icon: <Quote />,
   blockType: "cards-quote",
   shape: cardsQuotesBlockShape,
   inputsSections: [

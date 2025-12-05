@@ -1,3 +1,5 @@
+import { LayoutList } from 'lucide-react';
+
 import { EditorPlugin } from '../../../types';
 import { CardsBlock } from '../blocks/cards-block';
 import {
@@ -13,7 +15,7 @@ export const CardsTextWithImagePlugin: EditorPlugin<
   name: 'CardsTextWithImage',
   displayName: 'Card(s) information avec visuel',
   enabled: true,
-  icon: 'CardTextWithImage',
+  icon: <LayoutList />,
   blockType: 'cards-text-with-image',
   shape: cardsTextWithImageBlockShape,
   inputsSections: [

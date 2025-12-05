@@ -1,3 +1,5 @@
+import { AlignLeft } from 'lucide-react';
+
 import { EditorPlugin } from "../../../types";
 import { ParagraphBlock } from "../blocks/paragraph-block";
 import { CMSParagraphBlock, paragraphBlockShape } from '@maas/core-api-models';
@@ -10,7 +12,7 @@ export const ParagraphPlugin: EditorPlugin<
   name: "Paragraph",
   displayName: "Texte",
   enabled: true,
-  icon: "Text",
+  icon: <AlignLeft />,
   blockType: "paragraph",
   shape: paragraphBlockShape,
   inputsSections: [

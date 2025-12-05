@@ -1,3 +1,5 @@
+import { Heading } from 'lucide-react';
+
 import { EditorPlugin } from "../../../types";
 import { HeadingBlock } from "../blocks/heading-block";
 import { CMSHeadingBlock, headingBlockShape } from '@maas/core-api-models';
@@ -6,7 +8,7 @@ export const HeadingPlugin: EditorPlugin<"Heading", CMSHeadingBlock, any> = {
   name: "Heading",
   displayName: "Titre",
   enabled: true,
-  icon: "Heading",
+  icon: <Heading />,
   blockType: "heading",
   shape: headingBlockShape,
   inputsSections: [

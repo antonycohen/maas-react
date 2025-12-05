@@ -1,3 +1,5 @@
+import { ImageIcon } from 'lucide-react';
+
 import { EditorPlugin } from "../../../types";
 import { ImageBlock } from "../blocks/image-block";
 import { CMSImageBlock, imageBlockShape } from '@maas/core-api-models';
@@ -6,7 +8,7 @@ export const ImagesPlugin: EditorPlugin<"Image", CMSImageBlock, any> = {
   name: "Image",
   displayName: "Image(s)",
   enabled: true,
-  icon: "Image",
+  icon: <ImageIcon />,
   blockType: "images",
   shape: imageBlockShape,
   inputsSections: [

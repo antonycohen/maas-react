@@ -1,3 +1,5 @@
+import { Podcast } from 'lucide-react';
+
 import { EditorPlugin } from "../../../types";
 import { PodcastCarouselBlock } from "../blocks/podcast-carousel-block";
 import {
@@ -13,7 +15,7 @@ export const PodcastCarouselPlugin: EditorPlugin<
   name: "PodcastCarousel",
   displayName: "Podcasts",
   enabled: true,
-  icon: "Audio",
+  icon: <Podcast />,
   blockType: "podcast-carousel",
   shape: podcastCarouselShape,
   inputsSections: [

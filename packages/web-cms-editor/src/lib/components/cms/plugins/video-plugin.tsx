@@ -1,3 +1,5 @@
+import { Video } from 'lucide-react';
+
 import { EditorPlugin } from "../../../types";
 import { VideoBlock } from "../blocks/video-block";
 import { CMSVideoBlock, videoBlockShape } from '@maas/core-api-models';
@@ -6,7 +8,7 @@ export const VideoPlugin: EditorPlugin<"Video", CMSVideoBlock, any> = {
   name: "Video",
   displayName: "Vidéo",
   enabled: true,
-  icon: "Video",
+  icon: <Video />,
   blockType: "video",
   shape: videoBlockShape,
   inputsSections: [

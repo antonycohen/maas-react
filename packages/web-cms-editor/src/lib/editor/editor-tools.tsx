@@ -10,12 +10,14 @@ import { EditorPlugin } from '../types';
 
 type ToolItemProps = {
   id: string;
+  displayName: string;
   icon: ReactNode;
   onClick: () => void;
 };
 
 const ToolItem = React.memo(function ToolItem({
   id,
+  displayName,
   icon,
   onClick,
 }: ToolItemProps) {
@@ -33,13 +35,14 @@ const ToolItem = React.memo(function ToolItem({
         'flex items-center rounded-lg',
         'mb-[10px] cursor-grab select-none gap-x-2.5 border border-border transition-colors',
         'hover:border-primary active:bg-muted active:cursor-grabbing',
-        isDragging && 'opacity-50'
+        isDragging && 'opacity-50',
       )}
       {...listeners}
       {...attributes}
     >
       <GripVertical className="h-4 w-4 text-muted-foreground" />
       <span className="text-foreground [&>svg]:h-4 [&>svg]:w-4">{icon}</span>
+      <span className="text-foreground text-sm font-medium">{displayName}</span>
     </button>
   );
 });
@@ -57,7 +60,7 @@ export const EditorTools = React.memo(function EditorTools() {
       newBlock.id = crypto.randomUUID();
       addBlock(newBlock);
     },
-    [addBlock]
+    [addBlock],
   );
 
   if (!editMode) return null;
@@ -69,6 +72,7 @@ export const EditorTools = React.memo(function EditorTools() {
           key={plugin.name}
           id={`${TOOL_ID_PREFIX}${plugin.name}`}
           icon={plugin.icon}
+          displayName={plugin.displayName}
           onClick={() => handleAddBlock(plugin)}
         />
       ))}

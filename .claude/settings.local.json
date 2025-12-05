@@ -12,7 +12,10 @@
       "Bash(npx tsc:*)",
       "mcp__ide__getDiagnostics",
       "Bash(npx nx sync:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(for:*)",
+      "Bash(do mv \"$f\" \"$f%.ts.tsx\")",
+      "Bash(done)"
     ],
     "deny": []
   }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   closestCenter,
   DndContext,
@@ -45,11 +45,18 @@ const measuring = {
   },
 };
 
+// Throttle interval in ms - adjust for performance vs responsiveness
+const DRAG_THROTTLE_MS = 50;
+
 function EditorMain() {
   const { content, setContent, plugins, context, settings } =
     useEditorContext();
   const [activeId, setActiveId] = React.useState<string | null>(null);
   const [ghostBlock, setGhostBlock] = React.useState<CMSBlock | null>(null);
+
+  // Refs for throttling drag over updates
+  const lastOverIdRef = useRef<string | null>(null);
+  const lastDragUpdateRef = useRef<number>(0);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -68,6 +75,9 @@ function EditorMain() {
   }, [content, setContent]);
 
   const handleDragStart = React.useCallback((event: DragStartEvent) => {
+    // Reset throttle refs on drag start
+    lastOverIdRef.current = null;
+    lastDragUpdateRef.current = 0;
     setActiveId(event.active.id as string);
   }, []);
 
@@ -79,6 +89,16 @@ function EditorMain() {
 
       const activeIdStr = active.id as string;
       const overIdStr = over.id as string;
+
+      // Skip if over same element (no change)
+      if (lastOverIdRef.current === overIdStr) return;
+
+      // Throttle updates for performance
+      const now = Date.now();
+      if (now - lastDragUpdateRef.current < DRAG_THROTTLE_MS) return;
+
+      lastOverIdRef.current = overIdStr;
+      lastDragUpdateRef.current = now;
 
       // Handle tool item being dragged over preview
       if (activeIdStr.startsWith(TOOL_ID_PREFIX)) {

@@ -56,7 +56,6 @@ const SortableBlock = React.memo(function SortableBlock({
       style={style}
       className={cn(
         'bg-white',
-        isDragging && 'shadow-lg',
         isGhost && 'border-2 border-dashed border-primary/50 rounded-lg'
       )}
       {...attributes}
@@ -73,9 +72,10 @@ export const EditorPreview = React.memo(function EditorPreview() {
     settings: { previewMode },
   } = useEditorContext();
 
-  const { setNodeRef, isOver } = useDroppable({
+  const { setNodeRef } = useDroppable({
     id: 'editor-preview-drop-zone',
   });
+
 
   const blockIds = React.useMemo(
     () => content.map((block) => block.id),
@@ -100,8 +100,7 @@ export const EditorPreview = React.memo(function EditorPreview() {
       >
         <div
           className={cn(
-            'flex min-h-screen flex-col gap-y-6 bg-white px-5 py-9 transition-colors',
-            isOver && 'ring-2 ring-primary ring-inset',
+            'flex min-h-screen flex-col gap-y-6 bg-white px-5 py-9 transition-colors'
           )}
         >
           {content.length === 0 ? (

@@ -1,3 +1,5 @@
+import { LayoutGrid } from 'lucide-react';
+
 import { EditorPlugin } from "../../../types";
 import { MosaicGalleryBlock } from "../blocks/mosaic-gallery-block";
 import {
@@ -13,7 +15,7 @@ export const MosaicGalleryPlugin: EditorPlugin<
   name: "MosaicGallery",
   displayName: "MosaicGallery",
   enabled: true,
-  icon: "PictureMulti",
+  icon: <LayoutGrid />,
   blockType: "mosaic-gallery",
   shape: mosaicGalleryShape,
   inputsSections: [

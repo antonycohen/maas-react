@@ -1,3 +1,5 @@
+import { Newspaper } from 'lucide-react';
+
 import { EditorPlugin } from '../../../types';
 import { CardPressCoverageBlock } from '../blocks/card-press-coverage-block';
 import {
@@ -13,7 +15,7 @@ export const CardPressCoveragePlugin: EditorPlugin<
   name: 'CardPressCoverage',
   displayName: 'Card(s) presse',
   enabled: true,
-  icon: 'Pen',
+  icon: <Newspaper />,
   blockType: 'card-press-coverage',
   shape: cardPressCoverageShape,
   inputsSections: [

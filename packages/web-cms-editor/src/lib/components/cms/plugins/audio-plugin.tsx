@@ -1,3 +1,5 @@
+import { AudioLines } from 'lucide-react';
+
 import { EditorPlugin } from "../../../types";
 import { AudioBlock } from "../blocks/audio-block";
 import { audioBlockShape, CMSIAudioBlock } from '@maas/core-api-models';
@@ -6,7 +8,7 @@ export const AudioPlugin: EditorPlugin<"Audio", CMSIAudioBlock, any> = {
   name: "Audio",
   displayName: "Audio",
   enabled: true,
-  icon: "Audio",
+  icon: <AudioLines />,
   blockType: "audio",
   shape: audioBlockShape,
   inputsSections: [

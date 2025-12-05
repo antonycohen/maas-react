@@ -1,3 +1,5 @@
+import { Columns2 } from 'lucide-react';
+
 import { EditorPlugin } from "../../../types";
 import { ImageAndTextBlock } from "../blocks/image-and-text-block";
 import {
@@ -13,7 +15,7 @@ export const ImageWithTextPlugin: EditorPlugin<
   name: "ImageWithText",
   displayName: "Texte + image",
   enabled: true,
-  icon: "ImageAndText",
+  icon: <Columns2 />,
   blockType: "image-and-text",
   shape: imageAndTextBlockShape,
   inputsSections: [
