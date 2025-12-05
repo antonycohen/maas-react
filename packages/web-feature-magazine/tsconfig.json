@@ -1,0 +1,34 @@
+{
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "../core-utils"
+    },
+    {
+      "path": "../web-collection"
+    },
+    {
+      "path": "../web-cms-editor"
+    },
+    {
+      "path": "../web-form"
+    },
+    {
+      "path": "../core-api-models"
+    },
+    {
+      "path": "../core-api"
+    },
+    {
+      "path": "../web-components"
+    },
+    {
+      "path": "../web-layout"
+    },
+    {
+      "path": "./tsconfig.lib.json"
+    }
+  ],
+  "extends": "../../tsconfig.base.json"
+}

@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(npx nx list:*)",
+      "Bash(npx nx show:*)",
+      "Bash(npx nx typecheck:*)",
+      "Bash(npx nx serve @maas/maas-app --skip-nx-cache)",
+      "Bash(npx nx reset:*)",
+      "Bash(npx nx serve:*)",
+      "Bash(node -e:*)",
+      "Bash(npx tsc:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(npx nx sync:*)",
+      "Bash(cat:*)"
+    ],
+    "deny": []
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "@maas/maas-app",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "tags": [
+      "type:app"
+    ],
+    "targets": {
+      "build": {
+        "syncGenerators": [
+          "@maas/tailwind-sync-plugin:update-tailwind-globs"
+        ]
+      },
+      "serve": {
+        "syncGenerators": [
+          "@maas/tailwind-sync-plugin:update-tailwind-globs"
+        ]
+      }
+    }
+  },
+  "dependencies": {
+    "@maas/web-layout": "workspace:*",
+    "@maas/web-feature-login": "workspace:*",
+    "@maas/web-feature-settings": "workspace:*",
+    "@maas/web-feature-feeds": "workspace:*"
+
+  }
+}

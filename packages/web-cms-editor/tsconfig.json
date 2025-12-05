@@ -1,0 +1,22 @@
+{
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "../core-translations"
+    },
+    {
+      "path": "../web-components"
+    },
+    {
+      "path": "../core-utils"
+    },
+    {
+      "path": "../core-api-models"
+    },
+    {
+      "path": "./tsconfig.lib.json"
+    }
+  ],
+  "extends": "../../tsconfig.base.json"
+}

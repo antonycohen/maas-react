@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@source "../../../packages/core-api";
+@source "../../../packages/core-api-models";
+@source "../../../packages/core-store-oauth";
+@source "../../../packages/core-store-session";
+@source "../../../packages/core-translations";
+@source "../../../packages/core-utils";
+@source "../../../packages/web-cms-editor";
+@source "../../../packages/web-collection";
+@source "../../../packages/web-components";
+@source "../../../packages/web-feature-feeds";
+@source "../../../packages/web-feature-home";
+@source "../../../packages/web-feature-login";
+@source "../../../packages/web-feature-settings";
+@source "../../../packages/web-feature-users";
+@source "../../../packages/web-form";
+@source "../../../packages/web-layout";
+
+
+
+@import "../../../packages/web-themes/src/theme.css";
+@plugin 'tailwindcss-animate';
+@plugin "@tailwindcss/typography";
+
+
+
+
+
+
+
+
+
+
+
+
+
+

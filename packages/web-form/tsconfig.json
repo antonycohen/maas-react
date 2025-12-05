@@ -1,0 +1,22 @@
+{
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "../core-utils"
+    },
+    {
+      "path": "../web-cms-editor"
+    },
+    {
+      "path": "../core-api-models"
+    },
+    {
+      "path": "../web-components"
+    },
+    {
+      "path": "./tsconfig.lib.json"
+    }
+  ],
+  "extends": "../../tsconfig.base.json"
+}

@@ -1,0 +1,14 @@
+{
+  "common.year": "Année",
+  "common.month": "Mois",
+  "common.day": "Jour",
+  "common.week": "Semaine",
+  "created_at": "Créé le",
+  "common.pending": "En cours...",
+
+  "funnel.navigation.back": "Retour",
+  "funnel.navigation.exit": "Quitter",
+  "funnel.steps.step-1": "Step 1",
+  "funnel.steps.step-2": "Step 2",
+  "funnel.steps.step-3": "Step 3"
+}
