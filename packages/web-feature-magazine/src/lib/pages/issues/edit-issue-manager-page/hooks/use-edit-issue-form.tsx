@@ -22,7 +22,6 @@ export const useEditIssueForm = (issueId: string) => {
           fields: {
             id: null,
             name: null,
-            issueConfiguration: null,
           },
         },
       },

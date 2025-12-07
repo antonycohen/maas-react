@@ -126,12 +126,15 @@ export function EditIssueManagerPage() {
       const newFolder: FolderWithArticles = {
         id: `folder-${Date.now()}`,
         issue: { id: issueId, title: issue?.title || null },
+        type: null,
+        isDefault: false,
         name: createData.name,
         description: createData.description ?? null,
         position: folders.length,
         color: createData.color ?? null,
         cover: null, // Cover is not set on folder creation
         isPublished: false,
+        metadata: createData.metadata ?? null,
         articleCount: 0,
         articles: [],
       };
@@ -248,6 +251,7 @@ export function EditIssueManagerPage() {
         isPublished: false,
         isFeatured: createData.isFeatured ?? false,
         tags: null,
+        metadata: null,
         viewCount: null,
         likeCount: null,
         categories: null,

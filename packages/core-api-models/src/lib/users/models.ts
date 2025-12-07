@@ -9,6 +9,12 @@ export const readUserRefSchema = z.object({
 
 export type ReadUserRef = z.infer<typeof readUserRefSchema>;
 
+export const userRefSchema = z.object({
+  id: z.string(),
+});
+
+export type UserRef = z.infer<typeof userRefSchema>;
+
 export const userSchema = z.object({
   id: z.string(),
   email: z.email().nullable(),

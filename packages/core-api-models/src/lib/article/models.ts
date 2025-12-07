@@ -3,9 +3,9 @@ import { readImageSchema, updateImageSchema } from '../image';
 import { readFolderRefSchema, folderRefSchema } from '../folder';
 import { readIssueRefSchema, issueRefSchema } from '../issue';
 import { readDocumentSchema, updateDocumentSchema } from '../document';
-import { readCategoryRefSchema } from '../category';
+import { readCategoryRefSchema, categoryRefSchema } from '../category';
 import { cmsBlockSchema } from '../cms';
-import { readUserRefSchema } from '../users';
+import { readUserRefSchema, userRefSchema } from '../users';
 
 // Tag schema
 export const tagSchema = z.object({
@@ -42,6 +42,7 @@ export const articleSchema = z.object({
   isPublished: z.boolean().nullable(),
   isFeatured: z.boolean().nullable(),
   tags: z.array(tagSchema).nullable(),
+  metadata: z.record(z.string(), z.unknown()).nullable(),
   viewCount: z.number().nullable(),
   likeCount: z.number().nullable(),
   categories: z.array(readCategoryRefSchema).nullable(),
@@ -56,7 +57,7 @@ export const createArticleSchema = z.object({
   title: z.string().min(1).max(255),
   description: z.string().max(5000).nullable().optional(),
   content: z.array(cmsBlockSchema).nullable().optional(),
-  author: z.string().nullable().optional(), // user ID
+  author: userRefSchema.nullable().optional(),
   featuredImage: updateImageSchema.nullable().optional(),
   cover: updateImageSchema.nullable().optional(),
   pdf: updateDocumentSchema.nullable().optional(),
@@ -65,8 +66,9 @@ export const createArticleSchema = z.object({
   visibility: z.string().max(50).nullable().optional(),
   position: z.number().int().min(0).optional(),
   isFeatured: z.boolean().optional(),
-  tags: z.array(z.string()).nullable().optional(), // tag IDs
-  categories: z.array(z.string()).nullable().optional(), // category IDs
+  tags: z.array(z.string()).nullable().optional(),
+  metadata: z.record(z.string(), z.unknown()).nullable().optional(),
+  categories: z.array(categoryRefSchema).nullable().optional(),
 });
 
 export type CreateArticle = z.infer<typeof createArticleSchema>;
@@ -77,7 +79,7 @@ export const updateArticleSchema = z.object({
   title: z.string().max(255).optional(),
   description: z.string().max(5000).nullable().optional(),
   content: z.array(cmsBlockSchema).nullable().optional(),
-  author: z.string().nullable().optional(), // user ID
+  author: userRefSchema.nullable().optional(),
   featuredImage: updateImageSchema.nullable().optional(),
   cover: updateImageSchema.nullable().optional(),
   pdf: updateDocumentSchema.nullable().optional(),
@@ -88,8 +90,9 @@ export const updateArticleSchema = z.object({
   publishedAt: z.string().nullable().optional(), // ISO date string
   isPublished: z.boolean().optional(),
   isFeatured: z.boolean().optional(),
-  tags: z.array(z.string()).nullable().optional(), // tag IDs
-  categories: z.array(z.string()).nullable().optional(), // category IDs
+  tags: z.array(z.string()).nullable().optional(),
+  metadata: z.record(z.string(), z.unknown()).nullable().optional(),
+  categories: z.array(categoryRefSchema).nullable().optional(),
 });
 
 export type UpdateArticle = z.infer<typeof updateArticleSchema>;

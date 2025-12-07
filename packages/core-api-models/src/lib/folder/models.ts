@@ -1,6 +1,6 @@
 import * as z from 'zod';
 import { readImageSchema, updateImageSchema } from '../image';
-import { readIssueRefSchema, issueRefSchema } from '../issue';
+import { issueRefSchema, readIssueRefSchema } from '../issue';
 
 export const readFolderRefSchema = z.object({
   id: z.string(),
@@ -25,6 +25,8 @@ export type ReadArticleRef = z.infer<typeof readArticleRefSchema>;
 export const folderSchema = z.object({
   id: z.string(),
   issue: z.lazy(() => readIssueRefSchema.nullable()),
+  type: z.string().max(255).nullable(),
+  isDefault: z.boolean().nullable(),
   name: z.string().max(255),
   description: z.string().max(2000).nullable(),
   position: z.number().int().min(0).nullable(),
@@ -35,6 +37,7 @@ export const folderSchema = z.object({
     .nullable(),
   cover: z.object(readImageSchema).nullable(),
   isPublished: z.boolean().nullable(),
+  metadata: z.record(z.string(), z.unknown()).nullable(),
   articleCount: z.number().nullable(),
   articles: z.array(readArticleRefSchema).nullable(),
 });
@@ -54,6 +57,7 @@ export const createFolderSchema = z.object({
     .nullable()
     .optional(),
   cover: updateImageSchema.nullable().optional(),
+  metadata: z.record(z.string(), z.unknown()).nullable().optional(),
 });
 
 export type CreateFolder = z.infer<typeof createFolderSchema>;
@@ -71,6 +75,7 @@ export const updateFolderSchema = z.object({
     .optional(),
   cover: updateImageSchema.nullable().optional(),
   isPublished: z.boolean().optional(),
+  metadata: z.record(z.string(), z.unknown()).nullable().optional(),
 });
 
 export type UpdateFolder = z.infer<typeof updateFolderSchema>;
