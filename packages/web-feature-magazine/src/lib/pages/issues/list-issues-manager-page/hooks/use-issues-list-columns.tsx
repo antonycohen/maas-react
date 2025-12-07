@@ -88,6 +88,7 @@ export function useIssuesListColumns(): ColumnDef<Issue>[] {
     },
     {
       id: 'brand',
+      accessorFn: (row) => row.brand?.id,
       header: ({ column }) => (
         <CollectionColumnHeader column={column} title="Brand" />
       ),
@@ -102,6 +103,9 @@ export function useIssuesListColumns(): ColumnDef<Issue>[] {
         );
       },
       enableSorting: false,
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
     },
     {
       accessorKey: 'isPublished',

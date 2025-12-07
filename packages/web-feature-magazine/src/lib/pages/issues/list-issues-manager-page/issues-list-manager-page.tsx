@@ -9,10 +9,12 @@ import {
 import { Button } from '@maas/web-components';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons-react';
+import { useBrandOptions } from '../../../hooks/use-brand-options';
 
 export function IssuesListManagerPage() {
   const columns = useIssuesListColumns();
 
+  const brandOptions = useBrandOptions();
   return (
     <div>
       <header>
@@ -43,6 +45,14 @@ export function IssuesListManagerPage() {
               placeholder: 'Search issues...',
               queryParamName: 'title',
             },
+            facetedFilters: [
+              {
+                columnId: 'brand',
+                queryParamName: 'brand',
+                title: 'Brand',
+                options: brandOptions,
+              }
+            ]
           }}
           useQueryFn={useGetIssues}
           queryFields={{
