@@ -7,6 +7,8 @@ export * from './lib/inputs/controlled-rte-input';
 export * from './lib/inputs/controlled-image-input';
 export * from './lib/inputs/controlled-cms-input';
 export * from './lib/inputs/controlled-magazine-category-input';
+export * from './lib/inputs/controlled-associative-token-input';
+export * from './lib/inputs/controlled-checkbox';
 
 export * from './lib/helper/create-connected-inputs';
 

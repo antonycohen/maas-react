@@ -120,7 +120,7 @@ export function FolderSheet({
     } else {
       // Create mode - parse with createFolderSchema
       const createData: CreateFolder = createFolderSchema.parse({
-        issue: issueId,
+        issue: { id: issueId },
         name: data.name,
         description: data.description,
         color: data.color,

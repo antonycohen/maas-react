@@ -19,6 +19,7 @@ export const useEditBrandForm = (brandId: string) => {
         description: null,
         logo: null,
         isActive: null,
+        issueConfiguration: { fields: { defaultFolders: null } },
       },
     },
     {
@@ -33,6 +34,10 @@ export const useEditBrandForm = (brandId: string) => {
     defaultValues: {
       name: '',
       description: '',
+      isActive: null,
+      issueConfiguration: {
+        defaultFolders: null,
+      },
     },
     values:
       !isCreateMode && brand
@@ -41,6 +46,9 @@ export const useEditBrandForm = (brandId: string) => {
             description: brand.description,
             logo: brand.logo,
             isActive: brand.isActive ?? undefined,
+            issueConfiguration: brand.issueConfiguration ?? {
+              defaultFolders: null,
+            },
           }
         : undefined,
   });

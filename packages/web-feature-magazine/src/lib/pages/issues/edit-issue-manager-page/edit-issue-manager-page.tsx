@@ -18,163 +18,18 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   ArticleEditorPanel,
-  ArticlesPanel,
   ArticleSheet,
-  FoldersPanel,
+  ArticlesPanel,
   FolderSheet,
+  FoldersPanel,
   FolderWithArticles,
 } from './components';
-
-// Mock data for development - replace with actual API calls
-const mockFolders: FolderWithArticles[] = [
-  {
-    id: 'folder-1',
-    issue: { id: 'issue-1', title: 'Issue #42' },
-    name: 'Cover Stories',
-    description: null,
-    position: 0,
-    color: '#3B82F6',
-    cover: null,
-    isPublished: true,
-    articleCount: 3,
-    articles: [
-      {
-        id: 'article-1',
-        issue: { id: 'issue-1', title: 'Issue #42' },
-        folder: { id: 'folder-1', name: 'Cover Stories' },
-        title: 'The Future of AI in Healthcare',
-        description: null,
-        content: null,
-        author: null,
-        featuredImage: null,
-        cover: null,
-        pdf: null,
-        keywords: null,
-        type: 'feature',
-        visibility: null,
-        position: 0,
-        publishedAt: null,
-        isPublished: true,
-        isFeatured: false,
-        tags: null,
-        viewCount: null,
-        likeCount: null,
-        categories: null,
-      },
-      {
-        id: 'article-2',
-        issue: { id: 'issue-1', title: 'Issue #42' },
-        folder: { id: 'folder-1', name: 'Cover Stories' },
-        title: 'Interview with Tech Leaders',
-        description: null,
-        content: null,
-        author: null,
-        featuredImage: null,
-        cover: null,
-        pdf: null,
-        keywords: null,
-        type: 'interview',
-        visibility: null,
-        position: 1,
-        publishedAt: null,
-        isPublished: true,
-        isFeatured: false,
-        tags: null,
-        viewCount: null,
-        likeCount: null,
-        categories: null,
-      },
-      {
-        id: 'article-3',
-        issue: { id: 'issue-1', title: 'Issue #42' },
-        folder: { id: 'folder-1', name: 'Cover Stories' },
-        title: 'Breaking News Analysis',
-        description: null,
-        content: null,
-        author: null,
-        featuredImage: null,
-        cover: null,
-        pdf: null,
-        keywords: null,
-        type: 'news',
-        visibility: null,
-        position: 2,
-        publishedAt: null,
-        isPublished: false,
-        isFeatured: false,
-        tags: null,
-        viewCount: null,
-        likeCount: null,
-        categories: null,
-      },
-    ],
-  },
-  {
-    id: 'folder-2',
-    issue: { id: 'issue-1', title: 'Issue #42' },
-    name: 'Opinion',
-    description: null,
-    position: 1,
-    color: '#10B981',
-    cover: null,
-    isPublished: true,
-    articleCount: 3,
-    articles: [
-      {
-        id: 'article-4',
-        issue: { id: 'issue-1', title: 'Issue #42' },
-        folder: { id: 'folder-2', name: 'Opinion' },
-        title: 'Why We Need Better Regulations',
-        description: null,
-        content: null,
-        author: null,
-        featuredImage: null,
-        cover: null,
-        pdf: null,
-        keywords: null,
-        type: 'opinion',
-        visibility: null,
-        position: 0,
-        publishedAt: null,
-        isPublished: true,
-        isFeatured: false,
-        tags: null,
-        viewCount: null,
-        likeCount: null,
-        categories: null,
-      },
-    ],
-  },
-];
-
-const mockStandaloneArticles: Article[] = [
-  {
-    id: 'article-9',
-    issue: { id: 'issue-1', title: 'Issue #42' },
-    folder: null,
-    title: 'Quick Tips for Productivity',
-    description: null,
-    content: null,
-    author: null,
-    featuredImage: null,
-    cover: null,
-    pdf: null,
-    keywords: null,
-    type: 'tips',
-    visibility: null,
-    position: 0,
-    publishedAt: null,
-    isPublished: true,
-    isFeatured: false,
-    tags: null,
-    viewCount: null,
-    likeCount: null,
-    categories: null,
-  },
-];
+import { useMockData } from './hooks/use-mock-data';
 
 export function EditIssueManagerPage() {
   const { issueId = '' } = useParams<{ issueId: string }>();
+
+  const { mockFolders, mockStandaloneArticles } = useMockData();
 
   const isCreateMode = issueId === 'new';
 
@@ -193,28 +48,37 @@ export function EditIssueManagerPage() {
   const isLoading = false;
 
   // Content state
-  const [folders, setFolders] = useState<FolderWithArticles[]>(isCreateMode ? [] : mockFolders);
+  const [folders, setFolders] = useState<FolderWithArticles[]>(
+    isCreateMode ? [] : mockFolders,
+  );
   const [standaloneArticles, setStandaloneArticles] = useState<Article[]>(
-    isCreateMode ? [] : mockStandaloneArticles
+    isCreateMode ? [] : mockStandaloneArticles,
   );
 
   // Selection state
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(
-    folders.length > 0 ? folders[0].id : null
+    folders.length > 0 ? folders[0].id : null,
   );
-  const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
+  const [selectedArticleId, setSelectedArticleId] = useState<string | null>(
+    null,
+  );
 
   // Sheet state
   const [folderSheetOpen, setFolderSheetOpen] = useState(false);
   const [articleSheetOpen, setArticleSheetOpen] = useState(false);
-  const [editingFolder, setEditingFolder] = useState<FolderWithArticles | null>(null);
+  const [editingFolder, setEditingFolder] = useState<FolderWithArticles | null>(
+    null,
+  );
 
   // Get current folder and articles
   const currentFolder = selectedFolderId
     ? folders.find((f) => f.id === selectedFolderId) || null
     : null;
-  const currentArticles = selectedFolderId ? currentFolder?.articles || [] : standaloneArticles;
-  const selectedArticle = currentArticles.find((a) => a.id === selectedArticleId) || null;
+  const currentArticles = selectedFolderId
+    ? currentFolder?.articles || []
+    : standaloneArticles;
+  const selectedArticle =
+    currentArticles.find((a) => a.id === selectedArticleId) || null;
 
   function handleDeleteIssue() {
     if (window.confirm('Are you sure you want to delete this issue?')) {
@@ -235,7 +99,10 @@ export function EditIssueManagerPage() {
     }
   }
 
-  function handleSaveFolder(data: CreateFolder | UpdateFolder, folderId?: string) {
+  function handleSaveFolder(
+    data: CreateFolder | UpdateFolder,
+    folderId?: string,
+  ) {
     if (folderId) {
       // Update existing folder
       setFolders((prev) =>
@@ -244,12 +111,14 @@ export function EditIssueManagerPage() {
             ? {
                 ...f,
                 name: (data as UpdateFolder).name ?? f.name,
-                description: (data as UpdateFolder).description ?? f.description,
+                description:
+                  (data as UpdateFolder).description ?? f.description,
                 color: (data as UpdateFolder).color ?? f.color,
-                isPublished: (data as UpdateFolder).isPublished ?? f.isPublished,
+                isPublished:
+                  (data as UpdateFolder).isPublished ?? f.isPublished,
               }
-            : f
-        )
+            : f,
+        ),
       );
     } else {
       // Create new folder
@@ -261,7 +130,7 @@ export function EditIssueManagerPage() {
         description: createData.description ?? null,
         position: folders.length,
         color: createData.color ?? null,
-        cover: createData.cover ?? null,
+        cover: null, // Cover is not set on folder creation
         isPublished: false,
         articleCount: 0,
         articles: [],
@@ -272,7 +141,11 @@ export function EditIssueManagerPage() {
   }
 
   function handleDeleteFolder(folderId: string) {
-    if (window.confirm('Are you sure you want to delete this folder and all its articles?')) {
+    if (
+      window.confirm(
+        'Are you sure you want to delete this folder and all its articles?',
+      )
+    ) {
       setFolders((prev) => prev.filter((f) => f.id !== folderId));
       if (selectedFolderId === folderId) {
         setSelectedFolderId(folders.length > 1 ? folders[0].id : null);
@@ -286,18 +159,21 @@ export function EditIssueManagerPage() {
     setArticleSheetOpen(true);
   }
 
-  function handleSaveArticle(data: CreateArticle | UpdateArticle, articleId?: string) {
+  function handleSaveArticle(
+    data: CreateArticle | UpdateArticle,
+    articleId?: string,
+  ) {
     if (articleId) {
       // Update existing article
       const updateData = data as UpdateArticle;
-      const targetFolderId = updateData.folder;
+      const targetFolderId = updateData.folder?.id ?? null;
 
       // Remove from current location
       setFolders((prev) =>
         prev.map((f) => ({
           ...f,
           articles: f.articles.filter((a) => a.id !== articleId),
-        }))
+        })),
       );
       setStandaloneArticles((prev) => prev.filter((a) => a.id !== articleId));
 
@@ -321,7 +197,11 @@ export function EditIssueManagerPage() {
           isPublished: updateData.isPublished ?? existingArticle.isPublished,
           isFeatured: updateData.isFeatured ?? existingArticle.isFeatured,
           folder: targetFolderId
-            ? { id: targetFolderId, name: folders.find((f) => f.id === targetFolderId)?.name || null }
+            ? {
+                id: targetFolderId,
+                name:
+                  folders.find((f) => f.id === targetFolderId)?.name || null,
+              }
             : null,
         };
 
@@ -329,8 +209,10 @@ export function EditIssueManagerPage() {
         if (targetFolderId) {
           setFolders((prev) =>
             prev.map((f) =>
-              f.id === targetFolderId ? { ...f, articles: [...f.articles, updatedArticle] } : f
-            )
+              f.id === targetFolderId
+                ? { ...f, articles: [...f.articles, updatedArticle] }
+                : f,
+            ),
           );
           setSelectedFolderId(targetFolderId);
         } else {
@@ -341,22 +223,23 @@ export function EditIssueManagerPage() {
     } else {
       // Create new article
       const createData = data as CreateArticle;
+      const targetFolderId = createData.folder?.id ?? null;
       const newArticle: Article = {
         id: `article-${Date.now()}`,
-        issue: { id: issueId, name: issue?.title || null },
-        folder: createData.folder
+        issue: { id: issueId, title: issue?.title || null },
+        folder: targetFolderId
           ? {
-              id: createData.folder,
-              name: folders.find((f) => f.id === createData.folder)?.name || null,
+              id: targetFolderId,
+              name: folders.find((f) => f.id === targetFolderId)?.name || null,
             }
           : null,
         title: createData.title,
         description: createData.description ?? null,
         content: createData.content ?? null,
         author: null,
-        featuredImage: createData.featuredImage ?? null,
-        cover: createData.cover ?? null,
-        pdf: createData.pdf ?? null,
+        featuredImage: null,
+        cover: null,
+        pdf: null,
         keywords: createData.keywords ?? null,
         type: createData.type ?? null,
         visibility: createData.visibility ?? null,
@@ -373,8 +256,10 @@ export function EditIssueManagerPage() {
       if (selectedFolderId) {
         setFolders((prev) =>
           prev.map((f) =>
-            f.id === selectedFolderId ? { ...f, articles: [...f.articles, newArticle] } : f
-          )
+            f.id === selectedFolderId
+              ? { ...f, articles: [...f.articles, newArticle] }
+              : f,
+          ),
         );
       } else {
         setStandaloneArticles((prev) => [...prev, newArticle]);
@@ -389,7 +274,7 @@ export function EditIssueManagerPage() {
         prev.map((f) => ({
           ...f,
           articles: f.articles.filter((a) => a.id !== articleId),
-        }))
+        })),
       );
       setStandaloneArticles((prev) => prev.filter((a) => a.id !== articleId));
       if (selectedArticleId === articleId) {
@@ -433,7 +318,11 @@ export function EditIssueManagerPage() {
                   <IconSettings className="mr-2 h-4 w-4" />
                   Settings
                 </Button>
-                <Button variant="destructive" size="sm" onClick={handleDeleteIssue}>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={handleDeleteIssue}
+                >
                   <IconTrash className="mr-2 h-4 w-4" />
                   Delete
                 </Button>
@@ -472,7 +361,9 @@ export function EditIssueManagerPage() {
                 onSelectArticle={setSelectedArticleId}
                 onAddArticle={handleAddArticle}
                 onEditFolder={handleEditFolder}
-                onDeleteFolder={() => currentFolder && handleDeleteFolder(currentFolder.id)}
+                onDeleteFolder={() =>
+                  currentFolder && handleDeleteFolder(currentFolder.id)
+                }
                 onDeleteArticle={handleDeleteArticle}
               />
             </ResizablePanel>

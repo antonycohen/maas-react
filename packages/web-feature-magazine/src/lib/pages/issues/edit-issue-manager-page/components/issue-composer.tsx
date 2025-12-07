@@ -1,16 +1,17 @@
+import { Article } from '@maas/core-api-models';
 import { Button, Card, CardContent, CardHeader, CardTitle } from '@maas/web-components';
 import { IconFolderPlus, IconPlus } from '@tabler/icons-react';
-import { FolderSection, FolderData } from './folder-section';
-import { ArticleItem, ArticleItemData } from './article-item';
+import { FolderSection, FolderWithArticles } from './folder-section';
+import { ArticleItem } from './article-item';
 
 type IssueComposerProps = {
-  folders: FolderData[];
-  standaloneArticles: ArticleItemData[];
+  folders: FolderWithArticles[];
+  standaloneArticles: Article[];
   onAddFolder?: () => void;
-  onEditFolder?: (folder: FolderData) => void;
+  onEditFolder?: (folder: FolderWithArticles) => void;
   onDeleteFolder?: (folderId: string) => void;
   onAddArticle?: (folderId?: string) => void;
-  onEditArticle?: (article: ArticleItemData, folderId?: string) => void;
+  onEditArticle?: (article: Article, folderId?: string) => void;
   onDeleteArticle?: (articleId: string) => void;
 };
 

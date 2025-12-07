@@ -1,5 +1,6 @@
 import { FieldValues } from 'react-hook-form';
 
+import { ControlledCheckbox } from '../inputs/controlled-checkbox';
 import { ControlledCMSInput } from '../inputs/controlled-cms-input';
 import { ControlledDateInput } from '../inputs/controlled-date-input';
 import { ControlledImageInput } from '../inputs/controlled-image-input';
@@ -8,6 +9,7 @@ import { ControlledRTEInput } from '../inputs/controlled-rte-input';
 import { ControlledSelectInput } from '../inputs/controlled-select-input';
 import { ControlledTextInput } from '../inputs/controlled-text-input';
 import { ControlledTextareaInput } from '../inputs/controlled-textarea-input';
+import { ControlledAssociativeTokenInput } from '../inputs/controlled-associative-token-input';
 
 export function createConnectedInputHelpers<
   T extends FieldValues,
@@ -22,5 +24,7 @@ export function createConnectedInputHelpers<
     ControlledImageInput: ControlledImageInput<T>,
     ControlledCMSInput: ControlledCMSInput<T, Context>,
     ControlledMagazineCategoryInput: ControlledMagazineCategoryInput<T>,
+    ControlledAssociativeTokenInput: ControlledAssociativeTokenInput<T>,
+    ControlledCheckbox: ControlledCheckbox<T>,
   };
 }

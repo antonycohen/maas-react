@@ -9,13 +9,9 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
-  Checkbox,
-  Field,
   FieldGroup,
-  Label,
 } from '@maas/web-components';
 import { FormProvider } from 'react-hook-form';
 import { Brand } from '@maas/core-api-models';
@@ -40,8 +36,13 @@ export function EditBrandManagerPage() {
     return <div>Brand not found</div>;
   }
 
-  const { ControlledTextInput, ControlledImageInput, ControlledTextAreaInput } =
-    createConnectedInputHelpers<Brand>();
+  const {
+    ControlledTextInput,
+    ControlledImageInput,
+    ControlledTextAreaInput,
+    ControlledAssociativeTokenInput,
+    ControlledCheckbox,
+  } = createConnectedInputHelpers<Brand>();
 
   const pageTitle = isCreateMode ? 'New Brand' : (brand?.name ?? '');
   const breadcrumbLabel = isCreateMode ? 'New' : (brand?.name ?? '');
@@ -74,58 +75,72 @@ export function EditBrandManagerPage() {
       </header>
       <LayoutContent>
         <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <Card
-              className={cn(
-                'max-w-xl transition-opacity',
-                isLoading && 'pointer-events-none opacity-50',
-              )}
-            >
-              <CardHeader>
-                <CardTitle>Brand Details</CardTitle>
-                <CardDescription>
-                  View and update your brand information here.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <FieldGroup>
-                  <ControlledTextInput name="name" label="Name" />
-                  <ControlledImageInput name="logo" label="Logo" />
-                  <ControlledTextAreaInput
-                    name="description"
-                    label="Description"
-                    rows={4}
-                  />
-                  {!isCreateMode && (
-                    <Field orientation="horizontal">
-                      <Checkbox
-                        id="isActive"
-                        checked={form.watch('isActive') as boolean}
-                        onCheckedChange={(checked) =>
-                          form.setValue('isActive', checked as boolean, {
-                            shouldDirty: true,
-                          })
-                        }
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className={cn(
+              'space-y-6 transition-opacity',
+              isLoading && 'pointer-events-none opacity-50',
+            )}
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Brand Details</CardTitle>
+                  <CardDescription>
+                    View and update your brand information here.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <FieldGroup>
+                    <ControlledTextInput name="name" label="Name" />
+                    <ControlledImageInput name="logo" label="Logo" />
+                    <ControlledTextAreaInput
+                      name="description"
+                      label="Description"
+                      rows={4}
+                    />
+                    <ControlledCheckbox name="isActive" label="Active" />
+                  </FieldGroup>
+                </CardContent>
+              </Card>
+
+              {!isCreateMode && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Issue Configuration</CardTitle>
+                    <CardDescription>
+                      Default settings for new issues created under this brand.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <FieldGroup>
+                      <ControlledAssociativeTokenInput
+                        name="issueConfiguration.defaultFolders"
+                        label="Default Folders"
+                        keyLabel="Slug"
+                        keyPlaceholder="e.g., cover-stories"
+                        valueLabel="Name"
+                        valuePlaceholder="e.g., Cover Stories"
                       />
-                      <Label htmlFor="isActive">Active</Label>
-                    </Field>
-                  )}
-                </FieldGroup>
-              </CardContent>
-              <CardFooter className="border-t pt-6 gap-3">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => form.reset()}
-                  disabled={isLoading}
-                >
-                  Reset
-                </Button>
-                <Button type="submit" disabled={isSaving || isLoading}>
-                  {isSaving ? 'Saving...' : isCreateMode ? 'Create' : 'Save'}
-                </Button>
-              </CardFooter>
-            </Card>
+                    </FieldGroup>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+
+            <div className="flex gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => form.reset()}
+                disabled={isLoading}
+              >
+                Reset
+              </Button>
+              <Button type="submit" disabled={isSaving || isLoading}>
+                {isSaving ? 'Saving...' : isCreateMode ? 'Create' : 'Save'}
+              </Button>
+            </div>
           </form>
         </FormProvider>
       </LayoutContent>

@@ -148,12 +148,15 @@ export function ArticleEditorPanel({
 
   function onSubmit(data: ArticleEditorFormData) {
     if (!article) return;
+    const folderRef = data.folder && data.folder !== NO_FOLDER_VALUE
+      ? { id: data.folder }
+      : null;
     const updateData: UpdateArticle = updateArticleSchema.parse({
       title: data.title,
       description: data.description ?? '',
       content: data.content,
       type: data.type,
-      folder: data.folder || NO_FOLDER_VALUE,
+      folder: folderRef,
       isPublished: data.isPublished,
       isFeatured: data.isFeatured,
     });

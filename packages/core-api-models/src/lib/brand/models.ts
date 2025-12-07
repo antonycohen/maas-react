@@ -20,6 +20,9 @@ export const brandSchema = z.object({
   logo: z.object(readImageSchema).nullable(),
   isActive: z.boolean().nullable(),
   issueCount: z.number().nullable(),
+  issueConfiguration: z.object({
+    defaultFolders: z.record(z.string(), z.string()).nullable(),
+  }).nullable(),
 });
 
 export type Brand = z.infer<typeof brandSchema>;
@@ -29,6 +32,10 @@ export const createBrandSchema = z.object({
   name: z.string().min(1).max(255),
   description: z.string().max(5000).nullable().optional(),
   logo: updateImageSchema.nullable().optional(),
+  isActive: z.boolean().nullable(),
+  issueConfiguration: z.object({
+    defaultFolders: z.record(z.string(), z.string()).nullable(),
+  }),
 });
 
 export type CreateBrand = z.infer<typeof createBrandSchema>;
@@ -39,6 +46,9 @@ export const updateBrandSchema = z.object({
   description: z.string().max(5000).nullable().optional(),
   logo: updateImageSchema.nullable().optional(),
   isActive: z.boolean().optional(),
+  issueConfiguration: z.object({
+    defaultFolders: z.record(z.string(), z.string()).nullable(),
+  }),
 });
 
 export type UpdateBrand = z.infer<typeof updateBrandSchema>;

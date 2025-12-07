@@ -5,15 +5,7 @@ import { readIssueRefSchema, issueRefSchema } from '../issue';
 import { readDocumentSchema, updateDocumentSchema } from '../document';
 import { readCategoryRefSchema } from '../category';
 import { cmsBlockSchema } from '../cms';
-
-// User reference schema for author
-export const userRefSchema = z.object({
-  id: z.string(),
-  firstName: z.string().nullable(),
-  lastName: z.string().nullable(),
-});
-
-export type UserRef = z.infer<typeof userRefSchema>;
+import { readUserRefSchema } from '../users';
 
 // Tag schema
 export const tagSchema = z.object({
@@ -38,7 +30,7 @@ export const articleSchema = z.object({
   title: z.string().max(255),
   description: z.string().max(5000).nullable(),
   content: z.array(cmsBlockSchema).nullable(),
-  author: userRefSchema.nullable(),
+  author: readUserRefSchema.nullable(),
   featuredImage: z.object(readImageSchema).nullable(),
   cover: z.object(readImageSchema).nullable(),
   pdf: z.object(readDocumentSchema).nullable(),

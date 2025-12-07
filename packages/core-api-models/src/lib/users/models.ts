@@ -1,6 +1,14 @@
 import * as z from 'zod';
 import { readImageSchema } from '../image';
 
+export const readUserRefSchema = z.object({
+  id: z.string(),
+  firstName: z.string().nullable(),
+  lastName: z.string().nullable(),
+});
+
+export type ReadUserRef = z.infer<typeof readUserRefSchema>;
+
 export const userSchema = z.object({
   id: z.string(),
   email: z.email().nullable(),

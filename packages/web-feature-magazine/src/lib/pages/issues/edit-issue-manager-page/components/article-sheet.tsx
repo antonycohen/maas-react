@@ -119,7 +119,9 @@ export function ArticleSheet({
   }, [article, currentFolderId, open, reset]);
 
   function onSubmit(data: ArticleFormData) {
-    const folderValue = data.folder === NO_FOLDER_VALUE ? null : data.folder;
+    const folderRef = data.folder && data.folder !== NO_FOLDER_VALUE
+      ? { id: data.folder }
+      : null;
 
     if (isEditMode && article) {
       // Update mode
@@ -127,7 +129,7 @@ export function ArticleSheet({
         title: data.title,
         description: data.description,
         type: data.type,
-        folder: folderValue,
+        folder: folderRef,
         isPublished: data.isPublished,
         isFeatured: data.isFeatured,
       });
@@ -135,11 +137,11 @@ export function ArticleSheet({
     } else {
       // Create mode
       const createData: CreateArticle = createArticleSchema.parse({
-        issue: issueId,
+        issue: { id: issueId },
         title: data.title,
         description: data.description,
         type: data.type,
-        folder: folderValue,
+        folder: folderRef,
         isFeatured: data.isFeatured,
       });
       onSave(createData);
