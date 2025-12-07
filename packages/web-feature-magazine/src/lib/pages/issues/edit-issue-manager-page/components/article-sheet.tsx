@@ -1,17 +1,10 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  Article,
   CreateArticle,
   createArticleSchema,
-  Folder,
-  UpdateArticle,
-  updateArticleSchema,
+  ReadFolderRef,
 } from '@maas/core-api-models';
 import {
   Button,
-  Checkbox,
-  Field,
-  FieldDescription,
   FieldGroup,
   ScrollArea,
   Sheet,
@@ -21,143 +14,67 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@maas/web-components';
-import { createConnectedInputHelpers } from '@maas/web-form';
+import {
+  ControlledCheckbox,
+  ControlledMagazineFolderInput,
+  createConnectedInputHelpers,
+} from '@maas/web-form';
 import { useEffect } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
-import * as z from 'zod';
+import { FormProvider } from 'react-hook-form';
+import { ArticleFormData, useEditArticleForm } from '../hooks';
 
-// Form schema for creating/editing articles
-const articleFormSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(255),
-  description: z.string().max(5000).nullable().optional(),
-  type: z.string().max(50).nullable().optional(),
-  folder: z.string().min(1, 'Folder is required'),
-  isPublished: z.boolean().optional(),
-  isFeatured: z.boolean().optional(),
-});
-
-type ArticleFormData = z.infer<typeof articleFormSchema>;
-
-const { ControlledTextInput, ControlledTextAreaInput, ControlledSelectInput } =
-  createConnectedInputHelpers<ArticleFormData>();
+const { ControlledTextInput, ControlledTextAreaInput } =
+  createConnectedInputHelpers<CreateArticle>();
 
 type ArticleSheetProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  article?: Article | null;
-  folders: Folder[];
   issueId: string;
-  currentFolderId?: string | null;
-  onSave: (data: CreateArticle | UpdateArticle, articleId?: string) => void;
-  onDelete?: (articleId: string) => void;
+  currentFolder?: ReadFolderRef | null;
+  onCreate: (data: CreateArticle) => void;
 };
-
-const articleTypes = [
-  { value: 'feature', label: 'Feature' },
-  { value: 'news', label: 'News' },
-  { value: 'interview', label: 'Interview' },
-  { value: 'opinion', label: 'Opinion' },
-  { value: 'editorial', label: 'Editorial' },
-  { value: 'review', label: 'Review' },
-  { value: 'column', label: 'Column' },
-  { value: 'tips', label: 'Tips' },
-];
 
 export function ArticleSheet({
   open,
   onOpenChange,
-  article,
-  folders,
   issueId,
-  currentFolderId,
-  onSave,
-  onDelete,
+  currentFolder,
+  onCreate,
 }: ArticleSheetProps) {
-  const isEditMode = !!article;
-
-  const form = useForm<ArticleFormData>({
-    resolver: zodResolver(articleFormSchema),
-    defaultValues: {
-      title: '',
-      description: '',
-      type: 'feature',
-      folder: '',
-      isPublished: false,
-      isFeatured: false,
-    },
+  const { form } = useEditArticleForm({
+    article: null,
+    issueId,
   });
 
-  const { handleSubmit, reset, watch, setValue } = form;
-  const selectedType = watch('type');
-  const isPublished = watch('isPublished');
-  const isFeatured = watch('isFeatured');
+  const { handleSubmit, reset } = form;
 
   useEffect(() => {
     if (open) {
-      if (article) {
-        reset({
-          title: article.title,
-          description: article.description ?? '',
-          type: article.type || 'feature',
-          folder: article.folder?.id || currentFolderId || folders[0]?.id || '',
-          isPublished: article.isPublished ?? false,
-          isFeatured: article.isFeatured ?? false,
-        });
-      } else {
-        reset({
-          title: '',
-          description: '',
-          type: 'feature',
-          folder: currentFolderId || folders[0]?.id || '',
-          isPublished: false,
-          isFeatured: false,
-        });
-      }
+      reset({
+        issue: { id: issueId },
+        title: '',
+        description: '',
+        type: 'feature',
+        folder: currentFolder ?? null,
+        isFeatured: false,
+      });
     }
-  }, [article, currentFolderId, folders, open, reset]);
+  }, [currentFolder, issueId, open, reset]);
 
   function onSubmit(data: ArticleFormData) {
-    const folderRef = { id: data.folder };
+    const createData = data as CreateArticle;
 
-    if (isEditMode && article) {
-      // Update mode
-      const updateData: UpdateArticle = updateArticleSchema.parse({
-        title: data.title,
-        description: data.description,
-        type: data.type,
-        folder: folderRef,
-        isPublished: data.isPublished,
-        isFeatured: data.isFeatured,
-      });
-      onSave(updateData, article.id);
-    } else {
-      // Create mode
-      const createData: CreateArticle = createArticleSchema.parse({
-        issue: { id: issueId },
-        title: data.title,
-        description: data.description,
-        type: data.type,
-        folder: folderRef,
-        isFeatured: data.isFeatured,
-      });
-      onSave(createData);
-    }
+    const parsed: CreateArticle = createArticleSchema.parse({
+      issue: { id: issueId },
+      title: createData.title,
+      description: createData.description,
+      type: createData.type,
+      folder: createData.folder,
+      isFeatured: createData.isFeatured,
+    });
+    onCreate(parsed);
     onOpenChange(false);
   }
-
-  function handleDelete() {
-    if (article && onDelete) {
-      if (window.confirm('Are you sure you want to delete this article?')) {
-        onDelete(article.id);
-        onOpenChange(false);
-      }
-    }
-  }
-
-  const folderOptions = folders.map((folder) => ({
-    value: folder.id,
-    label: folder.name,
-  }));
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -168,13 +85,9 @@ export function ArticleSheet({
             className="flex flex-col h-full"
           >
             <SheetHeader>
-              <SheetTitle>
-                {isEditMode ? 'Edit Article' : 'New Article'}
-              </SheetTitle>
+              <SheetTitle>New Article</SheetTitle>
               <SheetDescription>
-                {isEditMode
-                  ? 'Update article details and settings.'
-                  : 'Create a new article for this issue.'}
+                Create a new article for this issue.
               </SheetDescription>
             </SheetHeader>
             <ScrollArea className="flex-1 px-4">
@@ -190,65 +103,15 @@ export function ArticleSheet({
                   placeholder="Brief description of the article..."
                   rows={3}
                 />
-                <Field>
-                  <FieldDescription>Type</FieldDescription>
-                  <div className="flex gap-2 flex-wrap">
-                    {articleTypes.map((t) => (
-                      <button
-                        key={t.value}
-                        type="button"
-                        className={`px-3 py-1.5 text-sm rounded-md border transition-colors ${
-                          selectedType === t.value
-                            ? 'bg-primary text-primary-foreground border-primary'
-                            : 'bg-background hover:bg-muted border-input'
-                        }`}
-                        onClick={() => setValue('type', t.value)}
-                      >
-                        {t.label}
-                      </button>
-                    ))}
-                  </div>
-                </Field>
-                <ControlledSelectInput
+                <ControlledMagazineFolderInput
                   name="folder"
                   label="Folder"
-                  options={folderOptions}
+                  issueId={issueId}
                 />
-                <div className="grid grid-cols-2 gap-4">
-                  <Field orientation="horizontal">
-                    <Checkbox
-                      id="article-published"
-                      checked={isPublished}
-                      onCheckedChange={(checked) =>
-                        setValue('isPublished', checked as boolean)
-                      }
-                    />
-                    <FieldDescription>Published</FieldDescription>
-                  </Field>
-                  <Field orientation="horizontal">
-                    <Checkbox
-                      id="article-featured"
-                      checked={isFeatured}
-                      onCheckedChange={(checked) =>
-                        setValue('isFeatured', checked as boolean)
-                      }
-                    />
-                    <FieldDescription>Featured</FieldDescription>
-                  </Field>
-                </div>
+                <ControlledCheckbox name="isFeatured" label="Featured" />
               </FieldGroup>
             </ScrollArea>
             <SheetFooter>
-              {isEditMode && onDelete && (
-                <Button
-                  type="button"
-                  variant="destructive"
-                  onClick={handleDelete}
-                  className="mr-auto"
-                >
-                  Delete
-                </Button>
-              )}
               <Button
                 type="button"
                 variant="outline"
@@ -256,7 +119,7 @@ export function ArticleSheet({
               >
                 Cancel
               </Button>
-              <Button type="submit">{isEditMode ? 'Save' : 'Create'}</Button>
+              <Button type="submit">Create</Button>
             </SheetFooter>
           </form>
         </FormProvider>

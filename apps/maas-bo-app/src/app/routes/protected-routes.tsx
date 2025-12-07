@@ -4,7 +4,13 @@ import { AdminLayout } from '@maas/web-layout';
 import { SettingsRoutes } from '@maas/web-feature-settings';
 import { UsersRoutes } from '@maas/web-feature-users';
 import { HomeRoutes } from '@maas/web-feature-home';
-import { BrandsRoutes, CategoriesRoutes, IssuesRoutes } from '@maas/web-feature-magazine';
+import {
+  ArticlesRoutes,
+  BrandsRoutes,
+  CategoriesRoutes,
+  FoldersRoutes,
+  IssuesRoutes,
+} from '@maas/web-feature-magazine';
 import { mainNavigation } from '../navigation/main-navigation';
 import { GalleryVerticalEnd } from 'lucide-react';
 
@@ -33,7 +39,9 @@ export const ProtectedRoutes = () => {
             }
           >
             <Route path="issues/*" element={<IssuesRoutes />} />
+            <Route path="articles/*" element={<ArticlesRoutes />} />
             <Route path="categories/*" element={<CategoriesRoutes />} />
+            <Route path="folders/*" element={<FoldersRoutes />} />
             <Route path="brands/*" element={<BrandsRoutes />} />
             <Route path="users/*" element={<UsersRoutes />} />
             <Route path="settings/*" element={<SettingsRoutes />} />

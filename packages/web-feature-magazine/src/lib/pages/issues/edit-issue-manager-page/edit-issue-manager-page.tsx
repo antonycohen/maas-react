@@ -160,7 +160,7 @@ function EditIssueContent() {
             <ResizablePanel defaultSize={50} minSize={30}>
               <ArticleEditorPanel
                 article={selectedArticle}
-                folders={folders}
+                issueId={issueId}
                 onSave={handleSaveArticle}
                 isLoading={isLoadingArticle}
               />
@@ -183,11 +183,9 @@ function EditIssueContent() {
       <ArticleSheet
         open={articleSheetOpen}
         onOpenChange={setArticleSheetOpen}
-        article={null}
-        folders={folders}
         issueId={issueId}
-        currentFolderId={selectedFolderId}
-        onSave={handleSaveArticle}
+        currentFolder={currentFolder}
+        onCreate={handleSaveArticle}
       />
     </div>
   );

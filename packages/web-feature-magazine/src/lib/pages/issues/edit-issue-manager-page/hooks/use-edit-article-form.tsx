@@ -1,18 +1,37 @@
 import { useForm } from 'react-hook-form';
 import {
   Article,
+  CreateArticle,
+  createArticleSchema,
   UpdateArticle,
   updateArticleSchema,
 } from '@maas/core-api-models';
 import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 
-export const useEditArticleForm = (article: Article | null) => {
-  const form = useForm<UpdateArticle>({
-    resolver: zodResolver(updateArticleSchema),
+// Combined schema for form - uses UpdateArticle fields plus issue for create mode
+const articleFormSchema = z.union([createArticleSchema, updateArticleSchema]);
+
+export type ArticleFormData = CreateArticle | UpdateArticle;
+
+type UseEditArticleFormOptions = {
+  article: Article | null;
+  issueId: string;
+};
+
+export const useEditArticleForm = ({
+  article,
+  issueId,
+}: UseEditArticleFormOptions) => {
+  const isCreateMode = article === null;
+
+  const form = useForm<ArticleFormData>({
+    resolver: zodResolver(articleFormSchema),
     defaultValues: {
+      issue: { id: issueId },
       folder: null,
       title: '',
-      description: null,
+      description: '',
       content: null,
       author: null,
       featuredImage: null,
@@ -28,18 +47,18 @@ export const useEditArticleForm = (article: Article | null) => {
       tags: null,
       metadata: null,
       categories: null,
-    },
+    } as ArticleFormData,
     values: article
       ? {
-          folder: article.folder ? { id: article.folder.id } : null,
+          folder: article.folder
+            ? { id: article.folder.id, name: article.folder.name }
+            : null,
           title: article.title,
           description: article.description,
           content: article.content,
           author: article.author ? { id: article.author.id } : null,
-          featuredImage: article.featuredImage
-            ? { id: article.featuredImage.id }
-            : null,
-          cover: article.cover ? { id: article.cover.id } : null,
+          featuredImage: article.featuredImage ?? null,
+          cover: article.cover ?? null,
           pdf: article.pdf ? { id: article.pdf.id } : null,
           keywords: article.keywords,
           type: article.type,
@@ -57,5 +76,5 @@ export const useEditArticleForm = (article: Article | null) => {
       : undefined,
   });
 
-  return { form };
+  return { form, isCreateMode };
 };

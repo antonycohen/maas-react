@@ -45,17 +45,32 @@ export function useArticleMutations() {
     articleId?: string,
   ) => {
     if (articleId) {
+      const updateData = data as UpdateArticle;
+      // Extract just the ids for ref fields before sending to API
       updateMutation.mutate({
         articleId,
-        data: data as UpdateArticle,
+        data: {
+          ...updateData,
+          folder: updateData.folder?.id ? { id: updateData.folder.id } : null,
+          featuredImage: updateData.featuredImage?.id
+            ? { id: updateData.featuredImage.id }
+            : null,
+          cover: updateData.cover?.id ? { id: updateData.cover.id } : null,
+        } as UpdateArticle,
       });
     } else {
       const createData = data as CreateArticle;
+      // Extract just the ids for ref fields before sending to API
+      const folderId = selectedFolderId ?? createData.folder?.id;
       createMutation.mutate({
         ...createData,
         issue: { id: issueId },
-        folder: selectedFolderId ? { id: selectedFolderId } : createData.folder,
-      });
+        folder: folderId ? { id: folderId } : null,
+        featuredImage: createData.featuredImage?.id
+          ? { id: createData.featuredImage.id }
+          : null,
+        cover: createData.cover?.id ? { id: createData.cover.id } : null,
+      } as CreateArticle);
     }
   };
 

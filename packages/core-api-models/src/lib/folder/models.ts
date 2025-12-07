@@ -1,6 +1,7 @@
 import * as z from 'zod';
 import { readImageSchema, updateImageSchema } from '../image';
 import { issueRefSchema, readIssueRefSchema } from '../issue';
+import { articleRefSchema } from '../article';
 
 export const readFolderRefSchema = z.object({
   id: z.string(),
@@ -9,17 +10,10 @@ export const readFolderRefSchema = z.object({
 
 export const folderRefSchema = z.object({
   id: z.string(),
+  name: z.string().nullable(),
 });
 
 export type ReadFolderRef = z.infer<typeof readFolderRefSchema>;
-
-// Article reference schema for folder's articles array
-export const readArticleRefSchema = z.object({
-  id: z.string(),
-  title: z.string().nullable(),
-});
-
-export type ReadArticleRef = z.infer<typeof readArticleRefSchema>;
 
 // Full folder schema for read operations
 export const folderSchema = z.object({
@@ -39,7 +33,7 @@ export const folderSchema = z.object({
   isPublished: z.boolean().nullable(),
   metadata: z.record(z.string(), z.unknown()).nullable(),
   articleCount: z.number().nullable(),
-  articles: z.array(readArticleRefSchema).nullable(),
+  articles: z.lazy(() => z.array(articleRefSchema).nullable()),
 });
 
 export type Folder = z.infer<typeof folderSchema>;
