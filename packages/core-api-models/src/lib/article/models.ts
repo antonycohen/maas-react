@@ -1,8 +1,9 @@
 import * as z from 'zod';
-import { ImageSchema } from '../image';
-import { folderRefSchema, issueRefSchema } from '../folder';
-import { documentSchema } from '../issue';
-import { categoryRefSchema } from '../category';
+import { readImageSchema, updateImageSchema } from '../image';
+import { readFolderRefSchema, folderRefSchema } from '../folder';
+import { readIssueRefSchema, issueRefSchema } from '../issue';
+import { readDocumentSchema, updateDocumentSchema } from '../document';
+import { readCategoryRefSchema } from '../category';
 import { cmsBlockSchema } from '../cms';
 
 // User reference schema for author
@@ -22,10 +23,9 @@ export const tagSchema = z.object({
 
 export type Tag = z.infer<typeof tagSchema>;
 
-// Reference schema for article (minimal fields)
+// Reference schema for article (for writes/updates)
 export const articleRefSchema = z.object({
   id: z.string(),
-  title: z.string().nullable(),
 });
 
 export type ArticleRef = z.infer<typeof articleRefSchema>;
@@ -33,15 +33,15 @@ export type ArticleRef = z.infer<typeof articleRefSchema>;
 // Full article schema for read operations
 export const articleSchema = z.object({
   id: z.string(),
-  issue: issueRefSchema.nullable(),
-  folder: folderRefSchema.nullable(),
+  issue: readIssueRefSchema.nullable(),
+  folder: readFolderRefSchema.nullable(),
   title: z.string().max(255),
   description: z.string().max(5000).nullable(),
   content: z.array(cmsBlockSchema).nullable(),
   author: userRefSchema.nullable(),
-  featuredImage: z.object(ImageSchema).nullable(),
-  cover: z.object(ImageSchema).nullable(),
-  pdf: documentSchema.nullable(),
+  featuredImage: z.object(readImageSchema).nullable(),
+  cover: z.object(readImageSchema).nullable(),
+  pdf: z.object(readDocumentSchema).nullable(),
   keywords: z.string().max(500).nullable(),
   type: z.string().max(50).nullable(),
   visibility: z.string().max(50).nullable(),
@@ -52,22 +52,22 @@ export const articleSchema = z.object({
   tags: z.array(tagSchema).nullable(),
   viewCount: z.number().nullable(),
   likeCount: z.number().nullable(),
-  categories: z.array(categoryRefSchema).nullable(),
+  categories: z.array(readCategoryRefSchema).nullable(),
 });
 
 export type Article = z.infer<typeof articleSchema>;
 
 // Schema for creating an article
 export const createArticleSchema = z.object({
-  issue: z.string().min(1), // issue ID
-  folder: z.string().nullable().optional(), // folder ID
+  issue: issueRefSchema,
+  folder: folderRefSchema.nullable().optional(),
   title: z.string().min(1).max(255),
   description: z.string().max(5000).nullable().optional(),
   content: z.array(cmsBlockSchema).nullable().optional(),
   author: z.string().nullable().optional(), // user ID
-  featuredImage: z.object(ImageSchema).nullable().optional(),
-  cover: z.object(ImageSchema).nullable().optional(),
-  pdf: documentSchema.nullable().optional(),
+  featuredImage: updateImageSchema.nullable().optional(),
+  cover: updateImageSchema.nullable().optional(),
+  pdf: updateDocumentSchema.nullable().optional(),
   keywords: z.string().max(500).nullable().optional(),
   type: z.string().max(50).nullable().optional(),
   visibility: z.string().max(50).nullable().optional(),
@@ -81,14 +81,14 @@ export type CreateArticle = z.infer<typeof createArticleSchema>;
 
 // Schema for updating an article
 export const updateArticleSchema = z.object({
-  folder: z.string().nullable().optional(), // folder ID
+  folder: folderRefSchema.nullable().optional(),
   title: z.string().max(255).optional(),
   description: z.string().max(5000).nullable().optional(),
   content: z.array(cmsBlockSchema).nullable().optional(),
   author: z.string().nullable().optional(), // user ID
-  featuredImage: z.object(ImageSchema).nullable().optional(),
-  cover: z.object(ImageSchema).nullable().optional(),
-  pdf: documentSchema.nullable().optional(),
+  featuredImage: updateImageSchema.nullable().optional(),
+  cover: updateImageSchema.nullable().optional(),
+  pdf: updateDocumentSchema.nullable().optional(),
   keywords: z.string().max(500).nullable().optional(),
   type: z.string().max(50).nullable().optional(),
   visibility: z.string().max(50).nullable().optional(),

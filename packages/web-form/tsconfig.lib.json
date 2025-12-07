@@ -33,6 +33,9 @@
       "path": "../core-utils/tsconfig.lib.json"
     },
     {
+      "path": "../core-api/tsconfig.lib.json"
+    },
+    {
       "path": "../web-cms-editor/tsconfig.lib.json"
     },
     {

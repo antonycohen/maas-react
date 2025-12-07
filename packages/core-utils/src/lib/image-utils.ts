@@ -1,4 +1,4 @@
-import { Image, ResizedImage } from '@maas/core-api-models';
+import { Image, ReadResizedImage } from '@maas/core-api-models';
 
 export function getImageUrl(
   image: Image | undefined | null,
@@ -27,14 +27,14 @@ export function getResizedImage(
     requestedHeight: number;
     requestedMode: 'cropped' | 'resized';
   },
-): ResizedImage | Image {
+): ReadResizedImage | Image {
   if (!image.resizedImages?.length) {
     return image;
   }
 
   const { resizedImages } = image;
   const { requestedMode, requestedWidth, requestedHeight } = params;
-  const imageIsCorrectSize = (image: ResizedImage): boolean => {
+  const imageIsCorrectSize = (image: ReadResizedImage): boolean => {
     const { mode, width, height } = image;
 
     return (

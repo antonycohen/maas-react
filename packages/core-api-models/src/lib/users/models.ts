@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import { ImageSchema } from '../image';
+import { readImageSchema } from '../image';
 
 export const userSchema = z.object({
   id: z.string(),
@@ -10,8 +10,8 @@ export const userSchema = z.object({
     .max(32, "Bug title must be at most 32 characters.")
     .nullable(),
   lastName: z.string().nullable(),
-  profileImage: z.object(ImageSchema).nullable(),
-  coverImage: z.object(ImageSchema).nullable(),
+  profileImage: z.object(readImageSchema).nullable(),
+  coverImage: z.object(readImageSchema).nullable(),
   roles: z.array(z.string()).nullable(),
   createdAt: z.date().nullable(),
   updatedAt: z.date().nullable(),

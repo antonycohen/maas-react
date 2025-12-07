@@ -15,6 +15,7 @@ const BASE_PATH = '/api/v1/magazine/categories';
 export interface GetCategoriesFilter {
   parentId?: string;
   name?: string;
+  term?: string;
 }
 
 export class CategoriesEndpoint {

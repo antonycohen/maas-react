@@ -1,55 +1,47 @@
 import * as z from 'zod';
-import { ImageSchema } from '../image';
-import { brandRefSchema } from '../brand';
-import { folderRefSchema } from '../folder';
+import { readImageSchema, updateImageSchema } from '../image';
+import { brandRefSchema, readBrandRefSchema } from '../brand';
+import { readFolderRefSchema } from '../folder';
+import { readDocumentSchema, updateDocumentSchema } from '../document';
 
-// Document schema for PDF files
-export const documentSchema = z.object({
-  id: z.string().nullable(),
-  url: z.string().nullable(),
-  downloadUrl: z.string().optional(),
-  originalFilename: z.string().nullable(),
-  mimeType: z.string().nullable(),
-  size: z.number().nullable(),
-});
-
-export type Document = z.infer<typeof documentSchema>;
-
-// Reference schema for issue (minimal fields)
-export const issueRefSchema = z.object({
+export const readIssueRefSchema = z.object({
   id: z.string(),
   title: z.string().nullable(),
 });
 
-export type IssueRef = z.infer<typeof issueRefSchema>;
+export const issueRefSchema = z.object({
+  id: z.string(),
+});
+
+export type ReadIssueRef = z.infer<typeof readIssueRefSchema>;
 
 // Full issue schema for read operations
 export const issueSchema = z.object({
   id: z.string(),
-  brand: brandRefSchema.nullable(),
+  brand: readBrandRefSchema.nullable(),
   title: z.string().max(255),
   description: z.string().max(5000).nullable(),
   issueNumber: z.string().max(50).nullable(),
-  cover: z.object(ImageSchema).nullable(),
+  cover: z.object(readImageSchema).nullable(),
   publishedAt: z.string().nullable(), // ISO date string
   isPublished: z.boolean().nullable(),
-  pdf: documentSchema.nullable(),
+  pdf: z.object(readDocumentSchema).nullable(),
   pageCount: z.number().int().min(0).nullable(),
   folderCount: z.number().nullable(),
   articleCount: z.number().nullable(),
-  folders: z.array(folderRefSchema).nullable(),
+  folders: z.lazy(() => z.array(readFolderRefSchema).nullable()),
 });
 
 export type Issue = z.infer<typeof issueSchema>;
 
 // Schema for creating an issue
 export const createIssueSchema = z.object({
-  brand: z.string().min(1), // brand ID
+  brand: brandRefSchema,
   title: z.string().min(1).max(255),
   description: z.string().max(5000).nullable().optional(),
   issueNumber: z.string().max(50).nullable().optional(),
-  cover: z.object(ImageSchema).nullable().optional(),
-  pdf: documentSchema.nullable().optional(),
+  cover: updateImageSchema.nullable().optional(),
+  pdf: updateDocumentSchema.nullable().optional(),
   pageCount: z.number().int().min(0).optional(),
 });
 
@@ -60,10 +52,10 @@ export const updateIssueSchema = z.object({
   title: z.string().max(255).optional(),
   description: z.string().max(5000).nullable().optional(),
   issueNumber: z.string().max(50).nullable().optional(),
-  cover: z.object(ImageSchema).nullable().optional(),
+  cover: updateImageSchema.nullable().optional(),
   publishedAt: z.string().nullable().optional(), // ISO date string
   isPublished: z.boolean().optional(),
-  pdf: documentSchema.nullable().optional(),
+  pdf: updateDocumentSchema.nullable().optional(),
   pageCount: z.number().int().min(0).optional(),
 });
 

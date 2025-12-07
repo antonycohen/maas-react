@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
-import { CategoriesListManagerPage } from '../pages/list-categories-manager-page';
-import { EditCategoryManagerPage } from '../pages/edit-category-manager-page';
+import { CategoriesListManagerPage } from '../pages/categories/list-categories-manager-page';
+import { EditCategoryManagerPage } from '../pages/categories/edit-category-manager-page';
 
 export const CategoriesRoutes = () => {
   return (

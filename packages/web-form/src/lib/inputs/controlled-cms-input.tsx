@@ -1,5 +1,10 @@
 import { ReactNode } from 'react';
-import { FieldValues, useController, useFormContext } from 'react-hook-form';
+import {
+  FieldPath,
+  FieldValues,
+  useController,
+  useFormContext,
+} from 'react-hook-form';
 
 import { CMSBlock } from '@maas/core-api-models';
 import {
@@ -9,13 +14,12 @@ import {
   FieldLabel,
 } from '@maas/web-components';
 import { Editor, EditorPlugin, EditorTrigger } from '@maas/web-cms-editor';
-import { PathsToType } from '@maas/core-utils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyEditorPlugin<Context> = EditorPlugin<any, any, Context>;
 
 type ControlledCMSInputProps<T extends FieldValues, Context = unknown> = {
-  name: PathsToType<T, CMSBlock[] | null>;
+  name: FieldPath<T>;
   label: string;
   description?: string;
   plugins: AnyEditorPlugin<Context>[];

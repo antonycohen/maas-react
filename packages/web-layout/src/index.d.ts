@@ -1,3 +1,6 @@
-export * from './lib/top-bar/top-bar';
-export * from './lib/layout/layout';
+export * from './lib/admin-layout';
+export * from './lib/layout';
+export * from './lib/layout-header';
+export * from './lib/layout-breadcrumb';
+export * from './lib/layout-content';
 //# sourceMappingURL=index.d.ts.map

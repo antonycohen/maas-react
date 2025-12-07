@@ -3,6 +3,7 @@ export * from './lib/article';
 export * from './lib/brand';
 export * from './lib/category';
 export * from './lib/configuration';
+export * from './lib/document';
 export * from './lib/folder';
 export * from './lib/image';
 export * from './lib/issue';

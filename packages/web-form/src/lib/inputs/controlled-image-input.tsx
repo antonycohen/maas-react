@@ -44,6 +44,7 @@ export function ControlledImageInput<T extends FieldValues>(
         disabled={disabled}
         accept={accept}
         aria-invalid={fieldState.invalid}
+        className="max-w-100 [&_*]:aspect-auto [&>div]:h-34 [&>button]:h-34"
       />
       {description && <FieldDescription>{description}</FieldDescription>}
       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

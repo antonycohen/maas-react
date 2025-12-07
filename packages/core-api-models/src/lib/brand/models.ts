@@ -1,20 +1,23 @@
 import * as z from 'zod';
-import { ImageSchema } from '../image';
+import { readImageSchema, updateImageSchema } from '../image';
 
-// Reference schema for brand (minimal fields)
-export const brandRefSchema = z.object({
+export const readBrandRefSchema = z.object({
   id: z.string(),
   name: z.string().nullable(),
 });
 
-export type BrandRef = z.infer<typeof brandRefSchema>;
+export const brandRefSchema = z.object({
+  id: z.string(),
+});
+
+export type ReadBrandRef = z.infer<typeof readBrandRefSchema>;
 
 // Full brand schema for read operations
 export const brandSchema = z.object({
   id: z.string(),
   name: z.string().max(255),
   description: z.string().max(5000).nullable(),
-  logo: z.object(ImageSchema).nullable(),
+  logo: z.object(readImageSchema).nullable(),
   isActive: z.boolean().nullable(),
   issueCount: z.number().nullable(),
 });
@@ -25,7 +28,7 @@ export type Brand = z.infer<typeof brandSchema>;
 export const createBrandSchema = z.object({
   name: z.string().min(1).max(255),
   description: z.string().max(5000).nullable().optional(),
-  logo: z.object(ImageSchema).nullable().optional(),
+  logo: updateImageSchema.nullable().optional(),
 });
 
 export type CreateBrand = z.infer<typeof createBrandSchema>;
@@ -34,7 +37,7 @@ export type CreateBrand = z.infer<typeof createBrandSchema>;
 export const updateBrandSchema = z.object({
   name: z.string().max(255).optional(),
   description: z.string().max(5000).nullable().optional(),
-  logo: z.object(ImageSchema).nullable().optional(),
+  logo: updateImageSchema.nullable().optional(),
   isActive: z.boolean().optional(),
 });
 

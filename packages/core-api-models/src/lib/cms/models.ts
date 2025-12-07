@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import * as z from 'zod';
 
-import { Image, ImageSchema } from '../image';
+import { Image, readImageSchema } from '../image';
 
 export type CMSBlockData = {
   [key: string]: unknown;
@@ -421,7 +421,7 @@ export type CMSBlock =
 
 // Zod Schemas
 
-const imageSchema = z.object(ImageSchema).nullable();
+const imageSchema = z.object(readImageSchema).nullable();
 
 const cmsBlockCommonSchema = {
   id: z.string(),
@@ -459,7 +459,7 @@ export const cmsImageBlockSchema = z.object({
     type: z.enum(['single', 'carousel', 'gallery']),
     caption: z.string().nullable(),
     image: imageSchema,
-    images: z.array(z.object(ImageSchema)).nullable(),
+    images: z.array(z.object(readImageSchema)).nullable(),
     withBorder: z.boolean().nullable(),
     withBackground: z.boolean().nullable(),
     stretched: z.boolean().nullable(),
@@ -739,7 +739,7 @@ export const cmsClubProjectsBlockSchema = z.object({
 });
 
 const cardPressSchema = z.object({
-  image: z.object(ImageSchema),
+  image: z.object(readImageSchema),
   content: z.string(),
   date: z.string(),
 });
@@ -767,7 +767,7 @@ export const cmsPodcastCarouselBlockSchema = z.object({
 });
 
 const mosaicGalleryElementSchema = z.object({
-  image: z.object(ImageSchema),
+  image: z.object(readImageSchema),
 });
 
 export const cmsMosaicGalleryBlockSchema = z.object({
@@ -813,7 +813,7 @@ const analyzeContentSchema = z.object({
   author: z.string(),
   subtitle: z.string(),
   content: z.string(),
-  image: z.object(ImageSchema),
+  image: z.object(readImageSchema),
 });
 
 export const cmsAnalyzeBlockSchema = z.object({
