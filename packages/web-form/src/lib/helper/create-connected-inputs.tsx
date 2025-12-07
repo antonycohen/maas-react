@@ -10,6 +10,8 @@ import { ControlledSelectInput } from '../inputs/controlled-select-input';
 import { ControlledTextInput } from '../inputs/controlled-text-input';
 import { ControlledTextareaInput } from '../inputs/controlled-textarea-input';
 import { ControlledAssociativeTokenInput } from '../inputs/controlled-associative-token-input';
+import { ControlledMagazineBrandInput } from '../inputs/controlled-magazine-brand-input';
+import { ControlledMagazineFolderInput } from '../inputs/controlled-magazine-folder-input';
 
 export function createConnectedInputHelpers<
   T extends FieldValues,
@@ -23,7 +25,9 @@ export function createConnectedInputHelpers<
     ControlledRTEInput: ControlledRTEInput<T>,
     ControlledImageInput: ControlledImageInput<T>,
     ControlledCMSInput: ControlledCMSInput<T, Context>,
+    ControlledMagazineBrandInput: ControlledMagazineBrandInput<T>,
     ControlledMagazineCategoryInput: ControlledMagazineCategoryInput<T>,
+    ControlledMagazineFolderInput: ControlledMagazineFolderInput<T>,
     ControlledAssociativeTokenInput: ControlledAssociativeTokenInput<T>,
     ControlledCheckbox: ControlledCheckbox<T>,
   };

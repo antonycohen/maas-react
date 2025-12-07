@@ -3,6 +3,7 @@ import {
   Article,
   CreateArticle,
   createArticleSchema,
+  Folder,
   UpdateArticle,
   updateArticleSchema,
 } from '@maas/core-api-models';
@@ -24,14 +25,13 @@ import { createConnectedInputHelpers } from '@maas/web-form';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { FolderWithArticles } from './folder-section';
 
 // Form schema for creating/editing articles
 const articleFormSchema = z.object({
   title: z.string().min(1, 'Title is required').max(255),
   description: z.string().max(5000).nullable().optional(),
   type: z.string().max(50).nullable().optional(),
-  folder: z.string().nullable().optional(),
+  folder: z.string().min(1, 'Folder is required'),
   isPublished: z.boolean().optional(),
   isFeatured: z.boolean().optional(),
 });
@@ -45,14 +45,12 @@ type ArticleSheetProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   article?: Article | null;
-  folders: FolderWithArticles[];
+  folders: Folder[];
   issueId: string;
   currentFolderId?: string | null;
   onSave: (data: CreateArticle | UpdateArticle, articleId?: string) => void;
   onDelete?: (articleId: string) => void;
 };
-
-const NO_FOLDER_VALUE = '__none__';
 
 const articleTypes = [
   { value: 'feature', label: 'Feature' },
@@ -83,7 +81,7 @@ export function ArticleSheet({
       title: '',
       description: '',
       type: 'feature',
-      folder: NO_FOLDER_VALUE,
+      folder: '',
       isPublished: false,
       isFeatured: false,
     },
@@ -101,7 +99,7 @@ export function ArticleSheet({
           title: article.title,
           description: article.description ?? '',
           type: article.type || 'feature',
-          folder: article.folder?.id || currentFolderId || NO_FOLDER_VALUE,
+          folder: article.folder?.id || currentFolderId || folders[0]?.id || '',
           isPublished: article.isPublished ?? false,
           isFeatured: article.isFeatured ?? false,
         });
@@ -110,18 +108,16 @@ export function ArticleSheet({
           title: '',
           description: '',
           type: 'feature',
-          folder: currentFolderId || NO_FOLDER_VALUE,
+          folder: currentFolderId || folders[0]?.id || '',
           isPublished: false,
           isFeatured: false,
         });
       }
     }
-  }, [article, currentFolderId, open, reset]);
+  }, [article, currentFolderId, folders, open, reset]);
 
   function onSubmit(data: ArticleFormData) {
-    const folderRef = data.folder && data.folder !== NO_FOLDER_VALUE
-      ? { id: data.folder }
-      : null;
+    const folderRef = { id: data.folder };
 
     if (isEditMode && article) {
       // Update mode
@@ -158,13 +154,10 @@ export function ArticleSheet({
     }
   }
 
-  const folderOptions = [
-    { value: NO_FOLDER_VALUE, label: 'No folder (standalone)' },
-    ...folders.map((folder) => ({
-      value: folder.id,
-      label: folder.name,
-    })),
-  ];
+  const folderOptions = folders.map((folder) => ({
+    value: folder.id,
+    label: folder.name,
+  }));
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>

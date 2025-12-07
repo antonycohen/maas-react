@@ -103,29 +103,26 @@ export function EditBrandManagerPage() {
                   </FieldGroup>
                 </CardContent>
               </Card>
-
-              {!isCreateMode && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Issue Configuration</CardTitle>
-                    <CardDescription>
-                      Default settings for new issues created under this brand.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <FieldGroup>
-                      <ControlledAssociativeTokenInput
-                        name="issueConfiguration.defaultFolders"
-                        label="Default Folders"
-                        keyLabel="Slug"
-                        keyPlaceholder="e.g., cover-stories"
-                        valueLabel="Name"
-                        valuePlaceholder="e.g., Cover Stories"
-                      />
-                    </FieldGroup>
-                  </CardContent>
-                </Card>
-              )}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Issue Configuration</CardTitle>
+                  <CardDescription>
+                    Default settings for new issues created under this brand.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <FieldGroup>
+                    <ControlledAssociativeTokenInput
+                      name="issueConfiguration.defaultFolders"
+                      label="Default Folders"
+                      keyLabel="Slug"
+                      keyPlaceholder="e.g., cover-stories"
+                      valueLabel="Name"
+                      valuePlaceholder="e.g., Cover Stories"
+                    />
+                  </FieldGroup>
+                </CardContent>
+              </Card>
             </div>
 
             <div className="flex gap-3">

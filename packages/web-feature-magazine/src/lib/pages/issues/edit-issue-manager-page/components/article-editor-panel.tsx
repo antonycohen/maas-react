@@ -1,17 +1,17 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Article,
-  cmsBlockSchema,
-  UpdateArticle,
-  updateArticleSchema,
-} from '@maas/core-api-models';
+import { Article, Folder, UpdateArticle } from '@maas/core-api-models';
 import {
   Button,
-  Checkbox,
   Field,
   FieldDescription,
   FieldGroup,
+  FieldLabel,
   ScrollArea,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Skeleton,
 } from '@maas/web-components';
 import {
   AnalyzePlugin,
@@ -33,23 +33,8 @@ import {
 } from '@maas/web-cms-editor';
 import { createConnectedInputHelpers } from '@maas/web-form';
 import { IconFileText } from '@tabler/icons-react';
-import { useEffect } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
-import * as z from 'zod';
-import { FolderWithArticles } from './folder-section';
-
-// Form schema for article editor
-const articleEditorFormSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(255),
-  description: z.string().max(5000).nullable().optional(),
-  content: z.array(cmsBlockSchema).nullable().optional(),
-  type: z.string().max(50).nullable().optional(),
-  folder: z.string().nullable().optional(),
-  isPublished: z.boolean().optional(),
-  isFeatured: z.boolean().optional(),
-});
-
-type ArticleEditorFormData = z.infer<typeof articleEditorFormSchema>;
+import { FormProvider } from 'react-hook-form';
+import { useEditArticleForm } from '../hooks';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyEditorPlugin = EditorPlugin<any, any, unknown>;
@@ -57,18 +42,16 @@ type AnyEditorPlugin = EditorPlugin<any, any, unknown>;
 const {
   ControlledTextInput,
   ControlledTextAreaInput,
-  ControlledSelectInput,
   ControlledCMSInput,
-} = createConnectedInputHelpers<ArticleEditorFormData>();
-
-const NO_FOLDER_VALUE = '__none__';
+  ControlledCheckbox,
+} = createConnectedInputHelpers<UpdateArticle>();
 
 type ArticleEditorPanelProps = {
   article: Article | null;
-  folders: FolderWithArticles[];
-  currentFolderId: string | null;
+  folders: Folder[];
   onSave: (data: UpdateArticle, articleId: string) => void;
   plugins?: AnyEditorPlugin[];
+  isLoading?: boolean;
 };
 
 const articleTypes = [
@@ -103,79 +86,51 @@ const plugins = [
 export function ArticleEditorPanel({
   article,
   folders,
-  currentFolderId,
   onSave,
+  isLoading,
 }: ArticleEditorPanelProps) {
-  const form = useForm<ArticleEditorFormData>({
-    resolver: zodResolver(articleEditorFormSchema),
-    defaultValues: {
-      title: '',
-      description: '',
-      content: null,
-      type: 'feature',
-      folder: NO_FOLDER_VALUE,
-      isPublished: false,
-      isFeatured: false,
-    },
-  });
-
-  console.log(form.getValues());
+  const { form } = useEditArticleForm(article);
 
   const {
     handleSubmit,
-    reset,
     watch,
     setValue,
     formState: { isDirty },
   } = form;
   const selectedType = watch('type');
-  const isPublished = watch('isPublished');
-  const isFeatured = watch('isFeatured');
 
-  useEffect(() => {
-    if (article) {
-      reset({
-        title: article.title,
-        description: article.description ?? '',
-        content: article.content ?? null,
-        type: article.type || 'feature',
-        folder: article.folder?.id || currentFolderId || NO_FOLDER_VALUE,
-        isPublished: article.isPublished ?? false,
-        isFeatured: article.isFeatured ?? false,
-      });
-    }
-  }, [article, currentFolderId, reset]);
-
-  function onSubmit(data: ArticleEditorFormData) {
+  function onSubmit(data: UpdateArticle) {
     if (!article) return;
-    const folderRef = data.folder && data.folder !== NO_FOLDER_VALUE
-      ? { id: data.folder }
-      : null;
-    const updateData: UpdateArticle = updateArticleSchema.parse({
-      title: data.title,
-      description: data.description ?? '',
-      content: data.content,
-      type: data.type,
-      folder: folderRef,
-      isPublished: data.isPublished,
-      isFeatured: data.isFeatured,
-    });
-    onSave(updateData, article.id);
+    onSave(data, article.id);
   }
 
-  const folderOptions = [
-    { value: NO_FOLDER_VALUE, label: 'No folder (standalone)' },
-    ...folders.map((folder) => ({
-      value: folder.id,
-      label: folder.name,
-    })),
-  ];
+  const folderOptions = folders.map((folder) => ({
+    value: folder.id,
+    label: folder.name,
+  }));
 
-  if (!article) {
+  if (!article && !isLoading) {
     return (
       <div className="flex h-full flex-col items-center justify-center text-muted-foreground">
         <IconFileText className="h-12 w-12 mb-4 opacity-50" />
         <p className="text-sm">Select an article to edit</p>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full flex-col">
+        <div className="flex items-center justify-between border-b px-4 py-2">
+          <Skeleton className="h-5 w-24" />
+          <Skeleton className="h-8 w-16" />
+        </div>
+        <div className="p-4 space-y-4">
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-20 w-full" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-32 w-full" />
+        </div>
       </div>
     );
   }
@@ -227,11 +182,28 @@ export function ArticleEditorPanel({
                 </div>
               </Field>
 
-              <ControlledSelectInput
-                name="folder"
-                label="Folder"
-                options={folderOptions}
-              />
+              <Field>
+                <FieldLabel>Folder</FieldLabel>
+                <Select
+                  value={watch('folder')?.id ?? ''}
+                  onValueChange={(value) =>
+                    setValue('folder', value ? { id: value } : null, {
+                      shouldDirty: true,
+                    })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select folder..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {folderOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
 
               {plugins.length > 0 && (
                 <ControlledCMSInput
@@ -243,30 +215,8 @@ export function ArticleEditorPanel({
               )}
 
               <div className="grid grid-cols-2 gap-4">
-                <Field orientation="horizontal">
-                  <Checkbox
-                    id="article-published"
-                    checked={isPublished}
-                    onCheckedChange={(checked) =>
-                      setValue('isPublished', checked as boolean, {
-                        shouldDirty: true,
-                      })
-                    }
-                  />
-                  <FieldDescription>Published</FieldDescription>
-                </Field>
-                <Field orientation="horizontal">
-                  <Checkbox
-                    id="article-featured"
-                    checked={isFeatured}
-                    onCheckedChange={(checked) =>
-                      setValue('isFeatured', checked as boolean, {
-                        shouldDirty: true,
-                      })
-                    }
-                  />
-                  <FieldDescription>Featured</FieldDescription>
-                </Field>
+                <ControlledCheckbox name="isPublished" label="Published" />
+                <ControlledCheckbox name="isFeatured" label="Featured" />
               </div>
             </FieldGroup>
           </div>
