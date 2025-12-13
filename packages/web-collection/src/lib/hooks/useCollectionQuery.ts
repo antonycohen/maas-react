@@ -1,27 +1,31 @@
-import { keepPreviousData } from '@tanstack/react-query';
-import { FieldQuery, QueryParams } from '@maas/core-api';
-import { useMemo } from 'react';
-import { ColumnFiltersState, PaginationState } from '@tanstack/react-table';
-import { CollectionToolbarProps } from '../collection-toolbar';
-import { UseQueryTable } from '../collection';
+import {keepPreviousData} from '@tanstack/react-query';
+import {FieldQuery, QueryParams} from '@maas/core-api';
+import {useMemo} from 'react';
+import {ColumnFiltersState, PaginationState, SortingState} from '@tanstack/react-table';
+import {CollectionToolbarProps} from '../collection-toolbar';
+import {UseQueryTable} from '../collection';
 
-interface UseCollectionQueryProps<T> {
+interface UseCollectionQueryProps<T, S = undefined> {
   pagination: PaginationState;
   globalFilter: string;
   columnFilters: ColumnFiltersState;
-  filtersConfiguration?: Omit<CollectionToolbarProps<T>, 'table'>;
-  useQueryFn: UseQueryTable<T>;
-  queryFields?: FieldQuery<T>
+  sorting?: SortingState;
+  filtersConfiguration?: Omit<CollectionToolbarProps<T>, 'table' | 'showColumnSelector'>;
+  useQueryFn: UseQueryTable<T, S>;
+  queryFields?: FieldQuery<T>;
+  staticParams?: S;
 }
 
-export function useCollectionQuery<T>({
+export function useCollectionQuery<T, Q = undefined>({
   pagination,
   globalFilter,
   columnFilters,
+  sorting,
   filtersConfiguration,
   useQueryFn,
-  queryFields
-}: UseCollectionQueryProps<T>) {
+  queryFields,
+  staticParams,
+}: UseCollectionQueryProps<T, Q>) {
   const filters = useMemo(() => {
     const filters: QueryParams = {};
     const textFilter = filtersConfiguration?.textFilter;
@@ -41,12 +45,30 @@ export function useCollectionQuery<T>({
     globalFilter,
   ]);
 
+  const sort = useMemo(() => {
+    if (sorting && sorting.length > 0) {
+      const sortItem = sorting[0];
+      return {
+        field: sortItem.id as keyof T,
+        direction: (sortItem.desc ? 'desc' : 'asc') as 'desc' | 'asc',
+      };
+    }
+    return undefined;
+  }, [sorting]);
+
+
+
   const { data } = useQueryFn(
     {
       offset: pagination.pageIndex * pagination.pageSize,
       limit: pagination.pageSize,
       filters,
-      fields: queryFields
+      fields: queryFields,
+      staticParams,
+      sort: sort ? {
+        field: sort.field,
+        direction: sort.direction,
+      }: undefined,
     },
     {
       placeholderData: keepPreviousData,

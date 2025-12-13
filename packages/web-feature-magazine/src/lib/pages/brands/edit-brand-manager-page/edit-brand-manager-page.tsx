@@ -57,6 +57,8 @@ export function EditBrandManagerPage() {
             { label: breadcrumbLabel },
           ]}
         />
+      </header>
+      <LayoutContent>
         <LayoutHeader
           pageTitle={pageTitle}
           actions={
@@ -72,8 +74,6 @@ export function EditBrandManagerPage() {
             )
           }
         />
-      </header>
-      <LayoutContent>
         <FormProvider {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -97,7 +97,6 @@ export function EditBrandManagerPage() {
                     <ControlledTextAreaInput
                       name="description"
                       label="Description"
-                      rows={4}
                     />
                     <ControlledCheckbox name="isActive" label="Active" />
                   </FieldGroup>

@@ -5,27 +5,16 @@ import {
   useController,
   useFormContext,
 } from 'react-hook-form';
-import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react';
 
 import { useGetCategories } from '@maas/core-api';
-import { cn } from '@maas/core-utils';
+import { ReadCategoryRef } from '@maas/core-api-models';
 import {
-  Button,
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
+  AsyncCombobox,
   Field,
   FieldDescription,
   FieldError,
   FieldLabel,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
 } from '@maas/web-components';
-import { ReadCategoryRef } from '@maas/core-api-models';
 
 type ControlledMagazineCategoryInputProps<T extends FieldValues> = {
   name: FieldPathByValue<T, ReadCategoryRef | undefined | null>;
@@ -46,7 +35,6 @@ export function ControlledMagazineCategoryInput<T extends FieldValues>(
     disabled,
   } = props;
 
-  const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
   const form = useFormContext();
@@ -64,76 +52,41 @@ export function ControlledMagazineCategoryInput<T extends FieldValues>(
       offset: 0,
     },
     {
-      enabled: open,
+      enabled: true,
     },
   );
 
   const categories = categoriesData?.data ?? [];
+  const options = categories.map((category) => ({
+    id: category.id,
+    label: category.name,
+  }));
 
   const currentValue = field.value as ReadCategoryRef | null | undefined;
-  const displayValue = currentValue?.name ?? placeholder;
+  const comboboxValue =
+    currentValue && currentValue.name
+      ? { id: currentValue.id, label: currentValue.name }
+      : null;
 
   return (
     <Field data-invalid={fieldState.invalid}>
       <FieldLabel htmlFor={id}>{label}</FieldLabel>
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            id={id}
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            aria-invalid={fieldState.invalid}
-            disabled={disabled}
-            className="w-full justify-between font-normal"
-            onBlur={field.onBlur}
-          >
-            {currentValue ? displayValue : placeholder}
-            <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
-          <Command shouldFilter={false}>
-            <CommandInput
-              placeholder="Search categories..."
-              value={searchTerm}
-              onValueChange={setSearchTerm}
-            />
-            <CommandList>
-              <CommandEmpty>
-                {isLoading ? 'Loading...' : 'No category found.'}
-              </CommandEmpty>
-              <CommandGroup>
-                {categories.map((category) => (
-                  <CommandItem
-                    key={category.id}
-                    value={category.id}
-                    onSelect={() => {
-                      const isSelected = currentValue?.id === category.id;
-                      field.onChange(
-                        isSelected
-                          ? null
-                          : { id: category.id, name: category.name },
-                      );
-                      setOpen(false);
-                    }}
-                  >
-                    <CheckIcon
-                      className={cn(
-                        'mr-2 h-4 w-4',
-                        currentValue?.id === category.id
-                          ? 'opacity-100'
-                          : 'opacity-0',
-                      )}
-                    />
-                    {category.name}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
+      <AsyncCombobox
+        id={id}
+        value={comboboxValue}
+        onChange={(option) => {
+          field.onChange(option ? { id: option.id, name: option.label } : null);
+        }}
+        onBlur={field.onBlur}
+        onSearchChange={setSearchTerm}
+        options={options}
+        isLoading={isLoading}
+        placeholder={placeholder}
+        searchPlaceholder="Search categories..."
+        emptyMessage="No category found."
+        disabled={disabled}
+        aria-invalid={fieldState.invalid}
+      />
       {description && <FieldDescription>{description}</FieldDescription>}
       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
     </Field>

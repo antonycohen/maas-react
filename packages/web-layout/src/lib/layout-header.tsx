@@ -2,20 +2,24 @@ import { ReactNode } from 'react';
 
 type LayoutHeaderProps = {
   pageTitle: string;
+  pageDescription?: string;
   actions?: ReactNode;
 };
 
 export function LayoutHeader(props: LayoutHeaderProps) {
-  const { pageTitle, actions } = props;
+  const { pageTitle, pageDescription, actions } = props;
 
   return (
-    <div className="border-border flex flex-col border-b px-4 py-4 md:py-6">
+    <div className="flex flex-col">
       {/* Main content */}
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div className="space-y-2">
-          <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+        <div className="flex flex-col">
+          <h1 className="justify-start text-foreground text-3xl font-semibold leading-9">
             {pageTitle}
           </h1>
+          {pageDescription && (
+            <p className="justify-start text-ring text-3xl font-semibold leading-9 ">{pageDescription}</p>
+          )}
         </div>
         <div className="flex items-center gap-4">
           {/* Actions */}

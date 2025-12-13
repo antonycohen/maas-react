@@ -5,6 +5,8 @@ import { CategoriesEndpoint } from './endpoints/categories';
 import { FoldersEndpoint } from './endpoints/folders';
 import { IssuesEndpoint } from './endpoints/issues';
 import { UsersEndpoint } from './endpoints/users';
+import { OrganizationsEndpoint } from './endpoints/organizations';
+import { OrganizationMembersEndpoint } from './endpoints/organization-members';
 
 class MaasApi {
   private readonly client: ApiClient;
@@ -14,6 +16,8 @@ class MaasApi {
   public readonly folders: FoldersEndpoint;
   public readonly issues: IssuesEndpoint;
   public readonly users: UsersEndpoint;
+  public readonly organizations: OrganizationsEndpoint;
+  public readonly organizationMembers: OrganizationMembersEndpoint;
 
   constructor(config: ApiClientConfig) {
     this.client = new ApiClient(config);
@@ -23,6 +27,8 @@ class MaasApi {
     this.folders = new FoldersEndpoint(this.client);
     this.issues = new IssuesEndpoint(this.client);
     this.users = new UsersEndpoint(this.client);
+    this.organizations = new OrganizationsEndpoint(this.client);
+    this.organizationMembers = new OrganizationMembersEndpoint(this.client);
   }
 }
 

@@ -1,28 +1,13 @@
-import { ColumnDef, flexRender, RowData } from '@tanstack/react-table';
-import { UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
+import {ColumnDef, flexRender, RowData} from '@tanstack/react-table';
+import {UseQueryOptions, UseQueryResult} from '@tanstack/react-query';
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@maas/web-components';
-import {
-  CollectionToolbar,
-  CollectionToolbarProps,
-} from './collection-toolbar';
-import { CollectionPagination } from './collection-pagination';
-import {
-  ApiCollectionResponse,
-  ApiError,
-  FieldQuery,
-  GetCollectionQueryParams,
-} from '@maas/core-api';
-import { useCollectionState } from './hooks/useCollectionState';
-import { useCollectionQuery } from './hooks/useCollectionQuery';
-import { useCollectionTable } from './hooks/useCollectionTable';
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from '@maas/web-components';
+import {CollectionToolbar, CollectionToolbarProps,} from './collection-toolbar';
+import {CollectionPagination} from './collection-pagination';
+import {ApiCollectionResponse, ApiError, FieldQuery, GetCollectionQueryParams,} from '@maas/core-api';
+import {useCollectionState} from './hooks/useCollectionState';
+import {useCollectionQuery} from './hooks/useCollectionQuery';
+import {useCollectionTable} from './hooks/useCollectionTable';
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -31,38 +16,44 @@ declare module '@tanstack/react-table' {
   }
 }
 
-export type UseQueryTable<T> = (
-  params: GetCollectionQueryParams<T>,
+export type UseQueryTable<T, Q> = (
+  params: GetCollectionQueryParams<T, Q>,
   options?: Omit<
     UseQueryOptions<ApiCollectionResponse<T>, ApiError>,
     'queryKey'
   >,
 ) => UseQueryResult<ApiCollectionResponse<T>, ApiError>;
 
-interface Props<T> {
+interface Props<T, S> {
   columns: ColumnDef<T>[];
-  filtersConfiguration?: Omit<CollectionToolbarProps<T>, 'table'>;
+  filtersConfiguration?: Omit<CollectionToolbarProps<T>, 'table' | 'showColumnSelector'>;
   useLocationAsState?: boolean;
-  useQueryFn: UseQueryTable<T>;
+  useQueryFn: UseQueryTable<T, S>;
   queryFields?: FieldQuery<T>;
+  staticParams?: S;
+  showColumnSelector?: boolean;
 }
 
-export function Collection<T>({
+export function Collection<T, Q = undefined>({
   columns,
   filtersConfiguration,
   useLocationAsState = false,
   useQueryFn,
   queryFields,
-}: Props<T>) {
+  staticParams = undefined as Q,
+  showColumnSelector = false
+}: Props<T, Q>) {
   const state = useCollectionState({ useLocationAsState });
 
   const { items } = useCollectionQuery({
     pagination: state.pagination,
     globalFilter: state.globalFilter,
     columnFilters: state.columnFilters,
+    sorting: state.sorting,
     filtersConfiguration,
     useQueryFn,
     queryFields,
+    staticParams,
   });
 
   const table = useCollectionTable({
@@ -73,7 +64,7 @@ export function Collection<T>({
 
   return (
     <div className="space-y-4">
-      <CollectionToolbar table={table} {...filtersConfiguration} />
+      <CollectionToolbar table={table} showColumnSelector={showColumnSelector} {...filtersConfiguration} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

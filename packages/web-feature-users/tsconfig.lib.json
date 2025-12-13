@@ -9,7 +9,8 @@
     ],
     "rootDir": "src",
     "jsx": "react-jsx",
-    "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo"
+    "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
+    "lib": ["es2022", "dom", "dom.iterable"]
   },
   "exclude": [
     "out-tsc",
@@ -31,6 +32,9 @@
   "references": [
     {
       "path": "../core-utils/tsconfig.lib.json"
+    },
+    {
+      "path": "../core-store-session/tsconfig.lib.json"
     },
     {
       "path": "../web-collection/tsconfig.lib.json"

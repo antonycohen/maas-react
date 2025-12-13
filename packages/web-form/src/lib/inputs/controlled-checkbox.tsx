@@ -11,12 +11,14 @@ type ControlledCheckboxProps<T extends FieldValues> = {
   name: FieldPath<T>;
   label: string;
   description?: string;
+  direction?: 'horizontal' | 'vertical';
+  className?: string;
 };
 
 export function ControlledCheckbox<T extends FieldValues>(
   props: ControlledCheckboxProps<T>,
 ) {
-  const { name, label, description } = props;
+  const { name, label, description, direction: _direction = 'vertical', className } = props;
   const form = useFormContext();
   const { control } = form;
   const { field, fieldState } = useController({
@@ -26,7 +28,7 @@ export function ControlledCheckbox<T extends FieldValues>(
   const id = useId();
 
   return (
-    <Field orientation="horizontal" data-invalid={fieldState.invalid}>
+    <Field orientation="horizontal" data-invalid={fieldState.invalid} className={className}>
       <Checkbox
         id={id}
         checked={field.value as boolean}

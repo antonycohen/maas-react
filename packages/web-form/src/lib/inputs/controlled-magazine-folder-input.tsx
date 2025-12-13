@@ -5,27 +5,16 @@ import {
   useController,
   useFormContext,
 } from 'react-hook-form';
-import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react';
 
 import { useGetFolders } from '@maas/core-api';
-import { cn } from '@maas/core-utils';
+import { ReadFolderRef } from '@maas/core-api-models';
 import {
-  Button,
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
+  AsyncCombobox,
   Field,
   FieldDescription,
   FieldError,
   FieldLabel,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
 } from '@maas/web-components';
-import { ReadFolderRef } from '@maas/core-api-models';
 
 type ControlledMagazineFolderInputProps<T extends FieldValues> = {
   name: FieldPathByValue<T, ReadFolderRef | undefined | null>;
@@ -48,7 +37,6 @@ export function ControlledMagazineFolderInput<T extends FieldValues>(
     disabled,
   } = props;
 
-  const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
   const form = useFormContext();
@@ -69,76 +57,41 @@ export function ControlledMagazineFolderInput<T extends FieldValues>(
       offset: 0,
     },
     {
-      enabled: open,
+      enabled: true,
     },
   );
 
   const folders = foldersData?.data ?? [];
+  const options = folders.map((folder) => ({
+    id: folder.id,
+    label: folder.name,
+  }));
 
   const currentValue = field.value as ReadFolderRef | null | undefined;
-  const displayValue = currentValue?.name ?? placeholder;
+  const comboboxValue =
+    currentValue && currentValue.name
+      ? { id: currentValue.id, label: currentValue.name }
+      : null;
 
   return (
     <Field data-invalid={fieldState.invalid}>
       <FieldLabel htmlFor={id}>{label}</FieldLabel>
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            id={id}
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            aria-invalid={fieldState.invalid}
-            disabled={disabled}
-            className="w-full justify-between font-normal"
-            onBlur={field.onBlur}
-          >
-            {currentValue ? displayValue : placeholder}
-            <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
-          <Command shouldFilter={false}>
-            <CommandInput
-              placeholder="Search folders..."
-              value={searchTerm}
-              onValueChange={setSearchTerm}
-            />
-            <CommandList>
-              <CommandEmpty>
-                {isLoading ? 'Loading...' : 'No folder found.'}
-              </CommandEmpty>
-              <CommandGroup>
-                {folders.map((folder) => (
-                  <CommandItem
-                    key={folder.id}
-                    value={folder.id}
-                    onSelect={() => {
-                      const isSelected = currentValue?.id === folder.id;
-                      field.onChange(
-                        isSelected
-                          ? null
-                          : { id: folder.id, name: folder.name },
-                      );
-                      setOpen(false);
-                    }}
-                  >
-                    <CheckIcon
-                      className={cn(
-                        'mr-2 h-4 w-4',
-                        currentValue?.id === folder.id
-                          ? 'opacity-100'
-                          : 'opacity-0',
-                      )}
-                    />
-                    {folder.name}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
+      <AsyncCombobox
+        id={id}
+        value={comboboxValue}
+        onChange={(option) => {
+          field.onChange(option ? { id: option.id, name: option.label } : null);
+        }}
+        onBlur={field.onBlur}
+        onSearchChange={setSearchTerm}
+        options={options}
+        isLoading={isLoading}
+        placeholder={placeholder}
+        searchPlaceholder="Search folders..."
+        emptyMessage="No folder found."
+        disabled={disabled}
+        aria-invalid={fieldState.invalid}
+      />
       {description && <FieldDescription>{description}</FieldDescription>}
       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
     </Field>

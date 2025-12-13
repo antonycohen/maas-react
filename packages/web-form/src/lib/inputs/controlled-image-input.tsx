@@ -1,31 +1,22 @@
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-  ImagePicker,
-} from '@maas/web-components';
-import { PathsToType } from '@maas/core-utils';
-import { Image } from '@maas/core-api-models';
-import {
-  FieldValues,
-  useController,
-  useFormContext,
-} from 'react-hook-form';
-import { useId } from 'react';
+import {Field, FieldDescription, FieldError, FieldLabel, ImagePicker,} from '@maas/web-components';
+import {UpdateImage} from '@maas/core-api-models';
+import {FieldPathByValue, FieldValues, useController, useFormContext,} from 'react-hook-form';
+import {useId} from 'react';
 
 type ControlledImageInputProps<T extends FieldValues> = {
-  name: PathsToType<T, Image | null>;
+  name: FieldPathByValue<T, UpdateImage | undefined | null >;
   label: string;
   description?: string;
   disabled?: boolean;
   accept?: string;
+  direction?: 'horizontal' | 'vertical';
+  className?: string;
 };
 
 export function ControlledImageInput<T extends FieldValues>(
   props: ControlledImageInputProps<T>,
 ) {
-  const { name, label, description, disabled, accept } = props;
+  const { name, label, description, disabled, accept, direction = 'vertical', className } = props;
   const form = useFormContext();
   const { control } = form;
   const { field, fieldState } = useController({
@@ -35,8 +26,10 @@ export function ControlledImageInput<T extends FieldValues>(
   const id = useId();
 
   return (
-    <Field data-invalid={fieldState.invalid}>
-      <FieldLabel htmlFor={id}>{label}</FieldLabel>
+    <Field data-invalid={fieldState.invalid} orientation={direction} className={className}>
+      <FieldLabel htmlFor={id} className={direction === 'horizontal' ? 'font-semibold basis-1/2' : ''}>
+        {label}
+      </FieldLabel>
       <ImagePicker
         id={id}
         value={field.value}
@@ -44,7 +37,7 @@ export function ControlledImageInput<T extends FieldValues>(
         disabled={disabled}
         accept={accept}
         aria-invalid={fieldState.invalid}
-        className="max-w-100 [&_*]:aspect-auto [&>div]:h-34 [&>button]:h-34"
+        className={direction === 'horizontal' ? 'basis-1/2' : ''}
       />
       {description && <FieldDescription>{description}</FieldDescription>}
       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

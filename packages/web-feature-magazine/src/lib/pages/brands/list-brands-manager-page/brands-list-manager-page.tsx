@@ -17,11 +17,10 @@ export function BrandsListManagerPage() {
     <div>
       <header>
         <LayoutBreadcrumb
-          items={[
-            { label: 'Home', to: '/' },
-            { label: 'Brands' },
-          ]}
+          items={[{ label: 'Home', to: '/' }, { label: 'Brands' }]}
         />
+      </header>
+      <LayoutContent>
         <LayoutHeader
           pageTitle="Brands"
           actions={
@@ -33,8 +32,6 @@ export function BrandsListManagerPage() {
             </Button>
           }
         />
-      </header>
-      <LayoutContent>
         <Collection
           useLocationAsState
           columns={columns}
@@ -51,7 +48,7 @@ export function BrandsListManagerPage() {
             description: null,
             isActive: null,
             issueCount: null,
-            logo: null
+            logo: null,
           }}
         />
       </LayoutContent>

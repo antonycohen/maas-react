@@ -1,7 +1,7 @@
 'use client';
 
-import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-import { Row } from '@tanstack/react-table';
+import {DotsHorizontalIcon} from '@radix-ui/react-icons';
+import {Row} from '@tanstack/react-table';
 
 import {
   Button,
@@ -9,14 +9,13 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@maas/web-components';
 
-import { useDialogState } from '@maas/core-utils';
+import {cn, useDialogState} from '@maas/core-utils';
 
-import { Link } from 'react-router-dom';
-import { ComponentType } from 'react';
+import {Link} from 'react-router-dom';
+import {ComponentType} from 'react';
 
 interface CommonAction {
   className?: string;
@@ -40,10 +39,18 @@ interface DialogAction<T> extends CommonAction {
   };
 }
 
-type Action<T> = LinkAction<T> | DialogAction<T>;
+interface OnClickAction<T> extends CommonAction {
+  onClick: (row: T) => void;
+}
+
+type Action<T> = LinkAction<T> | DialogAction<T> | OnClickAction<T>;
 
 const isDialogAction = <T,>(action: Action<T>): action is DialogAction<T> => {
   return (action as DialogAction<T>).dialog !== undefined;
+};
+
+const isOnClickAction = <T,>(action: Action<T>): action is OnClickAction<T> => {
+  return (action as OnClickAction<T>).onClick !== undefined;
 };
 
 const filterDialogActions = <T,>(actions: Action<T>[]): DialogAction<T>[] => {
@@ -65,14 +72,12 @@ export function CollectionRowActions<T>({ row, actions }: Props<T>) {
     const Icon = action.icon;
     return (
       <DropdownMenuItem
-        className={action.className}
+        className={cn('' ,action.className)}
         key={index}
         onClick={() => setOpen(action.dialog.id)}
       >
+        <Icon size={16} />
         {action.label}
-        <DropdownMenuShortcut>
-          <Icon size={16} />
-        </DropdownMenuShortcut>
       </DropdownMenuItem>
     );
   };
@@ -82,13 +87,38 @@ export function CollectionRowActions<T>({ row, actions }: Props<T>) {
     return (
       <DropdownMenuItem className={action.className} key={index} asChild>
         <Link to={action.linkTo(row.original)}>
+          <Icon size={16} />
           {action.label}
-          <DropdownMenuShortcut>
-            <Icon size={16} />
-          </DropdownMenuShortcut>
         </Link>
       </DropdownMenuItem>
     );
+  };
+
+  const renderOnClickActionMenuItem = (
+    action: OnClickAction<T>,
+    index: number,
+  ) => {
+    const Icon = action.icon;
+    return (
+      <DropdownMenuItem
+        className={action.className}
+        key={index}
+        onClick={() => action.onClick(row.original)}
+      >
+        <Icon size={16} />
+        {action.label}
+      </DropdownMenuItem>
+    );
+  };
+
+  const renderActionMenuItem = (action: Action<T>, index: number) => {
+    if (isDialogAction(action)) {
+      return renderDialogActionMenuItem(action, index);
+    }
+    if (isOnClickAction(action)) {
+      return renderOnClickActionMenuItem(action, index);
+    }
+    return renderLinkActionMenuItem(action, index);
   };
 
   return (
@@ -103,7 +133,7 @@ export function CollectionRowActions<T>({ row, actions }: Props<T>) {
             <span className="sr-only">Open menu</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[160px]">
+        <DropdownMenuContent align="end" className="w-[224px]">
           {actions.map((action, index) => {
             const needsSeparator =
               index > 0 && action.group !== actions[index - 1].group;
@@ -112,9 +142,7 @@ export function CollectionRowActions<T>({ row, actions }: Props<T>) {
                 {needsSeparator && (
                   <DropdownMenuSeparator key={`separator-${index}`} />
                 )}
-                {isDialogAction(action)
-                  ? renderDialogActionMenuItem(action, index)
-                  : renderLinkActionMenuItem(action, index)}
+                {renderActionMenuItem(action, index)}
               </>
             );
           })}

@@ -3,10 +3,13 @@
   "include": [],
   "references": [
     {
+      "path": "../web-collection"
+    },
+    {
       "path": "../core-utils"
     },
     {
-      "path": "../web-collection"
+      "path": "../web-form"
     },
     {
       "path": "../core-api-models"
@@ -15,13 +18,13 @@
       "path": "../core-api"
     },
     {
-      "path": "../web-components"
-    },
-    {
-      "path": "../web-form"
+      "path": "../core-store-session"
     },
     {
       "path": "../web-layout"
+    },
+    {
+      "path": "../web-components"
     },
     {
       "path": "./tsconfig.lib.json"

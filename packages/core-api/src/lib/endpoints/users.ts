@@ -1,28 +1,14 @@
-import { User } from '@maas/core-api-models';
-import { ApiClient } from '../api-client/api-client';
-import { ApiCollectionResponse, GetCollectionQueryParams, GetQueryByIdParams } from '../types';
+import {
+  ChangeEmailRequest,
+  ChangePasswordRequest,
+  UpdateLocalizationPreferences,
+  UpdateNotificationsPreferences,
+  UpdateUserInfo,
+  User
+} from '@maas/core-api-models';
+import {ApiClient} from '../api-client/api-client';
+import {ApiCollectionResponse, GetCollectionQueryParams, GetQueryByIdParams} from '../types';
 
-export interface UpdateUserBody {
-  firstName?: User['firstName'];
-  lastName?: User['lastName'];
-  profileImage?: User['profileImage'];
-  phoneNumber?: User['phoneNumber'];
-  locale?: User['locale'];
-}
-
-export interface ChangeEmailRequestBody {
-  newEmail: string;
-}
-
-export interface ChangePasswordRequestBody {
-  oldPassword: string;
-  newPassword: string;
-}
-
-export interface GetUsersFilter {
-  terms?: string;
-  roles?: string[];
-}
 
 export class UsersEndpoint {
   constructor(private client: ApiClient) {}
@@ -43,16 +29,16 @@ export class UsersEndpoint {
     });
   }
 
-  async updateUser(userId: string, updates: UpdateUserBody): Promise<User> {
+  async updateUser(userId: string, updates: UpdateUserInfo | UpdateLocalizationPreferences | UpdateNotificationsPreferences): Promise<User> {
     return this.client.patch<User>(`/api/v1/users/${userId}`, updates);
   }
 
-  async changeEmail(body: ChangeEmailRequestBody): Promise<void> {
-    return this.client.post<void>('/api/v1/users/me/change-email', body);
+  async changeEmail(userId: string, body: ChangeEmailRequest): Promise<void> {
+    return this.client.post<void>(`/api/v1/users/${userId}/change-email-request`, body);
   }
 
-  async changePassword(body: ChangePasswordRequestBody): Promise<void> {
-    return this.client.post<void>('/api/v1/users/me/change-password', body);
+  async changePassword(userId: string, body: ChangePasswordRequest): Promise<void> {
+    return this.client.post<void>(`/api/v1/users/${userId}/change-password-request`, body);
   }
 
   async deleteUser(userId: string): Promise<void> {

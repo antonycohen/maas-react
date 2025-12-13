@@ -23,12 +23,14 @@ interface TextFilterConfiguration {
 
 export interface CollectionToolbarProps<TData> {
   table: Table<TData>;
+  showColumnSelector: boolean;
   textFilter?: TextFilterConfiguration;
   facetedFilters?: FacetedFilterConfiguration<TData>[];
 }
 
 export function CollectionToolbar<TData>({
   table,
+  showColumnSelector,
   textFilter,
   facetedFilters,
 }: CollectionToolbarProps<TData>) {
@@ -75,7 +77,7 @@ export function CollectionToolbar<TData>({
           </Button>
         )}
       </div>
-      <CollectionViewOptions table={table} />
+      {showColumnSelector && <CollectionViewOptions table={table} />}
     </div>
   );
 }

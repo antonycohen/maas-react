@@ -13,10 +13,11 @@ import {
   Tags,
   Users,
 } from 'lucide-react';
+import { SidebarNavigationProps } from '@maas/web-components';
 
-export const mainNavigation = [
+export const mainNavigation: SidebarNavigationProps[] = [
   {
-    name: 'Overview',
+    sectionName: 'Overview',
     items: [
       {
         title: 'Dashboard',
@@ -26,7 +27,7 @@ export const mainNavigation = [
     ],
   },
   {
-    name: 'Content',
+    sectionName: 'Content',
     items: [
       {
         title: 'Magazines',
@@ -56,7 +57,7 @@ export const mainNavigation = [
     ],
   },
   {
-    name: 'Customers',
+    sectionName: 'Customers',
     items: [
       {
         title: 'Users',
@@ -76,7 +77,7 @@ export const mainNavigation = [
     ],
   },
   {
-    name: 'Engagement',
+    sectionName: 'Engagement',
     items: [
       {
         title: 'Notifications',
@@ -86,11 +87,11 @@ export const mainNavigation = [
     ],
   },
   {
-    name: 'Administration',
+    sectionName: 'Administration',
     items: [
       {
         title: 'Admins',
-        url: '/admins',
+        url: '/teams',
         icon: ShieldCheck,
       },
       {

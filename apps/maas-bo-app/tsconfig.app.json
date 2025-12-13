@@ -38,6 +38,9 @@
       "path": "../../packages/web-feature-login/tsconfig.lib.json"
     },
     {
+      "path": "../../packages/web-feature-magazine/tsconfig.lib.json"
+    },
+    {
       "path": "../../packages/web-feature-home/tsconfig.lib.json"
     },
     {
@@ -47,16 +50,19 @@
       "path": "../../packages/web-feature-settings/tsconfig.lib.json"
     },
     {
-      "path": "../../packages/web-feature-magazine/tsconfig.lib.json"
+      "path": "../../packages/web-feature-organizations/tsconfig.lib.json"
     },
     {
       "path": "../../packages/web-layout/tsconfig.lib.json"
     },
     {
-      "path": "../../packages/core-store-session/tsconfig.lib.json"
+      "path": "../../packages/web-components/tsconfig.lib.json"
     },
     {
       "path": "../../packages/core-translations/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/core-store-session/tsconfig.lib.json"
     }
   ]
 }

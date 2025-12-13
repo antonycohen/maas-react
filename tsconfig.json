@@ -65,6 +65,12 @@
     },
     {
       "path": "./packages/core-translations"
+    },
+    {
+      "path": "./packages/web-feature-organizations"
+    },
+    {
+      "path": "./packages/core-workspace"
     }
   ]
 }

@@ -1,5 +1,10 @@
-import { PropsWithChildren } from 'react';
+import {DetailedHTMLProps, HTMLAttributes} from 'react';
+import {cn} from "@maas/core-utils";
 
-export function LayoutContent(props: PropsWithChildren) {
-  return <div className="flex flex-1 flex-col gap-4 p-4">{props.children}</div>;
+export function LayoutContent(props:  DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) {
+  return <div className={cn(
+    "container flex self-stretch px-16 py-8 flex-col justify-start gap-8",
+    props.className
+  )
+  }>{props.children}</div>;
 }

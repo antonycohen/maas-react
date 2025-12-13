@@ -164,7 +164,7 @@ export function RichTextEditor({
         data-disabled={disabled}
         aria-invalid={ariaInvalid}
         className={cn(
-          "border-input dark:bg-input/30 overflow-hidden rounded-md border shadow-xs transition-[color,box-shadow]",
+          "border-input bg-input-background overflow-hidden rounded-md border shadow-xs transition-[color,box-shadow]",
           "focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]",
           "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
           "data-[disabled=true]:pointer-events-none data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-50",

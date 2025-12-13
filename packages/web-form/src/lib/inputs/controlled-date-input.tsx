@@ -19,12 +19,14 @@ type ControlledDateInputProps<T extends FieldValues> = {
   placeholder?: string;
   description?: string;
   disabled?: boolean;
+  direction?: 'horizontal' | 'vertical';
+  className?: string;
 };
 
 export function ControlledDateInput<T extends FieldValues>(
   props: ControlledDateInputProps<T>,
 ) {
-  const { name, label, placeholder, description, disabled } = props;
+  const { name, label, placeholder, description, disabled, direction = 'vertical', className } = props;
   const form = useFormContext();
   const { control } = form;
   const { field, fieldState } = useController({
@@ -34,8 +36,10 @@ export function ControlledDateInput<T extends FieldValues>(
   const id = useId();
 
   return (
-    <Field data-invalid={fieldState.invalid}>
-      <FieldLabel htmlFor={id}>{label}</FieldLabel>
+    <Field data-invalid={fieldState.invalid} orientation={direction} className={className}>
+      <FieldLabel htmlFor={id} className={direction === 'horizontal' ? 'font-semibold basis-1/2' : ''}>
+        {label}
+      </FieldLabel>
       <DatePicker
         id={id}
         value={field.value}
@@ -43,6 +47,7 @@ export function ControlledDateInput<T extends FieldValues>(
         placeholder={placeholder}
         disabled={disabled}
         aria-invalid={fieldState.invalid}
+        className={direction === 'horizontal' ? 'basis-1/2' : ''}
       />
       {description && <FieldDescription>{description}</FieldDescription>}
       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

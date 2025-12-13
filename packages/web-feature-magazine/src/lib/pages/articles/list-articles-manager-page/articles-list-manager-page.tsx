@@ -17,11 +17,10 @@ export function ArticlesListManagerPage() {
     <div>
       <header>
         <LayoutBreadcrumb
-          items={[
-            { label: 'Home', to: '/' },
-            { label: 'Articles' },
-          ]}
+          items={[{ label: 'Home', to: '/' }, { label: 'Articles' }]}
         />
+      </header>
+      <LayoutContent>
         <LayoutHeader
           pageTitle="Articles"
           actions={
@@ -33,8 +32,6 @@ export function ArticlesListManagerPage() {
             </Button>
           }
         />
-      </header>
-      <LayoutContent>
         <Collection
           useLocationAsState
           columns={columns}

@@ -17,11 +17,10 @@ export function FoldersListManagerPage() {
     <div>
       <header>
         <LayoutBreadcrumb
-          items={[
-            { label: 'Home', to: '/' },
-            { label: 'Folders' },
-          ]}
+          items={[{ label: 'Home', to: '/' }, { label: 'Folders' }]}
         />
+      </header>
+      <LayoutContent>
         <LayoutHeader
           pageTitle="Folders"
           actions={
@@ -33,8 +32,6 @@ export function FoldersListManagerPage() {
             </Button>
           }
         />
-      </header>
-      <LayoutContent>
         <Collection
           useLocationAsState
           columns={columns}

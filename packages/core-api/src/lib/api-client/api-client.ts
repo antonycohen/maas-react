@@ -116,7 +116,7 @@ class ApiClient {
   async getCollection<T>(
     endpoint: string,
     fields?: FieldQuery<T>,
-    query?: Record<string, boolean | string | number | boolean[] | string[] | number[]>,
+    query?: object,
     config?: AxiosRequestConfig,
   ): Promise<ApiCollectionResponse<T>> {
     const response = await this.request<T[]>(endpoint, {

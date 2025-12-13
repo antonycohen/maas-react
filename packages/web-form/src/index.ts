@@ -13,4 +13,5 @@ export * from './lib/inputs/controlled-associative-token-input';
 export * from './lib/inputs/controlled-checkbox';
 
 export * from './lib/helper/create-connected-inputs';
+export * from './lib/helper/handle-api-error';
 

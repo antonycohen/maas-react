@@ -58,6 +58,8 @@ export function EditCategoryManagerPage() {
             { label: breadcrumbLabel },
           ]}
         />
+      </header>
+      <LayoutContent>
         <LayoutHeader
           pageTitle={pageTitle}
           actions={
@@ -73,8 +75,6 @@ export function EditCategoryManagerPage() {
             )
           }
         />
-      </header>
-      <LayoutContent>
         <FormProvider {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <Card
@@ -101,9 +101,7 @@ export function EditCategoryManagerPage() {
                   <ControlledTextAreaInput
                     name="description"
                     label="Description"
-                    rows={4}
                   />
-
                 </FieldGroup>
               </CardContent>
               <CardFooter className="border-t pt-6 gap-3">

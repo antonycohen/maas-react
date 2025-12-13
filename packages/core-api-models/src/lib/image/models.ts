@@ -31,4 +31,6 @@ export const updateImageSchema = z
     message: 'Either base64, downloadUrl, or id must be provided',
   });
 
+export type UpdateImage = z.infer<typeof updateImageSchema>;
+
 export type Image = z.infer<z.ZodObject<typeof readImageSchema>>;

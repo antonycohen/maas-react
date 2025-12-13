@@ -21,13 +21,14 @@ type ControlledTextInputProps<T extends FieldValues> = {
   label: string;
   placeholder?: string;
   description?: string;
-  rows?: number;
+  direction?: 'horizontal' | 'vertical';
+  className?: string;
 };
 
 export function ControlledTextareaInput<T extends FieldValues>(
   props: ControlledTextInputProps<T>,
 ) {
-  const { name, label, placeholder, description, rows } = props;
+  const { name, label, placeholder, description, direction = 'vertical', className } = props;
   const form = useFormContext();
   const { control } = form;
   const { field, fieldState } = useController({
@@ -37,20 +38,22 @@ export function ControlledTextareaInput<T extends FieldValues>(
   const id = useId();
 
   return (
-    <Field data-invalid={fieldState.invalid}>
-      <FieldLabel htmlFor={id}>{label}</FieldLabel>
-      <InputGroup>
+    <Field data-invalid={fieldState.invalid} orientation={direction} className={className}>
+      <FieldLabel htmlFor={id} className={direction === 'horizontal' ? 'font-semibold basis-1/2' : ''}>
+        {label}
+      </FieldLabel>
+      <InputGroup className={direction === 'horizontal' ? 'basis-1/2' : ''}>
         <InputGroupTextarea
           {...field}
           id={id}
           placeholder={placeholder}
-          rows={rows ?? 6}
+          rows={6}
           className="min-h-24 resize-none"
           aria-invalid={fieldState.invalid}
         />
         <InputGroupAddon align="block-end">
           <InputGroupText className="tabular-nums">
-            {field.value?.length}/100 characters
+            {field.value.length}/100 characters
           </InputGroupText>
         </InputGroupAddon>
       </InputGroup>
