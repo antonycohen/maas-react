@@ -1,9 +1,9 @@
-import {Outlet} from 'react-router-dom';
-import {TabNavLinks} from '@maas/web-components';
-import {LayoutContent, LayoutHeader} from "@maas/web-layout";
-import {useGetUserForAccountSettingsPage} from "./hooks/use-get-user-for-account-settings-page";
-import {useConnectedUser} from "@maas/core-store-session";
-import {EditUserOutletContext} from "./types";
+import { Outlet } from 'react-router-dom';
+import { TabNavLinks } from '@maas/web-components';
+import { LayoutContent } from '@maas/web-layout';
+import { useGetUserForAccountSettingsPage } from './hooks/use-get-user-for-account-settings-page';
+import { useConnectedUser } from '@maas/core-store-session';
+import { EditUserOutletContext } from './types';
 
 const getTabItems = (baseUrl: string) => [
   { title: 'Profile', url: `${baseUrl}/account/profile` },
@@ -11,34 +11,28 @@ const getTabItems = (baseUrl: string) => [
   { title: 'Preferences', url: `${baseUrl}/account/preferences` },
 ];
 
-export function AccountSettingsPage({baseUrl} : {baseUrl: string}) {
+export function AccountSettingsPage({ baseUrl }: { baseUrl: string }) {
   const connectedUser = useConnectedUser();
   const connectedUserId = connectedUser?.id as string;
-  const { user, isLoading } =
-    useGetUserForAccountSettingsPage(connectedUserId);
+  const { user, isLoading } = useGetUserForAccountSettingsPage(connectedUserId);
 
   const outletContext: EditUserOutletContext = {
     user,
     isLoading,
   };
 
-  if(!user) {
+  if (!user) {
     return <div>User not found</div>;
   }
 
-  const displayName = user.firstName ?? 'My account';
-
   return (
-      <LayoutContent className={'gap-8'}>
-        <LayoutHeader
-          pageTitle={displayName}
-        />
-        <TabNavLinks items={getTabItems(baseUrl)} />
-        <div className="flex flex-col h-full">
-          <div className="flex-1">
-            <Outlet context={outletContext} />
-          </div>
+    <LayoutContent className={'gap-8 container mx-auto'}>
+      <TabNavLinks items={getTabItems(baseUrl)} />
+      <div className="flex flex-col h-full">
+        <div className="flex-1">
+          <Outlet context={outletContext} />
         </div>
-      </LayoutContent>
+      </div>
+    </LayoutContent>
   );
 }
