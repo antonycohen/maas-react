@@ -6,6 +6,7 @@ export interface FeedArticleData {
   image: string;
   title: string;
   category: string;
+  subcategory?: string;
   author: string;
   date: string;
   link: string;
@@ -15,29 +16,61 @@ interface FeedArticleItemProps {
   item: FeedArticleData;
 }
 
+interface FeedTagProps {
+  label: string;
+  variant?: 'accent' | 'default';
+}
+
+const FeedTag = ({ label, variant = 'default' }: FeedTagProps) => {
+  return (
+    <div className="flex h-6 items-center justify-center rounded bg-white border border-[#e0e0e0] px-2">
+      <span
+        className={`
+          font-body text-[11px] font-semibold uppercase leading-4 tracking-[0.33px]
+          ${variant === 'accent' ? 'text-brand-primary' : 'text-black'}
+        `}
+      >
+        {label}
+      </span>
+    </div>
+  );
+};
+
 export const FeedArticleItem = ({ item }: FeedArticleItemProps) => {
   return (
     <Link
       to={item.link}
-      className="group flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white transition-shadow hover:shadow-md"
+      className="group flex flex-col gap-3 rounded-[12px] border border-[#e0e0e0] bg-white p-3 transition-shadow hover:shadow-md"
     >
-      <div className="relative aspect-[4/3] overflow-hidden">
+      {/* Image */}
+      <div className="relative aspect-[266/188] w-full overflow-hidden rounded">
         <img
           src={item.image}
           alt={item.title}
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
       </div>
-      <div className="flex flex-1 flex-col p-4">
-        <span className="mb-2 w-fit rounded border border-red-500 px-2 py-0.5 text-xs font-medium uppercase text-red-500">
-          {item.category}
-        </span>
-        <h3 className="mb-auto text-base font-semibold text-gray-900">
-          {item.title}
-        </h3>
-        <div className="mt-4 flex items-center gap-2 text-sm text-gray-500">
-          <span className="font-medium text-gray-700">{item.author}</span>
-          <span>{item.date}</span>
+
+      {/* Content */}
+      <div className="flex flex-col gap-5 p-2">
+        {/* Tags & Title */}
+        <div className="flex flex-col gap-1">
+          {/* Tags */}
+          <div className="flex flex-wrap items-start gap-0.5">
+            <FeedTag label={item.category} variant="accent" />
+            {item.subcategory && <FeedTag label={item.subcategory} />}
+          </div>
+
+          {/* Title */}
+          <h3 className="font-heading text-[20px] font-semibold leading-6 tracking-[-0.3px] text-black line-clamp-3 h-[72px]">
+            {item.title}
+          </h3>
+        </div>
+
+        {/* Author & Date */}
+        <div className="flex h-5 items-center gap-2 text-[13px] leading-[18px] text-black/70">
+          <span className="font-body font-semibold">{item.author}</span>
+          <span className="font-body font-normal">{item.date}</span>
         </div>
       </div>
     </Link>
@@ -72,25 +105,44 @@ export const FeedMagazineItem = ({ item }: FeedMagazineItemProps) => {
   return (
     <Link
       to={item.link}
-      className="group relative flex aspect-[3/4] flex-col overflow-hidden rounded-lg"
+      className="group relative flex flex-col items-start justify-end overflow-clip rounded-[12px] bg-brand-primary"
     >
-      <img
-        src={item.image}
-        alt={item.title}
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-      <div className="relative mt-auto flex flex-col p-4">
-        <div className="mb-2 flex flex-wrap gap-2">
-          <span className="w-fit rounded bg-red-500 px-2 py-0.5 text-xs font-semibold uppercase text-white">
-            {item.category}
-          </span>
-          <span className="w-fit rounded bg-gray-800 px-2 py-0.5 text-xs font-semibold uppercase text-white">
-            {item.edition}
+      {/* Magazine Cover Image - positioned bottom right */}
+      <div className="absolute inset-0 flex items-end justify-end">
+        <div className="h-[340px] w-[242px] shrink-0 rounded shadow-tangente-3">
+          <img
+            src={item.image}
+            alt={item.title}
+            className="h-full w-full object-contain rounded transition-transform duration-300 group-hover:scale-105"
+          />
+        </div>
+      </div>
+
+      {/* Content with gradient overlay */}
+      <div className="relative flex w-full flex-col gap-5 bg-gradient-to-b from-transparent to-black/70 to-50% px-5 py-5">
+        {/* Tags & Title */}
+        <div className="flex flex-col gap-1">
+          {/* Tag */}
+          <div className="flex flex-wrap items-start gap-0.5">
+            <div className="flex h-6 items-center justify-center rounded bg-black/70 border border-[#333] px-2 backdrop-blur-md">
+              <span className="font-body text-[11px] font-semibold uppercase leading-4 tracking-[0.33px] text-brand-secondary">
+                {item.category}
+              </span>
+            </div>
+          </div>
+
+          {/* Title */}
+          <h3 className="font-heading text-[20px] font-semibold leading-6 tracking-[-0.3px] text-white line-clamp-2 h-[48px]">
+            {item.title}
+          </h3>
+        </div>
+
+        {/* Date */}
+        <div className="flex h-5 items-center">
+          <span className="font-body text-[13px] font-normal leading-[18px] text-white">
+            {item.date}
           </span>
         </div>
-        <h3 className="mb-2 text-lg font-semibold text-white">{item.title}</h3>
-        <span className="text-sm text-gray-300">{item.date}</span>
       </div>
     </Link>
   );
@@ -102,9 +154,11 @@ export interface FeedFolderData {
   image: string;
   title: string;
   category: string;
+  subcategory?: string;
   articleCount: number;
   date: string;
   link: string;
+  articles?: FeedArticleData[];
 }
 
 interface FeedFolderItemProps {
@@ -112,29 +166,74 @@ interface FeedFolderItemProps {
 }
 
 export const FeedFolderItem = ({ item }: FeedFolderItemProps) => {
+  // Get up to 3 images from articles for the stack effect
+  const articleImages = item.articles?.slice(0, 3).map(a => a.image) || [];
+  const [backImg, midImg, frontImg] = [
+    articleImages[2] || articleImages[1] || articleImages[0] || item.image,
+    articleImages[1] || articleImages[0] || item.image,
+    articleImages[0] || item.image
+  ];
+
   return (
     <Link
       to={item.link}
-      className="group flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white transition-shadow hover:shadow-md"
+      className="group flex flex-col gap-3 rounded-[12px] border border-[#e0e0e0] bg-white p-3 transition-shadow hover:shadow-md"
     >
-      <div className="relative aspect-[4/3] overflow-hidden">
-        <img
-          src={item.image}
-          alt={item.title}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-        />
+      {/* Stacked Images */}
+      <div className="relative h-[188px] w-full">
+        {/* Back image (top, darkest overlay) */}
+        <div className="absolute left-[24px] top-0 h-[153px] w-[218px] rounded overflow-hidden shadow-tangente-1">
+          <img
+            src={backImg}
+            alt=""
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/70 rounded" />
+        </div>
+
+        {/* Middle image (centered, medium overlay) */}
+        <div className="absolute left-[4.5%] right-[4.5%] top-1/2 -translate-y-1/2 aspect-[250/164] rounded overflow-hidden border border-white/15 shadow-tangente-2">
+          <img
+            src={midImg}
+            alt=""
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/50 rounded" />
+        </div>
+
+        {/* Front image (bottom, no overlay) */}
+        <div className="absolute bottom-0 left-0 right-0 aspect-[266/164] rounded overflow-hidden border border-white/15 shadow-tangente-3">
+          <img
+            src={frontImg}
+            alt={item.title}
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        </div>
       </div>
-      <div className="flex flex-1 flex-col p-4">
-        <span className="mb-2 w-fit rounded border border-red-500 px-2 py-0.5 text-xs font-medium uppercase text-red-500">
-          {item.category}
-        </span>
-        <h3 className="mb-auto text-base font-semibold text-gray-900">
-          {item.title}
-        </h3>
-        <div className="mt-4 flex items-center gap-2 text-sm text-gray-500">
-          <FileText className="h-4 w-4" />
-          <span>{item.articleCount} articles</span>
-          <span>{item.date}</span>
+
+      {/* Content */}
+      <div className="flex flex-col gap-5 p-2">
+        {/* Tags & Title */}
+        <div className="flex flex-col gap-1">
+          {/* Tags */}
+          <div className="flex flex-wrap items-start gap-0.5">
+            <FeedTag label={item.category} variant="accent" />
+            {item.subcategory && <FeedTag label={item.subcategory} />}
+          </div>
+
+          {/* Title */}
+          <h3 className="font-heading text-[20px] font-semibold leading-6 tracking-[-0.3px] text-black line-clamp-3 h-[72px]">
+            {item.title}
+          </h3>
+        </div>
+
+        {/* Article Count & Date */}
+        <div className="flex h-5 items-center gap-2 text-[13px] leading-[18px] text-black/70">
+          <div className="flex items-center gap-1">
+            <FileText className="h-5 w-5" />
+            <span className="font-body font-semibold">{item.articleCount} articles</span>
+          </div>
+          <span className="font-body font-normal">{item.date}</span>
         </div>
       </div>
     </Link>

@@ -77,5 +77,6 @@ export function useCollectionQuery<T, Q = undefined>({
 
   return {
     items: data?.data || [],
+    totalCount: data?.pagination?.count || 0,
   };
 }

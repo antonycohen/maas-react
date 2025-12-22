@@ -3,7 +3,7 @@ import { readImageSchema, updateImageSchema } from '../image';
 
 export const readBrandRefSchema = z.object({
   id: z.string(),
-  name: z.string().nullable(),
+  name: z.string().optional().nullable(),
 });
 
 export const brandRefSchema = z.object({

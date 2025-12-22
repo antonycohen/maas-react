@@ -4,12 +4,19 @@
   /* ===== FONT FAMILY ===== */
   --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
   "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-heading: "Barlow Semi Condensed", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
 
   /* ===== FONT WEIGHT ===== */
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
+
+  /* ===== TANGENTE FONT WEIGHT ===== */
+  --font-weight-tangente-normal: 400;
+  --font-weight-tangente-emphasized: 600;
+  --font-weight-tangente-accent: 700;
 
   /* ===== LETTER SPACING ===== */
   --letter-spacing-tight: -0.4px;
@@ -35,6 +42,41 @@
   --text-3xl: 30px;
   --text-3xl--line-height: 36px;
 
+  /* ===== TANGENTE TYPOGRAPHY ===== */
+  /* Caption */
+  --text-tangente-caption-s: 11px;
+  --text-tangente-caption-s--line-height: 16px;
+  --text-tangente-caption-m: 13px;
+  --text-tangente-caption-m--line-height: 18px;
+
+  /* Body */
+  --text-tangente-body-s: 14px;
+  --text-tangente-body-s--line-height: 20px;
+  --text-tangente-body-s--letter-spacing: -0.5px;
+  --text-tangente-body-m: 16px;
+  --text-tangente-body-m--line-height: 22px;
+  --text-tangente-body-m--letter-spacing: -0.75px;
+  --text-tangente-body-l: 18px;
+  --text-tangente-body-l--line-height: 26px;
+  --text-tangente-body-l--letter-spacing: -1px;
+
+  /* Heading */
+  --text-tangente-h6: 18px;
+  --text-tangente-h6--line-height: 22px;
+  --text-tangente-h6--letter-spacing: -1.5px;
+  --text-tangente-h5: 20px;
+  --text-tangente-h5--line-height: 24px;
+  --text-tangente-h5--letter-spacing: -1.5px;
+  --text-tangente-h4: 26px;
+  --text-tangente-h4--line-height: 32px;
+  --text-tangente-h4--letter-spacing: -2px;
+  --text-tangente-h3: 34px;
+  --text-tangente-h3--line-height: 40px;
+  --text-tangente-h3--letter-spacing: -2.5px;
+  --text-tangente-h2: 48px;
+  --text-tangente-h2--line-height: 52px;
+  --text-tangente-h2--letter-spacing: -2.75px;
+
   /* ===== BORDER RADIUS ===== */
   --radius-xs: 2px;
   --radius-sm: 6px;
@@ -42,6 +84,12 @@
   --radius-lg: 10px;
   --radius-xl: 14px;
   --radius-full: 9999px;
+
+  /* ===== TANGENTE BORDER RADIUS ===== */
+  --radius-tangente-xs: 4px;
+  --radius-tangente-sm: 12px;
+  --radius-tangente-md: 20px;
+  --radius-tangente-full: 9999px;
 
   /* ===== SPACING ===== */
   --spacing-0: 0px;
@@ -64,6 +112,28 @@
   --spacing-20: 80px;
   --spacing-24: 96px;
   --spacing-28: 112px;
+
+  /* ===== TANGENTE SPACING (Gap) ===== */
+  --spacing-tangente-gap-3xs: 2px;
+  --spacing-tangente-gap-2xs: 4px;
+  --spacing-tangente-gap-xs: 8px;
+  --spacing-tangente-gap-sm: 12px;
+  --spacing-tangente-gap-md: 16px;
+  --spacing-tangente-gap-lg: 20px;
+  --spacing-tangente-gap-xl: 24px;
+  --spacing-tangente-gap-2xl: 32px;
+  --spacing-tangente-gap-3xl: 40px;
+  --spacing-tangente-gap-4xl: 80px;
+
+  /* ===== TANGENTE SPACING (Padding) ===== */
+  --spacing-tangente-padding-3xs: 4px;
+  --spacing-tangente-padding-2xs: 8px;
+  --spacing-tangente-padding-xs: 12px;
+  --spacing-tangente-padding-sm: 16px;
+  --spacing-tangente-padding-md: 20px;
+  --spacing-tangente-padding-lg: 32px;
+  --spacing-tangente-padding-xl: 40px;
+  --spacing-tangente-padding-2xl: 48px;
 
   /* ===== WIDTH ===== */
   --width-3: 12px;
@@ -99,7 +169,11 @@
   --container-lg: 512px;
   --container-xl: 576px;
   --container-3xl: 768px;
+  --container-4xl: 896px;
   --container-7xl: 1280px;
+
+  /* ===== TANGENTE CONTAINER ===== */
+  --container-tangente: 1220px;
 
   /* ===== BORDER WIDTH ===== */
   --border-width-default: 1px;
@@ -122,6 +196,11 @@
   --shadow-lg: 0 4px 6px -4px rgb(0 0 0 / 0.1), 0 10px 15px -3px rgb(0 0 0 / 0.1);
   --shadow-xl: 0 8px 10px -6px rgb(0 0 0 / 0.1), 0 20px 25px -5px rgb(0 0 0 / 0.1);
   --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+  /* ===== TANGENTE SHADOWS (Depth) ===== */
+  --shadow-tangente-1: 0 0 4px 0 rgb(0 0 0 / 0.06), 2px 4px 8px 0 rgb(0 0 0 / 0.04);
+  --shadow-tangente-2: 0 0 4px 0 rgb(0 0 0 / 0.06), 2px 6px 16px 0 rgb(0 0 0 / 0.08);
+  --shadow-tangente-3: 0 0 8px 0 rgb(0 0 0 / 0.06), 3px 8px 20px 0 rgb(0 0 0 / 0.10);
 
   /* ===== BASE COLORS (Light Mode) ===== */
   --color-background: #ffffff;
@@ -159,6 +238,14 @@
   --color-chart-3: #2563eb;
   --color-chart-4: #16a34a;
   --color-chart-5: #8b5cf6;
+
+  /* ===== TANGENTE BRAND COLORS ===== */
+  --color-brand-primary: #e31b22;
+  --color-brand-secondary: #fff132;
+  --color-brand-black: #000000;
+  --color-brand-white: #ffffff;
+  --color-success: #079848;
+  --color-success-foreground: #ffffff;
 
   /* ===== SIDEBAR COLORS ===== */
   --color-sidebar: #ffffff;
@@ -256,6 +343,179 @@
   --color-alpha-90: rgb(0 0 0 / 0.1);
 }
 
+/* ===== TANGENTE THEME (Light) ===== */
+.tangente {
+  /* Brand Colors */
+  --color-brand-primary: #e31b22;
+  --color-brand-secondary: #fff132;
+  --color-brand-black: #000000;
+  --color-brand-white: #ffffff;
+
+  /* Background Colors */
+  --color-background: #ffffff;
+  --color-background-secondary: #f5f5f5;
+  --color-background-tertiary: #e0e0e0;
+  --color-background-success: #079848;
+  --color-foreground: #000000;
+
+  /* Card & Popover */
+  --color-card: #ffffff;
+  --color-card-foreground: #000000;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #000000;
+
+  /* Primary (using brand red) */
+  --color-primary: #e31b22;
+  --color-primary-foreground: #ffffff;
+
+  /* Secondary */
+  --color-secondary: #f5f5f5;
+  --color-secondary-foreground: #000000;
+
+  /* Muted */
+  --color-muted: #f5f5f5;
+  --color-muted-foreground: #00000080;
+
+  /* Accent (using brand yellow) */
+  --color-accent: #fff132;
+  --color-accent-foreground: #000000;
+
+  /* Destructive */
+  --color-destructive: #e31b22;
+  --color-destructive-foreground: #ffffff;
+
+  /* Success */
+  --color-success: #079848;
+  --color-success-foreground: #ffffff;
+
+  /* Border & Input */
+  --color-border: #e0e0e0;
+  --color-border-secondary: #e0e0e0;
+  --color-border-tertiary: #adadad;
+  --color-input: #e0e0e0;
+  --color-input-background: #ffffff;
+  --color-ring: #e31b22;
+
+  /* Text Colors */
+  --color-text-primary: #000000;
+  --color-text-secondary: #000000b2;
+  --color-text-tertiary: #00000080;
+  --color-text-disabled: #0000004d;
+
+  /* Icon Colors */
+  --color-icon-primary: #000000;
+  --color-icon-secondary: #000000b2;
+  --color-icon-tertiary: #00000080;
+  --color-icon-success: #079848;
+
+  /* Neutral */
+  --color-neutral-100: #e6eaeb;
+
+  /* Sidebar Colors */
+  --color-sidebar: #ffffff;
+  --color-sidebar-foreground: #000000;
+  --color-sidebar-primary: #e31b22;
+  --color-sidebar-primary-foreground: #ffffff;
+  --color-sidebar-accent: #f5f5f5;
+  --color-sidebar-accent-foreground: #000000;
+  --color-sidebar-border: #e0e0e0;
+  --color-sidebar-ring: #e31b22;
+
+  /* Chart Colors */
+  --color-chart-1: #e31b22;
+  --color-chart-2: #fff132;
+  --color-chart-3: #079848;
+  --color-chart-4: #000000;
+  --color-chart-5: #adadad;
+
+  /* Translucent */
+  --color-translucent-strong: #000000b2;
+  --color-translucent-normal: #00000080;
+
+  /* Alpha Colors */
+  --color-alpha-10: rgb(255 255 255 / 0.9);
+  --color-alpha-40: rgb(255 255 255 / 0.6);
+  --color-alpha-50: rgb(255 255 255 / 0.5);
+  --color-alpha-90: rgb(255 255 255 / 0.1);
+}
+
+/* ===== TANGENTE THEME (Dark) ===== */
+.tangente.dark {
+  /* Background Colors */
+  --color-background: #000000;
+  --color-background-secondary: #141414;
+  --color-background-tertiary: #333333;
+  --color-foreground: #ffffff;
+
+  /* Card & Popover */
+  --color-card: #141414;
+  --color-card-foreground: #ffffff;
+  --color-popover: #141414;
+  --color-popover-foreground: #ffffff;
+
+  /* Primary (brand red) */
+  --color-primary: #e31b22;
+  --color-primary-foreground: #ffffff;
+
+  /* Secondary */
+  --color-secondary: #141414;
+  --color-secondary-foreground: #ffffff;
+
+  /* Muted */
+  --color-muted: #141414;
+  --color-muted-foreground: #ffffffb2;
+
+  /* Accent (brand yellow) */
+  --color-accent: #fff132;
+  --color-accent-foreground: #000000;
+
+  /* Border & Input */
+  --color-border: #333333;
+  --color-border-secondary: #333333;
+  --color-border-tertiary: #333333;
+  --color-input: #333333;
+  --color-input-background: #000000;
+  --color-ring: #e31b22;
+
+  /* Text Colors */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #ffffffb2;
+  --color-text-tertiary: #ffffff80;
+  --color-text-disabled: #ffffff4d;
+
+  /* Icon Colors */
+  --color-icon-primary: #ffffff;
+  --color-icon-secondary: #ffffffb2;
+  --color-icon-tertiary: #ffffff80;
+
+  /* Sidebar Colors */
+  --color-sidebar: #000000;
+  --color-sidebar-foreground: #ffffff;
+  --color-sidebar-primary: #e31b22;
+  --color-sidebar-primary-foreground: #ffffff;
+  --color-sidebar-accent: #141414;
+  --color-sidebar-accent-foreground: #ffffff;
+  --color-sidebar-border: #333333;
+  --color-sidebar-ring: #e31b22;
+
+  /* Chart Colors (Dark) */
+  --color-chart-1: #e31b22;
+  --color-chart-2: #fff132;
+  --color-chart-3: #079848;
+  --color-chart-4: #ffffff;
+  --color-chart-5: #adadad;
+
+  /* Translucent */
+  --color-translucent-strong: #000000b2;
+  --color-translucent-normal: #00000080;
+
+  /* Alpha Colors (Dark) */
+  --color-alpha-10: rgb(0 0 0 / 0.9);
+  --color-alpha-40: rgb(0 0 0 / 0.6);
+  --color-alpha-50: rgb(0 0 0 / 0.5);
+  --color-alpha-90: rgb(0 0 0 / 0.1);
+}
+
 /* ===== BASE STYLES ===== */
 @layer base {
   * {
@@ -265,4 +525,24 @@
   body {
     @apply bg-background text-foreground font-sans;
   }
+
+  /* Tangente-specific base styles */
+  .tangente body {
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .tangente h1,
+  .tangente h2,
+  .tangente h3,
+  .tangente h4,
+  .tangente h5,
+  .tangente h6 {
+    font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
+  }
+
+}
+
+/* Tangente container override - outside @layer for higher specificity */
+.tangente .container {
+  max-width: var(--container-tangente) !important;
 }

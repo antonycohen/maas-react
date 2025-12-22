@@ -45,7 +45,7 @@ export function Collection<T, Q = undefined>({
 }: Props<T, Q>) {
   const state = useCollectionState({ useLocationAsState });
 
-  const { items } = useCollectionQuery({
+  const { items, totalCount } = useCollectionQuery({
     pagination: state.pagination,
     globalFilter: state.globalFilter,
     columnFilters: state.columnFilters,
@@ -59,6 +59,7 @@ export function Collection<T, Q = undefined>({
   const table = useCollectionTable({
     items,
     columns,
+    totalCount: totalCount,
     ...state,
   });
 

@@ -1011,7 +1011,7 @@ const Navbar = (props: NavbarProps) => {
   >(null);
 
   return (
-    <section className="bg-background inset-x-0 top-0 z-20">
+    <section className="bg-background inset-x-0 top-0 z-20 container mx-auto">
       <div className="container">
         <NavigationMenu className="min-w-full [&>div:last-child]:left-auto">
           <div className="flex w-full justify-between gap-2 py-4">

@@ -6,6 +6,7 @@
 @source "../../../packages/core-store-session";
 @source "../../../packages/core-translations";
 @source "../../../packages/core-utils";
+@source "../../../packages/core-workspace";
 @source "../../../packages/web-cms-editor";
 @source "../../../packages/web-collection";
 @source "../../../packages/web-components";
@@ -13,10 +14,12 @@
 @source "../../../packages/web-feature-home";
 @source "../../../packages/web-feature-login";
 @source "../../../packages/web-feature-magazine";
+@source "../../../packages/web-feature-organizations";
 @source "../../../packages/web-feature-settings";
 @source "../../../packages/web-feature-users";
 @source "../../../packages/web-form";
 @source "../../../packages/web-layout";
+
 
 
 

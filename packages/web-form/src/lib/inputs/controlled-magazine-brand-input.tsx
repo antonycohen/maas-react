@@ -21,7 +21,9 @@ type ControlledMagazineBrandInputProps<T extends FieldValues> = {
   label: string;
   placeholder?: string;
   description?: string;
+  direction?: 'horizontal' | 'vertical';
   disabled?: boolean;
+  className?: string;
 };
 
 export function ControlledMagazineBrandInput<T extends FieldValues>(
@@ -32,7 +34,9 @@ export function ControlledMagazineBrandInput<T extends FieldValues>(
     label,
     placeholder = 'Select brand...',
     description,
+    direction,
     disabled,
+    className
   } = props;
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -69,8 +73,10 @@ export function ControlledMagazineBrandInput<T extends FieldValues>(
       : null;
 
   return (
-    <Field data-invalid={fieldState.invalid}>
-      <FieldLabel htmlFor={id}>{label}</FieldLabel>
+    <Field data-invalid={fieldState.invalid} orientation={direction} className={className}>
+      <FieldLabel htmlFor={id} className={direction === 'horizontal' ? 'font-semibold basis-1/2' : ''}>
+        {label}
+      </FieldLabel>
       <AsyncCombobox
         id={id}
         value={comboboxValue}
@@ -86,6 +92,7 @@ export function ControlledMagazineBrandInput<T extends FieldValues>(
         emptyMessage="No brand found."
         disabled={disabled}
         aria-invalid={fieldState.invalid}
+        className={direction === 'horizontal' ? 'basis-1/2' : 'w-full'}
       />
       {description && <FieldDescription>{description}</FieldDescription>}
       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

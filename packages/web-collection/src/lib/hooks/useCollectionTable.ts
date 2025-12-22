@@ -16,16 +16,31 @@ import {
 interface UseCollectionTableProps<T> {
   items: T[];
   columns: ColumnDef<T>[];
+  totalCount: number;
   sorting: SortingState;
-  setSorting: (sorting: SortingState | ((prev: SortingState) => SortingState)) => void;
+  setSorting: (
+    sorting: SortingState | ((prev: SortingState) => SortingState),
+  ) => void;
   columnVisibility: VisibilityState;
-  setColumnVisibility: (visibility: VisibilityState | ((prev: VisibilityState) => VisibilityState)) => void;
+  setColumnVisibility: (
+    visibility: VisibilityState | ((prev: VisibilityState) => VisibilityState),
+  ) => void;
   rowSelection: Record<string, boolean>;
-  setRowSelection: (selection: Record<string, boolean> | ((prev: Record<string, boolean>) => Record<string, boolean>)) => void;
+  setRowSelection: (
+    selection:
+      | Record<string, boolean>
+      | ((prev: Record<string, boolean>) => Record<string, boolean>),
+  ) => void;
   columnFilters: ColumnFiltersState;
-  setColumnFilters: (filters: ColumnFiltersState | ((prev: ColumnFiltersState) => ColumnFiltersState)) => void;
+  setColumnFilters: (
+    filters:
+      | ColumnFiltersState
+      | ((prev: ColumnFiltersState) => ColumnFiltersState),
+  ) => void;
   pagination: PaginationState;
-  setPagination: (pagination: PaginationState | ((prev: PaginationState) => PaginationState)) => void;
+  setPagination: (
+    pagination: PaginationState | ((prev: PaginationState) => PaginationState),
+  ) => void;
   globalFilter: string;
   setGlobalFilter: (filter: string | ((prev: string) => string)) => void;
 }
@@ -33,6 +48,7 @@ interface UseCollectionTableProps<T> {
 export function useCollectionTable<T>({
   items,
   columns,
+  totalCount,
   sorting,
   setSorting,
   columnVisibility,
@@ -57,7 +73,7 @@ export function useCollectionTable<T>({
       pagination,
       globalFilter,
     },
-    rowCount: items.length,
+    rowCount: Math.max(items.length, totalCount),
     enableRowSelection: true,
     manualFiltering: true,
     manualSorting: true,

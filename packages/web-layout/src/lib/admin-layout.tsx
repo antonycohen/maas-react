@@ -17,7 +17,7 @@ import {
 } from '@maas/web-components';
 import { User } from '@maas/core-api-models';
 import { ArrowLeftIcon, Badge, BellIcon } from 'lucide-react';
-import { LayoutTopbar } from './layout-top-bar';
+import { AdminLayoutTopbar } from './admin-layout-topbar';
 
 type LayoutProps = {
   connectedUser: User;
@@ -103,7 +103,7 @@ export function AdminLayout(props: LayoutProps) {
         </Sidebar>
         <SidebarInset>
           <header>
-            <LayoutTopbar
+            <AdminLayoutTopbar
               className={'border-b'}
               buttons={[
                 <div className="relative">
