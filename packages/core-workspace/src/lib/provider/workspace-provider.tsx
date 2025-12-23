@@ -23,7 +23,7 @@ export const WorkspaceProvider = (props: WorkspaceProviderProps) => {
       value={{
         selectedWorkspaceId: props.selectedWorkspaceId,
         getCurrentWorkspaceUrlPrefix: () => {
-          return `/w/${props.selectedWorkspaceId ?? ''}`;
+          return `/admin/w/${props.selectedWorkspaceId ?? ''}`;
         },
       }}
     >

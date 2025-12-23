@@ -3,10 +3,14 @@ import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-export interface MenuItem {
+/** @deprecated Use MenuItem from layout-header-bar instead */
+export interface MainMenuItem {
   label: string;
   href: string;
 }
+
+/** @deprecated Use MenuItem from layout-header-bar instead */
+export type MenuItem = MainMenuItem;
 
 type LayoutMainMenuProps = {
   items?: MenuItem[];

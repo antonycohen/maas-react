@@ -14,7 +14,6 @@ import {
 } from '@maas/web-feature-magazine';
 import { TeamsRoutes } from '@maas/web-feature-organizations';
 import { SettingsRoutes } from '@maas/web-feature-settings';
-import { HomeRoutes } from '@maas/web-feature-home';
 import { useMainNavigation } from '../hooks/use-main-navigation';
 import { useUserNavigation } from '../hooks/use-user-navigation';
 import { GalleryVerticalEnd } from 'lucide-react';
@@ -84,7 +83,6 @@ export const WorkspaceRoutes = () => {
           <Route path="users/*" element={<UsersRoutes />} />
           <Route path="teams/*" element={<TeamsRoutes />} />
           <Route path="settings/*" element={<SettingsRoutes />} />
-          <Route index element={<HomeRoutes />} />
           <Route path="*" element={<Navigate to={'/'} />} />
         </Route>
       </Routes>

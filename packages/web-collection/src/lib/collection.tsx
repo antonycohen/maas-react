@@ -5,9 +5,9 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from '@m
 import {CollectionToolbar, CollectionToolbarProps,} from './collection-toolbar';
 import {CollectionPagination} from './collection-pagination';
 import {ApiCollectionResponse, ApiError, FieldQuery, GetCollectionQueryParams,} from '@maas/core-api';
-import {useCollectionState} from './hooks/useCollectionState';
-import {useCollectionQuery} from './hooks/useCollectionQuery';
-import {useCollectionTable} from './hooks/useCollectionTable';
+import {useCollectionState} from './hooks/use-collection-state';
+import {useCollectionQuery} from './hooks/use-collection-query';
+import {useCollectionTable} from './hooks/use-collection-table';
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

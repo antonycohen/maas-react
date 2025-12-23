@@ -113,27 +113,26 @@
   --spacing-24: 96px;
   --spacing-28: 112px;
 
-  /* ===== TANGENTE SPACING (Gap) ===== */
-  --spacing-tangente-gap-3xs: 2px;
-  --spacing-tangente-gap-2xs: 4px;
-  --spacing-tangente-gap-xs: 8px;
-  --spacing-tangente-gap-sm: 12px;
-  --spacing-tangente-gap-md: 16px;
-  --spacing-tangente-gap-lg: 20px;
-  --spacing-tangente-gap-xl: 24px;
-  --spacing-tangente-gap-2xl: 32px;
-  --spacing-tangente-gap-3xl: 40px;
-  --spacing-tangente-gap-4xl: 80px;
-
-  /* ===== TANGENTE SPACING (Padding) ===== */
-  --spacing-tangente-padding-3xs: 4px;
-  --spacing-tangente-padding-2xs: 8px;
-  --spacing-tangente-padding-xs: 12px;
-  --spacing-tangente-padding-sm: 16px;
-  --spacing-tangente-padding-md: 20px;
-  --spacing-tangente-padding-lg: 32px;
-  --spacing-tangente-padding-xl: 40px;
-  --spacing-tangente-padding-2xl: 48px;
+  /* ===== TANGENTE SPACING ===== */
+  /*
+   * Usage with Tailwind utilities:
+   * - gap-tg-lg, gap-tg-4xl
+   * - p-tg-xl, px-tg-sm, py-tg-md
+   * - m-tg-xs, mt-tg-2xl
+   * - w-tg-lg, h-tg-xl
+   * - space-x-tg-sm, space-y-tg-md
+   */
+  --spacing-tg-3xs: 2px;
+  --spacing-tg-2xs: 4px;
+  --spacing-tg-xs: 8px;
+  --spacing-tg-sm: 12px;
+  --spacing-tg-md: 16px;
+  --spacing-tg-lg: 20px;
+  --spacing-tg-xl: 24px;
+  --spacing-tg-2xl: 32px;
+  --spacing-tg-3xl: 40px;
+  --spacing-tg-4xl: 48px;
+  --spacing-tg-5xl: 80px;
 
   /* ===== WIDTH ===== */
   --width-3: 12px;
@@ -546,3 +545,5 @@
 .tangente .container {
   max-width: var(--container-tangente) !important;
 }
+
+

@@ -15,7 +15,7 @@ export const readUserRefSchema = z.object({
   id: z.uuid(),
   firstName: z.string().nullable(),
   lastName: z.string().nullable(),
-  email: z.string(),
+  email: z.string().optional(),
   profileImage: z.object(readImageSchema).optional().nullable(),
 });
 export type ReadUserRef = z.infer<typeof readUserRefSchema>;

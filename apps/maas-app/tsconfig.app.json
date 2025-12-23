@@ -34,12 +34,6 @@
   "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
   "references": [
     {
-      "path": "../../packages/web-feature-home/tsconfig.lib.json"
-    },
-    {
-      "path": "../../packages/web-feature-settings/tsconfig.lib.json"
-    },
-    {
       "path": "../../packages/web-feature-organizations/tsconfig.lib.json"
     },
     {
@@ -49,19 +43,16 @@
       "path": "../../packages/core-workspace/tsconfig.lib.json"
     },
     {
-      "path": "../../packages/web-feature-users/tsconfig.lib.json"
-    },
-    {
       "path": "../../packages/core-api-models/tsconfig.lib.json"
     },
     {
       "path": "../../packages/core-api/tsconfig.lib.json"
     },
     {
-      "path": "../../packages/web-layout/tsconfig.lib.json"
+      "path": "../../packages/web-feature-users/tsconfig.lib.json"
     },
     {
-      "path": "../../packages/web-feature-login/tsconfig.lib.json"
+      "path": "../../packages/web-feature-home/tsconfig.lib.json"
     },
     {
       "path": "../../packages/web-components/tsconfig.lib.json"
@@ -71,6 +62,18 @@
     },
     {
       "path": "../../packages/core-store-session/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/web-feature-feeds/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/web-feature-settings/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/web-feature-login/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/web-layout/tsconfig.lib.json"
     }
   ]
 }

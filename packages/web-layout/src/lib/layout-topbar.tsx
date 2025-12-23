@@ -20,16 +20,13 @@ export function LayoutTopbar({
 }: LayoutTopbarProps) {
   return (
     <header
-      className={cn(
-        'flex items-center justify-center',
-        className,
-      )}
+      className={cn('flex items-center justify-center px-4 md:px-0', className)}
     >
       <div className="container mx-auto flex items-center justify-center py-3">
-        <div className="flex w-full items-center justify-center">
+        <div className="flex w-full items-center justify-between gap-3 md:justify-center">
           {/* Left - Logo */}
-          <div className="flex flex-1 items-start">
-            <Link to="/" className="h-14 w-[150px]">
+          <div className="flex items-start md:flex-1">
+            <Link to="/" className="h-10 w-[100px] md:h-14 md:w-[150px]">
               <img
                 src="/logo-tangente-full.png"
                 alt="Tangente"
@@ -38,10 +35,10 @@ export function LayoutTopbar({
             </Link>
           </div>
 
-          {/* Center - Search Bar */}
+          {/* Center - Search Bar (Desktop) */}
           <button
             onClick={onSearchClick}
-            className="flex h-10 w-[480px] items-center justify-center gap-2 rounded border border-[#e0e0e0] bg-[#f5f5f5] px-3 py-2 transition-colors hover:bg-[#ebebeb]"
+            className="hidden h-10 w-[480px] items-center justify-center gap-2 rounded border border-[#e0e0e0] bg-[#f5f5f5] px-3 py-2 transition-colors hover:bg-[#ebebeb] lg:flex"
           >
             <Search className="h-5 w-5 text-black/50" />
             <span className="font-body text-[14px] font-normal leading-5 tracking-[-0.07px] text-black/50">
@@ -50,15 +47,24 @@ export function LayoutTopbar({
           </button>
 
           {/* Right - Actions */}
-          <div className="flex flex-1 items-center justify-end gap-2">
+          <div className="flex items-center justify-end gap-2 md:flex-1">
+            {/* Search Button (Mobile/Tablet) */}
+            <button
+              onClick={onSearchClick}
+              className="flex h-10 w-10 items-center justify-center rounded border border-[#e0e0e0] bg-white transition-colors hover:bg-gray-50 lg:hidden"
+              aria-label="Rechercher"
+            >
+              <Search className="h-5 w-5 text-black" />
+            </button>
+
             {connectedUser ? (
               /* Connected User - Show Avatar/Profile */
               <Link
                 to="/account"
-                className="flex h-10 items-center justify-center gap-1 rounded border border-[#e0e0e0] bg-white px-4 py-2 transition-colors hover:bg-gray-50"
+                className="flex h-10 items-center justify-center gap-1 rounded border border-[#e0e0e0] bg-white px-2 py-2 transition-colors hover:bg-gray-50 md:px-4"
               >
                 <UserCircle className="h-5 w-5 text-black" />
-                <span className="px-1 font-body text-[14px] font-semibold leading-5 tracking-[-0.07px] text-black">
+                <span className="hidden px-1 font-body text-[14px] font-semibold leading-5 tracking-[-0.07px] text-black sm:inline">
                   {connectedUser.firstName || 'Mon compte'}
                 </span>
               </Link>
@@ -66,10 +72,10 @@ export function LayoutTopbar({
               /* Not Connected - Show Login Button */
               <button
                 onClick={onLoginClick}
-                className="flex h-10 items-center justify-center gap-1 rounded border border-[#e0e0e0] bg-white px-4 py-2 transition-colors hover:bg-gray-50"
+                className="flex h-10 items-center justify-center gap-1 rounded border border-[#e0e0e0] bg-white px-2 py-2 transition-colors hover:bg-gray-50 md:px-4"
               >
                 <UserCircle className="h-5 w-5 text-black" />
-                <span className="px-1 font-body text-[14px] font-semibold leading-5 tracking-[-0.07px] text-black">
+                <span className="hidden px-1 font-body text-[14px] font-semibold leading-5 tracking-[-0.07px] text-black sm:inline">
                   Se connecter
                 </span>
               </button>
@@ -78,9 +84,9 @@ export function LayoutTopbar({
             {/* Subscribe Button */}
             <button
               onClick={onSubscribeClick}
-              className="flex h-10 items-center justify-center gap-1 rounded bg-brand-primary px-4 py-2 transition-colors hover:bg-brand-primary/90"
+              className="flex h-10 items-center justify-center gap-1 rounded bg-brand-primary px-3 py-2 transition-colors hover:bg-brand-primary/90 md:px-4"
             >
-              <span className="px-1 font-body text-[14px] font-semibold leading-5 tracking-[-0.07px] text-white">
+              <span className="px-1 font-body text-[13px] font-semibold leading-5 tracking-[-0.07px] text-white md:text-[14px]">
                 Je m'abonne
               </span>
             </button>

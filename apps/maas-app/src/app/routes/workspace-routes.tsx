@@ -14,7 +14,6 @@ import {
 } from '@maas/web-feature-magazine';
 import { TeamsRoutes } from '@maas/web-feature-organizations';
 import { SettingsRoutes } from '@maas/web-feature-settings';
-import { HomeRoutes } from '@maas/web-feature-home';
 import { useMainNavigation } from '../hooks/use-main-navigation';
 import { useUserNavigation } from '../hooks/use-user-navigation';
 import { GalleryVerticalEnd } from 'lucide-react';
@@ -34,6 +33,7 @@ export const WorkspaceRoutes = () => {
       limit: 100,
     },
   );
+
 
   const baseWorkspaceUrl = `/admin/w/${organizationId}`;
 
@@ -68,14 +68,14 @@ export const WorkspaceRoutes = () => {
                     name: e.name ?? 'Workspace',
                     logo: GalleryVerticalEnd,
                     id: e.id ?? '',
-                    urlPrefix: `/w/${e.id}/`,
+                    urlPrefix: `/admin/w/${e.id}/`,
                   };
                 }),
               }}
             />
           }
         >
-          <Route path="account/*" element={<AccountRoutes baseUrl={''} />} />
+          <Route path="account/*" element={<AccountRoutes baseUrl={baseWorkspaceUrl} />} />
           <Route path="issues/*" element={<IssuesRoutes />} />
           <Route path="articles/*" element={<ArticlesRoutes />} />
           <Route path="categories/*" element={<CategoriesRoutes />} />
@@ -84,8 +84,7 @@ export const WorkspaceRoutes = () => {
           <Route path="users/*" element={<UsersRoutes />} />
           <Route path="teams/*" element={<TeamsRoutes />} />
           <Route path="settings/*" element={<SettingsRoutes />} />
-          <Route index element={<HomeRoutes />} />
-          <Route path="*" element={<Navigate to={'/'} />} />
+          <Route path="*" element={<Navigate to={'issues'} />} />
         </Route>
       </Routes>
     </WorkspaceProvider>

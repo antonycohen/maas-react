@@ -3,6 +3,9 @@
   "include": [],
   "references": [
     {
+      "path": "../core-api-models"
+    },
+    {
       "path": "../web-components"
     },
     {

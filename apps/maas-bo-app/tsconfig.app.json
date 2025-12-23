@@ -35,9 +35,6 @@
   "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
   "references": [
     {
-      "path": "../../packages/web-feature-home/tsconfig.lib.json"
-    },
-    {
       "path": "../../packages/web-feature-settings/tsconfig.lib.json"
     },
     {

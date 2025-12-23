@@ -1,8 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { Footer } from '@maas/web-components';
 import { User } from '@maas/core-api-models';
-import { LayoutTopbar } from './layout-topbar';
-import { LayoutMainMenu, MenuItem } from './layout-main-menu';
+import { LayoutHeaderBar, MenuItem } from './layout-header-bar';
 
 type LayoutProps = {
   connectedUser: User | null;
@@ -14,8 +13,7 @@ export function Layout(props: LayoutProps) {
 
   return (
     <div className={'tangente'}>
-      <LayoutTopbar connectedUser={connectedUser} />
-      <LayoutMainMenu items={menuItems} />
+      <LayoutHeaderBar connectedUser={connectedUser} menuItems={menuItems} />
       <Outlet />
       <Footer />
     </div>

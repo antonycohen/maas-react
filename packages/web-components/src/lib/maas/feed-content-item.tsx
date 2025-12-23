@@ -113,7 +113,7 @@ export const FeedMagazineItem = ({ item }: FeedMagazineItemProps) => {
           <img
             src={item.image}
             alt={item.title}
-            className="h-full w-full object-contain rounded transition-transform duration-300 group-hover:scale-105"
+            className="h-full w-full object-cover rounded transition-transform duration-300 group-hover:scale-105"
           />
         </div>
       </div>
