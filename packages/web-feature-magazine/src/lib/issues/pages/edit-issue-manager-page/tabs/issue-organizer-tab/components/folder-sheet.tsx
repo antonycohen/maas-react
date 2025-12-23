@@ -77,7 +77,7 @@ export function FolderSheet({
     resolver: zodResolver(folderFormSchema),
     defaultValues: {
       name: '',
-      description: null,
+      description: '',
       color: colorPresets[0],
       isPublished: false,
     },
@@ -99,7 +99,7 @@ export function FolderSheet({
       } else {
         reset({
           name: '',
-          description: null,
+          description: '',
           color: colorPresets[0],
           isPublished: false,
         });
@@ -163,7 +163,6 @@ export function FolderSheet({
                   name="description"
                   label="Description"
                   placeholder="Optional description..."
-                  rows={3}
                 />
                 <Field>
                   <FieldDescription>Color</FieldDescription>

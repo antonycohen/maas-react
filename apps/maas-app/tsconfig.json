@@ -4,48 +4,6 @@
   "extends": "../../tsconfig.base.json",
   "references": [
     {
-      "path": "../../packages/web-feature-organizations"
-    },
-    {
-      "path": "../../packages/web-feature-magazine"
-    },
-    {
-      "path": "../../packages/core-workspace"
-    },
-    {
-      "path": "../../packages/core-api-models"
-    },
-    {
-      "path": "../../packages/core-api"
-    },
-    {
-      "path": "../../packages/web-feature-users"
-    },
-    {
-      "path": "../../packages/web-feature-home"
-    },
-    {
-      "path": "../../packages/web-components"
-    },
-    {
-      "path": "../../packages/core-translations"
-    },
-    {
-      "path": "../../packages/core-store-session"
-    },
-    {
-      "path": "../../packages/web-feature-feeds"
-    },
-    {
-      "path": "../../packages/web-feature-settings"
-    },
-    {
-      "path": "../../packages/web-feature-login"
-    },
-    {
-      "path": "../../packages/web-layout"
-    },
-    {
       "path": "./tsconfig.app.json"
     }
   ]

@@ -3,15 +3,6 @@
   "include": [],
   "references": [
     {
-      "path": "../core-api"
-    },
-    {
-      "path": "../core-store-oauth"
-    },
-    {
-      "path": "../core-store-session"
-    },
-    {
       "path": "./tsconfig.lib.json"
     }
   ],

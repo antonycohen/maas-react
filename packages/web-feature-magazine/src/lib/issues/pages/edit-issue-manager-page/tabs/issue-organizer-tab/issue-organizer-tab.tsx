@@ -36,9 +36,9 @@ export const IssueOrganizerTab = () => {
 
   return <>
     <div className="flex-1 overflow-hidden">
-      <ResizablePanelGroup direction="horizontal" className="h-full">
+      <ResizablePanelGroup orientation="horizontal" className="h-full">
         {/* Left: Folders */}
-        <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+        <ResizablePanel defaultSize={33} minSize={15}>
           <FoldersPanel
             folders={folders}
             selectedFolderId={selectedFolderId}
@@ -51,7 +51,7 @@ export const IssueOrganizerTab = () => {
         <ResizableHandle withHandle />
 
         {/* Middle: Articles */}
-        <ResizablePanel defaultSize={30} minSize={20} maxSize={40}>
+        <ResizablePanel defaultSize={34} minSize={15}>
           <ArticlesPanel
             folder={currentFolder}
             articles={articles}
@@ -70,7 +70,7 @@ export const IssueOrganizerTab = () => {
         <ResizableHandle withHandle />
 
         {/* Right: Editor */}
-        <ResizablePanel defaultSize={50} minSize={30}>
+        <ResizablePanel defaultSize={33} minSize={15}>
           <ArticleEditorPanel
             article={selectedArticle}
             issueId={issueId}

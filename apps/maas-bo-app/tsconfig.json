@@ -3,42 +3,6 @@
   "include": [],
   "references": [
     {
-      "path": "../../packages/web-feature-settings"
-    },
-    {
-      "path": "../../packages/web-feature-organizations"
-    },
-    {
-      "path": "../../packages/web-feature-magazine"
-    },
-    {
-      "path": "../../packages/core-workspace"
-    },
-    {
-      "path": "../../packages/web-feature-users"
-    },
-    {
-      "path": "../../packages/core-api-models"
-    },
-    {
-      "path": "../../packages/core-api"
-    },
-    {
-      "path": "../../packages/web-layout"
-    },
-    {
-      "path": "../../packages/web-feature-login"
-    },
-    {
-      "path": "../../packages/web-components"
-    },
-    {
-      "path": "../../packages/core-translations"
-    },
-    {
-      "path": "../../packages/core-store-session"
-    },
-    {
       "path": "./tsconfig.app.json"
     },
     {

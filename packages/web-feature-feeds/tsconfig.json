@@ -3,9 +3,6 @@
   "include": [],
   "references": [
     {
-      "path": "../web-layout"
-    },
-    {
       "path": "./tsconfig.lib.json"
     }
   ],

@@ -3,15 +3,6 @@
   "include": [],
   "references": [
     {
-      "path": "../core-utils"
-    },
-    {
-      "path": "../core-api-models"
-    },
-    {
-      "path": "../web-components"
-    },
-    {
       "path": "./tsconfig.lib.json"
     }
   ],

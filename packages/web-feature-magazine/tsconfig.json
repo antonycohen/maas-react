@@ -3,33 +3,6 @@
   "include": [],
   "references": [
     {
-      "path": "../web-cms-editor"
-    },
-    {
-      "path": "../core-workspace"
-    },
-    {
-      "path": "../web-form"
-    },
-    {
-      "path": "../core-utils"
-    },
-    {
-      "path": "../core-api-models"
-    },
-    {
-      "path": "../web-components"
-    },
-    {
-      "path": "../web-layout"
-    },
-    {
-      "path": "../core-api"
-    },
-    {
-      "path": "../web-collection"
-    },
-    {
       "path": "./tsconfig.lib.json"
     }
   ],

@@ -132,7 +132,6 @@ export function ArticleEditorPanel({
                 name="description"
                 label="Description"
                 placeholder="Brief description..."
-                rows={2}
               />
 
               <ControlledMagazineFolderInput

@@ -33,6 +33,12 @@
       "path": "../core-api-models/tsconfig.lib.json"
     },
     {
+      "path": "../core-api/tsconfig.lib.json"
+    },
+    {
+      "path": "../web-collection/tsconfig.lib.json"
+    },
+    {
       "path": "../web-components/tsconfig.lib.json"
     }
   ]
