@@ -24,7 +24,7 @@ export const FolderDetailsPages = () => {
         />
       </div>
       {currentFolders?.articles && currentFolders?.articles?.length > 0 && (
-        <div className="container mx-auto flex flex-col gap-5 pb-10 pt-5">
+        <div className="container mx-auto flex flex-col gap-5 pb-10 pt-5 px-5">
           <h2 className="font-heading text-[34px] font-semibold leading-[40px] tracking-[-0.85px]">
             <span className="text-brand-primary">Tous les articles</span>
             <span className="text-black">de ce dossier</span>

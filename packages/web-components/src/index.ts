@@ -47,6 +47,8 @@ export * from './lib/pro-blocks/nav-user';
 export * from './lib/pro-blocks/sidebar-navigation';
 export * from './lib/pro-blocks/team-switcher';
 
+export * from './lib/ui/icons'
+
 export * from './lib/maas/async-combobox';
 export * from './lib/maas/articles-highlight';
 export * from './lib/maas/category-articles';
@@ -63,4 +65,5 @@ export * from './lib/maas/magazine-highlights-hero';
 export * from './lib/maas/rich-text-editor';
 export * from './lib/maas/sso-connector';
 export * from './lib/maas/tab-nav-links';
+export * from './lib/maas/article-author'
 
