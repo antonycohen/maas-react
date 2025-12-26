@@ -87,7 +87,7 @@ export const FolderCard = ({
   const displayedArticles = articles.slice(0, maxArticles);
 
   return (
-    <div className="flex gap-5 rounded-xl border border-[#e0e0e0] bg-white p-3">
+    <div className="flex flex-col md:flex-row gap-5 rounded-xl border border-[#e0e0e0] bg-white p-3">
       {/* Left - Cover Image */}
       <div className="relative aspect-[588/420] flex-1 overflow-hidden rounded">
         {folder.cover?.url ? (
