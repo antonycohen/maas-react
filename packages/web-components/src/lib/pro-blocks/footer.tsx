@@ -63,7 +63,7 @@ const Footer = ({
   ],
 }: FooterProps) => {
   return (
-    <section className="flex items-center justify-center bg-[#141414]">
+    <section className="flex items-center justify-center bg-[#141414] px-5">
       <div className="container mx-auto flex flex-col gap-20 py-10">
         {/* Top Block - Logo, Tagline, Subscribe */}
         <div className="flex flex-col items-center gap-5">
@@ -86,9 +86,9 @@ const Footer = ({
         </div>
 
         {/* Bottom Block - Links */}
-        <div className="flex gap-5">
+        <div className="flex flex-col md:flex-row gap-5">
           {/* Recent Articles Column */}
-          <div className="flex w-[228px] shrink-0 flex-col gap-4 pr-5">
+          <div className="flex w-full md:w-[228px] shrink-0 flex-col gap-4 pr-5">
             <h3 className="font-body text-[13px] font-bold uppercase leading-4 tracking-[0.26px] text-white">
               Articles récents
             </h3>
@@ -110,7 +110,7 @@ const Footer = ({
             <h3 className="font-body text-[13px] font-bold uppercase leading-4 tracking-[0.26px] text-white">
               Catégories populaires
             </h3>
-            <div className="flex gap-5">
+            <div className="flex gap-5 flex-wrap">
               {categories.map((column, colIndex) => (
                 <div key={colIndex} className="flex flex-1 flex-col gap-2">
                   {column.map((link, linkIndex) => (
