@@ -30,10 +30,13 @@
   "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
   "references": [
     {
-      "path": "../core-api-models/tsconfig.lib.json"
+      "path": "../core-utils/tsconfig.lib.json"
     },
     {
       "path": "../core-api/tsconfig.lib.json"
+    },
+    {
+      "path": "../core-api-models/tsconfig.lib.json"
     },
     {
       "path": "../web-collection/tsconfig.lib.json"
