@@ -9,6 +9,11 @@
     ],
     "rootDir": "src",
     "jsx": "react-jsx",
+    "lib": [
+      "es2022",
+      "dom",
+      "dom.iterable"
+    ],
     "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo"
   },
   "exclude": [
@@ -27,7 +32,12 @@
     "eslint.config.cjs",
     "eslint.config.mjs"
   ],
-  "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
+  "include": [
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
   "references": [
     {
       "path": "../core-utils/tsconfig.lib.json"
