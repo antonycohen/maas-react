@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 
 import { ContentFeed, TitleAndDescriptionHero } from '@maas/web-components';
 import { fakeFeedItems, mockCurrentIssue } from '../mock';
+import { cn } from '@maas/core-utils';
 
 export const FolderDetailsPages = () => {
   const { id } = useParams();
@@ -14,12 +15,15 @@ export const FolderDetailsPages = () => {
   return (
     <div className="flex flex-col gap-tg-xl">
       <div
-        className={
-          'w-full bg-repeat bg-cover min-h-[530px] flex justify-center items-center bg-center'
+        className={cn(
+          'w-full bg-repeat bg-cover min-h-[530px] flex justify-center items-center bg-center',
+          {
+            'bg-gray-400': !bgImageUrl, // fallback when no image
+          },
+        )}
+        style={
+          bgImageUrl ? { backgroundImage: `url(${bgImageUrl})` } : undefined
         }
-        style={{
-          backgroundImage: `url(${bgImageUrl})`,
-        }}
       >
         <TitleAndDescriptionHero
           titleClassName={'text-white'}
