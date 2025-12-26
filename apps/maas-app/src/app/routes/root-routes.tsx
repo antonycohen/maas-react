@@ -5,7 +5,7 @@ import { ProtectedPage, useConnectedUser } from '@maas/core-store-session';
 import { Layout } from '@maas/web-layout';
 import {
   CategoryPage,
-  FoldersPage,
+  FolderRoutes,
   HomePage,
   MagazinePage,
 } from '@maas/web-feature-home';
@@ -23,7 +23,7 @@ export const RootRoutes = () => {
       <Route element={<Layout connectedUser={connectedUser} />}>
         <Route index element={<HomePage />} />
         <Route path="magazines/*" element={<MagazinePage />} />
-        <Route path="dossiers/*" element={<FoldersPage />} />
+        <Route path="dossiers/*" element={<FolderRoutes />} />
         <Route path="categories/*" element={<CategoryPage />} />
 
         <Route path="account/*" element={<ProtectedPage />}>

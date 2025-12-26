@@ -34,6 +34,7 @@ export const folderSchema = z.object({
   metadata: z.record(z.string(), z.unknown()).nullable(),
   articleCount: z.number().nullable(),
   articles: z.lazy(() => z.array(articleSchema).nullable()),
+  link: z.string().nullable().optional(),
 });
 
 export type Folder = z.infer<typeof folderSchema>;

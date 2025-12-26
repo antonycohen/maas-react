@@ -12,7 +12,7 @@ export const FoldersPage = () => {
       </div>
       <div className="container mx-auto gap-tg-lg flex flex-col py-tg-xl">
         {mockCurrentIssue.folders?.map((folder) => (
-          <FolderCard folder={folder} />
+          <FolderCard key={`folder-${folder.id}`} folder={folder} link={`/dossiers/${folder.id}`} />
         ))}
       </div>
     </div>

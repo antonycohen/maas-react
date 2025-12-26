@@ -31,11 +31,11 @@ export const MagazineHighlightsHero = ({
   link,
 }: MagazineHighlightsHeroProps) => {
   const content = (
-    <div className="flex w-full items-start justify-center gap-5 ">
+    <div className="flex flex-col md:flex-row w-full  items-start justify-center gap-5 ">
       {/* Left - Magazine Cover with Yellow Circle */}
-      <div className="relative flex h-[480px] flex-1 items-center justify-center px-2.5 ">
+      <div className="relative flex h-[480px] w-full md:w-auto md:flex-1 items-center justify-center px-2.5 ">
         {/* Yellow Circle Decoration */}
-        <div className="absolute h-[480px] w-[480px]">
+        <div className="absolute h-[480px]  w-full md:w-[480px] px-5">
           <svg
             viewBox="0 0 480 480"
             fill="none"
@@ -101,7 +101,7 @@ export const MagazineHighlightsHero = ({
 
   return (
     <section className="flex items-center justify-center bg-brand-primary py-tg-xl">
-      <div className="container mx-auto flex h-[480px] items-center justify-center py-10">
+      <div className="container mx-auto flex md:h-[480px] items-center justify-center py-10">
         <div className="flex h-full w-full items-center justify-center">
           {link ? (
             <Link to={link} className="group flex w-full " >
