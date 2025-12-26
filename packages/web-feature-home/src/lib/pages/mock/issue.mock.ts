@@ -184,7 +184,7 @@ export const mockCurrentIssue: MockIssue = {
       type: 'dossier',
       isDefault: false,
       name: 'Mathématiques et cinéma',
-      description: 'Quand le septième art rencontre la reine des sciences.',
+      description: 'Nous sommes confrontés quotidiennement à des ruptures de symétries qui nous permettent de faire la différence entre haut et bas, droite et gauche. De même, l’orientation des objets de nos espaces mathématiques, quand elle existe, n’échappe pas à l’arbitraire d’une définition.',
       position: 0,
       color: '#e31b22',
       cover: {
