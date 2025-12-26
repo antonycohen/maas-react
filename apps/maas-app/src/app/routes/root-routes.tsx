@@ -7,8 +7,8 @@ import {
   CategoryPage,
   FolderRoutes,
   HomePage,
-  MagazinePage,
   ArticlesRoutes,
+  MagazinesRoutes,
 } from '@maas/web-feature-home';
 import { AccountRoutes } from '@maas/web-feature-users';
 
@@ -23,7 +23,7 @@ export const RootRoutes = () => {
       </Route>
       <Route element={<Layout connectedUser={connectedUser} />}>
         <Route index element={<HomePage />} />
-        <Route path="magazines/*" element={<MagazinePage />} />
+        <Route path="magazines/*" element={<MagazinesRoutes />} />
         <Route path="dossiers/*" element={<FolderRoutes />} />
         <Route path="categories/*" element={<CategoryPage />} />
         <Route path="articles/*" element={<ArticlesRoutes />} />

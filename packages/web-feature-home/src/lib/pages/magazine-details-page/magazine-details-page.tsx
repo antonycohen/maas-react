@@ -1,7 +1,7 @@
 import { FolderCard, MagazineHighlightsHero } from '@maas/web-components';
 import { mockCurrentIssue } from '../mock';
 
-export const MagazinePage = () => {
+export const MagazineDetailsPage = () => {
   return (
     <div className="flex flex-col gap-tg-xl">
       {/* Magazine Hero Section */}

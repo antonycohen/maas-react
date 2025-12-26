@@ -16,8 +16,8 @@ export const ArticleAuthor = ({ imageSrc, name, description }: ArticleAuthorProp
         />
       </Avatar>
       <div>
-        <h3 className={"font-body text-black font-semibold"}>{name}</h3>
-        <p className={'font-body text-black/50'}>{description}</p>
+        <h3 className={"font-body text-black font-semibold text-[14px] leading-[20px] tracking-[-0.07px]"}>{name}</h3>
+        <p className={'font-body text-black/70 text-[13px] leading-[18px]'}>{description}</p>
       </div>
     </div>
   );

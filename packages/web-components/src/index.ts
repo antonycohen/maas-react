@@ -66,4 +66,5 @@ export * from './lib/maas/rich-text-editor';
 export * from './lib/maas/sso-connector';
 export * from './lib/maas/tab-nav-links';
 export * from './lib/maas/article-author'
+export * from './lib/maas/share-articles'
 
