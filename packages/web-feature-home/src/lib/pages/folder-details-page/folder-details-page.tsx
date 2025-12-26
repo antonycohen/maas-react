@@ -13,9 +13,14 @@ export const FolderDetailsPages = () => {
 
   return (
     <div className="flex flex-col gap-tg-xl">
-      <div className={'w-full bg-repeat bg-cover min-h-[530px] flex justify-center items-center bg-center'} style={{
-        backgroundImage: `url(${bgImageUrl})`,
-      }}>
+      <div
+        className={
+          'w-full bg-repeat bg-cover min-h-[530px] flex justify-center items-center bg-center'
+        }
+        style={{
+          backgroundImage: `url(${bgImageUrl})`,
+        }}
+      >
         <TitleAndDescriptionHero
           titleClassName={'text-white'}
           descriptionClassName={'text-white'}
@@ -26,7 +31,7 @@ export const FolderDetailsPages = () => {
       {currentFolders?.articles && currentFolders?.articles?.length > 0 && (
         <div className="container mx-auto flex flex-col gap-5 pb-10 pt-5 px-5">
           <h2 className="font-heading text-[34px] font-semibold leading-[40px] tracking-[-0.85px]">
-            <span className="text-brand-primary">Tous les articles</span>
+            <span className="text-brand-primary">Tous les articles </span>&nbsp;
             <span className="text-black">de ce dossier</span>
           </h2>
           <ContentFeed items={fakeFeedItems} />
