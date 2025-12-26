@@ -15,7 +15,11 @@ export const MagazinePage = () => {
       </div>
       <div className="container mx-auto gap-tg-lg flex flex-col p-5">
         {mockCurrentIssue.folders?.map((folder) => (
-          <FolderCard folder={folder} link={`/dossiers/${folder.id}`} />
+          <FolderCard
+            key={folder.id}
+            folder={folder}
+            link={`/dossiers/${folder.id}`}
+          />
         ))}
       </div>
     </div>
