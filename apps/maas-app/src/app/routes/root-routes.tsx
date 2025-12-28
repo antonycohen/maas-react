@@ -27,7 +27,6 @@ export const RootRoutes = () => {
         <Route path="dossiers/*" element={<FolderRoutes />} />
         <Route path="categories/*" element={<CategoryPage />} />
         <Route path="articles/*" element={<ArticlesRoutes />} />
-
         <Route path="account/*" element={<ProtectedPage />}>
           <Route path="*" element={<AccountRoutes />} />
         </Route>
