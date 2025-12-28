@@ -10,6 +10,7 @@ export * from './lib/inputs/controlled-magazine-category-input';
 export * from './lib/inputs/controlled-magazine-brand-input';
 export * from './lib/inputs/controlled-magazine-folder-input';
 export * from './lib/inputs/controlled-associative-token-input';
+export * from './lib/inputs/controlled-slug-value-input';
 export * from './lib/inputs/controlled-checkbox';
 
 export * from './lib/helper/create-connected-inputs';
