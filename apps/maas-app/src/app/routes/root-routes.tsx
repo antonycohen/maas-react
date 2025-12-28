@@ -11,6 +11,7 @@ import {
   MagazinesRoutes,
 } from '@maas/web-feature-home';
 import { AccountRoutes } from '@maas/web-feature-users';
+import { PricingRoutes } from '@maas/web-feature-pricing';
 
 export const RootRoutes = () => {
   const connectedUser = useConnectedUser();
@@ -27,6 +28,7 @@ export const RootRoutes = () => {
         <Route path="dossiers/*" element={<FolderRoutes />} />
         <Route path="categories/*" element={<CategoryPage />} />
         <Route path="articles/*" element={<ArticlesRoutes />} />
+        <Route path={"pricing/*"} element={<PricingRoutes />} />
         <Route path="account/*" element={<ProtectedPage />}>
           <Route path="*" element={<AccountRoutes />} />
         </Route>

@@ -394,6 +394,8 @@ importers:
 
   packages/web-feature-organizations: {}
 
+  packages/web-feature-pricing: {}
+
   packages/web-feature-settings:
     dependencies:
       '@maas/web-layout':
