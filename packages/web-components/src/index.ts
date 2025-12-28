@@ -50,6 +50,7 @@ export * from './lib/pro-blocks/team-switcher';
 export * from './lib/ui/icons'
 
 export * from './lib/maas/async-combobox';
+export * from './lib/maas/async-multi-combobox';
 export * from './lib/maas/articles-highlight';
 export * from './lib/maas/category-articles';
 export * from './lib/maas/content-feed';

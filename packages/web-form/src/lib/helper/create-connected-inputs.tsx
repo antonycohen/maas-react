@@ -8,7 +8,9 @@ import { ControlledEnumInput } from '../inputs/controlled-enum-input';
 import { ControlledImageInput } from '../inputs/controlled-image-input';
 import { ControlledLanguageInput } from '../inputs/controlled-language-input';
 import { ControlledMagazineBrandInput } from '../inputs/controlled-magazine-brand-input';
-import { ControlledMagazineCategoryInput } from '../inputs/controlled-magazine-category-input';
+import { ControlledCategoryInput } from '../inputs/controlled-category-input';
+import { ControlledCategoriesInput } from '../inputs/controlled-categories-input';
+import { ControlledArticleTypeInput } from '../inputs/controlled-article-type-input';
 import { ControlledMagazineFolderInput } from '../inputs/controlled-magazine-folder-input';
 import { ControlledPasswordInput } from '../inputs/controlled-password-input';
 import { ControlledRTEInput } from '../inputs/controlled-rte-input';
@@ -18,6 +20,7 @@ import { ControlledSlugValueArrayInput } from '../inputs/controlled-slug-value-a
 import { ControlledSwitchInput } from '../inputs/controlled-switch-input';
 import { ControlledTextInput } from '../inputs/controlled-text-input';
 import { ControlledTextareaInput } from '../inputs/controlled-textarea-input';
+import { ControlledTokenInput } from '../inputs/controlled-token-input';
 
 export function createConnectedInputHelpers<
   T extends FieldValues,
@@ -32,7 +35,9 @@ export function createConnectedInputHelpers<
     ControlledImageInput: ControlledImageInput<T>,
     ControlledLanguageInput: ControlledLanguageInput<T>,
     ControlledMagazineBrandInput: ControlledMagazineBrandInput<T>,
-    ControlledMagazineCategoryInput: ControlledMagazineCategoryInput<T>,
+    ControlledCategoryInput: ControlledCategoryInput<T>,
+    ControlledCategoriesInput: ControlledCategoriesInput<T>,
+    ControlledArticleTypeInput: ControlledArticleTypeInput<T>,
     ControlledMagazineFolderInput: ControlledMagazineFolderInput<T>,
     ControlledPasswordInput: ControlledPasswordInput<T>,
     ControlledRTEInput: ControlledRTEInput<T>,
@@ -42,5 +47,6 @@ export function createConnectedInputHelpers<
     ControlledSwitchInput: ControlledSwitchInput<T>,
     ControlledTextAreaInput: ControlledTextareaInput<T>,
     ControlledTextInput: ControlledTextInput<T>,
+    ControlledTokenInput: ControlledTokenInput<T>,
   };
 }

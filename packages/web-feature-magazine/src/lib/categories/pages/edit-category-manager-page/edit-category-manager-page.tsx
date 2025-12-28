@@ -42,7 +42,7 @@ export function EditCategoryManagerPage() {
     ControlledTextInput,
     ControlledImageInput,
     ControlledTextAreaInput,
-    ControlledMagazineCategoryInput,
+    ControlledCategoryInput,
   } = createConnectedInputHelpers<Category>();
 
   const pageTitle = isCreateMode ? 'New Category' : (category?.name ?? '');
@@ -92,7 +92,7 @@ export function EditCategoryManagerPage() {
               <CardContent>
                 <FieldGroup>
                   <ControlledTextInput name="name" label="Name" />
-                  <ControlledMagazineCategoryInput
+                  <ControlledCategoryInput
                     name="parent"
                     label="Parent Category"
                     placeholder="No Parent"

@@ -6,8 +6,8 @@ import {
   useFormContext,
 } from 'react-hook-form';
 
-import { useGetCategories } from '@maas/core-api';
-import { ReadCategoryRef } from '@maas/core-api-models';
+import { useGetArticleTypes } from '@maas/core-api';
+import { ReadArticleTypeRef } from '@maas/core-api-models';
 import {
   AsyncCombobox,
   Field,
@@ -16,21 +16,21 @@ import {
   FieldLabel,
 } from '@maas/web-components';
 
-type ControlledMagazineCategoryInputProps<T extends FieldValues> = {
-  name: FieldPathByValue<T, ReadCategoryRef | undefined | null>;
+type ControlledArticleTypeInputProps<T extends FieldValues> = {
+  name: FieldPathByValue<T, ReadArticleTypeRef | undefined | null>;
   label: string;
   placeholder?: string;
   description?: string;
   disabled?: boolean;
 };
 
-export function ControlledMagazineCategoryInput<T extends FieldValues>(
-  props: ControlledMagazineCategoryInputProps<T>,
+export function ControlledArticleTypeInput<T extends FieldValues>(
+  props: ControlledArticleTypeInputProps<T>,
 ) {
   const {
     name,
     label,
-    placeholder = 'Select category...',
+    placeholder = 'Select article type...',
     description,
     disabled,
   } = props;
@@ -45,24 +45,30 @@ export function ControlledMagazineCategoryInput<T extends FieldValues>(
   });
   const id = useId();
 
-  const { data: categoriesData, isLoading } = useGetCategories(
+  const { data: articleTypesData, isLoading } = useGetArticleTypes(
     {
-      filters: searchTerm ? { term: searchTerm } : undefined,
+      filters: searchTerm ? { name: searchTerm } : undefined,
       limit: 15,
       offset: 0,
+      fields: {
+        id: null,
+        name: null,
+        fields: null,
+        isActive: null,
+      }
     },
     {
       enabled: true,
     },
   );
 
-  const categories = categoriesData?.data ?? [];
-  const options = categories.map((category) => ({
-    id: category.id,
-    label: category.name,
+  const articleTypes = articleTypesData?.data ?? [];
+  const options = articleTypes.map((articleType) => ({
+    id: articleType.id,
+    label: articleType.name,
   }));
 
-  const currentValue = field.value as ReadCategoryRef | null | undefined;
+  const currentValue = field.value as ReadArticleTypeRef | null | undefined;
   const comboboxValue =
     currentValue && currentValue.name
       ? { id: currentValue.id, label: currentValue.name }
@@ -82,8 +88,8 @@ export function ControlledMagazineCategoryInput<T extends FieldValues>(
         options={options}
         isLoading={isLoading}
         placeholder={placeholder}
-        searchPlaceholder="Search categories..."
-        emptyMessage="No category found."
+        searchPlaceholder="Search article types..."
+        emptyMessage="No article type found."
         disabled={disabled}
         aria-invalid={fieldState.invalid}
       />

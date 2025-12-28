@@ -5,7 +5,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import {
   ControlledCheckbox,
   ControlledEnumInput,
-  ControlledMagazineCategoryInput,
+  ControlledCategoryInput,
   ControlledSelectInput,
   ControlledTextInput,
 } from '@maas/web-form';
@@ -114,7 +114,7 @@ export function FieldEditor({
         )}
 
         {fieldType === 'category' && (
-          <ControlledMagazineCategoryInput
+          <ControlledCategoryInput
             name={`fields.${index}.category`}
             label="Category"
             placeholder="Select category..."

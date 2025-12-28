@@ -9,9 +9,11 @@ import {
 import { Button } from '@maas/web-components';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons-react';
+import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
 
 export function ArticlesListManagerPage() {
   const columns = useArticlesListColumns();
+  const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
 
   return (
     <div>
@@ -25,7 +27,7 @@ export function ArticlesListManagerPage() {
           pageTitle="Articles"
           actions={
             <Button asChild>
-              <Link to="/articles/new">
+              <Link to={`${workspaceBaseUrl}/articles/new`}>
                 <IconPlus className="mr-2 h-4 w-4" />
                 New Article
               </Link>
@@ -48,21 +50,8 @@ export function ArticlesListManagerPage() {
             description: null,
             type: null,
             isPublished: null,
-            isFeatured: null,
             featuredImage: null,
             cover: null,
-            issue: {
-              fields: {
-                id: null,
-                title: null,
-              },
-            },
-            folder: {
-              fields: {
-                id: null,
-                name: null,
-              },
-            },
           }}
         />
       </LayoutContent>

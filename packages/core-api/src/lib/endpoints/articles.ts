@@ -10,16 +10,14 @@ import {
   GetQueryByIdParams,
 } from '../types';
 
-const BASE_PATH = '/api/v1/magazine/articles';
+const BASE_PATH = '/api/v1/articles';
 
 export interface GetArticlesFilter {
-  issueId?: string;
-  folderId?: string;
+  organizationId?: string;
   authorId?: string;
+  typeId?: string;
+  visibility?: string;
   isPublished?: boolean;
-  isFeatured?: boolean;
-  tags?: string;
-  term?: string;
 }
 
 export class ArticlesEndpoint {
@@ -27,7 +25,7 @@ export class ArticlesEndpoint {
 
   /**
    * Get a list of articles
-   * GET /api/v1/magazine/articles
+   * GET /api/v1/articles
    */
   async getArticles(
     params: GetCollectionQueryParams<Article> & { filters?: GetArticlesFilter }
@@ -36,19 +34,17 @@ export class ArticlesEndpoint {
     return this.client.getCollection<Article>(BASE_PATH, fields, {
       offset,
       limit,
-      ...(filters?.issueId && { issue_id: filters.issueId }),
-      ...(filters?.folderId && { folder_id: filters.folderId }),
+      ...(filters?.organizationId && { organization_id: filters.organizationId }),
       ...(filters?.authorId && { author_id: filters.authorId }),
+      ...(filters?.typeId && { type_id: filters.typeId }),
+      ...(filters?.visibility && { visibility: filters.visibility }),
       ...(filters?.isPublished !== undefined && { is_published: filters.isPublished }),
-      ...(filters?.isFeatured !== undefined && { is_featured: filters.isFeatured }),
-      ...(filters?.tags && { tags: filters.tags }),
-      ...(filters?.term && { term: filters.term }),
     });
   }
 
   /**
    * Get a single article by ID
-   * GET /api/v1/magazine/articles/{articleId}
+   * GET /api/v1/articles/{articleId}
    */
   async getArticle(params: GetQueryByIdParams<Article>): Promise<Article> {
     return this.client.getById<Article>(
@@ -59,7 +55,7 @@ export class ArticlesEndpoint {
 
   /**
    * Create a new article
-   * POST /api/v1/magazine/articles
+   * POST /api/v1/articles
    */
   async createArticle(data: CreateArticle): Promise<Article> {
     return this.client.post<Article>(BASE_PATH, data);
@@ -67,7 +63,7 @@ export class ArticlesEndpoint {
 
   /**
    * Update an article (full replacement)
-   * PUT /api/v1/magazine/articles/{articleId}
+   * PUT /api/v1/articles/{articleId}
    */
   async updateArticle(
     articleId: string,
@@ -78,7 +74,7 @@ export class ArticlesEndpoint {
 
   /**
    * Patch an article (partial update)
-   * PATCH /api/v1/magazine/articles/{articleId}
+   * PATCH /api/v1/articles/{articleId}
    */
   async patchArticle(
     articleId: string,
@@ -89,7 +85,7 @@ export class ArticlesEndpoint {
 
   /**
    * Delete an article
-   * DELETE /api/v1/magazine/articles/{articleId}
+   * DELETE /api/v1/articles/{articleId}
    */
   async deleteArticle(articleId: string): Promise<void> {
     return this.client.delete<void>(`${BASE_PATH}/${articleId}`);

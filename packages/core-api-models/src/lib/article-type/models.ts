@@ -51,6 +51,19 @@ export const articleTypeFieldInputSchema = z.object({
 
 export type ArticleTypeFieldInput = z.infer<typeof articleTypeFieldInputSchema>;
 
+// Ref schemas for article type references
+export const articleTypeRefSchema = z.object({
+  id: z.string(),
+});
+
+export const readArticleTypeRefSchema = z.object({
+  id: z.string(),
+  name: z.string().nullable(),
+});
+
+export type ArticleTypeRef = z.infer<typeof articleTypeRefSchema>;
+export type ReadArticleTypeRef = z.infer<typeof readArticleTypeRefSchema>;
+
 // Schema for reading an article type
 export const articleTypeSchema = z.object({
   id: z.string(),
