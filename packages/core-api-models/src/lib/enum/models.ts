@@ -9,6 +9,19 @@ export const enumValueSchema = z.object({
 
 export type EnumValue = z.infer<typeof enumValueSchema>;
 
+// Ref schemas for enum references
+export const enumRefSchema = z.object({
+  id: z.string(),
+});
+
+export const readEnumRefSchema = z.object({
+  id: z.string(),
+  name: z.string().nullable(),
+});
+
+export type EnumRef = z.infer<typeof enumRefSchema>;
+export type ReadEnumRef = z.infer<typeof readEnumRefSchema>;
+
 // Schema for reading an enum
 export const enumSchema = z.object({
   id: z.string(),

@@ -13,12 +13,13 @@ type ControlledTextInputProps<T extends FieldValues> = {
   placeholder?: string;
   direction?: 'horizontal' | 'vertical';
   className?: string;
+  disabled?: boolean;
 };
 
 export function ControlledTextInput<T extends FieldValues>(
   props: ControlledTextInputProps<T>,
 ) {
-  const { name, label, placeholder, direction = 'vertical', className } = props;
+  const { name, label, placeholder, direction = 'vertical', className, disabled } = props;
   const form = useFormContext();
   const { control } = form;
   const { field, fieldState } = useController({
@@ -38,6 +39,7 @@ export function ControlledTextInput<T extends FieldValues>(
         autoComplete="off"
         placeholder={placeholder}
         id={id}
+        disabled={disabled}
         className={direction === 'horizontal' ? 'basis-1/2' : ''}
       />
       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

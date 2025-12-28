@@ -14,39 +14,45 @@ import {
   FieldGroup,
 } from '@maas/web-components';
 import { FormProvider } from 'react-hook-form';
-import { Enum } from '@maas/core-api-models';
+import { ArticleType } from '@maas/core-api-models';
 import { cn } from '@maas/core-utils';
-import { createConnectedInputHelpers } from '@maas/web-form';
+import {
+  createConnectedInputHelpers,
+} from '@maas/web-form';
 import { IconTrash } from '@tabler/icons-react';
-import { useEditEnumForm } from './hooks/use-edit-enum-form';
+import { useEditArticleTypeForm } from './hooks/use-edit-article-type-form';
 import { useEditActions } from './hooks/use-edit-actions';
-import { useCurrentWorkspaceUrlPrefix, useGetCurrentWorkspaceId } from '@maas/core-workspace';
+import { FieldsList } from './components';
+import {
+  useCurrentWorkspaceUrlPrefix,
+  useGetCurrentWorkspaceId,
+} from '@maas/core-workspace';
 
-export function EditEnumManagerPage() {
-  const { enumId = '' } = useParams<{ enumId: string }>();
+export function EditArticleTypeManagerPage() {
+  const { articleTypeId = '' } = useParams<{ articleTypeId: string }>();
+  const workspaceId = useGetCurrentWorkspaceId() as string;
 
-  const workspaceId = useGetCurrentWorkspaceId();
-  const { enumData, isLoading, form, isCreateMode } = useEditEnumForm(
-    enumId,
-    workspaceId as string,
-  );
+  const { articleTypeData, isLoading, form, isCreateMode } =
+    useEditArticleTypeForm(articleTypeId, workspaceId);
   const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
 
   const { deleteMutation, handleDelete, isSaving, onSubmit } = useEditActions(
     form,
     isCreateMode,
-    enumId,
+    articleTypeId,
   );
 
-  if (!isCreateMode && !isLoading && !enumData) {
-    return <div>Enum not found</div>;
+  if (!isCreateMode && !isLoading && !articleTypeData) {
+    return <div>Article type not found</div>;
   }
 
-  const { ControlledTextInput, ControlledSlugValueArrayInput } =
-    createConnectedInputHelpers<Enum>();
+  const { ControlledTextInput, ControlledCheckbox } =
+    createConnectedInputHelpers<ArticleType>();
 
-  const pageTitle = isCreateMode ? 'New Enum' : (enumData?.name ?? '');
-  const breadcrumbLabel = isCreateMode ? 'New' : (enumData?.name ?? '');
+  const pageTitle = isCreateMode
+    ? 'New Article Type'
+    : (articleTypeData?.name ?? '');
+  const breadcrumbLabel = isCreateMode ? 'New' : (articleTypeData?.name ?? '');
 
   return (
     <div>
@@ -54,7 +60,7 @@ export function EditEnumManagerPage() {
         <LayoutBreadcrumb
           items={[
             { label: 'Home', to: `${workspaceBaseUrl}` },
-            { label: 'Enums', to: `${workspaceBaseUrl}/enums` },
+            { label: 'Article Types', to: `${workspaceBaseUrl}/article-types` },
             { label: breadcrumbLabel },
           ]}
         />
@@ -86,35 +92,17 @@ export function EditEnumManagerPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Enum Details</CardTitle>
+                  <CardTitle>Article Type Details</CardTitle>
                   <CardDescription>
-                    Define the enum name and key identifier.
+                    Define the article type name and key identifier.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <FieldGroup>
                     <ControlledTextInput name="name" label="Name" />
+                    <ControlledCheckbox name="isActive" label="Active" />
                   </FieldGroup>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Enum Values</CardTitle>
-                  <CardDescription>
-                    Define the key-label pairs for this enum.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <FieldGroup>
-                    <ControlledSlugValueArrayInput
-                      name="values"
-                      label="Values"
-                      slugPath="value"
-                      valuePath="label"
-                      valueLabel="Label"
-                      valuePlaceholder="e.g., Pending"
-                    />
-                  </FieldGroup>
+                  <FieldsList />
                 </CardContent>
               </Card>
             </div>

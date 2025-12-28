@@ -1,4 +1,5 @@
 export * from './lib/articles/routes/articles-routes';
+export * from './lib/article-types/routes/article-types-routes';
 export * from './lib/brands/routes/brands-routes';
 export * from './lib/categories/routes/categories-routes';
 export * from './lib/enums/routes/enums-routes';

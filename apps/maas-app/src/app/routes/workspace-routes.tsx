@@ -7,6 +7,7 @@ import { AccountRoutes, UsersRoutes } from '@maas/web-feature-users';
 import { WorkspaceProvider } from '@maas/core-workspace';
 import {
   ArticlesRoutes,
+  ArticleTypesRoutes,
   BrandsRoutes,
   CategoriesRoutes,
   EnumsRoutes,
@@ -82,6 +83,7 @@ export const WorkspaceRoutes = () => {
           />
           <Route path="issues/*" element={<IssuesRoutes />} />
           <Route path="articles/*" element={<ArticlesRoutes />} />
+          <Route path="article-types/*" element={<ArticleTypesRoutes />} />
           <Route path="categories/*" element={<CategoriesRoutes />} />
           <Route path="folders/*" element={<FoldersRoutes />} />
           <Route path="enums/*" element={<EnumsRoutes />} />

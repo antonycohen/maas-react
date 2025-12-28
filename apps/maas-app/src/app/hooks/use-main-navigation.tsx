@@ -63,6 +63,11 @@ export const useMainNavigation = (
           url: `${workspaceBaseUrl}/enums`,
           icon: List,
         },
+        {
+          title: 'Article Types',
+          url: `${workspaceBaseUrl}/article-types`,
+          icon: FolderTree,
+        },
       ],
     },
     {

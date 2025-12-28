@@ -1,5 +1,6 @@
 export * from './lib/api-error';
 export * from './lib/article';
+export * from './lib/article-type';
 export * from './lib/brand';
 export * from './lib/category';
 export * from './lib/configuration';

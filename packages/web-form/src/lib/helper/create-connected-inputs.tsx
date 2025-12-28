@@ -4,6 +4,7 @@ import { ControlledAssociativeTokenInput } from '../inputs/controlled-associativ
 import { ControlledCheckbox } from '../inputs/controlled-checkbox';
 import { ControlledCMSInput } from '../inputs/controlled-cms-input';
 import { ControlledDateInput } from '../inputs/controlled-date-input';
+import { ControlledEnumInput } from '../inputs/controlled-enum-input';
 import { ControlledImageInput } from '../inputs/controlled-image-input';
 import { ControlledLanguageInput } from '../inputs/controlled-language-input';
 import { ControlledMagazineBrandInput } from '../inputs/controlled-magazine-brand-input';
@@ -13,6 +14,7 @@ import { ControlledPasswordInput } from '../inputs/controlled-password-input';
 import { ControlledRTEInput } from '../inputs/controlled-rte-input';
 import { ControlledSelectInput } from '../inputs/controlled-select-input';
 import { ControlledSlugValueInput } from '../inputs/controlled-slug-value-input';
+import { ControlledSlugValueArrayInput } from '../inputs/controlled-slug-value-array-input';
 import { ControlledSwitchInput } from '../inputs/controlled-switch-input';
 import { ControlledTextInput } from '../inputs/controlled-text-input';
 import { ControlledTextareaInput } from '../inputs/controlled-textarea-input';
@@ -26,6 +28,7 @@ export function createConnectedInputHelpers<
     ControlledCheckbox: ControlledCheckbox<T>,
     ControlledCMSInput: ControlledCMSInput<T, Context>,
     ControlledDateInput: ControlledDateInput<T>,
+    ControlledEnumInput: ControlledEnumInput<T>,
     ControlledImageInput: ControlledImageInput<T>,
     ControlledLanguageInput: ControlledLanguageInput<T>,
     ControlledMagazineBrandInput: ControlledMagazineBrandInput<T>,
@@ -35,6 +38,7 @@ export function createConnectedInputHelpers<
     ControlledRTEInput: ControlledRTEInput<T>,
     ControlledSelectInput: ControlledSelectInput<T>,
     ControlledSlugValueInput: ControlledSlugValueInput<T>,
+    ControlledSlugValueArrayInput: ControlledSlugValueArrayInput<T>,
     ControlledSwitchInput: ControlledSwitchInput<T>,
     ControlledTextAreaInput: ControlledTextareaInput<T>,
     ControlledTextInput: ControlledTextInput<T>,
