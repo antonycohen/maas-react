@@ -18,6 +18,7 @@ import {
 } from '@maas/web-components';
 import { camelize } from '@nx/devkit/src/utils/string-utils';
 import { createConnectedInputHelpers } from '@maas/web-form';
+import { editorPlugins } from '../edit-article-manager-page';
 
 type DynamicFieldProps = {
   field: ArticleTypeField;
@@ -91,7 +92,13 @@ function DynamicField({ field }: DynamicFieldProps) {
       return <ControlledCategoryInput name={fieldName} label={field.label} />;
 
     case 'cms':
-      return <ControlledCMSInput name={fieldName} label={field.label} plugins={[]} />;
+      return (
+        <ControlledCMSInput
+          name={fieldName}
+          label={field.label}
+          plugins={editorPlugins}
+        />
+      );
 
     default:
       return null;

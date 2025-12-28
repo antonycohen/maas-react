@@ -70,7 +70,7 @@ export function useEnumsListColumns(): ColumnDef<Enum>[] {
         const values = row.original.values;
         const count = values?.length ?? 0;
         return (
-          <div className="text-center">
+          <div>
             {count} {count === 1 ? 'value' : 'values'}
           </div>
         );

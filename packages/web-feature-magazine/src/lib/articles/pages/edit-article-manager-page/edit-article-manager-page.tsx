@@ -22,11 +22,37 @@ import { useEditArticleForm } from './hooks/use-edit-article-form';
 import { useEditActions } from './hooks/use-edit-actions';
 import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
 import { DynamicCustomFields } from './components/dynamic-custom-fields';
+import {
+  AnalyzePlugin,
+  AudioPlugin, CardEventPlugin,
+  CardPressCoveragePlugin, CardsTextWithImagePlugin, HeadingPlugin,
+  HighlightPlugin, IframePlugin, ImagesPlugin, ImageWithTextPlugin,
+  MosaicGalleryPlugin, ParagraphPlugin, PodcastCarouselPlugin, QuotesPlugin,
+  VideoPlugin
+} from '@maas/web-cms-editor';
 
 const VISIBILITY_OPTIONS = [
   { value: 'public', label: 'Public' },
   { value: 'private', label: 'Private' },
   { value: 'draft', label: 'Draft' },
+];
+
+export const editorPlugins = [
+  HeadingPlugin,
+  ParagraphPlugin,
+  QuotesPlugin,
+  CardsTextWithImagePlugin,
+  CardEventPlugin,
+  CardPressCoveragePlugin,
+  PodcastCarouselPlugin,
+  VideoPlugin,
+  MosaicGalleryPlugin,
+  ImagesPlugin,
+  ImageWithTextPlugin,
+  IframePlugin,
+  AudioPlugin,
+  AnalyzePlugin,
+  HighlightPlugin,
 ];
 
 export function EditArticleManagerPage() {
@@ -52,6 +78,7 @@ export function EditArticleManagerPage() {
     ControlledTextAreaInput,
     ControlledImageInput,
     ControlledSelectInput,
+    ControlledCMSInput,
     ControlledCheckbox,
     ControlledCategoriesInput,
     ControlledArticleTypeInput,
@@ -109,6 +136,13 @@ export function EditArticleManagerPage() {
                     <ControlledTextAreaInput
                       name="description"
                       label="Description"
+                    />
+                    <ControlledCMSInput
+                      name={'content'}
+                      label={'Content'}
+                      plugins={editorPlugins}
+                      author="John Doe"
+                      lastModifiedAt={article?.updatedAt}
                     />
                     <ControlledTokenInput name="keywords" label="Keywords" />
                     <ControlledSelectInput

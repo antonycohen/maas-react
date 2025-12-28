@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, MouseEvent } from 'react';
 import {
   ArrowLeft,
   Pencil,
@@ -42,8 +42,9 @@ export const EditorActionsBar = ({ onSave }: EditorActionsBarProps) => {
     setSettings((prev) => ({ ...prev, previewMode: value, editMode: false }));
   };
 
-  const closeEditor = () =>
+  const closeEditor = () => {
     setSettings((prev) => ({ ...prev, visible: false }));
+  }
 
   const saveEditorContent = () => {
     onSave?.();
@@ -96,33 +97,44 @@ export const EditorActionsBar = ({ onSave }: EditorActionsBarProps) => {
   return (
     <header className="editor-navigation h-[104px] border-b border-neutral-300 bg-white px-6 py-8">
       <div className="flex items-center justify-between">
-        <Button variant="ghost" onClick={resetEditor}>
-          <ArrowLeft className="h-4 w-4" />
-          Annuler
+        <Button asChild variant="ghost" onClick={resetEditor}>
+          <div>
+            <ArrowLeft className="h-4 w-4" />
+            Annuler
+          </div>
         </Button>
 
         <div className="flex items-center gap-x-12">
           <Button
+            asChild
             variant="ghost"
             size="icon"
             onClick={() => setEditMode(true)}
             className={cn({ 'bg-primary/10 text-primary': settings.editMode })}
           >
-            <Pencil className="h-4 w-4" />
+            <div>
+              <Pencil className="h-4 w-4" />
+            </div>
+
           </Button>
 
           <div className="flex items-center gap-x-3">
             <Button
+              asChild
               variant="ghost"
               size="icon"
               onClick={() => setPreviewMode('desktop')}
               className={cn({
-                'bg-primary/10 text-primary': settings.previewMode === 'desktop',
+                'bg-primary/10 text-primary':
+                  settings.previewMode === 'desktop',
               })}
             >
-              <Monitor className="h-4 w-4" />
+              <div>
+                <Monitor className="h-4 w-4" />
+              </div>
             </Button>
             <Button
+              asChild
               variant="ghost"
               size="icon"
               onClick={() => setPreviewMode('mobile')}
@@ -130,7 +142,9 @@ export const EditorActionsBar = ({ onSave }: EditorActionsBarProps) => {
                 'bg-primary/10 text-primary': settings.previewMode === 'mobile',
               })}
             >
-              <Smartphone className="h-4 w-4" />
+              <div>
+                <Smartphone className="h-4 w-4" />
+              </div>
             </Button>
           </div>
         </div>
@@ -142,7 +156,7 @@ export const EditorActionsBar = ({ onSave }: EditorActionsBarProps) => {
                 htmlFor={uniqueId}
                 className={cn(
                   'flex cursor-pointer items-center justify-center',
-                  buttonVariants({ variant: 'ghost', size: 'icon' })
+                  buttonVariants({ variant: 'ghost', size: 'icon' }),
                 )}
               >
                 <Plus className="h-4 w-4" />
@@ -161,15 +175,22 @@ export const EditorActionsBar = ({ onSave }: EditorActionsBarProps) => {
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" onClick={exportEditorContent}>
-                <Download className="h-4 w-4" />
+              <Button
+                asChild
+                variant="ghost"
+                size="icon"
+                onClick={exportEditorContent}
+              >
+                <div>
+                  <Download className="h-4 w-4" />
+                </div>
               </Button>
             </TooltipTrigger>
             <TooltipContent>Exporter le contenu</TooltipContent>
           </Tooltip>
 
-          <Button onClick={saveEditorContent} className="ml-6">
-            Sauvegarder
+          <Button asChild className="ml-6" onClick={saveEditorContent}>
+            <div>Sauvegarder</div>
           </Button>
         </div>
       </div>

@@ -56,6 +56,8 @@ export const articleSchema = z.object({
   viewCount: z.number().nullable(),
   likeCount: z.number().nullable(),
   categories: z.array(readCategoryRefSchema).nullable(),
+  createdAt: z.iso.datetime().nullable(),
+  updatedAt: z.iso.datetime().nullable(),
 });
 
 export type Article = z.infer<typeof articleSchema>;
