@@ -14,7 +14,7 @@ export type ReferralCode = z.infer<typeof referralCodeSchema>;
 // 1. Reference schema with label field (for dropdowns, selects, links)
 export const readOrganizationRefSchema = z.object({
   id: z.uuid(),
-  name: z.string(),
+  name: z.string().optional(),
 });
 export type ReadOrganizationRef = z.infer<typeof readOrganizationRefSchema>;
 

@@ -12,6 +12,7 @@ import { ControlledMagazineFolderInput } from '../inputs/controlled-magazine-fol
 import { ControlledPasswordInput } from '../inputs/controlled-password-input';
 import { ControlledRTEInput } from '../inputs/controlled-rte-input';
 import { ControlledSelectInput } from '../inputs/controlled-select-input';
+import { ControlledSlugValueInput } from '../inputs/controlled-slug-value-input';
 import { ControlledSwitchInput } from '../inputs/controlled-switch-input';
 import { ControlledTextInput } from '../inputs/controlled-text-input';
 import { ControlledTextareaInput } from '../inputs/controlled-textarea-input';
@@ -33,6 +34,7 @@ export function createConnectedInputHelpers<
     ControlledPasswordInput: ControlledPasswordInput<T>,
     ControlledRTEInput: ControlledRTEInput<T>,
     ControlledSelectInput: ControlledSelectInput<T>,
+    ControlledSlugValueInput: ControlledSlugValueInput<T>,
     ControlledSwitchInput: ControlledSwitchInput<T>,
     ControlledTextAreaInput: ControlledTextareaInput<T>,
     ControlledTextInput: ControlledTextInput<T>,

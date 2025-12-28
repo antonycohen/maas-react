@@ -9,6 +9,7 @@ import {
   ArticlesRoutes,
   BrandsRoutes,
   CategoriesRoutes,
+  EnumsRoutes,
   FoldersRoutes,
   IssuesRoutes,
 } from '@maas/web-feature-magazine';
@@ -75,11 +76,15 @@ export const WorkspaceRoutes = () => {
             />
           }
         >
-          <Route path="account/*" element={<AccountRoutes baseUrl={baseWorkspaceUrl} />} />
+          <Route
+            path="account/*"
+            element={<AccountRoutes baseUrl={baseWorkspaceUrl} />}
+          />
           <Route path="issues/*" element={<IssuesRoutes />} />
           <Route path="articles/*" element={<ArticlesRoutes />} />
           <Route path="categories/*" element={<CategoriesRoutes />} />
           <Route path="folders/*" element={<FoldersRoutes />} />
+          <Route path="enums/*" element={<EnumsRoutes />} />
           <Route path="brands/*" element={<BrandsRoutes />} />
           <Route path="users/*" element={<UsersRoutes />} />
           <Route path="teams/*" element={<TeamsRoutes />} />
