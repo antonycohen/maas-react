@@ -47,5 +47,5 @@ export function useSetupSessionUser() {
     }
   }, [userError, userResponse, setError, setConnectedUser, accessToken, reset, isLoading, userId]);
 
-  return { userResponse, userError, ...userQuery };
+  return { userResponse, userError,isLoading, ...userQuery };
 }
