@@ -328,7 +328,7 @@ export function LayoutHeaderBar({
         className={cn(
           'flex items-center justify-center bg-white px-4 md:px-0',
           isMobileScrolled &&
-            'fixed left-0 right-0 top-0 z-50 shadow-md md:relative md:shadow-none'
+            'fixed left-0 right-0 top-0 z-50 shadow-md md:relative md:shadow-none',
         )}
       >
         <div className="container mx-auto flex items-center justify-center py-3">
@@ -338,7 +338,9 @@ export function LayoutHeaderBar({
               <button
                 onClick={toggleMobileMenu}
                 className="flex h-10 w-10 items-center justify-center rounded transition-colors hover:bg-gray-100 md:hidden"
-                aria-label={isMobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+                aria-label={
+                  isMobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'
+                }
               >
                 {isMobileMenuOpen ? (
                   <X className="h-6 w-6 text-black/70" />
@@ -384,7 +386,7 @@ export function LayoutHeaderBar({
       <div
         className={cn(
           'fixed left-0 right-0 top-0 z-50 hidden border-b border-[#e0e0e0] bg-white shadow-md transition-transform duration-300 ease-out md:block',
-          isDesktopScrolled ? 'translate-y-0' : '-translate-y-full'
+          isDesktopScrolled ? 'translate-y-0' : '-translate-y-full',
         )}
       >
         <div className="flex items-center justify-center px-4">
@@ -420,7 +422,7 @@ export function LayoutHeaderBar({
         <div
           className={cn(
             'absolute left-0 right-0 z-40 border-b border-[#e0e0e0] bg-white shadow-lg md:hidden',
-            isMobileScrolled ? 'fixed top-[64px]' : 'top-full'
+            isMobileScrolled ? 'fixed top-[64px]' : 'top-full',
           )}
         >
           <div className="flex flex-col py-2">
