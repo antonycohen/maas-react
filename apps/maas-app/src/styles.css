@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "../../../packages/web-themes/src/theme.css";
 
 @source "../../../packages/core-api";
 @source "../../../packages/core-api-models";
@@ -16,11 +15,13 @@
 @source "../../../packages/web-feature-login";
 @source "../../../packages/web-feature-magazine";
 @source "../../../packages/web-feature-organizations";
+@source "../../../packages/web-feature-pricing";
 @source "../../../packages/web-feature-settings";
 @source "../../../packages/web-feature-users";
 @source "../../../packages/web-form";
 @source "../../../packages/web-layout";
-@source "../../../packages/web-feature-pricing/";
+@import "../../../packages/web-themes/src/theme.css";
+
 
 
 @plugin 'tailwindcss-animate';

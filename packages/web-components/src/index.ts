@@ -62,6 +62,7 @@ export * from './lib/maas/folder-card';
 export * from './lib/maas/image-picker';
 export * from './lib/maas/title-and-description-hero';
 export * from './lib/maas/language-input';
+export * from './lib/maas/pricing-card';
 export * from './lib/maas/magazine-highlights-hero';
 export * from './lib/maas/rich-text-editor';
 export * from './lib/maas/sso-connector';

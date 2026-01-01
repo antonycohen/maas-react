@@ -32,6 +32,9 @@
   "references": [
     {
       "path": "../core-utils/tsconfig.lib.json"
+    },
+    {
+      "path": "../web-components/tsconfig.lib.json"
     }
   ]
 }

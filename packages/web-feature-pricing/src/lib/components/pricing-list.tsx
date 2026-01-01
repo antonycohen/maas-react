@@ -1,4 +1,5 @@
-import { PricingCard, PricingCardProps } from './pricing-card';
+import { PricingCard, type PricingCardProps } from '@maas/web-components';
+
 const PRICING_DATA: PricingCardProps[] = [
   {
     title: 'Tangente',

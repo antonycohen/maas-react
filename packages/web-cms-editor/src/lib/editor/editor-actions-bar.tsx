@@ -1,12 +1,12 @@
-import React, { useRef, MouseEvent } from 'react';
+import React, { useRef } from 'react';
 import {
-  ArrowLeft,
-  Pencil,
-  Monitor,
-  Smartphone,
-  Plus,
-  Download,
   AlertCircle,
+  ArrowLeft,
+  Download,
+  Monitor,
+  Pencil,
+  Plus,
+  Smartphone,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -17,8 +17,8 @@ import {
   Button,
   buttonVariants,
   Tooltip,
-  TooltipTrigger,
   TooltipContent,
+  TooltipTrigger,
 } from '@maas/web-components';
 
 import { useEditorContext } from '../store/editor-context';
@@ -44,7 +44,7 @@ export const EditorActionsBar = ({ onSave }: EditorActionsBarProps) => {
 
   const closeEditor = () => {
     setSettings((prev) => ({ ...prev, visible: false }));
-  }
+  };
 
   const saveEditorContent = () => {
     onSave?.();
@@ -81,7 +81,7 @@ export const EditorActionsBar = ({ onSave }: EditorActionsBarProps) => {
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Le fichier n'est pas valide</AlertTitle>
-          </Alert>
+          </Alert>,
         );
       } finally {
         if (inputRef.current) {
@@ -115,7 +115,6 @@ export const EditorActionsBar = ({ onSave }: EditorActionsBarProps) => {
             <div>
               <Pencil className="h-4 w-4" />
             </div>
-
           </Button>
 
           <div className="flex items-center gap-x-3">
