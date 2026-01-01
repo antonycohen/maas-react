@@ -71,6 +71,9 @@
     },
     {
       "path": "./packages/core-workspace"
+    },
+    {
+      "path": "./packages/web-feature-pricing"
     }
   ]
 }

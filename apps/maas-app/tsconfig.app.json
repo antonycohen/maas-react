@@ -73,6 +73,9 @@
       "path": "../../packages/web-feature-login/tsconfig.lib.json"
     },
     {
+      "path": "../../packages/web-feature-pricing/tsconfig.lib.json"
+    },
+    {
       "path": "../../packages/web-layout/tsconfig.lib.json"
     }
   ]

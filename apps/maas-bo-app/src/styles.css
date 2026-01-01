@@ -15,10 +15,12 @@
 @source "../../../packages/web-feature-login";
 @source "../../../packages/web-feature-magazine";
 @source "../../../packages/web-feature-organizations";
+@source "../../../packages/web-feature-pricing";
 @source "../../../packages/web-feature-settings";
 @source "../../../packages/web-feature-users";
 @source "../../../packages/web-form";
 @source "../../../packages/web-layout";
+
 
 
 @import "../../../packages/web-themes/src/theme.css";
