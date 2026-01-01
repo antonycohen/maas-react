@@ -1,104 +1,86 @@
-import { useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { EditUserOutletContext } from '../../types';
 import { FormProvider } from 'react-hook-form';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@maas/web-components';
+import { Button } from '@maas/web-components';
 import { createConnectedInputHelpers } from '@maas/web-form';
 import { UpdateUserInfo } from '@maas/core-api-models';
 import { useAccountProfileForm } from './hooks/use-account-profile-form';
-import { DeleteAccountConfirmationAlertDialog } from './modals/delete-account-confirmation-alert-dialog';
 
 export const AccountProfileTab = () => {
   const { user, isLoading } = useOutletContext<EditUserOutletContext>();
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-  const { form, handleSubmit, handleDeleteAccount, isDeleting, isUpdating } =
+  const { form, handleSubmit, isUpdating } =
     useAccountProfileForm(user);
 
   const { ControlledTextInput, ControlledImageInput } =
     createConnectedInputHelpers<UpdateUserInfo>();
 
-  if (isLoading) {
+  if (isLoading || !user) {
     return <div>Loading...</div>;
   }
 
+  const inputClassName = "[&_label]:uppercase [&_label]:text-[11px] [&_label]:font-semibold [&_label]:tracking-[0.33px] [&_label]:text-gray-500 [&_label]:mb-1 [&_input]:bg-[#f5f5f5] [&_input]:border-[#e0e0e0] [&_input]:h-[40px] [&_input]:rounded [&_input]:px-3 [&_input]:text-sm";
+
   return (
-    <FormProvider {...form}>
-      <div className="flex flex-col gap-8">
-        {/* Profile Card */}
-        <form onSubmit={handleSubmit}>
-          <Card className="rounded-2xl gap-0">
-            <CardHeader>
-              <CardTitle className="text-xl">Profile</CardTitle>
-              <CardDescription>
-                Enter your full name or a display name you'd like to use.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="px-6 pt-2">
-              <div className="flex flex-col divide-y">
-                <ControlledTextInput
-                  name="firstName"
-                  label="First name"
-                  direction="horizontal"
-                  className="py-6"
-                />
-                <ControlledTextInput
-                  name="lastName"
-                  label="Last name"
-                  direction="horizontal"
-                  className="py-6"
-                />
-                <ControlledImageInput
+    <div className="flex flex-col gap-10">
+      <h1 className="text-5xl font-semibold tracking-tight font-barlow-semi-condensed">
+        <span className="text-[#e31b22]">Bienvenue</span>
+        <span> {user.firstName}</span>
+      </h1>
+
+      <FormProvider {...form}>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <div className="bg-white border border-gray-200 rounded-[20px] p-10 flex flex-col gap-6">
+            <div className="flex flex-col gap-4">
+              <h2 className="text-2xl font-semibold font-barlow-semi-condensed">Informations générales</h2>
+              <p className="text-sm text-gray-500">
+                Contrary to popular belief, Lorem Ipsum is not simply random text.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <ControlledImageInput
                   name="profileImage"
-                  label="Profile picture"
+                  label="Photo de profil"
                   direction="horizontal"
-                  className="py-6"
+                  className="py-2"
                 />
+
+              <div className="flex gap-5">
+                <div className="flex-1">
+                  <ControlledTextInput
+                    name="lastName"
+                    label="Nom"
+                    placeholder="Votre nom"
+                    className={inputClassName}
+                  />
+                </div>
+                <div className="flex-1">
+                  <ControlledTextInput
+                    name="firstName"
+                    label="Prénom"
+                    placeholder="Votre prénom"
+                    className={inputClassName}
+                  />
+                </div>
               </div>
-            </CardContent>
-            <CardFooter className="border-t justify-end">
-              <Button type="submit" isLoading={isUpdating}>Save</Button>
-            </CardFooter>
-          </Card>
+
+              <div className="w-full">
+                 <div className="flex flex-col gap-1">
+                    <label className="text-[11px] font-semibold uppercase text-gray-500 tracking-wider mb-1">Email</label>
+                    <div className="bg-[#f5f5f5] border border-[#e0e0e0] rounded px-3 py-2 text-gray-500 text-sm h-[40px] flex items-center w-full">
+                      {user.email}
+                    </div>
+                 </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end mt-4">
+               <Button type="submit" isLoading={isUpdating}>Enregistrer</Button>
+            </div>
+          </div>
         </form>
-
-        {/* Delete Account Card */}
-        <Card className="rounded-lg">
-          <CardHeader>
-            <CardTitle className="text-xl">Delete account</CardTitle>
-            <CardDescription>
-              This will permanently delete your Personal Account. Please note
-              that this action is irreversible, so proceed with caution.
-            </CardDescription>
-          </CardHeader>
-          <CardFooter className="border-t justify-between">
-            <p className="text-sm text-destructive">
-              This action cannot be undone!
-            </p>
-            <Button
-              variant="destructive"
-              onClick={() => setIsDeleteDialogOpen(true)}
-            >
-              Delete account
-            </Button>
-          </CardFooter>
-        </Card>
-      </div>
-
-      <DeleteAccountConfirmationAlertDialog
-        open={isDeleteDialogOpen}
-        onOpenChange={setIsDeleteDialogOpen}
-        onConfirm={handleDeleteAccount}
-        isLoading={isDeleting}
-      />
-    </FormProvider>
+      </FormProvider>
+    </div>
   );
 };
