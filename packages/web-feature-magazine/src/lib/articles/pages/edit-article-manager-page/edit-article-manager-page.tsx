@@ -187,7 +187,7 @@ export function EditArticleManagerPage() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] flex-col">
+    <div className="flex flex-col">
       {/* Breadcrumb - scrolls with content */}
       <header className="shrink-0">
         <LayoutBreadcrumb
@@ -312,7 +312,7 @@ export function EditArticleManagerPage() {
           </div>
 
           {/* Sidebar */}
-          <aside className="w-80 shrink-0 border-l bg-muted/30 sticky top-[57px] h-[calc(100vh-57px)] overflow-y-auto">
+          <aside className="w-80 shrink-0 border-l bg-muted/30 sticky top-[57px] self-start h-[calc(100svh-57px)] overflow-y-auto">
             <div className="p-4 space-y-1">
               {/* Publishing */}
               <SidebarSection
