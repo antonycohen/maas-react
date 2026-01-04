@@ -17,6 +17,8 @@ const FIELD_TYPE_OPTIONS: { value: ArticleTypeFieldType; label: string }[] = [
   { value: 'enum', label: 'Enum' },
   { value: 'cms', label: 'CMS' },
   { value: 'category', label: 'Category' },
+  { value: 'image', label: 'Image' },
+  { value: 'video', label: 'Video' },
 ];
 
 type FieldEditorProps = {

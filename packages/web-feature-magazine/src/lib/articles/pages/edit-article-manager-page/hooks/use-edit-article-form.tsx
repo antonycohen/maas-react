@@ -10,6 +10,7 @@ import {
 } from '@maas/core-api-models';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useGetCurrentWorkspaceId } from '@maas/core-workspace';
+import { camelCase } from 'change-case';
 
 export const useEditArticleForm = (articleId: string) => {
   const workspaceId = useGetCurrentWorkspaceId() as string;
@@ -42,10 +43,10 @@ export const useEditArticleForm = (articleId: string) => {
                 key: null,
                 category: null,
                 validators: null,
-              }
+              },
             },
             isActive: null,
-          }
+          },
         },
         visibility: null,
         customFields: null,
@@ -64,21 +65,22 @@ export const useEditArticleForm = (articleId: string) => {
     const fields: Record<string, unknown> = {};
     if (type?.fields) {
       for (const field of type.fields) {
+        const key = camelCase(field.key);
         switch (field.type) {
           case 'text':
           case 'string':
-            fields[field.key] = field.isList ? [] : '';
+            fields[key] = field.isList ? [] : '';
             break;
           case 'number':
-            fields[field.key] = field.isList ? [] : null;
+            fields[key] = field.isList ? [] : null;
             break;
           case 'enum':
           case 'category':
           case 'cms':
-            fields[field.key] = field.isList ? [] : null;
+            fields[key] = field.isList ? [] : null;
             break;
           default:
-            fields[field.key] = null;
+            fields[key] = null;
             break;
         }
       }
@@ -119,7 +121,10 @@ export const useEditArticleForm = (articleId: string) => {
             type: article.type ?? null,
             visibility: article.visibility,
             customFields: article.customFields
-              ? article.customFields : (article.type ? initCustomFields(article.type) : {}),
+              ? article.customFields
+              : article.type
+                ? initCustomFields(article.type)
+                : {},
             publishedAt: article.publishedAt,
             isPublished: article.isPublished ?? undefined,
             tags:

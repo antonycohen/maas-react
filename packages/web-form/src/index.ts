@@ -5,6 +5,7 @@ export * from './lib/inputs/controlled-date-input';
 export * from './lib/inputs/controlled-select-input';
 export * from './lib/inputs/controlled-rte-input';
 export * from './lib/inputs/controlled-image-input';
+export * from './lib/inputs/controlled-video-input';
 export * from './lib/inputs/controlled-cms-input';
 export * from './lib/inputs/controlled-category-input';
 export * from './lib/inputs/controlled-categories-input';

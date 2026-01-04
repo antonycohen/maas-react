@@ -19,7 +19,6 @@ export const useEditArticleTypeForm = (
       fields: {
         id: null,
         name: null,
-        key: null,
         fields: {
           fields: {
             type: null,
@@ -45,7 +44,6 @@ export const useEditArticleTypeForm = (
     ),
     defaultValues: {
       name: '',
-      key: '',
       fields: [],
       isActive: true,
       organization: {
@@ -57,7 +55,6 @@ export const useEditArticleTypeForm = (
         ? {
             name: articleTypeData.name,
             fields: articleTypeData.fields ?? [],
-            key: articleTypeData.key ?? '',
             isActive: articleTypeData.isActive ?? true,
             organization: {
               id: organizationId,

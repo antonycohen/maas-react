@@ -19,6 +19,7 @@ import {
 import { camelize } from '@nx/devkit/src/utils/string-utils';
 import { createConnectedInputHelpers } from '@maas/web-form';
 import { editorPlugins } from '../edit-article-manager-page';
+import { camelCase } from 'change-case';
 
 type DynamicFieldProps = {
   field: ArticleTypeField;
@@ -30,11 +31,12 @@ const {
   ControlledSelectInput,
   ControlledCategoryInput,
   ControlledCMSInput,
+  ControlledImageInput,
+  ControlledVideoInput,
 } = createConnectedInputHelpers<any>();
 
 function DynamicEnumField({ field }: DynamicFieldProps) {
   const enumId = field.enum?.id;
-
 
   const { data: enumData, isLoading } = useGetEnumById(
     {
@@ -100,6 +102,12 @@ function DynamicField({ field }: DynamicFieldProps) {
         />
       );
 
+    case 'image':
+      return <ControlledImageInput name={fieldName} label={field.label} />;
+
+    case 'video':
+      return <ControlledVideoInput name={fieldName} label={field.label} />;
+
     default:
       return null;
   }
@@ -109,21 +117,24 @@ function initCustomFields(articleType: ArticleType): Record<string, unknown> {
   const fields: Record<string, unknown> = {};
   if (articleType?.fields) {
     articleType.fields.forEach((field) => {
+      const key = camelCase(field.key);
       switch (field.type) {
         case 'text':
         case 'string':
-          fields[field.key] = field.isList ? [] : '';
+          fields[key] = field.isList ? [] : '';
           break;
         case 'number':
-          fields[field.key] = field.isList ? [] : null;
+          fields[key] = field.isList ? [] : null;
           break;
         case 'enum':
         case 'category':
         case 'cms':
-          fields[field.key] = field.isList ? [] : null;
+        case 'image':
+        case 'video':
+          fields[key] = field.isList ? [] : null;
           break;
         default:
-          fields[field.key] = null;
+          fields[key] = null;
           break;
       }
     });
@@ -133,6 +144,13 @@ function initCustomFields(articleType: ArticleType): Record<string, unknown> {
 
 export function DynamicCustomFields() {
   const { control, setValue, getValues } = useFormContext<Article>();
+  const customFields = useWatch({
+    control,
+    name: 'customFields',
+  });
+
+  console.log(customFields);
+
   const previousTypeIdRef = useRef<string | null>(null);
 
   const articleType = useWatch({

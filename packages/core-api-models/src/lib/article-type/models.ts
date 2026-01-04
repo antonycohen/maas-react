@@ -11,6 +11,8 @@ export const articleTypeFieldTypeSchema = z.enum([
   'number',
   'cms',
   'category',
+  'image',
+  'video',
 ]);
 
 export type ArticleTypeFieldType = z.infer<typeof articleTypeFieldTypeSchema>;

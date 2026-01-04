@@ -12,6 +12,16 @@ import {
 } from '../organizations';
 import { articleTypeRefSchema, articleTypeSchema } from '../article-type';
 
+// Video schema for custom fields (based on VideoDto)
+export const videoSchema = z.object({
+  url: z.string().nullable().optional(),
+  title: z.string().nullable().optional(),
+  height: z.number().nullable().optional(),
+  width: z.number().nullable().optional(),
+});
+
+export type Video = z.infer<typeof videoSchema>;
+
 // Tag schema
 export const tagSchema = z.object({
   id: z.string(),
@@ -28,6 +38,8 @@ export const articleRefSchema = z.object({
 export type ArticleRef = z.infer<typeof articleRefSchema>;
 
 // Custom fields schema (dynamic key-value pairs based on article type)
+// Using z.unknown() for values since custom fields are dynamic and
+// their structure depends on the article type definition
 export const articleCustomFieldsSchema = z.record(z.string(), z.unknown());
 
 export type ArticleCustomFields = z.infer<typeof articleCustomFieldsSchema>;

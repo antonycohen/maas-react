@@ -53,6 +53,7 @@ export const useEditActions = (
   });
 
   function onSubmit(data: CreateArticle | UpdateArticle) {
+    console.log(data);
     if (isCreateMode) {
       createMutation.mutate(data as CreateArticle);
     } else {
