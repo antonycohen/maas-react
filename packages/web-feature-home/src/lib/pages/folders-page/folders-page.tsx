@@ -3,7 +3,7 @@ import { mockCurrentIssue } from '../mock';
 
 export const FoldersPage = () => {
   return (
-    <div className="flex flex-col gap-tg-xl">
+    <div className="flex flex-col gap-tg-xl px-5 md:px-0">
       <div className="container mx-auto">
         <TitleAndDescriptionHero
           title="Dossiers"
@@ -12,7 +12,11 @@ export const FoldersPage = () => {
       </div>
       <div className="container mx-auto gap-tg-lg flex flex-col py-tg-xl">
         {mockCurrentIssue.folders?.map((folder) => (
-          <FolderCard key={`folder-${folder.id}`} folder={folder} link={`/dossiers/${folder.id}`} />
+          <FolderCard
+            key={`folder-${folder.id}`}
+            folder={folder}
+            link={`/dossiers/${folder.id}`}
+          />
         ))}
       </div>
     </div>

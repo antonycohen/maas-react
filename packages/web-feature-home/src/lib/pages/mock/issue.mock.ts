@@ -9,31 +9,36 @@ type MockIssue = Omit<Issue, 'folders'> & { folders: MockFolder[] | null };
 
 export const fakeArticles = [
   {
-    image: 'https://images.unsplash.com/photo-1529480780361-9e8a4a9a5c8e?w=800&q=80',
+    image:
+      'https://images.unsplash.com/photo-1766596663327-b932edfe968b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     title: 'Quatre tours de mathemagie',
     category: 'Numero',
     link: '/articles/magie',
   },
   {
-    image: 'https://images.unsplash.com/photo-1544396821-4dd40b938ad3?w=400&q=80',
+    image:
+      'https://images.unsplash.com/photo-1544396821-4dd40b938ad3?w=400&q=80',
     title: 'Condorcet, un (vrai) mathematicien ?',
     category: 'Thematiques',
     link: '/articles/condorcet',
   },
   {
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
+    image:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
     title: "A la recherche d'un contre-exemple : un probleme en analyse",
     category: 'Jeux & Defis',
     link: '/articles/contre-exemple',
   },
   {
-    image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&q=80',
+    image:
+      'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&q=80',
     title: 'Antoine Houlou-Garcia',
     category: 'Notes de Lecture',
     link: '/articles/houlou-garcia',
   },
   {
-    image: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400&q=80',
+    image:
+      'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400&q=80',
     title: 'La marquise et les savants de son temps',
     category: 'Article',
     link: '/articles/marquise',
