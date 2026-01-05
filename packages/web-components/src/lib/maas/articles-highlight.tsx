@@ -94,7 +94,7 @@ export const ArticlesHighlight = ({ articles }: ArticlesHighlightProps) => {
 
   return (
     <section className="flex w-full items-center justify-center">
-      <div className="container flex w-full items-center justify-center px-5 py-4 md:px-0 md:pb-10 md:pt-5">
+      <div className="container flex w-full items-center justify-center px-5 py-4 xl:px-0 md:pb-10 md:pt-5">
         <div className="flex h-[640px] md:h-[480px] w-full flex-col md:flex-row gap-3 md:gap-5">
           {/* Featured Article (Top/Left) */}
           <ArticleCard article={featured} featured />

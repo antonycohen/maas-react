@@ -77,7 +77,7 @@ export const CategoryPage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-tg-xl px-5 md:px-0">
+    <div className="flex flex-col gap-tg-xl px-5 xl:px-0">
       <div className="container mx-auto">
         <TitleAndDescriptionHero
           title="Histoire & Culture"

@@ -9,7 +9,7 @@ const ArticleDetailsPage = () => {
   //TODO: fetch the articles by id
   return (
     <section className={'container mx-auto py-10 space-y-10 px-5'}>
-      <div className={'flex flex-col gap-y-16 md:flex-row gap-5 items-start'}>
+      <div className={'flex flex-col gap-y-16 lg:flex-row gap-5 items-start'}>
         <ArticleSidebar />
         <main className={'w-full md:w-[600px] shrink-0'}>
           <ArticleContent />
