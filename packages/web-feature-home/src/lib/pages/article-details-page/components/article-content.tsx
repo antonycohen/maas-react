@@ -50,13 +50,13 @@ export const ArticleContent = () => {
               </p>
             ),
             img: ({ src, alt }) => (
-              <div className="aspect-[600/420] w-full rounded-[4px] overflow-hidden bg-gray-200">
+              <picture className="aspect-[600/420] w-full rounded-[4px] overflow-hidden bg-gray-200">
                 <img
                   src={src ?? ''}
                   alt={alt ?? ''}
                   className="object-cover w-full h-full"
                 />
-              </div>
+              </picture>
             ),
           }}
         >
