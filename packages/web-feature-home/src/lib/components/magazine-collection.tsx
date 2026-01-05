@@ -1,23 +1,29 @@
 import { Table as TanstackTable } from '@tanstack/react-table';
-import { Button, Checkbox, Pagination } from '@maas/web-components';
-import { IconX } from '@tabler/icons-react';
+import {
+  Button,
+  Checkbox,
+  Pagination,
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@maas/web-components';
+import { IconFilter, IconX } from '@tabler/icons-react';
 import { CollectionRenderProps } from '@maas/web-collection';
 import { Article } from '@maas/core-api-models';
 import { ReactNode } from 'react';
-
 interface FacetedFilterConfig {
   columnId: string;
   title?: string;
   options: { label: string; value: string }[];
 }
-
 interface ContentFilterProps<T> {
   table: TanstackTable<T>;
   facetedFilters?: FacetedFilterConfig[];
   resetLabel?: string;
   className?: string;
 }
-
 /**
  * Reusable content filter sidebar component
  * Uses table column state via setFilterValue
@@ -31,7 +37,6 @@ export function ContentFilter<T>({
                           }: ContentFilterProps<T> & { sortingTitle?: string }) {
   // Get sorting options from columns with enableSorting and meta labels
   const sortingOptions: { columnId: string; label: string; desc: boolean }[] = [];
-
   table.getAllColumns().forEach((column) => {
     if (column.getCanSort()) {
       const meta = column.columnDef.meta as { descendingLabel?: string; ascendingLabel?: string } | undefined;
@@ -43,7 +48,6 @@ export function ContentFilter<T>({
       }
     }
   });
-
   // Get current sorting state
   const currentSort = table.getState().sorting[0];
   const getActiveSortKey = () => {
@@ -51,16 +55,13 @@ export function ContentFilter<T>({
     return `${currentSort.id}-${currentSort.desc ? 'desc' : 'asc'}`;
   };
   const activeSortKey = getActiveSortKey();
-
   // Check if any filter is active
   const hasActiveFilters = facetedFilters?.some((filter) => {
     const column = table.getColumn(filter.columnId);
     const filterValue = column?.getFilterValue() as string[] | undefined;
     return filterValue && filterValue.length > 0;
   }) ?? false;
-
   const hasSorting = currentSort !== undefined;
-
   const handleReset = () => {
     // Reset filters
     facetedFilters?.forEach((filter) => {
@@ -70,14 +71,11 @@ export function ContentFilter<T>({
     // Reset sorting
     table.resetSorting();
   };
-
   const hasSortingOptions = sortingOptions.length > 0;
   const hasFilters = facetedFilters && facetedFilters.length > 0;
-
   if (!hasSortingOptions && !hasFilters) {
     return null;
   }
-
   return (
     <aside
       className={
@@ -94,14 +92,12 @@ export function ContentFilter<T>({
             {sortingOptions.map((option) => {
               const sortKey = `${option.columnId}-${option.desc ? 'desc' : 'asc'}`;
               const isActive = activeSortKey === sortKey;
-
               const handleSortChange = (checked: boolean) => {
                 if (checked) {
                   const column = table.getColumn(option.columnId);
                   column?.toggleSorting(option.desc);
                 }
               };
-
               return (
                 <label
                   key={sortKey}
@@ -120,14 +116,12 @@ export function ContentFilter<T>({
           </div>
         </div>
       )}
-
       {/* Faceted Filters Section */}
       {hasFilters && facetedFilters.map((filter, index) => {
         const column = table.getColumn(filter.columnId);
         const selectedValues = new Set(
           column?.getFilterValue() as string[] | undefined,
         );
-
         const handleChange = (value: string, checked: boolean) => {
           if (checked) {
             selectedValues.add(value);
@@ -139,7 +133,6 @@ export function ContentFilter<T>({
             filterValues.length ? filterValues : undefined,
           );
         };
-
         return (
           <div key={filter.columnId}>
             {(index > 0 || hasSortingOptions) && <div className="mb-6 h-px w-full bg-[#e6eaeb]" />}
@@ -171,7 +164,6 @@ export function ContentFilter<T>({
           </div>
         );
       })}
-
       {(hasActiveFilters || hasSorting) && (
         <>
           <div className="h-px w-full bg-[#e6eaeb]" />
@@ -184,31 +176,53 @@ export function ContentFilter<T>({
     </aside>
   );
 }
-
-
-export const renderMagazineCollectionToolbar =  ({
-                                                      table,
-                                                      filtersConfiguration,
-                                                    }: CollectionRenderProps<Article>) => (
-  <ContentFilter
-    table={table}
-    facetedFilters={filtersConfiguration?.facetedFilters}
-  />
+export const renderMagazineCollectionToolbar = ({
+  table,
+  filtersConfiguration,
+}: CollectionRenderProps<Article>) => (
+  <>
+    {/* Mobile Filter Trigger */}
+    <div className="md:hidden">
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant="outline" className="w-full justify-start gap-2">
+            <IconFilter className="h-4 w-4" />
+            Filtrer et trier
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="w-[300px] overflow-y-auto px-5">
+          <SheetHeader className="mb-6 text-left">
+            <SheetTitle>Filtres</SheetTitle>
+          </SheetHeader>
+          <ContentFilter
+            table={table}
+            facetedFilters={filtersConfiguration?.facetedFilters}
+            className="flex flex-col gap-6"
+          />
+        </SheetContent>
+      </Sheet>
+    </div>
+    {/* Desktop Sidebar */}
+    <div className="hidden md:block">
+      <ContentFilter
+        table={table}
+        facetedFilters={filtersConfiguration?.facetedFilters}
+      />
+    </div>
+  </>
 );
-
 export const renderMagazineCollectionLayout = ({
-                        toolbar,
-                        content,
-                        pagination,
-                      }: {
+  toolbar,
+  content,
+  pagination,
+}: {
   toolbar: ReactNode;
   content: ReactNode;
   pagination: ReactNode;
 }) => (
-  <div className="flex gap-5">
+  <div className="flex flex-col gap-5 md:flex-row">
     {/* Sidebar */}
     {toolbar}
-
     {/* Main Content */}
     <div className="flex min-w-0 flex-1 flex-col gap-10">
       {content}
@@ -216,8 +230,6 @@ export const renderMagazineCollectionLayout = ({
     </div>
   </div>
 );
-
-
 export const renderMagazineCollectionPagination = ({
                                    state,
                                    totalCount,
