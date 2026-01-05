@@ -105,7 +105,7 @@ export const FeedMagazineItem = ({ item }: FeedMagazineItemProps) => {
   return (
     <Link
       to={item.link}
-      className="group relative h-[450px] flex flex-col items-start justify-end overflow-clip rounded-[12px] bg-brand-primary"
+      className="group relative h-[450px] md:h-auto flex flex-col items-start justify-end overflow-clip rounded-[12px] bg-brand-primary"
     >
       {/* Magazine Cover Image - positioned bottom right */}
       <div className="absolute inset-0 flex items-center justify-center">
