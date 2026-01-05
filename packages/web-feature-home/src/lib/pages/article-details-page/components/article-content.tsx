@@ -29,7 +29,7 @@ export const ArticleContent = () => {
   `;
   //TODO: create a better markdown converter utilities
   return (
-    <article className="flex flex-col gap-10 items-start w-full max-w-[600px]">
+    <article className="flex flex-col gap-10 items-start w-full lg:max-w-[600px]">
       <div className="flex flex-col gap-5 items-start w-full relative">
         <Markdown
           remarkPlugins={[remarkGfm]}

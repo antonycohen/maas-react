@@ -11,7 +11,11 @@ const ArticleDetailsPage = () => {
     <section className={'container mx-auto py-10 space-y-10 px-5'}>
       <div className={'flex flex-col gap-y-16 lg:flex-row gap-5 items-start'}>
         <ArticleSidebar />
-        <main className={'w-full md:w-[600px] shrink-0'}>
+        <main
+          className={
+            'w-full lg:w-[600px] flex flex-row justify-center lg:justify-left shrink-0'
+          }
+        >
           <ArticleContent />
         </main>
       </div>
