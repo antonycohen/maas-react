@@ -68,9 +68,9 @@ export const FeedArticleItem = ({ item }: FeedArticleItemProps) => {
         </div>
 
         {/* Author & Date */}
-        <div className="flex h-5 items-center gap-2 text-[13px] leading-[18px] text-black/70">
+        <div className="flex h-5 items-center gap-2  justify-between text-[13px] leading-[18px] text-black/70">
           <span className="font-body font-semibold">{item.author}</span>
-          <span className="font-body font-normal">{item.date}</span>
+          <span className="font-body font-normal w-24">{item.date}</span>
         </div>
       </div>
     </Link>
@@ -105,10 +105,10 @@ export const FeedMagazineItem = ({ item }: FeedMagazineItemProps) => {
   return (
     <Link
       to={item.link}
-      className="group relative flex flex-col items-start justify-end overflow-clip rounded-[12px] bg-brand-primary"
+      className="group relative h-[450px] flex flex-col items-start justify-end overflow-clip rounded-[12px] bg-brand-primary"
     >
       {/* Magazine Cover Image - positioned bottom right */}
-      <div className="absolute inset-0 flex items-end justify-end">
+      <div className="absolute inset-0 flex items-center justify-center">
         <div className="h-[340px] w-[242px] shrink-0 rounded shadow-tangente-3">
           <img
             src={item.image}
@@ -229,12 +229,12 @@ export const FeedFolderItem = ({ item }: FeedFolderItemProps) => {
         </div>
 
         {/* Article Count & Date */}
-        <div className="flex h-5 items-center gap-2 text-[13px] leading-[18px] text-black/70">
+        <div className="flex h-5 items-center justify-between gap-2 text-[13px] leading-[18px] text-black/70">
           <div className="flex items-center gap-1">
             <FileText className="h-5 w-5" />
             <span className="font-body font-semibold">{item.articleCount} articles</span>
           </div>
-          <span className="font-body font-normal">{item.date}</span>
+          <span className="font-body font-normal w-24">{item.date}</span>
         </div>
       </div>
     </Link>

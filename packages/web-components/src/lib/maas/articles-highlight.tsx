@@ -74,8 +74,8 @@ const ArticleCard = ({ article, featured = false }: ArticleCardProps) => {
           className={`
             font-heading font-semibold text-white w-full
             ${featured
-              ? 'text-[34px] leading-[40px] tracking-[-0.85px]'
-              : 'text-[20px] leading-6 tracking-[-0.3px] line-clamp-2'
+              ? 'text-2xl md:text-[34px] leading-[40px] tracking-[-0.85px]'
+              : 'text-lg md:text-[20px] leading-6 tracking-[-0.3px] line-clamp-2'
             }
           `}
         >

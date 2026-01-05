@@ -74,7 +74,7 @@ const Footer = ({
               className="h-full w-full object-contain"
             />
           </div>
-          <p className="max-w-[596px] text-center font-heading text-[34px] font-semibold leading-[40px] tracking-[-0.85px] text-white">
+          <p className="max-w-[596px] text-center font-heading text-2xl md:text-[34px] font-semibold leading-[40px] tracking-[-0.85px] text-white">
             {tagline}
           </p>
           <Link

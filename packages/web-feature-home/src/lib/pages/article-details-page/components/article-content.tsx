@@ -30,12 +30,12 @@ export const ArticleContent = () => {
   //TODO: create a better markdown converter utilities
   return (
     <article className="flex flex-col gap-10 items-start w-full max-w-[600px]">
-      <div className="flex flex-col gap-10 items-start w-full relative">
+      <div className="flex flex-col gap-5 items-start w-full relative">
         <Markdown
           remarkPlugins={[remarkGfm]}
           components={{
             h1: ({ children }) => (
-              <h1 className="font-heading text-[48px] font-semibold leading-[52px] tracking-[-1.32px]">
+              <h1 className="font-heading text-4xl leading-[40px] md:leading-[52px] md:text-[48px] font-semibold  tracking-[-1.32px]">
                 {children}
               </h1>
             ),

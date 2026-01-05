@@ -15,7 +15,7 @@ export const HomePage = () => {
 
       {/* Content Feed Section */}
       <div className="container mx-auto flex flex-col px-5 md:px-0 gap-5 pb-10 pt-5">
-        <h2 className="font-heading text-[34px] font-semibold leading-[40px] tracking-[-0.85px]">
+        <h2 className="font-heading text-2xl md:text-[34px] font-semibold leading-[40px] tracking-[-0.85px]">
           <span className="text-brand-primary">L'actualité mathématique</span>
           <span className="text-black"> en continu</span>
         </h2>
@@ -24,8 +24,8 @@ export const HomePage = () => {
 
       {/* Jeux & Défis Section - Dark Background */}
       <div className="bg-zinc-900">
-        <div className="container mx-auto flex flex-col gap-5 pb-10 pt-10 px-2.5 md:px-0">
-          <h2 className="font-heading text-[34px] font-semibold leading-[40px] tracking-[-0.85px]">
+        <div className="container mx-auto flex flex-col gap-5 pb-10 pt-10 px-5 md:px-0">
+          <h2 className="font-heading text-2xl md:text-[34px] font-semibold leading-[40px] tracking-[-0.85px]">
             <span className="text-white">Découvrez les </span>
             <span className="text-brand-secondary">Jeux & Défis</span>
           </h2>
@@ -39,7 +39,7 @@ export const HomePage = () => {
 
       {/* Content Feed Section */}
       <div className="container mx-auto flex flex-col gap-5 pb-10 pt-5 px-5 md:px-0">
-        <h2 className="font-heading text-[34px] font-semibold leading-[40px] tracking-[-0.85px]">
+        <h2 className="font-heading text-2xl md:text-[34px] font-semibold leading-[40px] tracking-[-0.85px]">
           <span className="text-brand-primary">L'actualité mathématique</span>
           <span className="text-black"> en continu</span>
         </h2>

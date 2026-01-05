@@ -16,7 +16,7 @@ const ArticleDetailsPage = () => {
         </main>
       </div>
       <div className="container mx-auto flex flex-col gap-5 pb-10 pt-5">
-        <h2 className="font-heading text-[34px] font-semibold leading-[40px] tracking-[-0.85px]">
+        <h2 className="font-heading  text-2xl md:text-[34px] font-semibold leading-[40px] tracking-[-0.85px]">
           Articles Similaires
         </h2>
         <ContentFeed items={fakeFeedItems} />

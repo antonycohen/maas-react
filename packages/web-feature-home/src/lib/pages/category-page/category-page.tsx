@@ -84,7 +84,7 @@ export const CategoryPage = () => {
           description="Découvrez comment les grands mathématiciens ont façonné notre monde, explorez les liens entre les maths et les autres domaines comme l'art, la musique ou même la philosophie, et revivez les moments clés qui ont marqué leur évolution."
         />
       </div>
-      <div className="container mx-auto pb-10 pt-5">
+      <div className="container mx-auto pb-10 md:pt-5">
         <Collection
           columns={columns}
           useLocationAsState

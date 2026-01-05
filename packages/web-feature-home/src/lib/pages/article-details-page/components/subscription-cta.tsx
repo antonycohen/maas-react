@@ -3,7 +3,7 @@ import { CheckIcon } from '@radix-ui/react-icons';
 export const SubscriptionCTA = () => {
   return (
     <div className="flex flex-col gap-10 items-center w-full max-w-[600px] mx-auto mt-10">
-      <h2 className="font-heading text-[48px] font-semibold leading-[52px] tracking-[-1.32px] text-center text-black">
+      <h2 className="font-heading text-4xl leading-[47px] md:text-[48px] font-semibold md:leading-[52px] tracking-[-1.32px] text-center text-black">
         Devenez membre pour lire cette article, et tout Tangente !
       </h2>
       <div className="flex flex-col gap-3 items-start">
