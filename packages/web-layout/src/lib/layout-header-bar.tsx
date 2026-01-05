@@ -391,10 +391,6 @@ export function LayoutHeaderBar({
       >
         <div className="flex items-center justify-center px-4">
           <div className="container mx-auto flex items-center justify-between">
-            <Logo
-              variant="icon"
-              className="h-10 w-10 shrink-0 transition-all duration-300"
-            />
 
             <NavigationMenu
               items={menuItems}
@@ -402,15 +398,6 @@ export function LayoutHeaderBar({
             />
 
             <div className="flex shrink-0 items-center gap-2">
-              <IconButton onClick={onSearchClick} ariaLabel="Rechercher">
-                <Search className="h-5 w-5 text-black" />
-              </IconButton>
-
-              <UserButton
-                connectedUser={connectedUser}
-                onLoginClick={onLoginClick}
-              />
-
               <SubscribeButton onClick={onSubscribeClick} />
             </div>
           </div>
