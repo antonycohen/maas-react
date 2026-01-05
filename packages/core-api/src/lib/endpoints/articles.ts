@@ -18,6 +18,7 @@ export interface GetArticlesFilter {
   typeId?: string;
   visibility?: string;
   isPublished?: boolean;
+  folderId?: string;
 }
 
 export class ArticlesEndpoint {
@@ -39,6 +40,7 @@ export class ArticlesEndpoint {
       ...(filters?.typeId && { type_id: filters.typeId }),
       ...(filters?.visibility && { visibility: filters.visibility }),
       ...(filters?.isPublished !== undefined && { is_published: filters.isPublished }),
+      ...(filters?.folderId && { folder_id: filters.folderId }),
     });
   }
 

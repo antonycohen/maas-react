@@ -1,5 +1,5 @@
-export * from './article-editor-panel';
 export * from './article-item';
+export * from './article-preview-panel';
 export * from './article-sheet';
 export * from './articles-panel';
 export * from './folder-section';

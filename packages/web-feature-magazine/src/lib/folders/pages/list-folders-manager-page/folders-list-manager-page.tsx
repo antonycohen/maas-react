@@ -9,10 +9,12 @@ import {
 import { Button } from '@maas/web-components';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons-react';
+import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
 
 export function FoldersListManagerPage() {
   const columns = useFoldersListColumns();
 
+  const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
   return (
     <div>
       <header>
@@ -25,7 +27,7 @@ export function FoldersListManagerPage() {
           pageTitle="Folders"
           actions={
             <Button asChild>
-              <Link to="/folders/new">
+              <Link to={`${currentWorkspaceBaseUrl}/folders/new/info`}>
                 <IconPlus className="mr-2 h-4 w-4" />
                 New Folder
               </Link>
@@ -47,7 +49,6 @@ export function FoldersListManagerPage() {
             name: null,
             description: null,
             issue: null,
-            color: null,
             isPublished: null,
             articleCount: null,
             cover: null,

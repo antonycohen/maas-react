@@ -47,7 +47,6 @@ export function ArticleTypesListManagerPage() {
           queryFields={{
             id: null,
             name: null,
-            key: null,
             fields: null,
             isActive: null,
           }}

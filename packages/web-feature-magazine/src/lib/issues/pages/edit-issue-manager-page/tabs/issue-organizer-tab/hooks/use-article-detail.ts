@@ -16,12 +16,23 @@ export function useArticleDetail() {
         title: null,
         description: null,
         content: null,
-        type: null,
+        type: {
+          fields: {
+            id: null,
+            name: null,
+            fields: {
+              fields: {
+                label: null,
+                type: null,
+                key: null,
+              },
+            },
+          },
+        },
         visibility: null,
-        position: null,
         keywords: null,
         isPublished: null,
-        isFeatured: null,
+        customFields: null,
         publishedAt: null,
         author: { fields: { id: null, firstName: null, lastName: null } },
         featuredImage: null,
@@ -30,8 +41,6 @@ export function useArticleDetail() {
         tags: null,
         metadata: null,
         categories: { fields: { id: null, name: null } },
-        folder: { fields: { id: null, name: null } },
-        issue: { fields: { id: null, title: null } },
       },
     },
     {
@@ -40,7 +49,7 @@ export function useArticleDetail() {
   );
 
   return {
-    article: selectedArticleId ? article ?? null : null,
+    article: selectedArticleId ? (article ?? null) : null,
     isLoading: isCreateMode || !selectedArticleId ? false : isLoading,
     refetch,
   };

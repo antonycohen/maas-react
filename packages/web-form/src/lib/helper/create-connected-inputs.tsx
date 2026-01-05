@@ -1,5 +1,6 @@
 import { FieldValues } from 'react-hook-form';
 
+import { ControlledArticleInput } from '../inputs/controlled-article-input';
 import { ControlledAssociativeTokenInput } from '../inputs/controlled-associative-token-input';
 import { ControlledCheckbox } from '../inputs/controlled-checkbox';
 import { ControlledCMSInput } from '../inputs/controlled-cms-input';
@@ -28,6 +29,7 @@ export function createConnectedInputHelpers<
   Context = unknown,
 >() {
   return {
+    ControlledArticleInput: ControlledArticleInput<T>,
     ControlledAssociativeTokenInput: ControlledAssociativeTokenInput<T>,
     ControlledCheckbox: ControlledCheckbox<T>,
     ControlledCMSInput: ControlledCMSInput<T, Context>,

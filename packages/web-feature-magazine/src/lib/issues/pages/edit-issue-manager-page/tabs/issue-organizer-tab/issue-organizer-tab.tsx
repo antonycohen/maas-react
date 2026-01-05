@@ -1,7 +1,7 @@
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@maas/web-components';
-import { ArticleEditorPanel, ArticleSheet, ArticlesPanel, FolderSheet, FoldersPanel } from './components';
+import { ArticlePreviewPanel, ArticlesPanel, FolderSheet, FoldersPanel } from './components';
 import { useArticleDetail, useArticleMutations, useFolderArticles, useFolderMutations, useIssueFolders } from './hooks';
 import { useEditIssueContext } from './context';
+import { AddArticleModal } from './modals';
 
 export const IssueOrganizerTab = () => {
 
@@ -28,57 +28,49 @@ export const IssueOrganizerTab = () => {
 
   // Mutations
   const { handleSaveFolder, handleDeleteFolder } = useFolderMutations();
-  const { handleSaveArticle, handleDeleteArticle } = useArticleMutations();
+  const { handleSaveArticle, handleDeleteArticle, handleLinkExistingArticle } = useArticleMutations();
 
   if(isCreateMode) {
     return null;
   }
 
   return <>
-    <div className="flex-1 overflow-hidden">
-      <ResizablePanelGroup orientation="horizontal" className="h-full">
-        {/* Left: Folders */}
-        <ResizablePanel defaultSize={33} minSize={15}>
-          <FoldersPanel
-            folders={folders}
-            selectedFolderId={selectedFolderId}
-            onSelectFolder={selectFolder}
-            onAddFolder={openAddFolder}
-            isLoading={isLoadingFolders}
-          />
-        </ResizablePanel>
+    <div className="flex flex-1 h-full overflow-hidden">
+      {/* Left: Folders */}
+      <div className="w-1/3 min-w-[200px] h-full">
+        <FoldersPanel
+          folders={folders}
+          selectedFolderId={selectedFolderId}
+          onSelectFolder={selectFolder}
+          onAddFolder={openAddFolder}
+          isLoading={isLoadingFolders}
+        />
+      </div>
 
-        <ResizableHandle withHandle />
+      {/* Middle: Articles */}
+      <div className="w-1/3 min-w-[200px] h-full">
+        <ArticlesPanel
+          folder={currentFolder}
+          articles={articles}
+          selectedArticleId={selectedArticleId}
+          onSelectArticle={selectArticle}
+          onAddArticle={openAddArticle}
+          onEditFolder={() => currentFolder && openEditFolder(currentFolder)}
+          onDeleteFolder={() =>
+            currentFolder && handleDeleteFolder(currentFolder.id)
+          }
+          onDeleteArticle={handleDeleteArticle}
+          isLoading={isLoadingArticles}
+        />
+      </div>
 
-        {/* Middle: Articles */}
-        <ResizablePanel defaultSize={34} minSize={15}>
-          <ArticlesPanel
-            folder={currentFolder}
-            articles={articles}
-            selectedArticleId={selectedArticleId}
-            onSelectArticle={selectArticle}
-            onAddArticle={openAddArticle}
-            onEditFolder={() => currentFolder && openEditFolder(currentFolder)}
-            onDeleteFolder={() =>
-              currentFolder && handleDeleteFolder(currentFolder.id)
-            }
-            onDeleteArticle={handleDeleteArticle}
-            isLoading={isLoadingArticles}
-          />
-        </ResizablePanel>
-
-        <ResizableHandle withHandle />
-
-        {/* Right: Editor */}
-        <ResizablePanel defaultSize={33} minSize={15}>
-          <ArticleEditorPanel
-            article={selectedArticle}
-            issueId={issueId}
-            onSave={handleSaveArticle}
-            isLoading={isLoadingArticle}
-          />
-        </ResizablePanel>
-      </ResizablePanelGroup>
+      {/* Right: Preview */}
+      <div className="w-1/3 min-w-[200px] h-full border-l">
+        <ArticlePreviewPanel
+          article={selectedArticle}
+          isLoading={isLoadingArticle}
+        />
+      </div>
     </div>
 
     {/* Folder Sheet */}
@@ -91,12 +83,13 @@ export const IssueOrganizerTab = () => {
       onDelete={handleDeleteFolder}
     />
 
-    {/* Article Sheet (for creating new) */}
-    <ArticleSheet
+    {/* Add Article Modal */}
+    <AddArticleModal
       open={articleSheetOpen}
       onOpenChange={setArticleSheetOpen}
       issueId={issueId}
       currentFolder={currentFolder}
+      onSelectExisting={handleLinkExistingArticle}
       onCreate={handleSaveArticle}
     />
   </>

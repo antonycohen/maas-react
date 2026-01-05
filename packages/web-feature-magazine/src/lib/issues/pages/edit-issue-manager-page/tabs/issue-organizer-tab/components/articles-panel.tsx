@@ -114,7 +114,7 @@ export function ArticlesPanel({
                     <div className="flex items-center gap-2 mt-0.5">
                       {article.type && (
                         <span className="text-xs text-muted-foreground">
-                          {article.type}
+                          {article.type.name}
                         </span>
                       )}
                       {article.isPublished === false && (

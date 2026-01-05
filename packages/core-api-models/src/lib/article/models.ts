@@ -37,6 +37,14 @@ export const articleRefSchema = z.object({
 
 export type ArticleRef = z.infer<typeof articleRefSchema>;
 
+// Reference schema for article (for reads/display)
+export const readArticleRefSchema = z.object({
+  id: z.string(),
+  title: z.string().nullable(),
+});
+
+export type ReadArticleRef = z.infer<typeof readArticleRefSchema>;
+
 // Custom fields schema (dynamic key-value pairs based on article type)
 // Using z.unknown() for values since custom fields are dynamic and
 // their structure depends on the article type definition

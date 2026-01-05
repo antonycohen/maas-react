@@ -9,6 +9,7 @@ export * from './lib/inputs/controlled-video-input';
 export * from './lib/inputs/controlled-cms-input';
 export * from './lib/inputs/controlled-category-input';
 export * from './lib/inputs/controlled-categories-input';
+export * from './lib/inputs/controlled-article-input';
 export * from './lib/inputs/controlled-article-type-input';
 export * from './lib/inputs/controlled-magazine-brand-input';
 export * from './lib/inputs/controlled-magazine-folder-input';

@@ -8,8 +8,11 @@ import {
 import { cn } from '@maas/core-utils';
 import { Link } from 'react-router-dom';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
 
 export function useFoldersListColumns(): ColumnDef<Folder>[] {
+  const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+
   return [
     {
       id: 'select',
@@ -42,54 +45,21 @@ export function useFoldersListColumns(): ColumnDef<Folder>[] {
       enableHiding: false,
     },
     {
-      id: 'color',
-      header: ({ column }) => (
-        <CollectionColumnHeader column={column} title="Color" />
-      ),
-      cell: ({ row }) => {
-        const color = row.original.color;
-        return color ? (
-          <div
-            className="h-6 w-6 rounded border"
-            style={{ backgroundColor: color }}
-          />
-        ) : (
-          <div className="h-6 w-6 rounded bg-muted border" />
-        );
-      },
-      enableSorting: false,
-      meta: { className: 'w-16' },
-    },
-    {
       accessorKey: 'name',
       header: ({ column }) => (
         <CollectionColumnHeader column={column} title="Name" />
       ),
       cell: ({ row }) => {
         return (
-          <Link to={`/folders/${row.original.id}`} className="underline">
+          <Link
+            to={`${currentWorkspaceBaseUrl}/folders/${row.original.id}/info`}
+            className="underline"
+          >
             <LongText className="max-w-48">{row.getValue('name')}</LongText>
           </Link>
         );
       },
       meta: { className: 'w-48' },
-    },
-    {
-      accessorKey: 'issue',
-      header: ({ column }) => (
-        <CollectionColumnHeader column={column} title="Issue" />
-      ),
-      cell: ({ row }) => {
-        const issue = row.original.issue;
-        return issue ? (
-          <Link to={`/issues/${issue.id}`} className="underline">
-            <LongText className="max-w-32">{issue.title}</LongText>
-          </Link>
-        ) : (
-          <span className="text-muted-foreground">-</span>
-        );
-      },
-      enableSorting: false,
     },
     {
       accessorKey: 'description',
@@ -135,14 +105,16 @@ export function useFoldersListColumns(): ColumnDef<Folder>[] {
             {
               label: 'Edit Folder',
               icon: IconEdit,
-              linkTo: (folder: Folder) => `/folders/${folder.id}`,
+              linkTo: (folder: Folder) =>
+                `${currentWorkspaceBaseUrl}/folders/${folder.id}/info`,
             },
             {
               label: 'Delete Folder',
               icon: IconTrash,
               group: 'danger',
               className: 'text-red-500!',
-              linkTo: (folder: Folder) => `/folders/${folder.id}`,
+              linkTo: (folder: Folder) =>
+                `${currentWorkspaceBaseUrl}/folders/${folder.id}/info`,
             },
           ]}
         />

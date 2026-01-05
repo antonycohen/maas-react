@@ -1,4 +1,4 @@
-import { CreateArticle, UpdateArticle } from '@maas/core-api-models';
+import { CreateArticle, ReadArticleRef, UpdateArticle } from '@maas/core-api-models';
 import { useCreateArticle, useUpdateArticle, useDeleteArticle } from '@maas/core-api';
 import { useEditIssueContext } from '../context';
 
@@ -80,9 +80,25 @@ export function useArticleMutations() {
     }
   };
 
+  const handleLinkExistingArticle = (article: ReadArticleRef) => {
+    if (!selectedFolderId) return;
+
+    // Update the article to add it to the current folder
+    updateMutation.mutate({
+      articleId: article.id,
+      data: {
+        folder: { id: selectedFolderId },
+        issue: { id: issueId },
+      } as UpdateArticle,
+    });
+    setSelectedArticleId(article.id);
+    setArticleSheetOpen(false);
+  };
+
   return {
     handleSaveArticle,
     handleDeleteArticle,
+    handleLinkExistingArticle,
     isCreating: createMutation.isPending,
     isUpdating: updateMutation.isPending,
     isDeleting: deleteMutation.isPending,
