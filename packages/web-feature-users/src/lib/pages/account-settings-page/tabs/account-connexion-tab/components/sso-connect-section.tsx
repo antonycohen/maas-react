@@ -61,7 +61,7 @@ export const SsoConnectSection = ({user}: {user: ReadUser}) => {
     console.log(`Disconnect from ${provider}`);
   };
 
-  return <div className="flex gap-8">
+  return <div className="flex gap-8 flex-col xl:flex-row">
     {/* Main content */}
     <Card className="flex-1 rounded-2xl basis-1/2">
       <CardHeader className="border-b">
@@ -99,7 +99,7 @@ export const SsoConnectSection = ({user}: {user: ReadUser}) => {
     </Card>
 
     {/* Info sidebar */}
-    <div className="w-80 shrink-0 basis-1/2">
+    <div className="w-full xl:w-80 order-first xl:order-last shrink-0 basis-1/2 ">
       <div className="self-stretch px-4 py-3 bg-card rounded-[10px] border inline-flex justify-start items-center gap-3">
         <InfoIcon className="size-5 shrink-0 text-muted-foreground" />
         <p className="text-sm text-muted-foreground">
