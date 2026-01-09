@@ -13,8 +13,8 @@ export function ImageAndTextBlock(props: ImageAndTextBlockProps) {
 
   return (
     <div
-      className={cn('@md:flex-row flex flex-col gap-4', {
-        'md:flex-row-reverse': imagePlacement === 'right',
+      className={cn('flex flex-col gap-4 @md:flex-row', {
+        '@md:flex-row-reverse': imagePlacement === 'right',
       })}
     >
       <div className="@md:w-1/2">

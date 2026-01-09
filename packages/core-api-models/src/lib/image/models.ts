@@ -26,9 +26,6 @@ export const updateImageSchema = z
     downloadUrl: z.string().nullish(),
     originalFilename: z.string().nullish(),
     resizedImages: z.array(readResizedImageSchema).nullish(),
-  })
-  .refine((data) => data.base64 || data.downloadUrl || data.id, {
-    message: 'Either base64, downloadUrl, or id must be provided',
   });
 
 export type UpdateImage = z.infer<typeof updateImageSchema>;

@@ -1,3 +1,11 @@
-export * from "./models";
-export * from "./mocks";
-export * from "./shapes";
+// Common types and schemas
+export * from './common';
+
+// All block definitions (interfaces, schemas, shapes)
+export * from './blocks';
+
+// Union types and schemas
+export * from './unions';
+
+// Mocks
+export * from './mocks';

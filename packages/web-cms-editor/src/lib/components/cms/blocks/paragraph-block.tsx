@@ -9,7 +9,7 @@ export const ParagraphBlock = (props: { block: CMSParagraphBlock }) => {
     <div className="rte-content text-sm text-neutral-900">
       <p
         dangerouslySetInnerHTML={{ __html: block.data.text }}
-        className="body300-regular"
+        className="body300-regular whitespace-pre-line"
       />
     </div>
   );

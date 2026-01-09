@@ -31,10 +31,7 @@ import { useEditActions } from './hooks/use-edit-actions';
 import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
 import { DynamicCustomFields } from './components/dynamic-custom-fields';
 import {
-  AnalyzePlugin,
-  AudioPlugin,
   CardEventPlugin,
-  CardPressCoveragePlugin,
   CardsTextWithImagePlugin,
   HeadingPlugin,
   HighlightPlugin,
@@ -61,15 +58,12 @@ export const editorPlugins = [
   QuotesPlugin,
   CardsTextWithImagePlugin,
   CardEventPlugin,
-  CardPressCoveragePlugin,
   PodcastCarouselPlugin,
   VideoPlugin,
   MosaicGalleryPlugin,
   ImagesPlugin,
   ImageWithTextPlugin,
   IframePlugin,
-  AudioPlugin,
-  AnalyzePlugin,
   HighlightPlugin,
 ];
 
@@ -98,7 +92,7 @@ function SidebarSection({
         <IconChevronDown
           className={cn(
             'h-4 w-4 transition-transform duration-200',
-            isOpen && 'rotate-180'
+            isOpen && 'rotate-180',
           )}
         />
       </CollapsibleTrigger>
@@ -119,7 +113,7 @@ export function EditArticleManagerPage() {
   const { deleteMutation, handleDelete, isSaving, onSubmit } = useEditActions(
     form,
     isCreateMode,
-    articleId
+    articleId,
   );
 
   const {
@@ -134,8 +128,8 @@ export function EditArticleManagerPage() {
     ControlledArticleTypeInput,
   } = createConnectedInputHelpers<Article>();
 
-  const pageTitle = isCreateMode ? 'New Article' : article?.title ?? '';
-  const breadcrumbLabel = isCreateMode ? 'New' : article?.title ?? '';
+  const pageTitle = isCreateMode ? 'New Article' : (article?.title ?? '');
+  const breadcrumbLabel = isCreateMode ? 'New' : (article?.title ?? '');
 
   const isPublished = form.watch('isPublished');
   const visibility = form.watch('visibility');
@@ -266,7 +260,9 @@ export function EditArticleManagerPage() {
       <FormProvider {...form}>
         <form
           id="article-form"
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(onSubmit, (errors) =>
+            console.error('Form validation errors:', errors),
+          )}
           className="flex flex-1 "
         >
           {/* Content Area */}
@@ -321,10 +317,7 @@ export function EditArticleManagerPage() {
                 defaultOpen={true}
               >
                 <FieldGroup className="space-y-4">
-                  <ControlledSwitchInput
-                    name="isPublished"
-                    label="Published"
-                  />
+                  <ControlledSwitchInput name="isPublished" label="Published" />
                   <ControlledArticleTypeInput
                     name="type"
                     label="Article Type"

@@ -13,7 +13,10 @@ type EditorPluginInputProps = {
 export const EditorImageInput = (props: EditorPluginInputProps) => {
   const { input, path, blockContent, setBlockContent } = props;
 
-  const currentImage = extractValueFromPath<Image>(blockContent, path + input.name);
+  const currentImage = extractValueFromPath<Image>(
+    blockContent,
+    path + input.name,
+  );
 
   return (
     <Field>

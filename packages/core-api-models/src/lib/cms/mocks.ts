@@ -1,4 +1,4 @@
-import { CMSBlock } from "./models";
+import { CMSBlock } from "./unions";
 
 export const mockBlocks: CMSBlock[] = [
   {

@@ -4,7 +4,7 @@ import { readFolderRefSchema } from '../folder';
 import { readIssueRefSchema } from '../issue';
 import { readDocumentSchema, updateDocumentSchema } from '../document';
 import { categoryRefSchema, readCategoryRefSchema } from '../category';
-import { cmsBlockSchema } from '../cms';
+import { cmsBlockSchema, upsertCmsBlockSchema } from '../cms';
 import { readUserRefSchema, userRefSchema } from '../users';
 import {
   organizationRefSchema,
@@ -87,13 +87,15 @@ export const createArticleSchema = z.object({
   organization: organizationRefSchema,
   title: z.string().min(1).max(255),
   description: z.string().max(5000).nullable().optional(),
-  content: z.array(cmsBlockSchema).nullable().optional(),
+  content: z.array(upsertCmsBlockSchema).nullable().optional(),
   author: userRefSchema.nullable().optional(),
   featuredImage: updateImageSchema.nullable().optional(),
   cover: updateImageSchema.nullable().optional(),
   pdf: updateDocumentSchema.nullable().optional(),
   keywords: z.array(z.string().max(500)).nullable(),
-  type: articleTypeRefSchema.nullable().optional(),
+  type: articleTypeRefSchema.nullable().refine((data) => data?.id, {
+    message: 'Please select an article type',
+  }),
   visibility: z.string().max(50).nullable().optional(),
   customFields: articleCustomFieldsSchema.nullable().optional(),
   tags: z.array(z.string()).nullable().optional(),
@@ -107,13 +109,15 @@ export type CreateArticle = z.infer<typeof createArticleSchema>;
 export const updateArticleSchema = z.object({
   title: z.string().max(255).optional(),
   description: z.string().max(5000).nullable().optional(),
-  content: z.array(cmsBlockSchema).nullable().optional(),
+  content: z.array(upsertCmsBlockSchema).nullable().optional(),
   author: userRefSchema.nullable().optional(),
   featuredImage: updateImageSchema.nullable().optional(),
   cover: updateImageSchema.nullable().optional(),
   pdf: updateDocumentSchema.nullable().optional(),
   keywords: z.array(z.string().max(500)).nullable(),
-  type: articleTypeRefSchema.nullable().optional(),
+  type: articleTypeRefSchema.nullable().refine((data) => data?.id, {
+    message: 'Please select an article type',
+  }),
   visibility: z.string().max(50).nullable().optional(),
   customFields: articleCustomFieldsSchema.nullable().optional(),
   publishedAt: z.string().nullable().optional(), // ISO date string
