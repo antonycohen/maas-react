@@ -32,7 +32,7 @@ export const EditorContextualPanel = React.memo(function EditorContextualPanel()
   return (
     <div
       key={selectedPlugin?.name as string}
-      className="editor-contextual-panel h-full w-[326px] min-w-[326px] flex-none overflow-y-scroll bg-white p-2.5 pb-40"
+      className="editor-contextual-panel h-full w-full overflow-y-auto bg-white p-2.5 pb-40"
     >
       {!selectedBlockContent ? (
         <div className="flex h-32 items-center justify-center text-center text-sm text-muted-foreground">

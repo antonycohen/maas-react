@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -9,15 +9,25 @@ import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import {
+  $generateHtmlFromNodes,
+  $generateNodesFromDOM,
+} from "@lexical/html";
+import {
   $getRoot,
+  $insertNodes,
   EditorState,
   FORMAT_TEXT_COMMAND,
-  $createParagraphNode,
-  $createTextNode,
 } from "lexical";
 import { cn } from "@maas/core-utils";
 import { Bold, Italic, Underline, Strikethrough } from "lucide-react";
 import { Button } from "../ui/button";
+import {
+  EquationNode,
+  EquationPlugin,
+  EquationDialog,
+  EquationToolbarButton,
+} from "./lexical";
+import "katex/dist/katex.min.css";
 
 const theme = {
   paragraph: "mb-2 last:mb-0",
@@ -33,8 +43,13 @@ function onError(error: Error) {
   console.error(error);
 }
 
-function ToolbarPlugin() {
+type ToolbarPluginProps = {
+  enableEquation?: boolean;
+};
+
+function ToolbarPlugin({ enableEquation }: ToolbarPluginProps) {
   const [editor] = useLexicalComposerContext();
+  const [showEquationDialog, setShowEquationDialog] = useState(false);
 
   const formatBold = useCallback(() => {
     editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
@@ -53,48 +68,59 @@ function ToolbarPlugin() {
   }, [editor]);
 
   return (
-    <div className="border-input flex gap-1 border-b p-1">
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        onClick={formatBold}
-        className="h-8 w-8 p-0"
-        aria-label="Bold"
-      >
-        <Bold className="h-4 w-4" />
-      </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        onClick={formatItalic}
-        className="h-8 w-8 p-0"
-        aria-label="Italic"
-      >
-        <Italic className="h-4 w-4" />
-      </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        onClick={formatUnderline}
-        className="h-8 w-8 p-0"
-        aria-label="Underline"
-      >
-        <Underline className="h-4 w-4" />
-      </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        onClick={formatStrikethrough}
-        className="h-8 w-8 p-0"
-        aria-label="Strikethrough"
-      >
-        <Strikethrough className="h-4 w-4" />
-      </Button>
-    </div>
+    <>
+      <div className="border-input flex gap-1 border-b p-1">
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={formatBold}
+          className="h-8 w-8 p-0"
+          aria-label="Bold"
+        >
+          <Bold className="h-4 w-4" />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={formatItalic}
+          className="h-8 w-8 p-0"
+          aria-label="Italic"
+        >
+          <Italic className="h-4 w-4" />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={formatUnderline}
+          className="h-8 w-8 p-0"
+          aria-label="Underline"
+        >
+          <Underline className="h-4 w-4" />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={formatStrikethrough}
+          className="h-8 w-8 p-0"
+          aria-label="Strikethrough"
+        >
+          <Strikethrough className="h-4 w-4" />
+        </Button>
+        {enableEquation && (
+          <EquationToolbarButton onClick={() => setShowEquationDialog(true)} />
+        )}
+      </div>
+      {enableEquation && (
+        <EquationDialog
+          open={showEquationDialog}
+          onOpenChange={setShowEquationDialog}
+        />
+      )}
+    </>
   );
 }
 
@@ -104,18 +130,29 @@ type InitialValuePluginProps = {
 
 function InitialValuePlugin({ initialValue }: InitialValuePluginProps) {
   const [editor] = useLexicalComposerContext();
+  const hasInitialized = useRef(false);
 
   useEffect(() => {
-    if (initialValue) {
-      editor.update(() => {
-        const root = $getRoot();
-        root.clear();
-        const paragraph = $createParagraphNode();
-        paragraph.append($createTextNode(initialValue));
-        root.append(paragraph);
-      });
+    // Only initialize once on mount to prevent infinite loops
+    if (hasInitialized.current || !initialValue) {
+      return;
     }
-  }, []);
+    hasInitialized.current = true;
+
+    editor.update(() => {
+      const root = $getRoot();
+      root.clear();
+
+      // Parse HTML and convert to Lexical nodes
+      const parser = new DOMParser();
+      const dom = parser.parseFromString(initialValue, "text/html");
+      const nodes = $generateNodesFromDOM(editor, dom);
+
+      if (nodes.length > 0) {
+        $insertNodes(nodes);
+      }
+    });
+  }, [editor, initialValue]);
 
   return null;
 }
@@ -128,6 +165,7 @@ export type RichTextEditorProps = {
   className?: string;
   id?: string;
   "aria-invalid"?: boolean;
+  enableEquation?: boolean;
 };
 
 export function RichTextEditor({
@@ -138,20 +176,21 @@ export function RichTextEditor({
   className,
   id,
   "aria-invalid": ariaInvalid,
+  enableEquation = true,
 }: RichTextEditorProps) {
   const initialConfig = {
     namespace: "RichTextEditor",
     theme,
     onError,
     editable: !disabled,
+    nodes: enableEquation ? [EquationNode] : [],
   };
 
   const handleChange = useCallback(
-    (editorState: EditorState) => {
+    (editorState: EditorState, editor: import("lexical").LexicalEditor) => {
       editorState.read(() => {
-        const root = $getRoot();
-        const text = root.getTextContent();
-        onChange?.(text);
+        const html = $generateHtmlFromNodes(editor, null);
+        onChange?.(html);
       });
     },
     [onChange]
@@ -171,7 +210,7 @@ export function RichTextEditor({
           className
         )}
       >
-        <ToolbarPlugin />
+        <ToolbarPlugin enableEquation={enableEquation} />
         <div className="relative">
           <RichTextPlugin
             contentEditable={
@@ -193,6 +232,7 @@ export function RichTextEditor({
         <HistoryPlugin />
         <OnChangePlugin onChange={handleChange} />
         <InitialValuePlugin initialValue={value} />
+        {enableEquation && <EquationPlugin />}
       </div>
     </LexicalComposer>
   );

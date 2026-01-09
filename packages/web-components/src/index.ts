@@ -66,6 +66,7 @@ export * from './lib/maas/language-input';
 export * from './lib/maas/pricing-card';
 export * from './lib/maas/magazine-highlights-hero';
 export * from './lib/maas/rich-text-editor';
+export * from './lib/maas/lexical';
 export * from './lib/maas/sso-connector';
 export * from './lib/maas/tab-nav-links';
 export * from './lib/maas/article-author'

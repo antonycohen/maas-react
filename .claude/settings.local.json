@@ -20,7 +20,9 @@
       "mcp__figma-desktop__get_design_context",
       "mcp__figma-desktop__get_screenshot",
       "mcp__figma-desktop__get_metadata",
-      "WebSearch"
+      "WebSearch",
+      "Bash(pnpm add:*)",
+      "Bash(grep:*)"
     ],
     "deny": []
   }

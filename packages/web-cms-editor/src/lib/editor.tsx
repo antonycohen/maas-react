@@ -16,6 +16,11 @@ import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { GripVertical } from 'lucide-react';
 
 import { CMSBlock } from '@maas/core-api-models';
+import {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+} from '@maas/web-components';
 
 import { EditorActionsBar } from './editor/editor-actions-bar';
 import { EditorContainer } from './editor/editor-container';
@@ -247,10 +252,17 @@ function EditorMain() {
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
     >
-      <main className="editor-blocks flex h-full w-full flex-1 overflow-hidden bg-muted justify-center">
+      <main className="editor-blocks flex h-full w-full flex-1 overflow-hidden bg-muted">
         <EditorTools />
-        <EditorPreview />
-        <EditorContextualPanel />
+        <ResizablePanelGroup orientation="horizontal" className="flex-1">
+          <ResizablePanel defaultSize={70} minSize={30}>
+            <EditorPreview />
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel defaultSize={30} minSize={'326px'}>
+            <EditorContextualPanel />
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </main>
       <DragOverlay
         dropAnimation={{

@@ -88,13 +88,14 @@ export const EditorPreview = React.memo(function EditorPreview() {
         ref={setNodeRef}
         className={cn(
           'editor-preview',
-          'h-full min-w-0 flex-1',
+          'h-full w-full',
           'px-6 py-[30px]',
           'overflow-y-auto',
           '@container',
+          'flex justify-center',
           {
-            'w-[322px] max-w-[322px] flex-none': previewMode === 'mobile',
-            'w-[882px] max-w-[882px] flex-none': previewMode === 'desktop',
+            '[&>div]:w-[322px] [&>div]:max-w-[322px]': previewMode === 'mobile',
+            '[&>div]:w-[882px] [&>div]:max-w-[882px]': previewMode === 'desktop',
           }
         )}
       >
