@@ -1,4 +1,9 @@
 import { Link } from 'react-router-dom';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from '../ui/carousel';
 
 export interface CategoryArticle {
   image: string;
@@ -38,10 +43,10 @@ const CategoryArticleItem = ({ article }: CategoryArticleItemProps) => {
   return (
     <Link
       to={article.link}
-      className="group flex flex-1 basis-0 min-w-0 gap-3 rounded-[12px] border border-[#333] p-3 transition-colors hover:border-[#444]"
+      className="group flex flex-col md:flex-row flex-1 basis-0 min-w-0 gap-3 rounded-[12px] border border-[#333] p-3 transition-colors hover:border-[#444]"
     >
       {/* Image */}
-      <div className="relative flex-1 basis-0 min-w-0 aspect-[282/199] overflow-hidden rounded">
+      <div className="relative flex-1 md:basis-0 min-w-0 aspect-[282/199] overflow-hidden rounded">
         <img
           src={article.image}
           alt={article.title}
@@ -60,13 +65,13 @@ const CategoryArticleItem = ({ article }: CategoryArticleItemProps) => {
           </div>
 
           {/* Title */}
-          <h3 className="font-heading text-[20px] font-semibold leading-6 tracking-[-0.3px] text-white line-clamp-3">
+          <h3 className="font-heading text-[20px] h-20 font-semibold leading-6 tracking-[-0.3px] text-white line-clamp-3">
             {article.title}
           </h3>
         </div>
 
         {/* Author & Date */}
-        <div className="flex h-5 items-center gap-2 text-[13px] leading-[18px] text-white/70">
+        <div className="flex h-5 items-center gap-2 text-[13px] leading-[18px] text-white/70 mt-5">
           <span className="font-body font-semibold">{article.author}</span>
           <span className="font-body font-normal">{article.date}</span>
         </div>
@@ -96,13 +101,34 @@ export const CategoryArticles = ({
 
   return (
     <div className="flex flex-col gap-5">
-      {rows.map((row, rowIndex) => (
-        <div key={rowIndex} className="flex gap-5">
-          {row.map((article, index) => (
-            <CategoryArticleItem key={index} article={article} />
-          ))}
-        </div>
-      ))}
+      {/* Mobile Carousel */}
+      <div className="md:hidden">
+        <Carousel
+          opts={{
+            align: 'start',
+          }}
+          className="w-full"
+        >
+          <CarouselContent>
+            {articles.map((article, index) => (
+              <CarouselItem key={index} className="basis-[85%]">
+                <CategoryArticleItem article={article} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      </div>
+
+      {/* Desktop Grid */}
+      <div className="hidden flex-col gap-5 md:flex">
+        {rows.map((row, rowIndex) => (
+          <div key={rowIndex} className="flex gap-5">
+            {row.map((article, index) => (
+              <CategoryArticleItem key={index} article={article} />
+            ))}
+          </div>
+        ))}
+      </div>
 
       {/* View All Button */}
       {viewAllLink && (
@@ -118,3 +144,4 @@ export const CategoryArticles = ({
     </div>
   );
 };
+

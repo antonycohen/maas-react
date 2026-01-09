@@ -74,8 +74,8 @@ const ArticleCard = ({ article, featured = false }: ArticleCardProps) => {
           className={`
             font-heading font-semibold text-white w-full
             ${featured
-              ? 'text-[34px] leading-[40px] tracking-[-0.85px]'
-              : 'text-[20px] leading-6 tracking-[-0.3px] line-clamp-2'
+              ? 'text-2xl md:text-[34px] leading-[40px] tracking-[-0.85px]'
+              : 'text-lg md:text-[20px] leading-6 tracking-[-0.3px] line-clamp-2'
             }
           `}
         >
@@ -94,22 +94,22 @@ export const ArticlesHighlight = ({ articles }: ArticlesHighlightProps) => {
 
   return (
     <section className="flex w-full items-center justify-center">
-      <div className="container flex w-full items-center justify-center px-0 pb-10 pt-5">
-        <div className="flex h-[480px] w-full gap-5">
-          {/* Featured Article (Left) - basis-0 grow */}
+      <div className="container flex w-full items-center justify-center px-5 py-4 xl:px-0 md:pb-10 md:pt-5">
+        <div className="flex h-[640px] md:h-[480px] w-full flex-col md:flex-row gap-3 md:gap-5">
+          {/* Featured Article (Top/Left) */}
           <ArticleCard article={featured} featured />
 
-          {/* Grid Articles (Right) - basis-0 grow */}
-          <div className="flex flex-1 basis-0 min-w-0 gap-5">
-            {/* First Column - basis-0 grow */}
-            <div className="flex flex-1 basis-0 min-w-0 h-full flex-col gap-5">
+          {/* Grid Articles (Bottom/Right) */}
+          <div className="flex flex-1 basis-0 min-w-0 gap-3 md:gap-5">
+            {/* First Column */}
+            <div className="flex flex-1 basis-0 min-w-0 h-full flex-col gap-3 md:gap-5">
               {gridArticles.slice(0, 2).map((article, index) => (
                 <ArticleCard key={index} article={article} />
               ))}
             </div>
 
-            {/* Second Column - basis-0 grow */}
-            <div className="flex flex-1 basis-0 min-w-0 h-full flex-col gap-5">
+            {/* Second Column */}
+            <div className="flex flex-1 basis-0 min-w-0 h-full flex-col gap-3 md:gap-5">
               {gridArticles.slice(2, 4).map((article, index) => (
                 <ArticleCard key={index + 2} article={article} />
               ))}

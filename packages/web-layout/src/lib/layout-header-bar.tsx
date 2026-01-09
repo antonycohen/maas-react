@@ -179,7 +179,7 @@ function NavItem({ item }: { item: MenuItem }) {
       className={({ isActive }) =>
         cn(
           'flex h-12 items-center justify-center px-3',
-          'font-body text-[13px] font-bold uppercase leading-4 tracking-[0.26px]',
+          'font-body text-xs xl:text-[13px] font-bold uppercase leading-4 tracking-[0.26px]',
           'transition-colors',
           isActive
             ? 'border-b-2 border-brand-primary text-black'
@@ -316,7 +316,7 @@ export function LayoutHeaderBar({
       {/* Spacer to prevent content jump when mobile header becomes fixed */}
       {isMobileScrolled && (
         <div
-          className="md:hidden"
+          className="lg:hidden"
           style={{ height: topBarHeight }}
           aria-hidden="true"
         />
@@ -326,9 +326,9 @@ export function LayoutHeaderBar({
       <div
         ref={topBarRef}
         className={cn(
-          'flex items-center justify-center bg-white px-4 md:px-0',
+          'flex items-center justify-center bg-white px-4 xl:px-0',
           isMobileScrolled &&
-            'fixed left-0 right-0 top-0 z-50 shadow-md md:relative md:shadow-none',
+            'fixed left-0 right-0 top-0 z-50 shadow-md lg:relative md:shadow-none',
         )}
       >
         <div className="container mx-auto flex items-center justify-center py-3">
@@ -337,7 +337,7 @@ export function LayoutHeaderBar({
             <div className="flex items-center gap-2 md:flex-1">
               <button
                 onClick={toggleMobileMenu}
-                className="flex h-10 w-10 items-center justify-center rounded transition-colors hover:bg-gray-100 md:hidden"
+                className="flex h-10 w-10 items-center justify-center rounded transition-colors hover:bg-gray-100 lg:hidden"
                 aria-label={
                   isMobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'
                 }
@@ -379,22 +379,18 @@ export function LayoutHeaderBar({
       {/* Desktop Navigation Menu - Static */}
       <NavigationMenu
         items={menuItems}
-        className="hidden bg-white md:flex md:justify-center"
+        className="hidden bg-white lg:flex lg:justify-center"
       />
 
       {/* Fixed Navigation Bar - Desktop only, appears when scrolled */}
       <div
         className={cn(
-          'fixed left-0 right-0 top-0 z-50 hidden border-b border-[#e0e0e0] bg-white shadow-md transition-transform duration-300 ease-out md:block',
+          'fixed left-0 right-0 top-0 z-50 hidden border-b border-[#e0e0e0] bg-white shadow-md transition-transform duration-300 ease-out lg:block',
           isDesktopScrolled ? 'translate-y-0' : '-translate-y-full',
         )}
       >
         <div className="flex items-center justify-center px-4">
           <div className="container mx-auto flex items-center justify-between">
-            <Logo
-              variant="icon"
-              className="h-10 w-10 shrink-0 transition-all duration-300"
-            />
 
             <NavigationMenu
               items={menuItems}
@@ -402,15 +398,6 @@ export function LayoutHeaderBar({
             />
 
             <div className="flex shrink-0 items-center gap-2">
-              <IconButton onClick={onSearchClick} ariaLabel="Rechercher">
-                <Search className="h-5 w-5 text-black" />
-              </IconButton>
-
-              <UserButton
-                connectedUser={connectedUser}
-                onLoginClick={onLoginClick}
-              />
-
               <SubscribeButton onClick={onSubscribeClick} />
             </div>
           </div>
@@ -421,7 +408,7 @@ export function LayoutHeaderBar({
       {isMobileMenuOpen && (
         <div
           className={cn(
-            'absolute left-0 right-0 z-40 border-b border-[#e0e0e0] bg-white shadow-lg md:hidden',
+            'absolute left-0 right-0 z-40 border-b border-[#e0e0e0] bg-white shadow-lg lg:hidden',
             isMobileScrolled ? 'fixed top-[64px]' : 'top-full',
           )}
         >

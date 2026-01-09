@@ -544,7 +544,7 @@ const SolutionsMenu = () => (
       className="bg-primary text-primary-foreground group relative flex h-full flex-row overflow-hidden rounded-lg px-0 pt-8 lg:rounded-xl lg:px-6"
     >
       <div className="relative flex w-full flex-col space-y-12 text-left md:space-y-8 lg:w-full lg:flex-row lg:justify-between lg:space-x-6 lg:space-y-0 xl:space-x-8">
-        <div className="relative flex flex-col px-6 lg:mb-6 lg:px-0">
+        <div className="relative flex flex-col px-6 lg:mb-6 xl:px-0">
           <span className="mb-6 text-xs font-medium uppercase tracking-wider md:mb-8">
             Transform Your Workflow
           </span>

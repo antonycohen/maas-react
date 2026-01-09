@@ -31,7 +31,7 @@ export const ArticleSidebar = () => {
   return (
     <aside
       className={
-        'order-last  md:order-first flex flex-col gap-6 w-full md:w-[290px] pr-5 shrink-0'
+        'order-last  lg:order-first flex flex-col gap-6 w-full md:w-[290px] pr-5 shrink-0'
       }
     >
       <Authors authors={authors} />

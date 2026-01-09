@@ -9,14 +9,18 @@ const ArticleDetailsPage = () => {
   //TODO: fetch the articles by id
   return (
     <section className={'container mx-auto py-10 space-y-10 px-5'}>
-      <div className={'flex flex-col gap-y-16 md:flex-row gap-5 items-start'}>
+      <div className={'flex flex-col gap-y-16 lg:flex-row gap-5 items-start'}>
         <ArticleSidebar />
-        <main className={'w-full md:w-[600px] shrink-0'}>
+        <main
+          className={
+            'w-full lg:w-[600px] flex flex-row justify-center lg:justify-left shrink-0'
+          }
+        >
           <ArticleContent />
         </main>
       </div>
       <div className="container mx-auto flex flex-col gap-5 pb-10 pt-5">
-        <h2 className="font-heading text-[34px] font-semibold leading-[40px] tracking-[-0.85px]">
+        <h2 className="font-heading  text-2xl md:text-[34px] font-semibold leading-[40px] tracking-[-0.85px]">
           Articles Similaires
         </h2>
         <ContentFeed items={fakeFeedItems} />

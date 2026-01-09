@@ -20,7 +20,7 @@ export function LayoutTopbar({
 }: LayoutTopbarProps) {
   return (
     <header
-      className={cn('flex items-center justify-center px-4 md:px-0', className)}
+      className={cn('flex items-center justify-center px-4 xl:px-0', className)}
     >
       <div className="container mx-auto flex items-center justify-center py-3">
         <div className="flex w-full items-center justify-between gap-3 md:justify-center">

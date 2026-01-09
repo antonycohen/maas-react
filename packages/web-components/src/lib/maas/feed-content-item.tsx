@@ -68,9 +68,9 @@ export const FeedArticleItem = ({ item }: FeedArticleItemProps) => {
         </div>
 
         {/* Author & Date */}
-        <div className="flex h-5 items-center gap-2 text-[13px] leading-[18px] text-black/70">
+        <div className="flex h-5 items-center gap-2  justify-between text-[13px] leading-[18px] text-black/70">
           <span className="font-body font-semibold">{item.author}</span>
-          <span className="font-body font-normal">{item.date}</span>
+          <span className="font-body font-normal w-24">{item.date}</span>
         </div>
       </div>
     </Link>
@@ -105,10 +105,10 @@ export const FeedMagazineItem = ({ item }: FeedMagazineItemProps) => {
   return (
     <Link
       to={item.link}
-      className="group relative flex flex-col items-start justify-end overflow-clip rounded-[12px] bg-brand-primary"
+      className="group relative h-[450px] md:h-auto flex flex-col items-start justify-end overflow-clip rounded-[12px] bg-brand-primary"
     >
       {/* Magazine Cover Image - positioned bottom right */}
-      <div className="absolute inset-0 flex items-end justify-end">
+      <div className="absolute inset-0 flex items-center justify-center">
         <div className="h-[340px] w-[242px] shrink-0 rounded shadow-tangente-3">
           <img
             src={item.image}
@@ -174,35 +174,36 @@ export const FeedFolderItem = ({ item }: FeedFolderItemProps) => {
     articleImages[0] || item.image
   ];
 
+
   return (
     <Link
       to={item.link}
-      className="group flex flex-col gap-3 rounded-[12px] border border-[#e0e0e0] bg-white p-3 transition-shadow hover:shadow-md"
+      className="group flex flex-col gap-3 rounded-[12px] border border-[#e0e0e0] bg-white p-3 transition-shadow hover:shadow-md h-full"
     >
       {/* Stacked Images */}
-      <div className="relative h-[188px] w-full">
+      <div className="relative aspect-[266/188] w-full">
         {/* Back image (top, darkest overlay) */}
-        <div className="absolute left-[24px] top-0 h-[153px] w-[218px] rounded overflow-hidden shadow-tangente-1">
+        <div className="absolute left-[24px] right-[24px] top-0 aspect-[234/164] rounded-[4px] overflow-hidden shadow-[0px_0px_4px_0px_rgba(0,0,0,0.06),2px_4px_8px_0px_rgba(0,0,0,0.04)]">
           <img
             src={backImg}
             alt=""
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-black/70 rounded" />
+          <div className="absolute inset-0 bg-black/70 rounded-[4px]" />
         </div>
 
         {/* Middle image (centered, medium overlay) */}
-        <div className="absolute left-[4.5%] right-[4.5%] top-1/2 -translate-y-1/2 aspect-[250/164] rounded overflow-hidden border border-white/15 shadow-tangente-2">
+        <div className="absolute left-[12px] right-[12px] top-[12px] aspect-[250/164] rounded-[4px] overflow-hidden border border-white/15 shadow-[0px_0px_4px_0px_rgba(0,0,0,0.06),2px_6px_16px_0px_rgba(0,0,0,0.08)]">
           <img
             src={midImg}
             alt=""
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-black/50 rounded" />
+          <div className="absolute inset-0 bg-black/50 rounded-[4px]" />
         </div>
 
         {/* Front image (bottom, no overlay) */}
-        <div className="absolute bottom-0 left-0 right-0 aspect-[266/164] rounded overflow-hidden border border-white/15 shadow-tangente-3">
+        <div className="absolute top-6 md:bottom-0 left-0 right-0 aspect-[266/164] rounded-[4px] overflow-hidden border border-white/15 shadow-[0px_0px_8px_0px_rgba(0,0,0,0.06),3px_8px_20px_0px_rgba(0,0,0,0.1)]">
           <img
             src={frontImg}
             alt={item.title}
@@ -212,7 +213,7 @@ export const FeedFolderItem = ({ item }: FeedFolderItemProps) => {
       </div>
 
       {/* Content */}
-      <div className="flex flex-col gap-5 p-2">
+      <div className="flex flex-col gap-5 p-1 md:p-2">
         {/* Tags & Title */}
         <div className="flex flex-col gap-1">
           {/* Tags */}
@@ -222,18 +223,18 @@ export const FeedFolderItem = ({ item }: FeedFolderItemProps) => {
           </div>
 
           {/* Title */}
-          <h3 className="font-heading text-[20px] font-semibold leading-6 tracking-[-0.3px] text-black line-clamp-3 h-[72px]">
+          <h3 className="font-heading text-[20px] font-semibold leading-6 tracking-[-0.3px] text-black line-clamp-2 md:line-clamp-3 h-[48px] md:h-[72px]">
             {item.title}
           </h3>
         </div>
 
         {/* Article Count & Date */}
-        <div className="flex h-5 items-center gap-2 text-[13px] leading-[18px] text-black/70">
+        <div className="flex h-5 items-center justify-between gap-2 text-[13px] leading-[18px] text-black/70">
           <div className="flex items-center gap-1">
             <FileText className="h-5 w-5" />
             <span className="font-body font-semibold">{item.articleCount} articles</span>
           </div>
-          <span className="font-body font-normal">{item.date}</span>
+          <span className="font-body font-normal w-24">{item.date}</span>
         </div>
       </div>
     </Link>

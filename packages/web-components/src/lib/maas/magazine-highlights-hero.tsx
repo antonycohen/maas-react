@@ -75,7 +75,7 @@ export const MagazineHighlightsHero = ({
           <div className="flex flex-wrap items-start gap-0.5">
             <MagazineTag label="Magazine" />
           </div>
-          <h1 className="font-heading text-[48px] font-semibold leading-[52px] tracking-[-1.32px] text-white">
+          <h1 className="font-heading text-4xl md:leading-[46px] md:text-[48px] font-semibold md:leading-[52px] tracking-[-1.32px] text-white">
             {issue.title}
           </h1>
         </div>

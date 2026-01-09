@@ -25,7 +25,7 @@ export function SsoConnector({
   return (
     <div
       className={cn(
-        'flex items-center gap-4 rounded-xl border bg-card p-6',
+        'flex items-center gap-4 rounded-xl border bg-card p-6 flex-wrap md:flex-nowrap',
         className
       )}
     >
