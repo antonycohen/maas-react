@@ -101,7 +101,7 @@ export const EditorPreview = React.memo(function EditorPreview() {
       >
         <div
           className={cn(
-            'flex min-h-screen flex-col gap-y-6 bg-white px-5 py-9 transition-colors'
+            'flex flex-1 min-h-screen flex-col gap-y-6 bg-white px-5 py-9 transition-colors'
           )}
         >
           {content.length === 0 ? (
