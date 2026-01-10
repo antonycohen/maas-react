@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { GripVertical, Copy, Trash2 } from 'lucide-react';
 
 import { CMSBlock } from '@maas/core-api-models';
-import { cn, useOnClickOutside } from '@maas/core-utils';
+import { cn, useOnClickOutside, findBlockInTree } from '@maas/core-utils';
 import { Button } from '@maas/web-components';
 
 import { useEditorContext } from '../store/editor-context';
@@ -91,9 +91,9 @@ export const EditorBlock = React.memo(function EditorBlock(
     [setHoveredBlockId]
   );
 
-  // Only run effect when block is removed from content
+  // Only run effect when block is removed from content (recursive search for nested blocks)
   const blockExists = useMemo(
-    () => content.some((block) => block.id === blockId),
+    () => findBlockInTree(content, blockId) !== null,
     [content, blockId]
   );
 
@@ -125,7 +125,7 @@ export const EditorBlock = React.memo(function EditorBlock(
       })}
     >
       {isSelected && (
-        <div className="absolute -top-9 -left-px flex h-9 w-fit cursor-default items-center justify-center gap-x-2 rounded-t-lg border border-muted bg-white p-2">
+        <div className="absolute -top-9 -left-px flex h-9 w-fit cursor-default items-center justify-center gap-x-2 rounded-t-lg border border-muted p-2">
           <GripVertical className="h-4 w-4 text-muted-foreground" />
           {plugin?.icon}
         </div>
@@ -134,7 +134,7 @@ export const EditorBlock = React.memo(function EditorBlock(
       {plugin?.renderingBlock({ ...blockProps, context }, settings)}
 
       {isSelected && (
-        <div className="absolute -top-9 -right-px flex h-9 w-fit cursor-default items-center justify-center gap-x-2 rounded-t-lg border border-muted bg-white p-2">
+        <div className="absolute -top-9 -right-px flex h-9 w-fit cursor-default items-center justify-center gap-x-2 rounded-t-lg border border-muted p-2">
           <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={duplicateBlock}>
             <Copy className="h-4 w-4" />
           </Button>

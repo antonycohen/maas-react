@@ -1,4 +1,5 @@
 export * from './lib/array-utils';
+export * from './lib/block-tree-utils';
 export * from './lib/image-utils';
 export * from './lib/object-path-joiner';
 export * from './lib/object-path-utils';

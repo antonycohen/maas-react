@@ -112,6 +112,35 @@ export interface EditorSettings {
   visible: boolean;
 }
 
+/**
+ * Configuration for drag-and-drop behavior of a plugin
+ */
+export interface PluginDragDropConfig {
+  /**
+   * Whether this plugin can contain nested blocks (e.g., frame plugin)
+   * @default false
+   */
+  canContainChildren?: boolean;
+
+  /**
+   * The path to the children array in block.data (e.g., 'children')
+   * Required if canContainChildren is true
+   */
+  childrenDataPath?: string;
+
+  /**
+   * Whitelist of block types that can be nested inside this plugin
+   * If undefined and canContainChildren is true, all nestable types are allowed
+   */
+  allowedChildBlockTypes?: string[];
+
+  /**
+   * Whether this plugin can be placed inside a container plugin
+   * @default true
+   */
+  canBeNested?: boolean;
+}
+
 export declare type EditorPlugin<
   PluginName,
   BlockProperties extends CMSBlockCommon,
@@ -133,4 +162,9 @@ export declare type EditorPlugin<
     editorSettings?: EditorSettings,
   ) => ReactNode;
   shape: BlockProperties;
+
+  /**
+   * Drag-and-drop configuration for this plugin
+   */
+  dragDrop?: PluginDragDropConfig;
 };

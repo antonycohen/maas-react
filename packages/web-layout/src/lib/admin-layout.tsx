@@ -46,7 +46,7 @@ export function AdminLayout(props: LayoutProps) {
   };
 
   return (
-    <div>
+    <div >
       <SidebarProvider>
         <Sidebar collapsible="icon" className="sidebar-height">
           <SidebarHeader>

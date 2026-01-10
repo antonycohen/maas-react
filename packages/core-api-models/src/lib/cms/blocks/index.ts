@@ -19,3 +19,6 @@ export * from './card-event';
 export * from './video';
 export * from './iframe';
 export * from './podcast-carousel';
+
+// Container Blocks
+export * from './frame';

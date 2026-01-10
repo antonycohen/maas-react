@@ -13,6 +13,7 @@ import { cn } from '@maas/core-utils';
 
 import { useEditorContext } from '../store/editor-context';
 import { EditorBlock } from './editor-block';
+import { DropIndicator } from './drop-indicator';
 import { GHOST_BLOCK_ID } from '../constants';
 
 type SortableBlockProps = {
@@ -37,6 +38,10 @@ const SortableBlock = React.memo(function SortableBlock({
     id: block.id,
     disabled: disabled,
     animateLayoutChanges: defaultAnimateLayoutChanges,
+    data: {
+      parentId: null, // Root level block
+      isNested: false,
+    },
   });
 
   const style = React.useMemo<React.CSSProperties>(
@@ -66,7 +71,13 @@ const SortableBlock = React.memo(function SortableBlock({
   );
 });
 
-export const EditorPreview = React.memo(function EditorPreview() {
+interface EditorPreviewProps {
+  isDraggingFromToolbar?: boolean;
+}
+
+export const EditorPreview = React.memo(function EditorPreview({
+  isDraggingFromToolbar = false,
+}: EditorPreviewProps) {
   const {
     content,
     settings: { previewMode },
@@ -75,7 +86,6 @@ export const EditorPreview = React.memo(function EditorPreview() {
   const { setNodeRef } = useDroppable({
     id: 'editor-preview-drop-zone',
   });
-
 
   const blockIds = React.useMemo(
     () => content.map((block) => block.id),
@@ -92,16 +102,17 @@ export const EditorPreview = React.memo(function EditorPreview() {
           'px-6 py-[30px]',
           'overflow-y-auto',
           '@container',
-          'flex justify-center',
+          'flex items-start',
           {
-            '[&>div]:w-[322px] [&>div]:max-w-[322px]': previewMode === 'mobile',
-            '[&>div]:w-[882px] [&>div]:max-w-[882px]': previewMode === 'desktop',
+            'justify-center [&>div]:w-[322px] [&>div]:max-w-[322px]': previewMode === 'mobile',
+            'justify-center [&>div]:w-[882px] [&>div]:max-w-[882px]': previewMode === 'desktop',
+            '[&>div]:w-full': previewMode === false,
           }
         )}
       >
         <div
           className={cn(
-            'flex flex-1 min-h-screen flex-col gap-y-6 bg-white px-5 py-9 transition-colors'
+            'flex flex-col bg-white gap-y-6 px-5 py-9 transition-colors'
           )}
         >
           {content.length === 0 ? (
@@ -109,13 +120,28 @@ export const EditorPreview = React.memo(function EditorPreview() {
               Drag blocks here to add content
             </div>
           ) : (
-            content.map((block) => (
-              <SortableBlock
-                key={block.id}
-                block={block}
-                disabled={previewMode !== false}
-              />
+            content.map((block, index) => (
+              <React.Fragment key={block.id}>
+                {/* Drop indicator before each block */}
+                <DropIndicator
+                  id={`drop-indicator-${index}`}
+                  parentId={null}
+                  isActive={isDraggingFromToolbar}
+                />
+                <SortableBlock
+                  block={block}
+                  disabled={previewMode !== false}
+                />
+              </React.Fragment>
             ))
+          )}
+          {/* Drop indicator at the end */}
+          {content.length > 0 && (
+            <DropIndicator
+              id={`drop-indicator-${content.length}`}
+              parentId={null}
+              isActive={isDraggingFromToolbar}
+            />
           )}
         </div>
       </div>

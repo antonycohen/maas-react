@@ -98,7 +98,7 @@ function SortableItem({
   };
 
   return (
-    <div ref={setNodeRef} style={style} className="w-full max-w-[324px]">
+    <div ref={setNodeRef} style={style} className="w-full">
       <Collapsible open={isExpanded} onOpenChange={onExpandedChange}>
         <div className="border-input flex items-center gap-2 rounded-md border bg-transparent p-2">
           <button

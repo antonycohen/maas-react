@@ -7,6 +7,8 @@ import {
   CMSVideoBlock,
   cmsVideoBlockSchema,
   upsertEventBlockSchema,
+  CMSFrameBlock,
+  createCmsFrameBlockSchema,
 } from './blocks';
 import { CMSCardTextBlock, cmsCardTextBlockSchema } from './blocks/card-text';
 import {
@@ -49,8 +51,8 @@ import {
   cmsCardsQuotesBlockSchema,
 } from './blocks/quotes';
 
-// Union type for all CMS blocks
-export type CMSBlock =
+// Union type for all CMS blocks (excluding frame for non-recursive contexts)
+export type CMSBlockWithoutFrame =
   | CMSCardTextBlock
   | CMSCardTextWithImageBlock
   | CMSCardsQuotesBlock
@@ -66,13 +68,40 @@ export type CMSBlock =
   | CMSPodcastCarouselBlock
   | CMSVideoBlock;
 
-// Union schema for all CMS blocks (read)
+// Union type for all CMS blocks (including frame)
+export type CMSBlock = CMSBlockWithoutFrame | CMSFrameBlock;
+
+// Schema for blocks that can be nested inside a frame (excludes frame itself)
+export const cmsBlockWithoutFrameSchema = z.discriminatedUnion('type', [
+  cmsCardTextBlockSchema,
+  cmsCardTextWithImageBlockSchema,
+  cmsCardsQuotesBlockSchema,
+  cmsCardsTextWithImageBlockSchema,
+  cmsEventBlockSchema,
+  cmsHeadingBlockSchema,
+  cmsHighlightBlockSchema,
+  cmsIFrameBlockSchema,
+  cmsImageAndTextBlockSchema,
+  cmsImageBlockSchema,
+  cmsMosaicGalleryBlockSchema,
+  cmsParagraphBlockSchema,
+  cmsPodcastCarouselBlockSchema,
+  cmsVideoBlockSchema,
+]);
+
+// Frame block schema with children limited to non-frame blocks (1 level nesting)
+export const cmsFrameBlockSchema = createCmsFrameBlockSchema(
+  cmsBlockWithoutFrameSchema
+);
+
+// Union schema for all CMS blocks (read) - includes frame
 export const cmsBlockSchema = z.discriminatedUnion('type', [
   cmsCardTextBlockSchema,
   cmsCardTextWithImageBlockSchema,
   cmsCardsQuotesBlockSchema,
   cmsCardsTextWithImageBlockSchema,
   cmsEventBlockSchema,
+  cmsFrameBlockSchema,
   cmsHeadingBlockSchema,
   cmsHighlightBlockSchema,
   cmsIFrameBlockSchema,
@@ -91,6 +120,7 @@ export const upsertCmsBlockSchema = z.discriminatedUnion('type', [
   cmsCardsQuotesBlockSchema,
   upsertCardsTextWithImageBlockSchema,
   upsertEventBlockSchema,
+  cmsFrameBlockSchema,
   cmsHeadingBlockSchema,
   cmsHighlightBlockSchema,
   cmsIFrameBlockSchema,

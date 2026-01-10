@@ -18,6 +18,7 @@ export * from "./lib/components/cms/plugins/images-plugin";
 export * from "./lib/components/cms/plugins/image-with-text-plugin";
 export * from "./lib/components/cms/plugins/iframe-plugin";
 export * from "./lib/components/cms/plugins/highlight-plugin";
+export * from "./lib/components/cms/plugins/frame-plugin";
 // CMS BLOCKS
 export * from "./lib/components/cms/blocks/heading-block";
 export * from "./lib/components/cms/blocks/paragraph-block";
@@ -35,3 +36,4 @@ export * from "./lib/components/cms/blocks/iframe-block";
 export * from "./lib/components/cms/blocks/gallery-block";
 export * from "./lib/components/cms/blocks/carousel-block";
 export * from "./lib/components/cms/blocks/highlight-block";
+export * from "./lib/components/cms/blocks/frame-block";

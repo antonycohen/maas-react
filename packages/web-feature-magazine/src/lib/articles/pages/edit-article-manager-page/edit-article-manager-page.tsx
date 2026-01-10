@@ -33,6 +33,7 @@ import { DynamicCustomFields } from './components/dynamic-custom-fields';
 import {
   CardEventPlugin,
   CardsTextWithImagePlugin,
+  FramePlugin,
   HeadingPlugin,
   HighlightPlugin,
   IframePlugin,
@@ -65,6 +66,7 @@ export const editorPlugins = [
   ImageWithTextPlugin,
   IframePlugin,
   HighlightPlugin,
+  FramePlugin
 ];
 
 type SidebarSectionProps = {

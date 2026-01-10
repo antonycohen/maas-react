@@ -1,25 +1,23 @@
-import React, { useRef } from 'react';
+import React, { useMemo } from 'react';
 import {
-  closestCenter,
+  closestCorners,
   DndContext,
-  DragEndEvent,
-  DragOverEvent,
   DragOverlay,
-  DragStartEvent,
   KeyboardSensor,
   MeasuringStrategy,
   PointerSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { GripVertical } from 'lucide-react';
 
 import { CMSBlock } from '@maas/core-api-models';
+import { cn, findBlockInTree } from '@maas/core-utils';
 import {
-  ResizablePanelGroup,
-  ResizablePanel,
   ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
 } from '@maas/web-components';
 
 import { EditorActionsBar } from './editor/editor-actions-bar';
@@ -27,10 +25,11 @@ import { EditorContainer } from './editor/editor-container';
 import { EditorContextualPanel } from './editor/editor-contextual-panel';
 import { EditorPreview } from './editor/editor-preview';
 import { EditorTools } from './editor/editor-tools';
+import { useEditorDragDrop } from './editor/use-editor-drag-drop';
 import { EditorProvider } from './store/editor-provider';
 import { useEditorContext } from './store/editor-context';
 import { EditorPlugin } from './types';
-import { GHOST_BLOCK_ID, TOOL_ID_PREFIX } from './constants';
+import { TOOL_ID_PREFIX } from './constants';
 
 export interface EditorProps<T> {
   field: {
@@ -50,175 +49,30 @@ const measuring = {
   },
 };
 
-// Throttle interval in ms - adjust for performance vs responsiveness
-const DRAG_THROTTLE_MS = 50;
-
 function EditorMain() {
   const { content, setContent, plugins, context, settings } =
     useEditorContext();
-  const [activeId, setActiveId] = React.useState<string | null>(null);
-  const [ghostBlock, setGhostBlock] = React.useState<CMSBlock | null>(null);
 
-  // Refs for throttling drag over updates
-  const lastOverIdRef = useRef<string | null>(null);
-  const lastDragUpdateRef = useRef<number>(0);
+  const {
+    activeId,
+    isDraggingFromToolbar,
+    handleDragStart,
+    handleDragOver,
+    handleDragEnd,
+    handleDragCancel,
+  } = useEditorDragDrop({ content, setContent, plugins });
 
   const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
-    }),
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
   );
 
-  const removeGhostBlock = React.useCallback(() => {
-    setGhostBlock(null);
-    setContent(content.filter((block) => block.id !== GHOST_BLOCK_ID));
-  }, [content, setContent]);
-
-  const handleDragStart = React.useCallback((event: DragStartEvent) => {
-    // Reset throttle refs on drag start
-    lastOverIdRef.current = null;
-    lastDragUpdateRef.current = 0;
-    setActiveId(event.active.id as string);
-  }, []);
-
-  const handleDragOver = React.useCallback(
-    (event: DragOverEvent) => {
-      const { active, over } = event;
-
-      if (!over) return;
-
-      const activeIdStr = active.id as string;
-      const overIdStr = over.id as string;
-
-      // Skip if over same element (no change)
-      if (lastOverIdRef.current === overIdStr) return;
-
-      // Throttle updates for performance
-      const now = Date.now();
-      if (now - lastDragUpdateRef.current < DRAG_THROTTLE_MS) return;
-
-      lastOverIdRef.current = overIdStr;
-      lastDragUpdateRef.current = now;
-
-      // Handle tool item being dragged over preview
-      if (activeIdStr.startsWith(TOOL_ID_PREFIX)) {
-        const pluginName = activeIdStr.replace(TOOL_ID_PREFIX, '');
-        const plugin = plugins.find((p) => p.name === pluginName);
-
-        if (plugin) {
-          // Create ghost block if it doesn't exist
-          if (!ghostBlock) {
-            const newGhost: CMSBlock = {
-              ...structuredClone(plugin.shape),
-              id: GHOST_BLOCK_ID,
-            };
-            setGhostBlock(newGhost);
-
-            // Insert ghost at the appropriate position
-            if (overIdStr === 'editor-preview-drop-zone') {
-              setContent([...content, newGhost]);
-            } else {
-              const overIndex = content.findIndex(
-                (block) => block.id === overIdStr,
-              );
-              if (overIndex !== -1) {
-                const newContent = [...content];
-                newContent.splice(overIndex, 0, newGhost);
-                setContent(newContent);
-              } else {
-                setContent([...content, newGhost]);
-              }
-            }
-          } else {
-            // Ghost exists, move it to new position
-            const ghostIndex = content.findIndex(
-              (block) => block.id === GHOST_BLOCK_ID,
-            );
-
-            if (overIdStr === 'editor-preview-drop-zone') {
-              // Move to end if dropping on the drop zone
-              if (ghostIndex !== content.length - 1) {
-                const withoutGhost = content.filter(
-                  (block) => block.id !== GHOST_BLOCK_ID,
-                );
-                setContent([...withoutGhost, ghostBlock]);
-              }
-            } else if (overIdStr !== GHOST_BLOCK_ID) {
-              const overIndex = content.findIndex(
-                (block) => block.id === overIdStr,
-              );
-              if (
-                overIndex !== -1 &&
-                ghostIndex !== -1 &&
-                ghostIndex !== overIndex
-              ) {
-                setContent(arrayMove(content, ghostIndex, overIndex));
-              }
-            }
-          }
-        }
-      } else {
-        // Handle reordering existing blocks
-        if (
-          overIdStr !== activeIdStr &&
-          !overIdStr.startsWith(TOOL_ID_PREFIX) &&
-          overIdStr !== 'editor-preview-drop-zone' &&
-          overIdStr !== GHOST_BLOCK_ID
-        ) {
-          const oldIndex = content.findIndex(
-            (block) => block.id === activeIdStr,
-          );
-          const newIndex = content.findIndex((block) => block.id === overIdStr);
-
-          if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
-            setContent(arrayMove(content, oldIndex, newIndex));
-          }
-        }
-      }
-    },
-    [content, ghostBlock, plugins, setContent],
-  );
-
-  const handleDragEnd = React.useCallback(
-    (event: DragEndEvent) => {
-      const { active, over } = event;
-      setActiveId(null);
-
-      const activeIdStr = active.id as string;
-
-      // Check if dragging a tool item
-      if (activeIdStr.startsWith(TOOL_ID_PREFIX)) {
-        if (over && ghostBlock) {
-          // Convert ghost to real block
-          const realId = crypto.randomUUID();
-          setContent(
-            content.map((block) =>
-              block.id === GHOST_BLOCK_ID ? { ...block, id: realId } : block,
-            ),
-          );
-        } else {
-          // Drag cancelled or dropped outside - remove ghost
-          removeGhostBlock();
-        }
-        setGhostBlock(null);
-      }
-    },
-    [content, ghostBlock, removeGhostBlock, setContent],
-  );
-
-  const handleDragCancel = React.useCallback(() => {
-    setActiveId(null);
-    removeGhostBlock();
-    setGhostBlock(null);
-  }, [removeGhostBlock]);
-
-  // Memoized computed values for overlay
-  const activePlugin = React.useMemo(
+  // ===========================================================================
+  // OVERLAY RENDERING
+  // ===========================================================================
+  const activePlugin = useMemo(
     () =>
       activeId?.startsWith(TOOL_ID_PREFIX)
         ? plugins.find((p) => p.name === activeId.replace(TOOL_ID_PREFIX, ''))
@@ -226,15 +80,15 @@ function EditorMain() {
     [activeId, plugins],
   );
 
-  const activeBlock = React.useMemo(
+  const activeBlock = useMemo(
     () =>
       activeId && !activeId.startsWith(TOOL_ID_PREFIX)
-        ? content.find((block) => block.id === activeId)
+        ? findBlockInTree(content, activeId)
         : null,
     [activeId, content],
   );
 
-  const activeBlockPlugin = React.useMemo(
+  const activeBlockPlugin = useMemo(
     () =>
       activeBlock
         ? plugins.find((p) => p.blockType === activeBlock.type)
@@ -245,7 +99,7 @@ function EditorMain() {
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCenter}
+      collisionDetection={closestCorners}
       measuring={measuring}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
@@ -256,14 +110,19 @@ function EditorMain() {
         <EditorTools />
         <ResizablePanelGroup orientation="horizontal" className="flex-1">
           <ResizablePanel defaultSize={70} minSize={30}>
-            <EditorPreview />
+            <EditorPreview isDraggingFromToolbar={isDraggingFromToolbar} />
           </ResizablePanel>
-          <ResizableHandle withHandle />
-          <ResizablePanel defaultSize={30} minSize={'326px'}>
-            <EditorContextualPanel />
-          </ResizablePanel>
+          {settings.previewMode === false && (
+            <>
+              <ResizableHandle withHandle />
+              <ResizablePanel defaultSize={30} minSize={'326px'}>
+                <EditorContextualPanel />
+              </ResizablePanel>
+            </>
+          )}
         </ResizablePanelGroup>
       </main>
+
       <DragOverlay
         dropAnimation={{
           duration: 200,
@@ -278,7 +137,12 @@ function EditorMain() {
             </span>
           </div>
         ) : activeBlock && activeBlockPlugin ? (
-          <div className="bg-white shadow-xl rounded-lg border-2 border-primary overflow-hidden">
+          <div
+            className={cn(
+              '@container bg-white',
+              settings.previewMode === 'mobile' ? 'w-[322px]' : 'w-[882px]',
+            )}
+          >
             {activeBlockPlugin.renderingBlock(
               { ...activeBlock, context },
               settings,

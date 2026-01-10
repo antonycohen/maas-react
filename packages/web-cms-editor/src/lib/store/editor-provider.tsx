@@ -1,6 +1,12 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import { CMSBlock } from '@maas/core-api-models';
+import {
+  findBlockInTree,
+  updateBlockInTree,
+  deleteBlockFromTree,
+  addBlockToParent as addBlockToParentUtil,
+} from '@maas/core-utils';
 
 import { EditorPlugin, EditorSettings } from '../types';
 import { generateBlockId } from '../utils/create-block';
@@ -28,7 +34,8 @@ export function EditorProvider(props: EditorProviderProps) {
     lastSavedVersionRef.current = field?.data ?? [];
   }
 
-  const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
+  const [selectedBlockId, setSelectedBlockIdState] = useState<string | null>(null);
+  const [parentBlockId, setParentBlockId] = useState<string | null>(null);
   const [selectedPlugin, setSelectedPlugin] = useState<EditorPlugin<
     any,
     any,
@@ -36,6 +43,15 @@ export function EditorProvider(props: EditorProviderProps) {
   > | null>(null);
   const [settings, setSettings] = useState<EditorSettings>(
     defaultEditorSettings
+  );
+
+  // Wrapper to set both selectedBlockId and parentBlockId
+  const setSelectedBlockId = useCallback(
+    (id: string | null, parentId?: string | null) => {
+      setSelectedBlockIdState(id);
+      setParentBlockId(parentId ?? null);
+    },
+    []
   );
 
   // Sync ref when editor becomes hidden
@@ -57,7 +73,8 @@ export function EditorProvider(props: EditorProviderProps) {
 
   const deleteBlockById = useCallback(
     (id: string) => {
-      setContent(content.filter((block) => block.id !== id));
+      // Use recursive delete to handle nested blocks
+      setContent(deleteBlockFromTree(content, id));
     },
     [content, setContent]
   );
@@ -65,6 +82,14 @@ export function EditorProvider(props: EditorProviderProps) {
   const addBlock = useCallback(
     (block: CMSBlock) => {
       setContent([...content, { ...block, id: generateBlockId() }]);
+    },
+    [content, setContent]
+  );
+
+  const addBlockToParent = useCallback(
+    (block: CMSBlock, parentId: string, index?: number) => {
+      const newBlock = { ...block, id: generateBlockId() };
+      setContent(addBlockToParentUtil(content, parentId, newBlock, index));
     },
     [content, setContent]
   );
@@ -83,24 +108,36 @@ export function EditorProvider(props: EditorProviderProps) {
     [plugins],
   );
 
+  // Get plugins available for a given context (nested blocks exclude containers)
+  const getPluginsForContext = useCallback(
+    (isNested: boolean): EditorPlugin<any, any, any>[] => {
+      if (isNested) {
+        // Exclude plugins that cannot be nested (e.g., containers like frame)
+        return (
+          plugins?.filter((plugin) => plugin.dragDrop?.canBeNested !== false) ||
+          []
+        );
+      }
+      return plugins || [];
+    },
+    [plugins],
+  );
+
   const selectedBlockContent = useMemo(() => {
     if (!selectedBlockId) return null;
-    const selectedBlock = content.find((block) => block.id === selectedBlockId);
+    // Use recursive search to find blocks at any nesting level
+    const selectedBlock = findBlockInTree(content, selectedBlockId);
     if (!selectedBlock) return null;
 
-    return selectedBlock;
+    return selectedBlock as CMSBlock;
   }, [content, selectedBlockId]);
 
   const setSelectedBlockContent = useCallback(
     (newContent: CMSBlock) => {
+      if (!selectedBlockContent) return;
+      // Use recursive update to handle nested blocks
       setContent(
-        content.map((block) => {
-          if (selectedBlockContent && block.id === selectedBlockContent.id) {
-            return newContent;
-          }
-
-          return block;
-        }),
+        updateBlockInTree(content, selectedBlockContent.id, () => newContent)
       );
     },
     [content, selectedBlockContent, setContent],
@@ -112,14 +149,17 @@ export function EditorProvider(props: EditorProviderProps) {
       selectedPlugin,
       selectedBlockId,
       selectedBlockContent,
+      parentBlockId,
       plugins,
       settings,
       setSelectedBlockId,
       deleteBlockById,
       addBlock,
+      addBlockToParent,
       setSelectedBlockContent,
       setContent,
       getPluginFromBlockType,
+      getPluginsForContext,
       setSettings,
       resetEditor,
       setSelectedPlugin,
@@ -130,13 +170,17 @@ export function EditorProvider(props: EditorProviderProps) {
     selectedPlugin,
     selectedBlockId,
     selectedBlockContent,
+    parentBlockId,
     plugins,
     settings,
+    setSelectedBlockId,
     setSelectedBlockContent,
     addBlock,
+    addBlockToParent,
     deleteBlockById,
     setContent,
     getPluginFromBlockType,
+    getPluginsForContext,
     resetEditor,
     context,
   ]);

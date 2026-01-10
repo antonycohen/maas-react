@@ -1,5 +1,6 @@
 "use client";
 
+import type { JSX } from "react";
 import {
   DecoratorNode,
   DOMConversionMap,
@@ -10,7 +11,7 @@ import {
   SerializedLexicalNode,
   Spread,
 } from "lexical";
-import * as katex from "katex";
+import katex from "katex";
 import { EquationComponent } from "./equation-component";
 
 export type SerializedEquationNode = Spread<
@@ -38,11 +39,11 @@ export class EquationNode extends DecoratorNode<JSX.Element> {
   __equation: string;
   __inline: boolean;
 
-  static getType(): string {
+  static override getType(): string {
     return "equation";
   }
 
-  static clone(node: EquationNode): EquationNode {
+  static override clone(node: EquationNode): EquationNode {
     return new EquationNode(node.__equation, node.__inline, node.__key);
   }
 
@@ -52,11 +53,11 @@ export class EquationNode extends DecoratorNode<JSX.Element> {
     this.__inline = inline ?? false;
   }
 
-  static importJSON(serializedNode: SerializedEquationNode): EquationNode {
+  static override importJSON(serializedNode: SerializedEquationNode): EquationNode {
     return $createEquationNode(serializedNode.equation, serializedNode.inline);
   }
 
-  exportJSON(): SerializedEquationNode {
+  override exportJSON(): SerializedEquationNode {
     return {
       equation: this.__equation,
       inline: this.__inline,
@@ -65,17 +66,17 @@ export class EquationNode extends DecoratorNode<JSX.Element> {
     };
   }
 
-  createDOM(): HTMLElement {
+  override createDOM(): HTMLElement {
     const element = document.createElement(this.__inline ? "span" : "div");
     element.className = "equation-container";
     return element;
   }
 
-  updateDOM(): boolean {
+  override updateDOM(): boolean {
     return false;
   }
 
-  static importDOM(): DOMConversionMap | null {
+  static override importDOM(): DOMConversionMap | null {
     return {
       span: (domNode: HTMLElement) => {
         if (!domNode.hasAttribute("data-lexical-equation")) {
@@ -98,7 +99,7 @@ export class EquationNode extends DecoratorNode<JSX.Element> {
     };
   }
 
-  exportDOM(): DOMExportOutput {
+  override exportDOM(): DOMExportOutput {
     const element = document.createElement(this.__inline ? "span" : "div");
     element.setAttribute("data-lexical-equation", this.__equation);
     element.setAttribute("data-lexical-inline", String(this.__inline));
@@ -131,7 +132,7 @@ export class EquationNode extends DecoratorNode<JSX.Element> {
     return this.__inline;
   }
 
-  decorate(): JSX.Element {
+  override decorate(): JSX.Element {
     return (
       <EquationComponent
         equation={this.__equation}
