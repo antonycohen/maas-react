@@ -91,7 +91,7 @@ export const WorkspaceRoutes = () => {
           <Route path="users/*" element={<UsersRoutes />} />
           <Route path="teams/*" element={<TeamsRoutes />} />
           <Route path="settings/*" element={<SettingsRoutes />} />
-          <Route path="*" element={<Navigate to={'issues'} />} />
+          <Route path="*" element={<Navigate to={`${baseWorkspaceUrl}/issues`} />} />
         </Route>
       </Routes>
     </WorkspaceProvider>
