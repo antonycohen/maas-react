@@ -1,8 +1,7 @@
-import { CMSIAudioBlock, CMSIFrameBlock } from '@maas/core-api-models';
-
+import { CMSIFrameBlock } from '@maas/core-api-models';
 
 type IFrameBlockProps = {
-  block: CMSIFrameBlock | CMSIAudioBlock;
+  block: CMSIFrameBlock;
   editMode?: boolean;
 };
 
@@ -23,7 +22,7 @@ export function IFrameBlock(props: IFrameBlockProps) {
       className="h-full w-full rounded-lg bg-neutral-100"
       style={{
         height: `${getValidHeight()}px`,
-        width: width ? `${width}px` : "100%",
+        width: width ? `${width}px` : '100%',
       }}
     >
       {url && (

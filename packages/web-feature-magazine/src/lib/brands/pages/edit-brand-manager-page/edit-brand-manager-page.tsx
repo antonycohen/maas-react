@@ -42,8 +42,9 @@ export function EditBrandManagerPage() {
     ControlledTextInput,
     ControlledImageInput,
     ControlledTextAreaInput,
-    ControlledAssociativeTokenInput,
     ControlledCheckbox,
+    ControlledRatioInput,
+    ControlledColorPickerInput,
   } = createConnectedInputHelpers<Brand>();
 
   const pageTitle = isCreateMode ? 'New Brand' : (brand?.name ?? '');
@@ -113,14 +114,16 @@ export function EditBrandManagerPage() {
                 </CardHeader>
                 <CardContent>
                   <FieldGroup>
-                    <ControlledAssociativeTokenInput
-                      name="issueConfiguration.defaultFolders"
-                      label="Default Folders"
-                      keyLabel="Slug"
-                      keyPlaceholder="e.g., cover-stories"
-                      valueLabel="Name"
-                      valuePlaceholder="e.g., Cover Stories"
+                    <ControlledRatioInput
+                      name="issueConfiguration.coverRatio"
+                      label="Cover Ratio"
+                      placeholder="e.g., 16:9, 1:1.414"
                     />
+                    <ControlledColorPickerInput
+                      name="issueConfiguration.color"
+                      label="Brand Color"
+                    />
+
                   </FieldGroup>
                 </CardContent>
               </Card>

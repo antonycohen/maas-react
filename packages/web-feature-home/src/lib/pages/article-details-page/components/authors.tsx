@@ -1,11 +1,11 @@
 import { ArticleAuthor } from '@maas/web-components';
+import { Article } from '@maas/core-api-models';
+import { getImageUrl } from '@maas/core-utils';
 
-type AuthorProps = {
-  image: string;
-  name:string;
-  description?:string;
-}
+type AuthorProps = Article['author']
 export const Authors = ({ authors }: { authors: AuthorProps[] }) => {
+
+  const filteredAuthors = authors.filter(author => author !== null && author !== undefined);
   return (
     <div className="flex flex-col gap-5">
       <h2
@@ -16,12 +16,12 @@ export const Authors = ({ authors }: { authors: AuthorProps[] }) => {
         Un article de
       </h2>
       <div className={'flex flex-col gap-3'}>
-        {authors.map((author, index) => (
+        {filteredAuthors.map((author, index) => (
           <ArticleAuthor
             key={index}
-            imageSrc={author.image}
-            name={author.name}
-            description={author.description}
+            imageSrc={getImageUrl(author.profileImage, 48, 48, 'cropped', '')}
+            name={`${author.firstName} ${author.lastName}`}
+            description={author.bio ?? ''}
           />
         ))}
       </div>

@@ -1,15 +1,15 @@
 import { User } from './models';
 
 export const userShape: User = {
-  id: '',
+  id: null,
   email: null,
-  phoneNumber: null,
   firstName: null,
   lastName: null,
-  roles: null,
+  status: null,
+  profileImage: null,
+  socialIdentifiers: null,
   createdAt: null,
   updatedAt: null,
-  coverImage: null,
-  profileImage: null,
-  locale: null,
+  localizationPreferences: null,
+  notificationsPreferences: null,
 };

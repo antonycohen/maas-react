@@ -19,6 +19,7 @@ export interface GetArticlesFilter {
   visibility?: string;
   isPublished?: boolean;
   folderId?: string;
+  id?: string[] | string;
 }
 
 export class ArticlesEndpoint {
@@ -35,6 +36,7 @@ export class ArticlesEndpoint {
     return this.client.getCollection<Article>(BASE_PATH, fields, {
       offset,
       limit,
+      ...(filters?.id && { id: filters.id }),
       ...(filters?.organizationId && { organization_id: filters.organizationId }),
       ...(filters?.authorId && { author_id: filters.authorId }),
       ...(filters?.typeId && { type_id: filters.typeId }),

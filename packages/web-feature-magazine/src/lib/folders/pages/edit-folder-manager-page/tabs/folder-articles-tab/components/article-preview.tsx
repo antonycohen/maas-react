@@ -45,7 +45,7 @@ export function ArticlePreview({ article, isLoading }: ArticlePreviewProps) {
         {article.featuredImage && (
           <div className="aspect-video rounded-lg overflow-hidden bg-muted">
             <img
-              src={article.featuredImage.url}
+              src={article.featuredImage.url ?? undefined}
               alt={article.title ?? ''}
               className="w-full h-full object-cover"
             />
@@ -60,9 +60,6 @@ export function ArticlePreview({ article, isLoading }: ArticlePreviewProps) {
             )}
             {article.isPublished === false && (
               <span className="text-orange-600">Draft</span>
-            )}
-            {article.isFeatured && (
-              <span className="text-blue-600">Featured</span>
             )}
           </div>
           {article.description && (

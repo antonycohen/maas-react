@@ -6,6 +6,3 @@ export * from './blocks';
 
 // Union types and schemas
 export * from './unions';
-
-// Mocks
-export * from './mocks';

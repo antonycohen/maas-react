@@ -1,16 +1,19 @@
-import { CMSCardTextWithImageBlock } from '@maas/core-api-models';
+import {
+  CMSCardTextBlock,
+  CMSCardTextWithImageBlock,
+} from '@maas/core-api-models';
 import { getImgSrc } from '@maas/core-utils';
 
 export type CardBlockProps = {
-  blockData?: CMSCardTextWithImageBlock['data'];
+  block: CMSCardTextBlock | CMSCardTextWithImageBlock;
 };
 
 export const CardBlock = (props: CardBlockProps) => {
-  const { blockData } = props;
+  const { block } = props;
 
-  const imgUrl = getImgSrc(blockData?.image);
-  const title = blockData?.title;
-  const description = blockData?.text;
+  const imgUrl = getImgSrc(block.data?.image);
+  const title = block.data?.title;
+  const description = block.data?.text;
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-neutral-200 bg-white p-6">

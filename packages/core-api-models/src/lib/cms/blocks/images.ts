@@ -29,7 +29,7 @@ export const cmsImageBlockSchema = z.object({
   data: z.object({
     type: z.enum(['single', 'carousel', 'gallery']),
     caption: z.string().nullable(),
-    image: imageSchema.optional(),
+    image: imageSchema.nullable(),
     images: z.array(z.object(readImageSchema)).nullable(),
     withBorder: z.boolean().nullable(),
     withBackground: z.boolean().nullable(),
@@ -44,7 +44,7 @@ export const upsertImageBlockSchema = z.object({
     type: z.enum(['single', 'carousel', 'gallery']),
     caption: z.string().nullable(),
     image: upsertImageSchema.nullable().optional(),
-    images: z.array(updateImageSchema).nullable(),
+    images: z.array(updateImageSchema).nullable().optional(),
     withBorder: z.boolean().nullable(),
     withBackground: z.boolean().nullable(),
     stretched: z.boolean().nullable(),

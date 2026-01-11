@@ -14,6 +14,7 @@ export type UpdateFolderParams = {
 export const updateFolder = async (
   params: UpdateFolderParams,
 ): Promise<Folder> => {
+  console.log('Updating folder:', params.folderId, params.data);
   return await maasApi.folders.patchFolder(params.folderId, params.data);
 };
 

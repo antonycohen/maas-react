@@ -7,20 +7,28 @@ import { useRenderBlocks } from '@maas/web-cms-editor';
 
 const ArticleDetailsPage = () => {
   const articleId = useParams<{ id: string }>().id;
-  const { data } = useGetArticleById({
+  const { data: article } = useGetArticleById({
     id: articleId as string,
     fields: {
       content: null,
       title: null,
       featuredImage: null,
-    }
+      author: {
+        fields: {
+          id: null,
+          firstName: null,
+          lastName: null,
+          profileImage: null,
+        },
+      },
+    },
   });
 
-  const blocks = useRenderBlocks(data?.content);
+  const blocks = useRenderBlocks(article?.content);
   return (
     <section className={'container mx-auto py-10 space-y-10 px-5'}>
       <div className={'flex flex-col gap-y-16 lg:flex-row gap-5 items-start'}>
-        <ArticleSidebar />
+        <ArticleSidebar author={article?.author} />
         <main
           className={
             'w-full lg:w-[600px] flex flex-row justify-center lg:justify-left shrink-0'
@@ -28,8 +36,8 @@ const ArticleDetailsPage = () => {
         >
           <div className='flex flex-col'>
             {blocks}
+            <ArticleContent />
           </div>
-          {/*<ArticleContent />*/}
         </main>
       </div>
       <div className="container mx-auto flex flex-col gap-5 pb-10 pt-5">

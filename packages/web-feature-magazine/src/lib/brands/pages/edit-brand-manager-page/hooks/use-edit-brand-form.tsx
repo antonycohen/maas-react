@@ -19,7 +19,7 @@ export const useEditBrandForm = (brandId: string) => {
         description: null,
         logo: null,
         isActive: null,
-        issueConfiguration: { fields: { defaultFolders: null } },
+        issueConfiguration: { fields: { defaultFolders: null, coverRatio: null, color: null } },
       },
     },
     {
@@ -28,15 +28,15 @@ export const useEditBrandForm = (brandId: string) => {
   );
 
   const form = useForm<CreateBrand | UpdateBrand>({
-    resolver: zodResolver(
-      isCreateMode ? createBrandSchema : updateBrandSchema,
-    ),
+    resolver: zodResolver(isCreateMode ? createBrandSchema : updateBrandSchema),
     defaultValues: {
       name: '',
       description: '',
       isActive: null,
       issueConfiguration: {
-        defaultFolders: null,
+        defaultFolders: brand?.issueConfiguration?.defaultFolders ?? null,
+        coverRatio: brand?.issueConfiguration?.coverRatio ?? '',
+        color: brand?.issueConfiguration?.color ?? '',
       },
     },
     values:
@@ -46,8 +46,10 @@ export const useEditBrandForm = (brandId: string) => {
             description: brand.description,
             logo: brand.logo,
             isActive: brand.isActive ?? undefined,
-            issueConfiguration: brand.issueConfiguration ?? {
-              defaultFolders: null,
+            issueConfiguration: {
+              defaultFolders: brand?.issueConfiguration?.defaultFolders ?? null,
+              coverRatio: brand?.issueConfiguration?.coverRatio ?? '',
+              color: brand?.issueConfiguration?.color ?? '',
             },
           }
         : undefined,

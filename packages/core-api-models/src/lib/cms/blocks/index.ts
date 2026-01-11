@@ -2,11 +2,15 @@
 export * from './paragraph';
 export * from './heading';
 export * from './highlight';
+export * from './html';
+export * from './list';
 
 // Image Blocks
 export * from './images';
 export * from './image-and-text';
 export * from './mosaic-gallery';
+export * from './carousel';
+export * from './gallery';
 
 // Card Blocks
 export * from './card-text';

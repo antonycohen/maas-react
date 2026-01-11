@@ -214,6 +214,7 @@ export function EditArticleManagerPage() {
             )}
           </div>
         </div>
+        
         <div className="flex items-center gap-2">
           {!isCreateMode && (
             <Button
@@ -346,7 +347,11 @@ export function EditArticleManagerPage() {
                     name="featuredImage"
                     label="Featured Image"
                   />
-                  <ControlledImageInput name="cover" label="Cover Image" />
+                  <ControlledImageInput
+                    name="cover"
+                    label="Cover Image"
+                    ratio={1 / 1.414}
+                  />
                 </FieldGroup>
               </SidebarSection>
 

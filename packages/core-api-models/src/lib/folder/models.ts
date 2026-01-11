@@ -1,14 +1,9 @@
 import * as z from 'zod';
 import { readImageSchema, updateImageSchema } from '../image';
-import { articleSchema } from '../article';
+import { articleRefSchema, articleSchema } from '../article';
 import { organizationRefSchema } from '../organizations';
 
 export const readFolderRefSchema = z.object({
-  id: z.string(),
-  name: z.string().nullable(),
-});
-
-export const folderRefSchema = z.object({
   id: z.string(),
   name: z.string().nullable(),
 });
@@ -38,7 +33,12 @@ export const createFolderSchema = z.object({
   name: z.string().min(1).max(255),
   description: z.string().max(2000).nullable().optional(),
   cover: updateImageSchema.nullable().optional(),
+  isPublished: z.boolean().optional(),
   metadata: z.record(z.string(), z.unknown()).nullable().optional(),
+  articles: z
+    .array(z.lazy(() => articleRefSchema))
+    .nullable()
+    .optional(),
 });
 
 export type CreateFolder = z.infer<typeof createFolderSchema>;
@@ -50,6 +50,10 @@ export const updateFolderSchema = z.object({
   cover: updateImageSchema.nullable().optional(),
   isPublished: z.boolean().optional(),
   metadata: z.record(z.string(), z.unknown()).nullable().optional(),
+  articles: z
+    .array(z.lazy(() => articleRefSchema))
+    .nullable()
+    .optional(),
 });
 
 export type UpdateFolder = z.infer<typeof updateFolderSchema>;

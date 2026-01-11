@@ -7,11 +7,15 @@ import {
 import { UseFormReturn } from 'react-hook-form';
 import { CreateFolder, UpdateFolder } from '@maas/core-api-models';
 import { useNavigate } from 'react-router-dom';
-import { useCurrentWorkspaceUrlPrefix, useGetCurrentWorkspaceId } from '@maas/core-workspace';
+import {
+  useCurrentWorkspaceUrlPrefix,
+  useGetCurrentWorkspaceId,
+} from '@maas/core-workspace';
 import { toast } from 'sonner';
+import { FolderFormValues } from './use-edit-folder-form';
 
 export const useEditFolderActions = (
-  form: UseFormReturn<CreateFolder | UpdateFolder>,
+  form: UseFormReturn<FolderFormValues>,
   isCreateMode: boolean,
   folderId: string,
 ) => {
@@ -52,17 +56,25 @@ export const useEditFolderActions = (
     },
   });
 
-  function onSubmit(data: CreateFolder | UpdateFolder) {
+  function onSubmit(data: FolderFormValues) {
+    console.log(data);
+    const articlesRefs = data.articles?.map((a) => ({ id: a.id })) ?? null;
+
     if (isCreateMode) {
-      const createData = data as CreateFolder;
+      const { articles, ...createData } = data;
       createMutation.mutate({
-        ...createData,
         organization: { id: workspaceId as string },
-      });
+        articles: articlesRefs,
+        ...createData,
+      } as CreateFolder);
     } else {
+      const { articles, ...updateData } = data;
       updateMutation.mutate({
         folderId,
-        data: data as UpdateFolder,
+        data: {
+          ...updateData,
+          articles: articlesRefs,
+        }
       });
     }
   }

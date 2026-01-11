@@ -15,6 +15,7 @@ export const readUserRefSchema = z.object({
   id: z.uuid(),
   firstName: z.string().nullable(),
   lastName: z.string().nullable(),
+  bio: z.string().nullable(),
   email: z.string().optional(),
   profileImage: z.object(readImageSchema).optional().nullable(),
 });

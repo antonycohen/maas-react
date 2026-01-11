@@ -1,20 +1,14 @@
 import { Authors } from './authors';
 import { Separator, ShareArticles } from '@maas/web-components';
 import { Thematiques } from './thematiques';
+import { Article } from '@maas/core-api-models';
 
-export const ArticleSidebar = () => {
-  const authors = [
-    {
-      name: 'Bertrand Russell',
-      description: 'Mathématicien et philosophe',
-      image: 'https://eu.ui-avatars.com/api/?name=Bertrand+Russell&size=250',
-    },
-    {
-      name: 'Sophie Portman',
-      description: 'Chief product officer',
-      image: 'https://eu.ui-avatars.com/api/?name=Sophie+Portman&size=250',
-    },
-  ];
+interface ArticleSidebarProps {
+  author?: Article['author'];
+}
+
+export const ArticleSidebar = ({ author }: ArticleSidebarProps) => {
+  const authors = author ? [author] : [];
 
   const fakeTags = [
     'Théorème',

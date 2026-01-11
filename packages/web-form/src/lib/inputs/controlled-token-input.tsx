@@ -400,7 +400,6 @@ export function ControlledTokenInput<TForm extends FieldValues, TValue = string>
         'flex flex-wrap gap-1 items-center p-3 border rounded-md min-h-[44px] bg-background cursor-text',
         'focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2',
         fieldState.invalid && 'border-destructive',
-        direction === 'horizontal' ? 'basis-1/2' : '',
       )}
       onClick={handleContainerClick}
     >
@@ -540,8 +539,17 @@ export function ControlledTokenInput<TForm extends FieldValues, TValue = string>
           {label}
         </FieldLabel>
       )}
-      {fieldContent}
-      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+      {direction === 'horizontal' ? (
+        <div className="flex flex-col basis-1/2">
+          {fieldContent}
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </div>
+      ) : (
+        <>
+          {fieldContent}
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </>
+      )}
     </Field>
   );
 }

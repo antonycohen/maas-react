@@ -7,7 +7,7 @@ import {
 } from '@maas/web-collection';
 import { cn } from '@maas/core-utils';
 import { Link } from 'react-router-dom';
-import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { IconEdit, IconFolder, IconTrash } from '@tabler/icons-react';
 import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
 
 export function useFoldersListColumns(): ColumnDef<Folder>[] {
@@ -50,16 +50,30 @@ export function useFoldersListColumns(): ColumnDef<Folder>[] {
         <CollectionColumnHeader column={column} title="Name" />
       ),
       cell: ({ row }) => {
+        const cover = row.original.cover;
         return (
           <Link
             to={`${currentWorkspaceBaseUrl}/folders/${row.original.id}/info`}
-            className="underline"
+            className="flex items-center gap-3"
           >
-            <LongText className="max-w-48">{row.getValue('name')}</LongText>
+            <div className="h-10 w-10 shrink-0 overflow-hidden rounded-md bg-muted">
+              {cover?.url ? (
+                <img
+                  src={cover.url}
+                  alt=""
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                  <IconFolder className="h-5 w-5" />
+                </div>
+              )}
+            </div>
+            <LongText className="max-w-48 underline">{row.getValue('name')}</LongText>
           </Link>
         );
       },
-      meta: { className: 'w-48' },
+      meta: { className: 'w-64' },
     },
     {
       accessorKey: 'description',

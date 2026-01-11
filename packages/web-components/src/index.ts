@@ -60,6 +60,7 @@ export * from './lib/maas/feed-content-item';
 export * from './lib/maas/pagination';
 export * from './lib/maas/folder-card';
 export * from './lib/maas/image-picker';
+export * from './lib/maas/image-crop-dialog';
 export * from './lib/maas/video-picker';
 export * from './lib/maas/title-and-description-hero';
 export * from './lib/maas/language-input';
@@ -72,3 +73,4 @@ export * from './lib/maas/tab-nav-links';
 export * from './lib/maas/article-author'
 export * from './lib/maas/share-articles'
 
+export * from './lib/shadcn-io/color-picker';

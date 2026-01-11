@@ -25,7 +25,9 @@ import {
 
 import { CMSHeadingBlock, cmsHeadingBlockSchema } from './blocks/heading';
 import { CMSHighlightBlock, cmsHighlightBlockSchema } from './blocks/highlight';
+import { CMSHtmlBlock, cmsHtmlBlockSchema } from './blocks/html';
 import { CMSIFrameBlock, cmsIFrameBlockSchema } from './blocks/iframe';
+import { CMSListBlock, cmsListBlockSchema } from './blocks/list';
 import {
   CMSImageAndTextBlock,
   cmsImageAndTextBlockSchema,
@@ -60,9 +62,11 @@ export type CMSBlockWithoutFrame =
   | CMSEventBlock
   | CMSHeadingBlock
   | CMSHighlightBlock
+  | CMSHtmlBlock
   | CMSIFrameBlock
   | CMSImageAndTextBlock
   | CMSImageBlock
+  | CMSListBlock
   | CMSMosaicGalleryBlock
   | CMSParagraphBlock
   | CMSPodcastCarouselBlock
@@ -80,9 +84,11 @@ export const cmsBlockWithoutFrameSchema = z.discriminatedUnion('type', [
   cmsEventBlockSchema,
   cmsHeadingBlockSchema,
   cmsHighlightBlockSchema,
+  cmsHtmlBlockSchema,
   cmsIFrameBlockSchema,
   cmsImageAndTextBlockSchema,
   cmsImageBlockSchema,
+  cmsListBlockSchema,
   cmsMosaicGalleryBlockSchema,
   cmsParagraphBlockSchema,
   cmsPodcastCarouselBlockSchema,
@@ -92,6 +98,31 @@ export const cmsBlockWithoutFrameSchema = z.discriminatedUnion('type', [
 // Frame block schema with children limited to non-frame blocks (1 level nesting)
 export const cmsFrameBlockSchema = createCmsFrameBlockSchema(
   cmsBlockWithoutFrameSchema
+);
+
+// Schema for blocks that can be nested inside a frame (upsert version - excludes frame itself)
+export const upsertCmsBlockWithoutFrameSchema = z.discriminatedUnion('type', [
+  cmsCardTextBlockSchema,
+  upsertCardTextWithImageBlockSchema,
+  cmsCardsQuotesBlockSchema,
+  upsertCardsTextWithImageBlockSchema,
+  upsertEventBlockSchema,
+  cmsHeadingBlockSchema,
+  cmsHighlightBlockSchema,
+  cmsHtmlBlockSchema,
+  cmsIFrameBlockSchema,
+  cmsListBlockSchema,
+  upsertImageAndTextBlockSchema,
+  upsertImageBlockSchema,
+  upsertMosaicGalleryBlockSchema,
+  cmsParagraphBlockSchema,
+  cmsPodcastCarouselBlockSchema,
+  cmsVideoBlockSchema,
+]);
+
+// Frame block schema for upsert (children use upsert schemas)
+export const upsertCmsFrameBlockSchema = createCmsFrameBlockSchema(
+  upsertCmsBlockWithoutFrameSchema
 );
 
 // Union schema for all CMS blocks (read) - includes frame
@@ -104,9 +135,11 @@ export const cmsBlockSchema = z.discriminatedUnion('type', [
   cmsFrameBlockSchema,
   cmsHeadingBlockSchema,
   cmsHighlightBlockSchema,
+  cmsHtmlBlockSchema,
   cmsIFrameBlockSchema,
   cmsImageAndTextBlockSchema,
   cmsImageBlockSchema,
+  cmsListBlockSchema,
   cmsMosaicGalleryBlockSchema,
   cmsParagraphBlockSchema,
   cmsPodcastCarouselBlockSchema,
@@ -120,10 +153,12 @@ export const upsertCmsBlockSchema = z.discriminatedUnion('type', [
   cmsCardsQuotesBlockSchema,
   upsertCardsTextWithImageBlockSchema,
   upsertEventBlockSchema,
-  cmsFrameBlockSchema,
+  upsertCmsFrameBlockSchema,
   cmsHeadingBlockSchema,
   cmsHighlightBlockSchema,
+  cmsHtmlBlockSchema,
   cmsIFrameBlockSchema,
+  cmsListBlockSchema,
   upsertImageAndTextBlockSchema,
   upsertImageBlockSchema,
   upsertMosaicGalleryBlockSchema,

@@ -45,34 +45,47 @@ export function ControlledSelectInput<T extends FieldValues>(
   });
   const id = useId();
 
+  const inputElement = (
+    <Select
+      value={field.value}
+      onValueChange={field.onChange}
+      disabled={disabled}
+    >
+      <SelectTrigger
+        id={id}
+        aria-invalid={fieldState.invalid}
+        onBlur={field.onBlur}
+      >
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((option) => (
+          <SelectItem key={option.value} value={option.value}>
+            {option.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+
   return (
     <Field data-invalid={fieldState.invalid} orientation={direction} className={className}>
       <FieldLabel htmlFor={id} className={direction === 'horizontal' ? 'font-semibold basis-1/2' : ''}>
         {label}
       </FieldLabel>
-      <Select
-        value={field.value}
-        onValueChange={field.onChange}
-        disabled={disabled}
-      >
-        <SelectTrigger
-          className={direction === 'horizontal' ? 'basis-1/2' : ''}
-          id={id}
-          aria-invalid={fieldState.invalid}
-          onBlur={field.onBlur}
-        >
-          <SelectValue placeholder={placeholder} />
-        </SelectTrigger>
-        <SelectContent>
-          {options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      {description && <FieldDescription>{description}</FieldDescription>}
-      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+      {direction === 'horizontal' ? (
+        <div className="flex flex-col basis-1/2">
+          {inputElement}
+          {description && <FieldDescription>{description}</FieldDescription>}
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </div>
+      ) : (
+        <>
+          {inputElement}
+          {description && <FieldDescription>{description}</FieldDescription>}
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </>
+      )}
     </Field>
   );
 }

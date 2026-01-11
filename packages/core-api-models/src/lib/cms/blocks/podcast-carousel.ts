@@ -4,8 +4,8 @@ import { CMSBlockCommon, cmsBlockCommonSchema } from '../common';
 
 export type CMSPodcastIframeElement = {
   url: string;
-  width?: number;
-  height?: number;
+  width?: number | null;
+  height?: number | null;
 };
 
 export interface CMSPodcastCarouselBlock extends CMSBlockCommon {

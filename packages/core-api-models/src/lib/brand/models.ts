@@ -13,6 +13,14 @@ export const brandRefSchema = z.object({
 export type ReadBrandRef = z.infer<typeof readBrandRefSchema>;
 
 // Full brand schema for read operations
+const coverRatioSchema = z
+  .string()
+  .regex(/^\d+(\.\d+)?:\d+(\.\d+)?$/, 'Must be in x:y format (e.g., "16:9", "1:1.414")');
+
+const hexColorSchema = z
+  .string()
+  .regex(/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/, 'Must be a valid hex color (e.g., "#FF0000", "#F00")');
+
 export const brandSchema = z.object({
   id: z.string(),
   name: z.string().max(255),
@@ -20,9 +28,13 @@ export const brandSchema = z.object({
   logo: z.object(readImageSchema).nullable(),
   isActive: z.boolean().nullable(),
   issueCount: z.number().nullable(),
-  issueConfiguration: z.object({
-    defaultFolders: z.record(z.string(), z.string()).nullable(),
-  }).nullable(),
+  issueConfiguration: z
+    .object({
+      defaultFolders: z.record(z.string(), z.string()).nullable(),
+      coverRatio: coverRatioSchema.nullable(),
+      color: hexColorSchema.nullable(),
+    })
+    .nullable(),
 });
 
 export type Brand = z.infer<typeof brandSchema>;
@@ -35,6 +47,8 @@ export const createBrandSchema = z.object({
   isActive: z.boolean().nullable(),
   issueConfiguration: z.object({
     defaultFolders: z.record(z.string(), z.string()).nullable(),
+    coverRatio: coverRatioSchema.nullable(),
+    color: hexColorSchema.nullable(),
   }),
 });
 
@@ -48,6 +62,8 @@ export const updateBrandSchema = z.object({
   isActive: z.boolean().optional(),
   issueConfiguration: z.object({
     defaultFolders: z.record(z.string(), z.string()).nullable(),
+    coverRatio: coverRatioSchema.nullable(),
+    color: hexColorSchema.nullable(),
   }),
 });
 

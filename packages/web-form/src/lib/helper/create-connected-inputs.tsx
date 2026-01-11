@@ -23,6 +23,8 @@ import { ControlledTextInput } from '../inputs/controlled-text-input';
 import { ControlledTextareaInput } from '../inputs/controlled-textarea-input';
 import { ControlledTokenInput } from '../inputs/controlled-token-input';
 import { ControlledVideoInput } from '../inputs/controlled-video-input';
+import { ControlledRatioInput } from '../inputs/controlled-ratio-input';
+import { ControlledColorPickerInput } from '../inputs/controlled-color-picker-input';
 
 export function createConnectedInputHelpers<
   T extends FieldValues,
@@ -52,5 +54,7 @@ export function createConnectedInputHelpers<
     ControlledTextInput: ControlledTextInput<T>,
     ControlledTokenInput: ControlledTokenInput<T>,
     ControlledVideoInput: ControlledVideoInput<T>,
+    ControlledRatioInput: ControlledRatioInput<T>,
+    ControlledColorPickerInput: ControlledColorPickerInput<T>,
   };
 }

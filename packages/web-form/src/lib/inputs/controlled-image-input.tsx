@@ -9,6 +9,7 @@ type ControlledImageInputProps<T extends FieldValues> = {
   description?: string;
   disabled?: boolean;
   accept?: string;
+  ratio?: number;
   direction?: 'horizontal' | 'vertical';
   className?: string;
 };
@@ -16,7 +17,16 @@ type ControlledImageInputProps<T extends FieldValues> = {
 export function ControlledImageInput<T extends FieldValues>(
   props: ControlledImageInputProps<T>,
 ) {
-  const { name, label, description, disabled, accept, direction = 'vertical', className } = props;
+  const {
+    name,
+    label,
+    description,
+    disabled,
+    accept,
+    direction = 'vertical',
+    className,
+    ratio,
+  } = props;
   const form = useFormContext();
   const { control } = form;
   const { field, fieldState } = useController({
@@ -25,22 +35,43 @@ export function ControlledImageInput<T extends FieldValues>(
   });
   const id = useId();
 
+  const inputElement = (
+    <ImagePicker
+      id={id}
+      value={field.value}
+      onChange={field.onChange}
+      disabled={disabled}
+      accept={accept}
+      ratio={ratio}
+      aria-invalid={fieldState.invalid}
+    />
+  );
+
   return (
-    <Field data-invalid={fieldState.invalid} orientation={direction} className={className}>
-      <FieldLabel htmlFor={id} className={direction === 'horizontal' ? 'font-semibold basis-1/2' : ''}>
+    <Field
+      data-invalid={fieldState.invalid}
+      orientation={direction}
+      className={className}
+    >
+      <FieldLabel
+        htmlFor={id}
+        className={direction === 'horizontal' ? 'font-semibold basis-1/2' : ''}
+      >
         {label}
       </FieldLabel>
-      <ImagePicker
-        id={id}
-        value={field.value}
-        onChange={field.onChange}
-        disabled={disabled}
-        accept={accept}
-        aria-invalid={fieldState.invalid}
-        className={direction === 'horizontal' ? 'basis-1/2' : ''}
-      />
-      {description && <FieldDescription>{description}</FieldDescription>}
-      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+      {direction === 'horizontal' ? (
+        <div className="flex flex-col basis-1/2">
+          {inputElement}
+          {description && <FieldDescription>{description}</FieldDescription>}
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </div>
+      ) : (
+        <>
+          {inputElement}
+          {description && <FieldDescription>{description}</FieldDescription>}
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </>
+      )}
     </Field>
   );
 }

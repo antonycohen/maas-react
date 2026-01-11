@@ -22,7 +22,9 @@
       "mcp__figma-desktop__get_metadata",
       "WebSearch",
       "Bash(pnpm add:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npx nx lint:*)"
     ],
     "deny": []
   }

@@ -51,6 +51,7 @@ export function BrandsListManagerPage() {
             isActive: null,
             issueCount: null,
             logo: null,
+            issueConfiguration: null,
           }}
         />
       </LayoutContent>

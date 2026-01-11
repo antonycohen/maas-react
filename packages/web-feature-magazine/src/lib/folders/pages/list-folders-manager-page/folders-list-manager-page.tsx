@@ -48,7 +48,6 @@ export function FoldersListManagerPage() {
             id: null,
             name: null,
             description: null,
-            issue: null,
             isPublished: null,
             articleCount: null,
             cover: null,

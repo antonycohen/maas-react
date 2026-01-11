@@ -52,7 +52,7 @@ function renderBlock(block: CMSBlock): React.ReactNode {
 
     case 'card-text':
     case 'card-text-with-image':
-      return <CardBlock key={block.id} blockData={block.data} />;
+      return <CardBlock key={block.id} block={block} />;
 
     case 'cards-text-with-image':
       return <CardsBlock key={block.id} block={block} />;
@@ -71,7 +71,7 @@ function renderBlock(block: CMSBlock): React.ReactNode {
 
 export { renderBlock };
 
-export const useRenderBlocks = (cmsBlocks: CMSBlock[]) => {
+export const useRenderBlocks = (cmsBlocks: CMSBlock[] | null | undefined) => {
   return useMemo(
     () => (cmsBlocks ?? []).map((block) => renderBlock(block)),
     [cmsBlocks],

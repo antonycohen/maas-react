@@ -177,7 +177,6 @@ export function VideoPicker({
       return;
     }
 
-    const parsed = parseVideoUrl(inputValue);
     const newVideo: VideoType = {
       url: inputValue,
       title: value?.title || null,

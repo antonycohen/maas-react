@@ -35,22 +35,35 @@ export function ControlledDateInput<T extends FieldValues>(
   });
   const id = useId();
 
+  const inputElement = (
+    <DatePicker
+      id={id}
+      value={field.value}
+      onChange={field.onChange}
+      placeholder={placeholder}
+      disabled={disabled}
+      aria-invalid={fieldState.invalid}
+    />
+  );
+
   return (
     <Field data-invalid={fieldState.invalid} orientation={direction} className={className}>
       <FieldLabel htmlFor={id} className={direction === 'horizontal' ? 'font-semibold basis-1/2' : ''}>
         {label}
       </FieldLabel>
-      <DatePicker
-        id={id}
-        value={field.value}
-        onChange={field.onChange}
-        placeholder={placeholder}
-        disabled={disabled}
-        aria-invalid={fieldState.invalid}
-        className={direction === 'horizontal' ? 'basis-1/2' : ''}
-      />
-      {description && <FieldDescription>{description}</FieldDescription>}
-      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+      {direction === 'horizontal' ? (
+        <div className="flex flex-col basis-1/2">
+          {inputElement}
+          {description && <FieldDescription>{description}</FieldDescription>}
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </div>
+      ) : (
+        <>
+          {inputElement}
+          {description && <FieldDescription>{description}</FieldDescription>}
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </>
+      )}
     </Field>
   );
 }
