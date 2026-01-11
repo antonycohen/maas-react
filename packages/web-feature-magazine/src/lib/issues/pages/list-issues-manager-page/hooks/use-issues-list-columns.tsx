@@ -56,10 +56,10 @@ export function useIssuesListColumns(): ColumnDef<Issue>[] {
           <img
             src={imageUrl}
             alt={row.original.title}
-            className="h-10 w-10 rounded object-cover"
+            className="rounded object-cover"
           />
         ) : (
-          <div className="h-10 w-10 rounded bg-muted" />
+          <div className="rounded bg-muted" />
         );
       },
       enableSorting: false,
