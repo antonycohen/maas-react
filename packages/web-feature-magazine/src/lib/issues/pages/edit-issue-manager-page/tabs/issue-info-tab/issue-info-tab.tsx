@@ -8,12 +8,36 @@ import {
 } from '@maas/web-components';
 import { createConnectedInputHelpers } from '@maas/web-form';
 import { LayoutContent } from '@maas/web-layout';
+import { useGetBrandById } from '@maas/core-api';
 import { EditIssueOutletContext } from '../../edit-issue-manager-page';
 import { IssueFormValues } from '../../hooks';
+import { parseRatio } from '@maas/core-utils';
 
 export const IssueInfoTab = () => {
-  const { isCreateMode, isLoading } =
+  const { isCreateMode, isLoading, form } =
     useOutletContext<EditIssueOutletContext>();
+
+  const brandRef = form.watch('brand');
+
+  // Fetch brand configuration when brand is selected
+  const { data: brand } = useGetBrandById(
+    {
+      id: brandRef?.id ?? '',
+      fields: {
+        id: null,
+        issueConfiguration: {
+          fields: {
+            coverRatio: null,
+          },
+        },
+      },
+    },
+    {
+      enabled: !!brandRef?.id,
+    },
+  );
+
+  const coverRatio = parseRatio(brand?.issueConfiguration?.coverRatio);
 
   const {
     ControlledTextInput,
@@ -43,14 +67,12 @@ export const IssueInfoTab = () => {
         </CardHeader>
         <CardContent className="px-6 pt-2">
           <div className="flex flex-col divide-y">
-            {isCreateMode && (
-              <ControlledMagazineBrandInput
-                name="brand"
-                label="Brand"
-                direction="horizontal"
-                className="py-6"
-              />
-            )}
+            <ControlledMagazineBrandInput
+              name="brand"
+              label="Brand"
+              direction="horizontal"
+              className="py-6"
+            />
             <ControlledTextInput
               name="title"
               label="Title"
@@ -74,6 +96,7 @@ export const IssueInfoTab = () => {
               label="Cover"
               direction="horizontal"
               className="py-6"
+              ratio={coverRatio}
             />
             {!isCreateMode && (
               <>

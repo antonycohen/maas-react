@@ -22,17 +22,24 @@ export const useEditIssueForm = ({
   const form = useForm<IssueFormValues>({
     resolver: zodResolver(isCreateMode ? createIssueSchema : updateIssueSchema),
     defaultValues: {
+      brand: {
+        id: issue?.brand?.id ?? '',
+        name: issue?.brand?.name ?? '',
+      },
       title: '',
       description: '',
       issueNumber: '',
       cover: null,
       pdf: null,
       pageCount: 0,
-      ...(isCreateMode ? { brand: null } : { folders: [] }),
     },
     values:
       !isCreateMode && issue
         ? {
+            brand: {
+              id: issue.brand?.id ?? '',
+              name: issue?.brand?.name ?? '',
+            },
             title: issue.title,
             description: issue.description ?? '',
             issueNumber: issue.issueNumber ?? '',

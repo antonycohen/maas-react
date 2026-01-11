@@ -1,7 +1,10 @@
 import { useState } from 'react';
-import { articleTypeRefSchema, ReadArticleRef } from '@maas/core-api-models';
+import {
+  CreateArticle,
+  createArticleSchema,
+  ReadArticleRef,
+} from '@maas/core-api-models';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import {
   Button,
   Dialog,
@@ -19,26 +22,11 @@ import {
 import { IconFileText, IconPlus, IconSearch } from '@tabler/icons-react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-// Partial schema for modal form validation (organization added by hook)
-const createArticleFormSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(255),
-  description: z.string().max(5000).nullable().optional(),
-  type: articleTypeRefSchema.nullable().refine((data) => data?.id, {
-    message: 'Please select an article type',
-  }),
-  keywords: z.array(z.string().max(500)).nullable().optional(),
-});
-
-type CreateArticleFormData = z.infer<typeof createArticleFormSchema>;
-
-const { ControlledTextInput, ControlledTextAreaInput, ControlledArticleTypeInput } =
-  createConnectedInputHelpers<CreateArticleFormData>();
-
 type AddArticleModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSelectExisting: (article: ReadArticleRef) => void;
-  onCreate: (data: CreateArticleFormData) => void;
+  onCreate: (data: CreateArticle) => void;
 };
 
 type Mode = 'select' | 'search' | 'create';
@@ -53,6 +41,12 @@ export function AddArticleModal({
   onSelectExisting,
   onCreate,
 }: AddArticleModalProps) {
+  const {
+    ControlledTextInput,
+    ControlledTextAreaInput,
+    ControlledArticleTypeInput,
+  } = createConnectedInputHelpers<CreateArticle>();
+
   const [mode, setMode] = useState<Mode>('select');
 
   // Form for searching existing articles
@@ -63,8 +57,8 @@ export function AddArticleModal({
   });
 
   // Form for creating new articles
-  const createForm = useForm<CreateArticleFormData>({
-    resolver: zodResolver(createArticleFormSchema),
+  const createForm = useForm<CreateArticle>({
+    resolver: zodResolver(createArticleSchema),
     defaultValues: {
       title: '',
       description: '',
@@ -92,7 +86,7 @@ export function AddArticleModal({
     }
   };
 
-  const handleCreate = (data: CreateArticleFormData) => {
+  const handleCreate = (data: CreateArticle) => {
     onCreate(data);
     handleClose();
   };

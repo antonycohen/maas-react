@@ -1,5 +1,15 @@
 import { Image, ReadResizedImage } from '@maas/core-api-models';
 
+export const parseRatio = (
+  ratioString: string | null | undefined,
+): number | undefined => {
+  if (!ratioString) return undefined;
+  const [width, height] = ratioString.split(':').map(Number);
+  if (!width || !height || isNaN(width) || isNaN(height)) return undefined;
+  return width / height;
+};
+
+
 export function getImageUrl(
   image: Image | undefined | null,
   w: number,

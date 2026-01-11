@@ -68,6 +68,7 @@ export function EditIssueManagerPage() {
           fields: {
             id: null,
             name: null,
+            issueConfiguration: null,
           },
         },
         folders: {
