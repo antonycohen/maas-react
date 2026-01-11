@@ -28,7 +28,7 @@ function mapIssueToFeedArticle(article: Article): FeedArticleData {
           year: 'numeric',
         })
       : '',
-    link: `/issues/${article.id}`,
+    link: `/articles/${article.id}`,
   };
 }
 

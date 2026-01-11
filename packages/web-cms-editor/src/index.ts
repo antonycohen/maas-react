@@ -2,8 +2,9 @@ export * from "./lib/editor";
 export * from "./lib/editor/editor-trigger";
 export * from "./lib/types";
 export * from "./lib/constants";
-export * from "./lib/components/editor-entry-element";
 export * from "./lib/store/editor-context";
+export * from "./lib/components/cms/use-render-blocks";
+
 
 // CMS PLUGINS
 export * from "./lib/components/cms/plugins/heading-plugin";
