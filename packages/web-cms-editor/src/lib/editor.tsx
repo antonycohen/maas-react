@@ -147,7 +147,7 @@ function EditorMain() {
           >
             {activeBlockPlugin.renderingBlock(
               { ...activeBlock, context },
-              settings,
+              { ...settings, isDragging: true },
             )}
           </div>
         ) : null}

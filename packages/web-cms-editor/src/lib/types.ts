@@ -110,6 +110,7 @@ export interface EditorSettings {
   pluginInputsHovered: boolean;
   previewMode: EditorPreviewMode | false;
   visible: boolean;
+  isDragging?: boolean;
 }
 
 /**

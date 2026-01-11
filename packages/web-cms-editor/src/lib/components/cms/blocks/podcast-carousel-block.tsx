@@ -12,9 +12,10 @@ import {
 
 type PodcastCarouselBlockProps = {
   block: CMSPodcastCarouselBlock;
+  isDragging?: boolean;
 };
 
-export const PodcastCarouselBlock = ({ block }: PodcastCarouselBlockProps) => {
+export const PodcastCarouselBlock = ({ block, isDragging }: PodcastCarouselBlockProps) => {
   return (
     <Carousel className="mb-6">
       {block.data.podcasts && block.data.podcasts?.length > 1 && (
@@ -25,12 +26,12 @@ export const PodcastCarouselBlock = ({ block }: PodcastCarouselBlockProps) => {
       )}
       <CarouselContent>
         {block.data.podcasts.map((podcast, index) => (
-          <CarouselItem>
+          <CarouselItem key={index}>
             <PodcastElement
-              key={index}
               url={podcast.url}
               width={podcast.width}
               height={podcast.height}
+              isDragging={isDragging}
             />
           </CarouselItem>
         ))}
@@ -39,8 +40,12 @@ export const PodcastCarouselBlock = ({ block }: PodcastCarouselBlockProps) => {
   );
 };
 
-const PodcastElement = (props: CMSPodcastIframeElement) => {
-  const { url, width, height } = props;
+type PodcastElementProps = CMSPodcastIframeElement & {
+  isDragging?: boolean;
+};
+
+const PodcastElement = (props: PodcastElementProps) => {
+  const { url, width, height, isDragging } = props;
   const getValidHeight = () => {
     if (!height || height < 50 || height > 1400) return 152;
 
@@ -55,7 +60,7 @@ const PodcastElement = (props: CMSPodcastIframeElement) => {
         width: width ? `${width}px` : '100%',
       }}
     >
-      {url && (
+      {url && !isDragging && (
         <iframe
           src={url}
           title="project-iframe-block"

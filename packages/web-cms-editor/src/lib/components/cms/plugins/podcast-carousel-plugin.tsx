@@ -41,7 +41,7 @@ export const PodcastCarouselPlugin: EditorPlugin<
       ],
     },
   ],
-  renderingBlock: (props) => {
-    return PodcastCarouselBlock({ block: props });
+  renderingBlock: (props, editorSettings) => {
+    return PodcastCarouselBlock({ block: props, isDragging: editorSettings?.isDragging });
   },
 };
