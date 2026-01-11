@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { articleTypeRefSchema, ReadArticleRef } from '@maas/core-api-models';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import { CreateFolder, ReadFolderRef } from '@maas/core-api-models';
 import {
   Button,
   Dialog,
@@ -13,63 +11,51 @@ import {
   FieldGroup,
 } from '@maas/web-components';
 import {
-  ControlledArticleInput,
+  ControlledMagazineFolderInput,
   createConnectedInputHelpers,
 } from '@maas/web-form';
-import { IconFileText, IconPlus, IconSearch } from '@tabler/icons-react';
+import { IconFolder, IconPlus, IconSearch } from '@tabler/icons-react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-// Partial schema for modal form validation (organization added by hook)
-const createArticleFormSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(255),
-  description: z.string().max(5000).nullable().optional(),
-  type: articleTypeRefSchema.nullable().refine((data) => data?.id, {
-    message: 'Please select an article type',
-  }),
-  keywords: z.array(z.string().max(500)).nullable().optional(),
-});
-
-type CreateArticleFormData = z.infer<typeof createArticleFormSchema>;
-
-const { ControlledTextInput, ControlledTextAreaInput, ControlledArticleTypeInput } =
-  createConnectedInputHelpers<CreateArticleFormData>();
-
-type AddArticleModalProps = {
+type AddFolderModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSelectExisting: (article: ReadArticleRef) => void;
-  onCreate: (data: CreateArticleFormData) => void;
+  onSelectExisting: (folder: ReadFolderRef) => void;
+  onCreate: (data: CreateFolder) => void;
+  existingFolderIds?: string[];
 };
 
 type Mode = 'select' | 'search' | 'create';
 
 type SearchFormData = {
-  article: ReadArticleRef | null;
+  folder: ReadFolderRef | null;
 };
 
-export function AddArticleModal({
+export function AddFolderModal({
   open,
   onOpenChange,
   onSelectExisting,
   onCreate,
-}: AddArticleModalProps) {
+  existingFolderIds = [],
+}: AddFolderModalProps) {
   const [mode, setMode] = useState<Mode>('select');
 
-  // Form for searching existing articles
+  const { ControlledTextInput, ControlledTextAreaInput, ControlledImageInput } =
+    createConnectedInputHelpers<CreateFolder>();
+
+  // Form for searching existing folders
   const searchForm = useForm<SearchFormData>({
     defaultValues: {
-      article: null,
+      folder: null,
     },
   });
 
-  // Form for creating new articles
-  const createForm = useForm<CreateArticleFormData>({
-    resolver: zodResolver(createArticleFormSchema),
+  // Form for creating new folders
+  const createForm = useForm<CreateFolder>({
     defaultValues: {
-      title: '',
+      name: '',
       description: '',
-      type: null,
-      keywords: null,
+      cover: null,
     },
   });
 
@@ -77,27 +63,41 @@ export function AddArticleModal({
     setMode('select');
     searchForm.reset();
     createForm.reset({
-      title: '',
+      name: '',
       description: '',
-      type: null,
-      keywords: null,
+      cover: null,
     });
     onOpenChange(false);
   };
 
   const handleSelectExisting = (data: SearchFormData) => {
-    if (data.article) {
-      onSelectExisting(data.article);
+    if (data.folder) {
+      // Check if folder is already in the issue
+      if (existingFolderIds.includes(data.folder.id)) {
+        searchForm.setError('folder', {
+          type: 'manual',
+          message: 'This folder is already in the issue',
+        });
+        return;
+      }
+      onSelectExisting(data.folder);
       handleClose();
     }
   };
 
-  const handleCreate = (data: CreateArticleFormData) => {
-    onCreate(data);
-    handleClose();
+  const handleCreate = (data: CreateFolder) => {
+    try {
+      onCreate(data);
+      handleClose();
+    } catch (error) {
+      console.error('Zod parse error:', error);
+    }
   };
 
-  const selectedArticle = searchForm.watch('article');
+  const selectedFolder = searchForm.watch('folder');
+  const isAlreadyAdded = selectedFolder
+    ? existingFolderIds.includes(selectedFolder.id)
+    : false;
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -105,9 +105,9 @@ export function AddArticleModal({
         {mode === 'select' && (
           <>
             <DialogHeader>
-              <DialogTitle>Add Article</DialogTitle>
+              <DialogTitle>Add Folder</DialogTitle>
               <DialogDescription>
-                Search for an existing article or create a new one.
+                Search for an existing folder or create a new one.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-3 py-4">
@@ -121,9 +121,9 @@ export function AddArticleModal({
                   <IconSearch className="h-5 w-5" />
                 </div>
                 <div className="text-left">
-                  <div className="font-medium">Search existing article</div>
+                  <div className="font-medium">Search existing folder</div>
                   <div className="text-sm text-muted-foreground">
-                    Find and add an article that already exists
+                    Find and add a folder that already exists
                   </div>
                 </div>
               </Button>
@@ -137,9 +137,9 @@ export function AddArticleModal({
                   <IconPlus className="h-5 w-5" />
                 </div>
                 <div className="text-left">
-                  <div className="font-medium">Create new article</div>
+                  <div className="font-medium">Create new folder</div>
                   <div className="text-sm text-muted-foreground">
-                    Create a brand new article for this issue
+                    Create a brand new folder for this issue
                   </div>
                 </div>
               </Button>
@@ -156,25 +156,30 @@ export function AddArticleModal({
               }}
             >
               <DialogHeader>
-                <DialogTitle>Search Article</DialogTitle>
+                <DialogTitle>Search Folder</DialogTitle>
                 <DialogDescription>
-                  Search for an existing article to add to this folder.
+                  Search for an existing folder to add to this issue.
                 </DialogDescription>
               </DialogHeader>
               <div className="py-4">
-                <ControlledArticleInput<SearchFormData>
-                  name="article"
-                  label="Article"
-                  placeholder="Search by title..."
+                <ControlledMagazineFolderInput<SearchFormData>
+                  name="folder"
+                  label="Folder"
+                  placeholder="Search by name..."
                 />
-                {selectedArticle && (
-                  <div className="mt-4 p-3 rounded-lg border bg-muted/50">
+                {selectedFolder && (
+                  <div
+                    className={`mt-4 p-3 rounded-lg border ${isAlreadyAdded ? 'border-orange-300 bg-orange-50' : 'bg-muted/50'}`}
+                  >
                     <div className="flex items-center gap-2">
-                      <IconFileText className="h-4 w-4 text-muted-foreground" />
-                      <span className="font-medium">
-                        {selectedArticle.title}
-                      </span>
+                      <IconFolder className="h-4 w-4 text-muted-foreground" />
+                      <span className="font-medium">{selectedFolder.name}</span>
                     </div>
+                    {isAlreadyAdded && (
+                      <p className="text-sm text-orange-600 mt-1">
+                        This folder is already in the issue
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
@@ -186,8 +191,11 @@ export function AddArticleModal({
                 >
                   Back
                 </Button>
-                <Button type="submit" disabled={!selectedArticle}>
-                  Add Article
+                <Button
+                  type="submit"
+                  disabled={!selectedFolder || isAlreadyAdded}
+                >
+                  Add Folder
                 </Button>
               </DialogFooter>
             </form>
@@ -199,31 +207,29 @@ export function AddArticleModal({
             <form
               onSubmit={(e) => {
                 e.stopPropagation();
-                createForm.handleSubmit(handleCreate)(e);
+                createForm.handleSubmit(handleCreate, (errors) => {
+                  console.log('Form errors:', errors);
+                })(e);
               }}
             >
               <DialogHeader>
-                <DialogTitle>Create Article</DialogTitle>
+                <DialogTitle>Create Folder</DialogTitle>
                 <DialogDescription>
-                  Create a new article for this issue.
+                  Create a new folder for this issue.
                 </DialogDescription>
               </DialogHeader>
               <div className="py-4">
                 <FieldGroup>
-                  <ControlledArticleTypeInput
-                    name="type"
-                    label="Type"
-                    placeholder="Select article type..."
-                  />
-                  <ControlledTextInput
-                    name="title"
-                    label="Title"
-                    placeholder="Enter article title..."
-                  />
+                  <ControlledTextInput name="name" label="Name" />
                   <ControlledTextAreaInput
                     name="description"
                     label="Description"
-                    placeholder="Brief description of the article..."
+                    maxLength={300}
+                  />
+                  <ControlledImageInput
+                    name="cover"
+                    label="Cover"
+                    ratio={1536 / 1024}
                   />
                 </FieldGroup>
               </div>
@@ -235,7 +241,7 @@ export function AddArticleModal({
                 >
                   Back
                 </Button>
-                <Button type="submit">Create Article</Button>
+                <Button type="submit">Create Folder</Button>
               </DialogFooter>
             </form>
           </FormProvider>

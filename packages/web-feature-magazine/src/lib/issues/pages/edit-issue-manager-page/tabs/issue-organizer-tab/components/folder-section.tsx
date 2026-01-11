@@ -34,7 +34,7 @@ export function FolderSection({
         className="flex items-center gap-2 rounded-lg border bg-card p-3"
         style={{
           borderLeftWidth: '4px',
-          borderLeftColor: folder.color || 'var(--border)',
+          borderLeftColor: 'var(--border)',
         }}
       >
         <CollapsibleTrigger asChild>
@@ -46,7 +46,7 @@ export function FolderSection({
         </CollapsibleTrigger>
         <IconFolder
           className="h-5 w-5"
-          style={{ color: folder.color || 'currentColor' }}
+          style={{ color: 'currentColor' }}
         />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
@@ -62,13 +62,14 @@ export function FolderSection({
           </div>
         </div>
         <div className="flex items-center gap-1 opacity-0 group-hover/folder:opacity-100 transition-opacity">
-          <Button variant="ghost" size="sm" onClick={() => onAddArticle?.(folder.id)}>
+          <Button type="button" variant="ghost" size="sm" onClick={() => onAddArticle?.(folder.id)}>
             <IconPlus className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => onEditFolder?.(folder)}>
+          <Button type="button" variant="ghost" size="sm" onClick={() => onEditFolder?.(folder)}>
             <IconEdit className="h-4 w-4" />
           </Button>
           <Button
+            type="button"
             variant="ghost"
             size="sm"
             onClick={() => onDeleteFolder?.(folder.id)}
@@ -84,6 +85,7 @@ export function FolderSection({
             <div className="py-4 text-center text-sm text-muted-foreground">
               No articles in this folder.{' '}
               <button
+                type="button"
                 className="text-primary hover:underline"
                 onClick={() => onAddArticle?.(folder.id)}
               >

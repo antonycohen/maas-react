@@ -19,17 +19,12 @@ export function ArticleItem({ article, onEdit, onDelete }: ArticleItemProps) {
           <span className="font-medium truncate">{article.title}</span>
           {article.type && (
             <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded">
-              {article.type}
+              {article.type?.name}
             </span>
           )}
           {article.isPublished === false && (
             <span className="text-xs text-orange-600 bg-orange-100 px-2 py-0.5 rounded">
               Draft
-            </span>
-          )}
-          {article.isFeatured && (
-            <span className="text-xs text-blue-600 bg-blue-100 px-2 py-0.5 rounded">
-              Featured
             </span>
           )}
         </div>
@@ -40,10 +35,11 @@ export function ArticleItem({ article, onEdit, onDelete }: ArticleItemProps) {
         )}
       </div>
       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-        <Button variant="ghost" size="sm" onClick={onEdit}>
+        <Button type="button" variant="ghost" size="sm" onClick={onEdit}>
           <IconEdit className="h-4 w-4" />
         </Button>
         <Button
+          type="button"
           variant="ghost"
           size="sm"
           onClick={onDelete}

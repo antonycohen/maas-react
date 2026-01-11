@@ -79,7 +79,7 @@ export function EditCategoryManagerPage() {
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <Card
               className={cn(
-                'max-w-xl transition-opacity',
+                'transition-opacity',
                 isLoading && 'pointer-events-none opacity-50',
               )}
             >

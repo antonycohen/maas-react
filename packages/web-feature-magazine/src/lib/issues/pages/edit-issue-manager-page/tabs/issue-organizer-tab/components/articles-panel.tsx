@@ -1,18 +1,128 @@
 import { Article, Folder } from '@maas/core-api-models';
 import { Button, ScrollArea, Skeleton } from '@maas/web-components';
-import { IconEdit, IconPlus, IconTrash, IconGripVertical } from '@tabler/icons-react';
+import { IconGripVertical, IconPlus, IconTrash } from '@tabler/icons-react';
+
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { reorder } from '@maas/core-utils';
+
+type FolderWithColor = Folder & { color?: string | null };
+
+// Helper to convert dnd-kit transform to CSS string
+function transformToString(
+  transform: { x: number; y: number; scaleX: number; scaleY: number } | null,
+): string | undefined {
+  if (!transform) return undefined;
+  return `translate3d(${transform.x}px, ${transform.y}px, 0) scaleX(${transform.scaleX}) scaleY(${transform.scaleY})`;
+}
 
 type ArticlesPanelProps = {
-  folder: Folder | null;
+  folder: FolderWithColor | null;
   articles: Article[];
   selectedArticleId: string | null;
   onSelectArticle: (articleId: string | null) => void;
   onAddArticle: () => void;
-  onEditFolder?: () => void;
   onDeleteFolder?: () => void;
   onDeleteArticle: (articleId: string) => void;
+  onReorder: (reorderedArticles: Article[]) => void;
   isLoading?: boolean;
 };
+
+type SortableArticleItemProps = {
+  article: Article;
+  isSelected: boolean;
+  onSelect: () => void;
+  onRemove: () => void;
+};
+
+function SortableArticleItem({
+  article,
+  isSelected,
+  onSelect,
+  onRemove,
+}: SortableArticleItemProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: article.id });
+
+  const style = {
+    transform: transformToString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      role="button"
+      tabIndex={0}
+      onClick={onSelect}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onSelect();
+        }
+      }}
+      className={`group w-full flex items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors cursor-pointer ${
+        isSelected ? 'bg-accent text-accent-foreground' : 'hover:bg-muted'
+      }`}
+    >
+      <button
+        type="button"
+        className="h-6 w-6 flex items-center justify-center shrink-0 text-muted-foreground cursor-grab active:cursor-grabbing"
+        {...attributes}
+        {...listeners}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <IconGripVertical className="h-3 w-3" />
+      </button>
+      <div className="flex-1 min-w-0">
+        <div className="truncate font-medium">{article.title}</div>
+        <div className="flex items-center gap-2 mt-0.5">
+          {article.type && (
+            <span className="text-xs text-muted-foreground">
+              {article.type.name}
+            </span>
+          )}
+          {article.isPublished === false && (
+            <span className="text-xs text-orange-600">Draft</span>
+          )}
+        </div>
+      </div>
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={(e) => {
+          e.stopPropagation();
+          onRemove();
+        }}
+        className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 text-destructive hover:text-destructive"
+      >
+        <IconTrash className="h-3 w-3" />
+      </Button>
+    </div>
+  );
+}
 
 export function ArticlesPanel({
   folder,
@@ -20,12 +130,32 @@ export function ArticlesPanel({
   selectedArticleId,
   onSelectArticle,
   onAddArticle,
-  onEditFolder,
   onDeleteFolder,
   onDeleteArticle,
+  onReorder,
   isLoading,
 }: ArticlesPanelProps) {
   const title = folder?.name || 'Select a folder';
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = articles.findIndex((a) => a.id === active.id);
+      const newIndex = articles.findIndex((a) => a.id === over.id);
+
+      if (oldIndex !== -1 && newIndex !== -1) {
+        onReorder(reorder(articles, oldIndex, newIndex));
+      }
+    }
+  };
 
   return (
     <div className="flex h-full flex-col border-x">
@@ -48,14 +178,7 @@ export function ArticlesPanel({
           {folder && (
             <>
               <Button
-                variant="ghost"
-                size="sm"
-                onClick={onEditFolder}
-                className="h-7 w-7 p-0"
-              >
-                <IconEdit className="h-4 w-4" />
-              </Button>
-              <Button
+                type="button"
                 variant="ghost"
                 size="sm"
                 onClick={onDeleteFolder}
@@ -66,6 +189,7 @@ export function ArticlesPanel({
             </>
           )}
           <Button
+            type="button"
             variant="ghost"
             size="sm"
             onClick={onAddArticle}
@@ -90,55 +214,32 @@ export function ArticlesPanel({
             </>
           ) : (
             <>
-              {articles.map((article) => (
-                <div
-                  key={article.id}
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => onSelectArticle(article.id)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      onSelectArticle(article.id);
-                    }
-                  }}
-                  className={`group w-full flex items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors cursor-pointer ${
-                    selectedArticleId === article.id
-                      ? 'bg-accent text-accent-foreground'
-                      : 'hover:bg-muted'
-                  }`}
+              {articles.length > 0 ? (
+                <DndContext
+                  sensors={sensors}
+                  collisionDetection={closestCenter}
+                  onDragEnd={handleDragEnd}
                 >
-                  <IconGripVertical className="h-3 w-3 shrink-0 text-muted-foreground cursor-grab" />
-                  <div className="flex-1 min-w-0">
-                    <div className="truncate font-medium">{article.title}</div>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      {article.type && (
-                        <span className="text-xs text-muted-foreground">
-                          {article.type.name}
-                        </span>
-                      )}
-                      {article.isPublished === false && (
-                        <span className="text-xs text-orange-600">Draft</span>
-                      )}
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDeleteArticle(article.id);
-                    }}
-                    className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 text-destructive hover:text-destructive"
+                  <SortableContext
+                    items={articles.map((a) => a.id)}
+                    strategy={verticalListSortingStrategy}
                   >
-                    <IconTrash className="h-3 w-3" />
-                  </Button>
-                </div>
-              ))}
-              {articles.length === 0 && (
+                    {articles.map((article) => (
+                      <SortableArticleItem
+                        key={article.id}
+                        article={article}
+                        isSelected={selectedArticleId === article.id}
+                        onSelect={() => onSelectArticle(article.id)}
+                        onRemove={() => onDeleteArticle(article.id)}
+                      />
+                    ))}
+                  </SortableContext>
+                </DndContext>
+              ) : (
                 <div className="py-8 text-center text-sm text-muted-foreground">
                   <p>No articles in this folder</p>
                   <Button
+                    type="button"
                     variant="link"
                     size="sm"
                     onClick={onAddArticle}

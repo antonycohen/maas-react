@@ -8,8 +8,11 @@ import {
 import { cn } from '@maas/core-utils';
 import { Link } from 'react-router-dom';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
 
 export function useCategoriesListColumns(): ColumnDef<Category>[] {
+  const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+
   return [
     {
       id: 'select',
@@ -69,7 +72,10 @@ export function useCategoriesListColumns(): ColumnDef<Category>[] {
       ),
       cell: ({ row }) => {
         return (
-          <Link to={`/categories/${row.original.id}`} className={'underline'}>
+          <Link
+            to={`${currentWorkspaceBaseUrl}/categories/${row.original.id}`}
+            className={'underline'}
+          >
             <LongText className="max-w-48">{row.getValue('name')}</LongText>
           </Link>
         );

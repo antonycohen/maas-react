@@ -3,6 +3,15 @@ import { readImageSchema, updateImageSchema } from '../image';
 import { brandRefSchema, readBrandRefSchema } from '../brand';
 import { folderSchema } from '../folder';
 import { readDocumentSchema, updateDocumentSchema } from '../document';
+import { articleRefSchema } from '../article';
+
+// Schema for folder with articles (used in issue create/update)
+export const issueFolderRefSchema = z.object({
+  id: z.string(),
+  articles: z.array(z.lazy(() => articleRefSchema)).nullable().optional(),
+});
+
+export type IssueFolderRef = z.infer<typeof issueFolderRefSchema>;
 
 export const readIssueRefSchema = z.object({
   id: z.string(),
@@ -57,6 +66,7 @@ export const updateIssueSchema = z.object({
   isPublished: z.boolean().optional(),
   pdf: updateDocumentSchema.nullable().optional(),
   pageCount: z.number().int().min(0).optional(),
+  folders: z.array(issueFolderRefSchema).nullable().optional(),
 });
 
 export type UpdateIssue = z.infer<typeof updateIssueSchema>;

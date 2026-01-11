@@ -7,7 +7,7 @@ import {
 } from 'react-hook-form';
 
 import { useGetArticleTypes } from '@maas/core-api';
-import { ReadArticleTypeRef } from '@maas/core-api-models';
+import { ArticleTypeRef, ReadArticleTypeRef } from '@maas/core-api-models';
 import {
   AsyncCombobox,
   Field,
@@ -17,7 +17,7 @@ import {
 } from '@maas/web-components';
 
 type ControlledArticleTypeInputProps<T extends FieldValues> = {
-  name: FieldPathByValue<T, ReadArticleTypeRef | undefined | null>;
+  name: FieldPathByValue<T, ArticleTypeRef | ReadArticleTypeRef | undefined | null>;
   label: string;
   placeholder?: string;
   description?: string;

@@ -9,9 +9,11 @@ import {
 import { Button } from '@maas/web-components';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons-react';
+import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
 
 export function CategoriesListManagerPage() {
   const columns = useCategoriesListColumns();
+  const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
 
   return (
     <div>
@@ -25,7 +27,7 @@ export function CategoriesListManagerPage() {
           pageTitle="Categories"
           actions={
             <Button asChild>
-              <Link to="/categories/new">
+              <Link to={`${currentWorkspaceBaseUrl}/categories/new`}>
                 <IconPlus className="mr-2 h-4 w-4" />
                 New Category
               </Link>

@@ -15,6 +15,7 @@ const BASE_PATH = '/api/v1/magazine/folders';
 export interface GetFoldersFilter {
   issueId?: string;
   term?: string;
+  id?: string | string[];
 }
 
 export class FoldersEndpoint {
