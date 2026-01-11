@@ -29,7 +29,7 @@ export const useEditIssueForm = ({
       title: '',
       description: '',
       issueNumber: '',
-      cover: null,
+      cover: issue?.cover,
       pdf: null,
       pageCount: 0,
     },
