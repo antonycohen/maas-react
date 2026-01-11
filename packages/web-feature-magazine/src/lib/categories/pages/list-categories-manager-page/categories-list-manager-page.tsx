@@ -19,7 +19,10 @@ export function CategoriesListManagerPage() {
     <div>
       <header>
         <LayoutBreadcrumb
-          items={[{ label: 'Home', to: '/' }, { label: 'Categories' }]}
+          items={[
+            { label: 'Home', to: `${currentWorkspaceBaseUrl}` },
+            { label: 'Categories' },
+          ]}
         />
       </header>
       <LayoutContent>

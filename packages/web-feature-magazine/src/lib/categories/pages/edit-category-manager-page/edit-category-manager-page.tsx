@@ -21,9 +21,11 @@ import { createConnectedInputHelpers } from '@maas/web-form';
 import { IconTrash } from '@tabler/icons-react';
 import { useEditCategoryForm } from './hooks/use-edit-category-form';
 import { useEditActions } from './hooks/use-edit-actions';
+import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
 
 export function EditCategoryManagerPage() {
   const { categoryId = '' } = useParams<{ categoryId: string }>();
+  const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
 
   const { category, isLoading, form, isCreateMode } =
     useEditCategoryForm(categoryId);
@@ -53,8 +55,11 @@ export function EditCategoryManagerPage() {
       <header>
         <LayoutBreadcrumb
           items={[
-            { label: 'Home', to: '/' },
-            { label: 'Categories', to: '/categories' },
+            { label: 'Home', to: `${currentWorkspaceBaseUrl}` },
+            {
+              label: 'Categories',
+              to: `${currentWorkspaceBaseUrl}/categories`,
+            },
             { label: breadcrumbLabel },
           ]}
         />
@@ -97,10 +102,15 @@ export function EditCategoryManagerPage() {
                     label="Parent Category"
                     placeholder="No Parent"
                   />
-                  <ControlledImageInput name="cover" label="Cover" />
+                  <ControlledImageInput
+                    name="cover"
+                    label="Cover"
+                    ratio={1536 / 1024}
+                  />
                   <ControlledTextAreaInput
                     name="description"
                     label="Description"
+                    maxLength={300}
                   />
                 </FieldGroup>
               </CardContent>

@@ -7,6 +7,7 @@ import {
 import { UseFormReturn } from 'react-hook-form';
 import { CreateCategory, UpdateCategory } from '@maas/core-api-models';
 import { useNavigate } from 'react-router-dom';
+import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
 
 export const useEditActions = (
   form: UseFormReturn<CreateCategory | UpdateCategory>,
@@ -14,6 +15,7 @@ export const useEditActions = (
   categoryId: string,
 ) => {
   const navigate = useNavigate();
+  const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
 
   const handleApiError = (error: ApiError) => {
     if (error.parametersErrors) {
@@ -28,21 +30,21 @@ export const useEditActions = (
 
   const createMutation = useCreateCategory({
     onSuccess: () => {
-      navigate('/categories');
+      navigate(`${currentWorkspaceBaseUrl}/categories`);
     },
     onError: handleApiError,
   });
 
   const updateMutation = useUpdateCategory({
     onSuccess: () => {
-      navigate('/categories');
+      navigate(`${currentWorkspaceBaseUrl}/categories`);
     },
     onError: handleApiError,
   });
 
   const deleteMutation = useDeleteCategory({
     onSuccess: () => {
-      navigate('/categories');
+      navigate(`${currentWorkspaceBaseUrl}/categories`);
     },
   });
 

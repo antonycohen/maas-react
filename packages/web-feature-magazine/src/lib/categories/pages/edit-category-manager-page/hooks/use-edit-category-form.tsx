@@ -47,11 +47,7 @@ export const useEditCategoryForm = (categoryId: string) => {
             name: category.name,
             description: category.description,
             cover: category.cover,
-            parent: category.parent?.id
-              ? {
-                  id: category.parent.id,
-                }
-              : null,
+            parent: category.parent
           }
         : undefined,
   });

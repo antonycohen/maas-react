@@ -61,13 +61,11 @@ export const FolderInfoTab = () => {
               className="py-6"
               ratio={1536 / 1024}
             />
-            {!isCreateMode && (
-              <ControlledSwitchInput
-                name="isPublished"
-                label="Published"
-                className="py-6"
-              />
-            )}
+            <ControlledSwitchInput
+              name="isPublished"
+              label="Published"
+              className="py-6"
+            />
           </div>
         </CardContent>
       </Card>
