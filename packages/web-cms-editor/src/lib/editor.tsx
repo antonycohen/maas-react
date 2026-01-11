@@ -9,6 +9,11 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
+import {
+  restrictToFirstScrollableAncestor,
+  restrictToVerticalAxis,
+  restrictToWindowEdges,
+} from '@dnd-kit/modifiers';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { GripVertical } from 'lucide-react';
 
@@ -124,6 +129,7 @@ function EditorMain() {
       </main>
 
       <DragOverlay
+        modifiers={[restrictToFirstScrollableAncestor]}
         dropAnimation={{
           duration: 200,
           easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
