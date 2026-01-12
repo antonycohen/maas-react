@@ -59,7 +59,10 @@ function renderBlock(block: CMSBlock): React.ReactNode {
 
     case 'frame':
       return (
-        <div key={block.id} className="space-y-4">
+        <div
+          key={block.id}
+          className="space-y-4 frame-block rounded-lg border-2 border-dashed border-neutral-300 bg-neutral-50 p-4"
+        >
           {block.data.children?.map((child) => renderBlock(child))}
         </div>
       );

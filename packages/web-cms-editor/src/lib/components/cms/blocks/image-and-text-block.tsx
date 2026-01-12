@@ -36,7 +36,7 @@ export function ImageAndTextBlock(props: ImageAndTextBlockProps) {
       </div>
       <div className="@md:w-1/2">
         <p
-          className="rte-content text-sm text-neutral-900"
+          className="rte-content font-body text-[18px] leading-[26px] tracking-[-0.18px]"
           dangerouslySetInnerHTML={{ __html: block.data.text }}
         />
       </div>

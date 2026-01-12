@@ -108,6 +108,12 @@ export const CategoryPage = () => {
             id: null,
             title: null,
             description: null,
+            cover: {
+              fields: {
+                resizedImages: null,
+                downloadUrl: null,
+              },
+            },
           }}
           renderToolbar={renderMagazineCollectionToolbar}
           renderContent={renderContent}

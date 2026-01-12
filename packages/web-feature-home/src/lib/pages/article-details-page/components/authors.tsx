@@ -6,6 +6,7 @@ type AuthorProps = Article['author']
 export const Authors = ({ authors }: { authors: AuthorProps[] }) => {
 
   const filteredAuthors = authors.filter(author => author !== null && author !== undefined);
+  if (filteredAuthors.length === 0) return null;
   return (
     <div className="flex flex-col gap-5">
       <h2

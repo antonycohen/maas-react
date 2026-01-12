@@ -1,6 +1,7 @@
 import { Folder, Article } from '@maas/core-api-models';
 import { ChevronRight, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useResizedImage } from '../hooks';
 
 interface FolderCardProps {
   folder: Folder;
@@ -85,14 +86,19 @@ export const FolderCard = ({
 }: FolderCardProps) => {
   const articles = folder.articles || [];
   const displayedArticles = articles.slice(0, maxArticles);
+  const { resizedImage } = useResizedImage({
+    width: 640,
+    images: folder?.cover?.resizedImages,
+  });
+
 
   return (
     <div className="flex flex-col md:flex-row gap-5 rounded-xl border border-[#e0e0e0] bg-white p-3">
       {/* Left - Cover Image */}
       <div className="relative aspect-[588/420] flex-1 overflow-hidden rounded">
-        {folder.cover?.url ? (
+        {resizedImage?.url ? (
           <img
-            src={folder.cover.url}
+            src={resizedImage?.url}
             alt={folder.name}
             className="absolute inset-0 h-full w-full object-cover"
           />
