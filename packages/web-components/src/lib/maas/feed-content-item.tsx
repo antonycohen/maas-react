@@ -108,7 +108,7 @@ export const FeedMagazineItem = ({ item }: FeedMagazineItemProps) => {
       className="group relative h-[450px] md:h-auto flex flex-col items-start justify-end overflow-clip rounded-[12px] bg-brand-primary"
     >
       {/* Magazine Cover Image - positioned bottom right */}
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute inset-0 flex items-end justify-end">
         <div className="h-[340px] w-[242px] shrink-0 rounded shadow-tangente-3">
           <img
             src={item.image}
