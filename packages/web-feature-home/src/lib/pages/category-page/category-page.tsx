@@ -107,6 +107,7 @@ export const CategoryPage = () => {
           queryFields={{
             id: null,
             title: null,
+            description: null,
           }}
           renderToolbar={renderMagazineCollectionToolbar}
           renderContent={renderContent}

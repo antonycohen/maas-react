@@ -3,14 +3,38 @@ import { useParams } from 'react-router-dom';
 import { ContentFeed, TitleAndDescriptionHero } from '@maas/web-components';
 import { fakeFeedItems, mockCurrentIssue } from '../mock';
 import { cn } from '@maas/core-utils';
+import { useGetFolderById } from '@maas/core-api';
 
 export const FolderDetailsPages = () => {
   const { id } = useParams();
   const currentFolders = mockCurrentIssue.folders?.find((f) => f.id === id);
 
+  const { data } = useGetFolderById({
+    id: id as string,
+    fields: {
+      id: null,
+      name: null,
+      description: null,
+      cover: {
+        fields: {
+          url: null,
+          resizedImages: null,
+        },
+      },
+      articles: {
+        fields: {
+          id: null,
+          title: null,
+        },
+      },
+    },
+  });
+
   if (!currentFolders) return null; //TODO: Add loader or something else
 
-  const bgImageUrl = currentFolders.cover?.url || 'https://images.unsplash.com/photo-1700773429980-ed1d3287fe1e?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+  const bgImageUrl =
+    currentFolders.cover?.url ||
+    'https://images.unsplash.com/photo-1700773429980-ed1d3287fe1e?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 
   return (
     <div className="flex flex-col gap-tg-xl">
