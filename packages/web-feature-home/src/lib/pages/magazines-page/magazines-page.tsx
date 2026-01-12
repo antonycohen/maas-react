@@ -18,6 +18,10 @@ const columns: ColumnDef<Issue>[] = [
     id: 'title',
     accessorKey: 'title',
   },
+  {
+    id: 'term',
+    accessorKey: 'term',
+  },
 ];
 
 export const MagazinesPage = () => {
@@ -73,7 +77,6 @@ export const MagazinesPage = () => {
       <div className="flex justify-center mt-[20px]">{pagination}</div>
     </div>
   );
-
   return (
     <div className="flex flex-col gap-[40px] pb-[40px] px-5">
       <div className="w-full max-w-[1220px] mx-auto">
@@ -87,6 +90,20 @@ export const MagazinesPage = () => {
         columns={columns}
         useQueryFn={useGetIssues}
         useLocationAsState
+        filtersConfiguration={{
+          facetedFilters: [
+            {
+              columnId: 'term' as any,
+              queryParamName: 'term',
+              title: 'Catégorie',
+              options: [
+                { label: 'Tout', value: 'all' },
+                { label: 'Tangente numéros', value: 'tangente' },
+                { label: 'Hors-séries', value: 'hors-series' },
+              ],
+            },
+          ],
+        }}
         queryFields={{
           id: null,
           title: null,

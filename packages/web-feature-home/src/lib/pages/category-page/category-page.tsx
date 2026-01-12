@@ -111,7 +111,7 @@ export const CategoryPage = () => {
             cover: {
               fields: {
                 resizedImages: null,
-                downloadUrl: null,
+                url: null,
               },
             },
           }}

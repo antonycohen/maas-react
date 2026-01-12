@@ -16,10 +16,16 @@ export function MagazineFilters<T>({ table }: MagazineFiltersProps<T>) {
   if (!table) {
     return null;
   }
-  // Temporary: we don't have category filtering connected yet as we don't know the column/API
-  const activeCategory = 'all';
-  const onCategoryChange = (val: string) =>
-    console.log('Category change not implemented', val);
+  const categoryColumn = table.getColumn('term');
+  const activeCategory = (categoryColumn?.getFilterValue() as string) || 'all';
+
+  const onCategoryChange = (val: string) => {
+    if (val === 'all') {
+      categoryColumn?.setFilterValue(undefined);
+    } else {
+      categoryColumn?.setFilterValue(val);
+    }
+  };
 
   const categories = [
     { id: 'all', label: 'Tout' },
