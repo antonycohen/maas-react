@@ -5,22 +5,11 @@ import { Article } from '@maas/core-api-models';
 
 interface ArticleSidebarProps {
   author?: Article['author'];
+  categories?: Article['categories'];
 }
 
-export const ArticleSidebar = ({ author }: ArticleSidebarProps) => {
+export const ArticleSidebar = ({ author, categories }: ArticleSidebarProps) => {
   const authors = author ? [author] : [];
-
-  const fakeTags = [
-    'Théorème',
-    'Démonstration',
-    'Conjecture',
-    'Algèbre',
-    'Analyse',
-    'Probabilités',
-    'Statistiques',
-    'Calcul différentiel',
-    'Intégrale',
-  ];
 
   return (
     <aside
@@ -30,7 +19,7 @@ export const ArticleSidebar = ({ author }: ArticleSidebarProps) => {
     >
       <Authors authors={authors} />
       <Separator />
-      <Thematiques tags={fakeTags} />
+      <Thematiques categories={categories} />
       <Separator />
       <ShareArticles
         links={{ facebook: '#', x: '#', instagram: '#', linkedin: '#' }}

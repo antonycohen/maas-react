@@ -1,8 +1,9 @@
 import { Issue } from '@maas/core-api-models';
 import { Link } from 'react-router-dom';
+import { useResizedImage } from '../hooks';
 
 interface MagazineHighlightsHeroProps {
-  issue: Issue;
+  issue?: Issue;
   link?: string;
 }
 
@@ -30,6 +31,11 @@ export const MagazineHighlightsHero = ({
   issue,
   link,
 }: MagazineHighlightsHeroProps) => {
+  const { resizedImage } = useResizedImage({
+    width: 640,
+    images: issue?.cover?.resizedImages,
+  });
+
   const content = (
     <div className="flex flex-col md:flex-row w-full  items-start justify-center gap-5 ">
       {/* Left - Magazine Cover with Yellow Circle */}
@@ -54,10 +60,10 @@ export const MagazineHighlightsHero = ({
 
         {/* Magazine Cover */}
         <div className="absolute left-1/2 top-0 h-[480px] w-[341px] -translate-x-1/2 overflow-hidden rounded-xl shadow-tangente-3">
-          {issue.cover?.url ? (
+          {resizedImage?.url ? (
             <img
-              src={issue.cover.url}
-              alt={issue.title}
+              src={resizedImage?.url}
+              alt={issue?.title}
               className="h-full w-full object-cover rounded-xl "
             />
           ) : (
@@ -76,22 +82,22 @@ export const MagazineHighlightsHero = ({
             <MagazineTag label="Magazine" />
           </div>
           <h1 className="font-heading text-4xl md:leading-[46px] md:text-[48px] font-semibold md:leading-[52px] tracking-[-1.32px] text-white">
-            {issue.title}
+            {issue?.title}
           </h1>
         </div>
 
         {/* Description */}
-        {issue.description && (
+        {issue?.description && (
           <p className="font-body text-[18px] font-normal leading-[26px] tracking-[-0.18px] text-white">
-            {issue.description}
+            {issue?.description}
           </p>
         )}
 
         {/* Date */}
-        {issue.publishedAt && (
+        {issue?.publishedAt && (
           <div className="flex h-5 items-center">
             <span className="font-body text-[13px] font-normal leading-[18px] text-white">
-              {formatDate(issue.publishedAt)}
+              {formatDate(issue?.publishedAt)}
             </span>
           </div>
         )}
@@ -100,11 +106,11 @@ export const MagazineHighlightsHero = ({
   );
 
   return (
-    <section className="flex items-center justify-center bg-brand-primary py-tg-xl">
+    <section className="flex items-center justify-center  py-tg-xl">
       <div className="container mx-auto flex md:h-[480px] items-center justify-center py-10">
         <div className="flex h-full w-full items-center justify-center">
           {link ? (
-            <Link to={link} className="group flex w-full " >
+            <Link to={link} className="group flex w-full ">
               {content}
             </Link>
           ) : (

@@ -17,7 +17,7 @@ type PodcastCarouselBlockProps = {
 
 export const PodcastCarouselBlock = ({ block, isDragging }: PodcastCarouselBlockProps) => {
   return (
-    <Carousel className="mb-6">
+    <Carousel className="mb-6 w-full">
       {block.data.podcasts && block.data.podcasts?.length > 1 && (
         <div className="mb-4 flex justify-end gap-1">
           <CarouselPrevious />
