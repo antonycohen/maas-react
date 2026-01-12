@@ -47,8 +47,12 @@ class ApiClient {
 
     // Request interceptor to add token
     this.axiosInstance.interceptors.request.use(async (config) => {
-      const token = await this.getValidToken();
-      config.headers.Authorization = `Bearer ${token}`;
+      try {
+        const token = await this.getValidToken();
+        config.headers.Authorization = `Bearer ${token}`;
+      } catch {
+        //TODO: need to authorize public users on backend for resource like magazines dossiers and articles
+      }
       return config;
     });
 
