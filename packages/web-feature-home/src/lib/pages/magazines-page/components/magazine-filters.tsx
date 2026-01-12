@@ -6,25 +6,43 @@ import {
   SelectValue,
 } from '@maas/web-components';
 import { cn } from '@maas/core-utils';
+import { Table } from '@tanstack/react-table';
 
-interface MagazineFiltersProps {
-  activeCategory: string;
-  onCategoryChange: (category: string) => void;
-  sortOrder: string;
-  onSortChange: (order: string) => void;
+interface MagazineFiltersProps<T> {
+  table: Table<T>;
 }
 
-export function MagazineFilters({
-  activeCategory,
-  onCategoryChange,
-  sortOrder,
-  onSortChange,
-}: MagazineFiltersProps) {
+export function MagazineFilters<T>({ table }: MagazineFiltersProps<T>) {
+  if (!table) {
+    return null;
+  }
+  // Temporary: we don't have category filtering connected yet as we don't know the column/API
+  const activeCategory = 'all';
+  const onCategoryChange = (val: string) =>
+    console.log('Category change not implemented', val);
+
   const categories = [
     { id: 'all', label: 'Tout' },
     { id: 'tangente', label: 'Tangente numéros' },
     { id: 'hors-series', label: 'Hors-séries' },
   ];
+
+  const setSortOrder = (order: string) => {
+    if (order === 'recent') {
+      table.getColumn('publishedAt')?.toggleSorting(true); // desc
+    } else if (order === 'oldest') {
+      table.getColumn('publishedAt')?.toggleSorting(false); // asc
+    }
+  };
+
+  const sorting = table.getState().sorting;
+  const currentSort = sorting[0];
+  const sortOrder =
+    currentSort?.id === 'publishedAt'
+      ? currentSort.desc
+        ? 'recent'
+        : 'oldest'
+      : 'recent';
 
   return (
     <>
@@ -37,10 +55,10 @@ export function MagazineFilters({
               key={category.id}
               onClick={() => onCategoryChange(category.id)}
               className={cn(
-                "flex items-center px-[12px] py-[4px] h-[40px] rounded-[4px] text-[14px] leading-[20px] tracking-[-0.07px] whitespace-nowrap transition-colors",
+                'flex items-center px-[12px] py-[4px] h-[40px] rounded-[4px] text-[14px] leading-[20px] tracking-[-0.07px] whitespace-nowrap transition-colors',
                 activeCategory === category.id
-                  ? "border-2 border-black text-black font-normal"
-                  : "border border-[#e0e0e0] text-black/50 font-normal hover:bg-gray-50"
+                  ? 'border-2 border-black text-black font-normal'
+                  : 'border border-[#e0e0e0] text-black/50 font-normal hover:bg-gray-50',
               )}
             >
               {category.label}
@@ -49,21 +67,24 @@ export function MagazineFilters({
         </div>
 
         {/* Right: Sort Filter */}
-        <div className="w-[240px]">
-          <Select value={sortOrder} onValueChange={onSortChange}>
-            <SelectTrigger className="w-full h-[40px] bg-[#f5f5f5] border-[#e0e0e0] rounded-[4px] px-[12px] py-[4px] text-[14px] text-black">
-              <SelectValue placeholder="Trier par" />
+        <div className="flex items-center gap-2">
+          <span className="text-[13px] text-black/50 font-bold uppercase tracking-[0.26px]">
+            Trier par
+          </span>
+          <Select value={sortOrder} onValueChange={setSortOrder}>
+            <SelectTrigger className="w-[180px] h-[40px] px-3 py-2 text-[14px] bg-white border border-[#e0e0e0] rounded-[4px] focus:ring-0 focus:ring-offset-0">
+              <SelectValue placeholder="Sélectionner" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="recent">Les + récents</SelectItem>
-              <SelectItem value="oldest">Les + anciens</SelectItem>
+              <SelectItem value="recent">Les plus récents</SelectItem>
+              <SelectItem value="oldest">Les plus anciens</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </div>
 
       {/* Mobile View */}
-      <div className="flex md:hidden w-full gap-[12px] px-[12px]">
+      <div className="flex md:hidden w-full gap-[12px]">
         <div className="flex-1">
           <Select value={activeCategory} onValueChange={onCategoryChange}>
             <SelectTrigger className="w-full h-[40px] bg-[#f5f5f5] border-[#e0e0e0] rounded-[4px] px-[12px] py-[4px] text-[14px] text-black">
@@ -79,7 +100,7 @@ export function MagazineFilters({
           </Select>
         </div>
         <div className="flex-1">
-          <Select value={sortOrder} onValueChange={onSortChange}>
+          <Select value={sortOrder} onValueChange={setSortOrder}>
             <SelectTrigger className="w-full h-[40px] bg-[#f5f5f5] border-[#e0e0e0] rounded-[4px] px-[12px] py-[4px] text-[14px] text-black">
               <SelectValue placeholder="Trier par" />
             </SelectTrigger>

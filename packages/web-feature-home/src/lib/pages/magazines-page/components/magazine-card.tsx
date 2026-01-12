@@ -1,17 +1,36 @@
-import { Magazine } from '../data';
+import { Issue } from '@maas/core-api-models';
+import { useResizedImage } from '@maas/web-components';
 import { Link } from 'react-router-dom';
 
 interface MagazineCardProps {
-  magazine: Magazine;
+  magazine: Issue;
 }
 
 export function MagazineCard({ magazine }: MagazineCardProps) {
+  const { resizedImage } = useResizedImage({
+    images: magazine.cover?.resizedImages,
+    width: 640,
+  });
+
+  const imageUrl = resizedImage?.url || magazine.cover?.downloadUrl || '';
+
+  const date = magazine.publishedAt
+    ? new Date(magazine.publishedAt).toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      })
+    : '';
+
   return (
-    <Link to={`/magazines/${magazine.id}`} className="flex flex-col items-start w-full">
+    <Link
+      to={`/magazines/${magazine.id}`}
+      className="flex flex-col items-start w-full"
+    >
       {/* Cover Image */}
       <div className="relative w-full aspect-[270/380] rounded-t-[4px] shadow-[0px_0px_8px_0px_rgba(0,0,0,0.06),3px_8px_20px_0px_rgba(0,0,0,0.1)] mb-5">
         <img
-          src={magazine.imageUrl}
+          src={imageUrl}
           alt={magazine.title}
           className="absolute inset-0 w-full h-full object-contain rounded-t-[4px]"
         />
@@ -23,7 +42,7 @@ export function MagazineCard({ magazine }: MagazineCardProps) {
           {magazine.title}
         </h3>
         <p className="font-[family-name:var(--font-family-body,'Inter',sans-serif)] font-normal text-[13px] leading-[18px] text-black/70">
-          {magazine.date}
+          {date}
         </p>
       </div>
     </Link>
