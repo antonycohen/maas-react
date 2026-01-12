@@ -47,6 +47,7 @@ class ApiClient {
 
     // Request interceptor to add token
     this.axiosInstance.interceptors.request.use(async (config) => {
+      //add a try catch to avoid blocking requests if token retrieval fails
       try {
         const token = await this.getValidToken();
         config.headers.Authorization = `Bearer ${token}`;
