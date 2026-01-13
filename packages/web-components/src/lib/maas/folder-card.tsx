@@ -26,13 +26,17 @@ interface ArticleItemProps {
 }
 
 const ArticleItem = ({ article, link }: ArticleItemProps) => {
+  const { resizedImage: image } = useResizedImage({
+    images: article.cover?.resizedImages,
+    width: 320,
+  });
   const content = (
     <>
       {/* Thumbnail */}
       <div className="h-10 w-[60px] shrink-0 overflow-hidden rounded">
-        {article.featuredImage?.url ? (
+        {image?.url ? (
           <img
-            src={article.featuredImage.url}
+            src={image?.url}
             alt={article.title}
             className="h-full w-full object-cover"
           />
