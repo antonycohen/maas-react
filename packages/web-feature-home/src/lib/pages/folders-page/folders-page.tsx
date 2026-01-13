@@ -1,7 +1,41 @@
 import { FolderCard, TitleAndDescriptionHero } from '@maas/web-components';
-import { mockCurrentIssue } from '../mock';
+import { useGetFolders } from '@maas/core-api';
 
 export const FoldersPage = () => {
+  const { data: response } = useGetFolders({
+    limit: 10,
+    offset: 0,
+    fields: {
+      id: null,
+      name: null,
+      description: null,
+      type: null,
+      articleCount: null,
+      cover: {
+        fields: {
+          resizedImages: null,
+        },
+      },
+      articles: {
+        fields: {
+          title: null,
+          id: null,
+          featuredImage: {
+            fields: {
+              url: null,
+            },
+          },
+          author: {
+            fields: {
+              firstName: null,
+              lastName: null,
+            },
+          },
+        },
+      },
+    },
+  });
+
   return (
     <div className="flex flex-col gap-tg-xl px-5 xl:px-0">
       <div className="container mx-auto">
@@ -11,7 +45,7 @@ export const FoldersPage = () => {
         />
       </div>
       <div className="container mx-auto gap-tg-lg flex flex-col py-tg-xl">
-        {mockCurrentIssue.folders?.map((folder) => (
+        {response?.data?.map((folder) => (
           <FolderCard
             key={`folder-${folder.id}`}
             folder={folder}

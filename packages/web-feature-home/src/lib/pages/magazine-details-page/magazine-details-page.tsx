@@ -28,6 +28,17 @@ export const MagazineDetailsPage = () => {
             fields: {
               title: null,
               id: null,
+              featuredImage: {
+                fields: {
+                  url: null,
+                },
+              },
+              author: {
+                fields: {
+                  firstName: null,
+                  lastName: null,
+                },
+              },
             },
           },
         },

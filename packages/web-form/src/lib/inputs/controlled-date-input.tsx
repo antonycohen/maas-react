@@ -34,12 +34,13 @@ export function ControlledDateInput<T extends FieldValues>(
     control: control,
   });
   const id = useId();
-
   const inputElement = (
     <DatePicker
       id={id}
       value={field.value}
-      onChange={field.onChange}
+      onChange={(e: Date | undefined) => {
+        field.onChange(e?.toISOString());
+      }}
       placeholder={placeholder}
       disabled={disabled}
       aria-invalid={fieldState.invalid}

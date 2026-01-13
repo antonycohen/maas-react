@@ -1,5 +1,5 @@
 import {
-  FeedArticleData,
+  mapIssueToFeedArticle,
   FeedArticleItem,
   TitleAndDescriptionHero,
 } from '@maas/web-components';
@@ -13,24 +13,7 @@ import {
   renderMagazineCollectionToolbar,
 } from '../../components/magazine-collection';
 
-function mapIssueToFeedArticle(article: Article): FeedArticleData {
-  return {
-    type: 'article',
-    image: article.cover?.downloadUrl || '/placeholder.jpg',
-    title: article.title || 'Sans titre',
-    category: article.categories?.[0].name || 'Magazine',
-    subcategory: undefined,
-    author: article.author?.firstName || 'Tangente',
-    date: article.publishedAt
-      ? new Date(article.publishedAt).toLocaleDateString('fr-FR', {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric',
-        })
-      : '',
-    link: `/articles/${article.id}`,
-  };
-}
+
 
 // Column definitions for filtering (accessor columns enable filter state)
 const columns: ColumnDef<Article>[] = [

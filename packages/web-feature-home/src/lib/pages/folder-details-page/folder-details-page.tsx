@@ -1,15 +1,17 @@
 import { useParams } from 'react-router-dom';
 
-import { ContentFeed, TitleAndDescriptionHero } from '@maas/web-components';
-import { fakeFeedItems, mockCurrentIssue } from '../mock';
+import {
+  ContentFeed,
+  mapIssueToFeedArticle,
+  TitleAndDescriptionHero,
+} from '@maas/web-components';
 import { cn } from '@maas/core-utils';
 import { useGetFolderById } from '@maas/core-api';
+import { useMemo } from 'react';
 
 export const FolderDetailsPages = () => {
   const { id } = useParams();
-  const currentFolders = mockCurrentIssue.folders?.find((f) => f.id === id);
-
-  const { data } = useGetFolderById({
+  const { data: currentFolders } = useGetFolderById({
     id: id as string,
     fields: {
       id: null,
@@ -23,18 +25,29 @@ export const FolderDetailsPages = () => {
       },
       articles: {
         fields: {
-          id: null,
           title: null,
+          id: null,
+          featuredImage: {
+            fields: {
+              url: null,
+            },
+          },
+          author: {
+            fields: {
+              firstName: null,
+              lastName: null,
+            },
+          },
         },
       },
     },
   });
+  const articles = useMemo(() => {
+    return currentFolders?.articles?.map((a) => mapIssueToFeedArticle(a));
+  }, [currentFolders]);
 
   if (!currentFolders) return null; //TODO: Add loader or something else
-
-  const bgImageUrl =
-    currentFolders.cover?.url ||
-    'https://images.unsplash.com/photo-1700773429980-ed1d3287fe1e?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+  const bgImageUrl = currentFolders.cover?.url;
 
   return (
     <div className="flex flex-col gap-tg-xl">
@@ -42,7 +55,7 @@ export const FolderDetailsPages = () => {
         className={cn(
           'w-full bg-repeat bg-cover min-h-[530px] flex justify-center items-center bg-center',
           {
-            'bg-gray-400': !bgImageUrl, // fallback when no image
+            'bg-gray-400': !bgImageUrl,
           },
         )}
         style={
@@ -56,13 +69,13 @@ export const FolderDetailsPages = () => {
           description={currentFolders.description || ''}
         />
       </div>
-      {currentFolders?.articles && currentFolders?.articles?.length > 0 && (
+      {articles && articles?.length > 0 && (
         <div className="container mx-auto flex flex-col gap-5 pb-10 pt-5 px-5">
           <h2 className="font-heading text-2xl md:text-[34px] font-semibold leading-[40px] tracking-[-0.85px]">
             <span className="text-brand-primary">Tous les articles </span>&nbsp;
             <span className="text-black">de ce dossier</span>
           </h2>
-          <ContentFeed items={fakeFeedItems} />
+          <ContentFeed items={articles} />
         </div>
       )}
     </div>
