@@ -81,9 +81,13 @@ export const FeedArticleItem = ({ item }: FeedArticleItemProps) => {
 
 
 export function mapIssueToFeedArticle(article: Article): FeedArticleData {
+  //TODO: update the images to use cover.url directly but now the url is broken
+  const coverImages = article.cover?.resizedImages?.find(
+    (i) => i.width === 640,
+  );
   return {
     type: 'article',
-    image: article.cover?.downloadUrl || '/placeholder.jpg',
+    image: coverImages?.url || '/placeholder.jpg',
     title: article.title || 'Sans titre',
     category: article.categories?.[0].name || 'Magazine',
     subcategory: undefined,
