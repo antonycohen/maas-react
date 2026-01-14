@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { FileText } from 'lucide-react';
+import { Article } from '@maas/core-api-models';
 
 export interface FeedArticleData {
   type: 'article';
@@ -76,6 +77,32 @@ export const FeedArticleItem = ({ item }: FeedArticleItemProps) => {
     </Link>
   );
 };
+
+
+
+export function mapIssueToFeedArticle(article: Article): FeedArticleData {
+  //TODO: update the images to use cover.url directly but now the url is broken
+  const coverImages = article.cover?.resizedImages?.find(
+    (i) => i.width === 640,
+  );
+  return {
+    type: 'article',
+    image: coverImages?.url || '/placeholder.jpg',
+    title: article.title || 'Sans titre',
+    category: article.categories?.[0].name || 'Magazine',
+    subcategory: undefined,
+    author: article.author?.firstName || 'Tangente',
+    date: article.publishedAt
+      ? new Date(article.publishedAt).toLocaleDateString('fr-FR', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+        })
+      : '',
+    link: `/articles/${article.id}`,
+  };
+}
+
 
 
 export type FeedContentItemData =

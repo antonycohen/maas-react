@@ -97,13 +97,11 @@ export function EditIssueManagerPage() {
       enabled: !isCreateMode,
     },
   );
-
   // Form
   const { form } = useEditIssueForm({
     issue,
     isCreateMode,
   });
-
   // Actions
   const { onSubmit, handleDelete, isSaving, deleteMutation } = useEditIssueActions(
     form,
