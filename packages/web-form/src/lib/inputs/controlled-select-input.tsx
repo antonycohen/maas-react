@@ -36,7 +36,16 @@ type ControlledSelectInputProps<T extends FieldValues> = {
 export function ControlledSelectInput<T extends FieldValues>(
   props: ControlledSelectInputProps<T>,
 ) {
-  const { name, label, options, placeholder, description, disabled, direction = 'vertical', className } = props;
+  const {
+    name,
+    label,
+    options,
+    placeholder,
+    description,
+    disabled,
+    direction = 'vertical',
+    className,
+  } = props;
   const form = useFormContext();
   const { control } = form;
   const { field, fieldState } = useController({
@@ -45,10 +54,16 @@ export function ControlledSelectInput<T extends FieldValues>(
   });
   const id = useId();
 
+  //https://github.com/radix-ui/primitives/issues/3068
+  const handleChange = (value: string) => {
+    if (value?.trim() === '') return;
+    field.onChange(value);
+  };
+
   const inputElement = (
     <Select
-      value={field.value}
-      onValueChange={field.onChange}
+      value={field.value ?? undefined}
+      onValueChange={handleChange}
       disabled={disabled}
     >
       <SelectTrigger
@@ -69,8 +84,15 @@ export function ControlledSelectInput<T extends FieldValues>(
   );
 
   return (
-    <Field data-invalid={fieldState.invalid} orientation={direction} className={className}>
-      <FieldLabel htmlFor={id} className={direction === 'horizontal' ? 'font-semibold basis-1/2' : ''}>
+    <Field
+      data-invalid={fieldState.invalid}
+      orientation={direction}
+      className={className}
+    >
+      <FieldLabel
+        htmlFor={id}
+        className={direction === 'horizontal' ? 'font-semibold basis-1/2' : ''}
+      >
         {label}
       </FieldLabel>
       {direction === 'horizontal' ? (
