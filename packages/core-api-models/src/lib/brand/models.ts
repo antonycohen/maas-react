@@ -30,7 +30,7 @@ export const brandSchema = z.object({
   issueCount: z.number().nullable(),
   issueConfiguration: z
     .object({
-      defaultFolders: z.record(z.string(), z.string()).nullable(),
+      defaultFolders: z.array(z.string()).nullable(),
       coverRatio: coverRatioSchema.nullable(),
       color: hexColorSchema.nullable(),
     })
@@ -46,7 +46,7 @@ export const createBrandSchema = z.object({
   logo: updateImageSchema.nullable().optional(),
   isActive: z.boolean().nullable(),
   issueConfiguration: z.object({
-    defaultFolders: z.record(z.string(), z.string()).nullable(),
+    defaultFolders: z.array(z.string()).nullable(),
     coverRatio: coverRatioSchema.nullable(),
     color: hexColorSchema.nullable(),
   }),
@@ -61,7 +61,7 @@ export const updateBrandSchema = z.object({
   logo: updateImageSchema.nullable().optional(),
   isActive: z.boolean().optional(),
   issueConfiguration: z.object({
-    defaultFolders: z.record(z.string(), z.string()).nullable(),
+    defaultFolders: z.array(z.string()).nullable(),
     coverRatio: coverRatioSchema.nullable(),
     color: hexColorSchema.nullable(),
   }),

@@ -37,6 +37,7 @@ export function EditBrandManagerPage() {
   if (!isCreateMode && !isLoading && !brand) {
     return <div>Brand not found</div>;
   }
+console.log(form.formState.errors, form.formState);
 
   const {
     ControlledTextInput,
@@ -123,7 +124,6 @@ export function EditBrandManagerPage() {
                       name="issueConfiguration.color"
                       label="Brand Color"
                     />
-
                   </FieldGroup>
                 </CardContent>
               </Card>
