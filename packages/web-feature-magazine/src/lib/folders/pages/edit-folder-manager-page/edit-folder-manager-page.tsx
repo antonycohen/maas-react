@@ -66,6 +66,12 @@ export function EditFolderManagerPage() {
         description: null,
         cover: null,
         isPublished: null,
+        issues: {
+          fields: {
+            id: null,
+            title: null,
+          },
+        },
         articles: {
           fields: {
             id: null,

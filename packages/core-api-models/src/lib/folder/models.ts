@@ -1,7 +1,8 @@
 import * as z from 'zod';
 import { readImageSchema, updateImageSchema } from '../image';
-import { articleRefSchema, articleSchema } from '../article';
+import { articleRefSchema, articleSchema, Article } from '../article';
 import { organizationRefSchema } from '../organizations';
+import { issueSchema, Issue } from '../issue';
 
 export const readFolderRefSchema = z.object({
   id: z.string(),
@@ -10,11 +11,28 @@ export const readFolderRefSchema = z.object({
 
 export type ReadFolderRef = z.infer<typeof readFolderRefSchema>;
 
+// Define Folder type to break circular reference
+export type Folder = {
+  id: string;
+  type: string | null;
+  isDefault: boolean | null;
+  issues: Issue[] | null;
+  name: string;
+  description: string | null;
+  cover: z.infer<typeof readImageSchema> | null;
+  isPublished: boolean | null;
+  metadata: Record<string, unknown> | null;
+  articleCount: number | null;
+  articles: Article[] | null;
+  link: string | null;
+};
+
 // Full folder schema for read operations
-export const folderSchema = z.object({
+export const folderSchema: z.ZodType<Folder> = z.object({
   id: z.string(),
   type: z.string().max(255).nullable(),
   isDefault: z.boolean().nullable(),
+  issues: z.lazy(() => z.array(issueSchema).nullable()),
   name: z.string().max(255),
   description: z.string().max(2000).nullable(),
   cover: z.object(readImageSchema).nullable(),
@@ -22,10 +40,8 @@ export const folderSchema = z.object({
   metadata: z.record(z.string(), z.unknown()).nullable(),
   articleCount: z.number().nullable(),
   articles: z.lazy(() => z.array(articleSchema).nullable()),
-  link: z.string().nullable().optional(),
+  link: z.string().nullable(),
 });
-
-export type Folder = z.infer<typeof folderSchema>;
 
 // Schema for creating a folder
 export const createFolderSchema = z.object({
