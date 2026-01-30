@@ -12,7 +12,7 @@ export function MagazineCard({ magazine }: MagazineCardProps) {
     width: 640,
   });
 
-  const imageUrl = resizedImage?.url || magazine.cover?.downloadUrl || '';
+  const imageUrl = resizedImage?.url || magazine.cover?.downloadUrl || 'https://placehold.net/book-600x800.png';
 
   const date = magazine.publishedAt
     ? new Date(magazine.publishedAt).toLocaleDateString('fr-FR', {

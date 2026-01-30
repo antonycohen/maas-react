@@ -1,7 +1,7 @@
 import React from 'react';
 import { Collection, CollectionRenderProps } from '@maas/web-collection';
 import { TitleAndDescriptionHero, Pagination } from '@maas/web-components';
-import { useGetIssues } from '@maas/core-api';
+import { GetIssuesParams, useGetIssues } from '@maas/core-api';
 import { Issue } from '@maas/core-api-models';
 import { ColumnDef } from '@tanstack/react-table';
 import { MagazineFilters } from './components/magazine-filters';
@@ -90,6 +90,7 @@ export const MagazinesPage = () => {
         columns={columns}
         useQueryFn={useGetIssues}
         useLocationAsState
+        staticParams={{ filters: { isPublished: true } } as any}
         filtersConfiguration={{
           facetedFilters: [
             {

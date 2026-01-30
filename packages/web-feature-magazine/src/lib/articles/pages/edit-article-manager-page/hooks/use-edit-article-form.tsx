@@ -30,6 +30,7 @@ export const useEditArticleForm = (articleId: string) => {
         content: null,
         cover: null,
         keywords: null,
+        metadata: null,
         type: {
           fields: {
             id: null,

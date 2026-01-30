@@ -12,5 +12,5 @@ export const useResizedImage = ({
     () => images?.find((image) => image.width === width),
     [images, width],
   );
-  return { resizedImage: resizedImage || images?.[0] || null };
+  return { resizedImage: resizedImage || images?.[0] };
 };

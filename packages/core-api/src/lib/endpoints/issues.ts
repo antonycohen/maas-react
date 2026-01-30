@@ -29,11 +29,11 @@ export class IssuesEndpoint {
   async getIssues(
     params: GetCollectionQueryParams<Issue> & { filters?: GetIssuesFilter }
   ): Promise<ApiCollectionResponse<Issue>> {
-    const { fields, offset, limit, filters } = params;
+    const { fields, offset, limit, filters, staticParams } = params;
     return this.client.getCollection<Issue>(BASE_PATH, fields, {
       offset,
       limit,
-      ...filters,
+      ...{ ...filters, ...staticParams },
     });
   }
 
