@@ -34,7 +34,7 @@ export const useEditBrandForm = (brandId: string) => {
       description: '',
       isActive: null,
       issueConfiguration: {
-        defaultFolders: brand?.issueConfiguration?.defaultFolders ?? null,
+        defaultFolders: brand?.issueConfiguration?.defaultFolders ?? [],
         coverRatio: brand?.issueConfiguration?.coverRatio ?? '',
         color: brand?.issueConfiguration?.color ?? '',
       },
@@ -47,7 +47,7 @@ export const useEditBrandForm = (brandId: string) => {
             logo: brand.logo,
             isActive: brand.isActive ?? undefined,
             issueConfiguration: {
-              defaultFolders: brand?.issueConfiguration?.defaultFolders ?? null,
+              defaultFolders: brand?.issueConfiguration?.defaultFolders ?? [],
               coverRatio: brand?.issueConfiguration?.coverRatio ?? '',
               color: brand?.issueConfiguration?.color ?? '',
             },

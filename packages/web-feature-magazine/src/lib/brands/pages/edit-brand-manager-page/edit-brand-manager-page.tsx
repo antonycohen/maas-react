@@ -123,7 +123,6 @@ export function EditBrandManagerPage() {
                       name="issueConfiguration.color"
                       label="Brand Color"
                     />
-
                   </FieldGroup>
                 </CardContent>
               </Card>
