@@ -22,7 +22,7 @@ export type GetCollectionQueryParams<T, Q = undefined> = {
   offset: number;
   limit: number;
   filters?: QueryParams;
-  staticParams?: QueryParams;
+  staticParams?: Q;
   sort?: {
     field: keyof T;
     direction: 'asc' | 'desc';

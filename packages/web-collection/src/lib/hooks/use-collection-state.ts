@@ -9,17 +9,29 @@ import { useSearchParams } from 'react-router-dom';
 
 interface UseCollectionStateProps {
   useLocationAsState?: boolean;
+  searchDebounceMs?: number;
 }
 
 export function useCollectionState({
   useLocationAsState = false,
+  searchDebounceMs = 300,
 }: UseCollectionStateProps = {}) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [globalFilter, setGlobalFilter] = useState(() =>
     useLocationAsState ? searchParams.get('search') || '' : '',
   );
+  const [debouncedGlobalFilter, setDebouncedGlobalFilter] = useState(globalFilter);
   const [rowSelection, setRowSelection] = useState({});
+
+  // Debounce globalFilter for API queries
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedGlobalFilter(globalFilter);
+    }, searchDebounceMs);
+
+    return () => clearTimeout(timer);
+  }, [globalFilter, searchDebounceMs]);
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
     () => {
@@ -55,7 +67,7 @@ export function useCollectionState({
 
     const params = new URLSearchParams();
 
-    if (globalFilter) params.set('search', globalFilter);
+    if (debouncedGlobalFilter) params.set('search', debouncedGlobalFilter);
     if (pagination.pageIndex > 0)
       params.set('page', String(pagination.pageIndex));
     if (pagination.pageSize !== 10)
@@ -69,7 +81,7 @@ export function useCollectionState({
     setSearchParams(params, { replace: true });
   }, [
     useLocationAsState,
-    globalFilter,
+    debouncedGlobalFilter,
     pagination,
     columnFilters,
     sorting,
@@ -79,6 +91,7 @@ export function useCollectionState({
 
   return {
     globalFilter,
+    debouncedGlobalFilter,
     setGlobalFilter,
     rowSelection,
     setRowSelection,

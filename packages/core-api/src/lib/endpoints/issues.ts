@@ -33,7 +33,7 @@ export class IssuesEndpoint {
     return this.client.getCollection<Issue>(BASE_PATH, fields, {
       offset,
       limit,
-      ...{ ...filters, ...staticParams },
+      ...{ ...filters, ...staticParams as GetCollectionQueryParams<Issue>['filters'] },
     });
   }
 

@@ -10,10 +10,12 @@ import { Button } from '@maas/web-components';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons-react';
 import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { usePublishedStatusOptions } from '../../../hook/use-filter-options';
 
 export function ArticlesListManagerPage() {
   const columns = useArticlesListColumns();
   const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+  const publishedStatusOptions = usePublishedStatusOptions();
 
   return (
     <div>
@@ -40,8 +42,16 @@ export function ArticlesListManagerPage() {
           filtersConfiguration={{
             textFilter: {
               placeholder: 'Search articles...',
-              queryParamName: 'term',
+              queryParamName: 'title',
             },
+            facetedFilters: [
+              {
+                columnId: 'isPublished',
+                queryParamName: 'isPublished',
+                title: 'Published Status',
+                options: publishedStatusOptions,
+              },
+            ],
           }}
           useQueryFn={useGetArticles}
           queryFields={{

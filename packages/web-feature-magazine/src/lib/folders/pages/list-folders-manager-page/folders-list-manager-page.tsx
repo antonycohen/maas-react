@@ -15,6 +15,7 @@ export function FoldersListManagerPage() {
   const columns = useFoldersListColumns();
 
   const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+
   return (
     <div>
       <header>

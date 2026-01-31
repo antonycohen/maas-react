@@ -90,7 +90,7 @@ export const MagazinesPage = () => {
         columns={columns}
         useQueryFn={useGetIssues}
         useLocationAsState
-        staticParams={{ filters: { isPublished: true } } as any}
+        staticParams={{ filters: { isPublished: true } }}
         filtersConfiguration={{
           facetedFilters: [
             {

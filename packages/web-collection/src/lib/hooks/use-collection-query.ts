@@ -8,6 +8,7 @@ import {UseQueryTable} from '../collection';
 interface UseCollectionQueryProps<T, S = undefined> {
   pagination: PaginationState;
   globalFilter: string;
+  debouncedGlobalFilter: string;
   columnFilters: ColumnFiltersState;
   sorting?: SortingState;
   filtersConfiguration?: Omit<CollectionToolbarProps<T>, 'table' | 'showColumnSelector'>;
@@ -19,6 +20,7 @@ interface UseCollectionQueryProps<T, S = undefined> {
 export function useCollectionQuery<T, Q = undefined>({
   pagination,
   globalFilter,
+  debouncedGlobalFilter,
   columnFilters,
   sorting,
   filtersConfiguration,
@@ -30,7 +32,7 @@ export function useCollectionQuery<T, Q = undefined>({
     const filters: QueryParams = {};
     const textFilter = filtersConfiguration?.textFilter;
     if (textFilter !== undefined) {
-      filters[textFilter.queryParamName] = globalFilter;
+      filters[textFilter.queryParamName] = debouncedGlobalFilter;
     }
     filtersConfiguration?.facetedFilters?.forEach((facetedFilter) => {
       filters[facetedFilter.queryParamName] = columnFilters.find(
@@ -42,7 +44,7 @@ export function useCollectionQuery<T, Q = undefined>({
     columnFilters,
     filtersConfiguration?.facetedFilters,
     filtersConfiguration?.textFilter,
-    globalFilter,
+    debouncedGlobalFilter,
   ]);
 
   const sort = useMemo(() => {
@@ -58,17 +60,26 @@ export function useCollectionQuery<T, Q = undefined>({
 
 
 
+  const staticParamsObj = (staticParams ?? {}) as Record<string, unknown>;
+  const staticFilters = (staticParamsObj.filters ?? {}) as Record<string, unknown>;
+  const otherStaticParams = { ...staticParamsObj } as Record<string, unknown>;
+  Reflect.deleteProperty(otherStaticParams, 'filters');
+
   const { data } = useQueryFn(
     {
       offset: pagination.pageIndex * pagination.pageSize,
       limit: pagination.pageSize,
-      filters,
+      // merge static filters (defaults) with dynamic filters (overrides)
+      filters: { ...(staticFilters ?? {}), ...(filters ?? {}) },
       fields: queryFields,
-      staticParams,
-      sort: sort ? {
-        field: sort.field,
-        direction: sort.direction,
-      }: undefined,
+      // spread other static params at top level so hooks expecting top-level params receive them
+      ...otherStaticParams,
+      sort: sort
+        ? {
+          field: sort.field,
+          direction: sort.direction,
+        }
+        : undefined,
     },
     {
       placeholderData: keepPreviousData,

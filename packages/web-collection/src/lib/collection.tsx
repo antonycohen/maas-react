@@ -243,6 +243,7 @@ export function Collection<T, Q = undefined>({
   const { items, totalCount } = useCollectionQuery({
     pagination: state.pagination,
     globalFilter: state.globalFilter,
+    debouncedGlobalFilter: state.debouncedGlobalFilter,
     columnFilters: state.columnFilters,
     sorting: state.sorting,
     filtersConfiguration,

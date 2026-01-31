@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import { readImageSchema, updateImageSchema } from '../image';
+import { readImageSchema, updateImageSchema, Image } from '../image';
 import { articleRefSchema, articleSchema, Article } from '../article';
 import { organizationRefSchema } from '../organizations';
 import { issueSchema, Issue } from '../issue';
@@ -19,7 +19,7 @@ export type Folder = {
   issues: Issue[] | null;
   name: string;
   description: string | null;
-  cover: z.infer<typeof readImageSchema> | null;
+  cover: Image | null;
   isPublished: boolean | null;
   metadata: Record<string, unknown> | null;
   articleCount: number | null;

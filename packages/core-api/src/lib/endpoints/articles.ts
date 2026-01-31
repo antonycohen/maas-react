@@ -13,6 +13,7 @@ import {
 const BASE_PATH = '/api/v1/articles';
 
 export interface GetArticlesFilter {
+  title?: string;
   organizationId?: string;
   authorId?: string;
   typeId?: string;
@@ -36,6 +37,7 @@ export class ArticlesEndpoint {
     return this.client.getCollection<Article>(BASE_PATH, fields, {
       offset,
       limit,
+      ...(filters?.title && { title: filters.title }),
       ...(filters?.id && { id: filters.id }),
       ...(filters?.organizationId && { organization_id: filters.organizationId }),
       ...(filters?.authorId && { author_id: filters.authorId }),
