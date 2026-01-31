@@ -1,7 +1,7 @@
 import React from 'react';
 import { Collection, CollectionRenderProps } from '@maas/web-collection';
 import { TitleAndDescriptionHero, Pagination } from '@maas/web-components';
-import { GetIssuesParams, useGetIssues } from '@maas/core-api';
+import { useGetIssues } from '@maas/core-api';
 import { Issue } from '@maas/core-api-models';
 import { ColumnDef } from '@tanstack/react-table';
 import { MagazineFilters } from './components/magazine-filters';
@@ -21,6 +21,10 @@ const columns: ColumnDef<Issue>[] = [
   {
     id: 'term',
     accessorKey: 'term',
+  },
+  {
+    id: 'publishedAt',
+    accessorKey: 'publishedAt',
   },
 ];
 

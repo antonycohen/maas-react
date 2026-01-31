@@ -1,13 +1,17 @@
 import { Badge } from '@maas/web-components';
 import { Article } from '@maas/core-api-models';
+import { Separator } from '@maas/web-components';
 
 export const Thematiques = ({
   categories,
+  withSeparator = true,
 }: {
   categories?: Article['categories'];
+    withSeparator?: boolean;
 }) => {
   if (categories?.length === 0) return null;
   return (
+    <>
     <div className="flex flex-col gap-5">
       <h2
         className={
@@ -30,5 +34,7 @@ export const Thematiques = ({
         ))}
       </div>
     </div>
+      {withSeparator && <Separator />}
+    </>
   );
 };

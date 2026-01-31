@@ -9,7 +9,7 @@ interface MagazineCardProps {
 export function MagazineCard({ magazine }: MagazineCardProps) {
   const { resizedImage } = useResizedImage({
     images: magazine.cover?.resizedImages,
-    width: 640,
+    width: 960,
   });
 
   const imageUrl = resizedImage?.url || magazine.cover?.downloadUrl || 'https://placehold.net/book-600x800.png';
@@ -32,7 +32,7 @@ export function MagazineCard({ magazine }: MagazineCardProps) {
         <img
           src={imageUrl}
           alt={magazine.title}
-          className="absolute inset-0 w-full h-full object-contain rounded-t-[4px]"
+          className="absolute inset-0 w-full h-full object-cover rounded-t-[4px]"
         />
       </div>
 

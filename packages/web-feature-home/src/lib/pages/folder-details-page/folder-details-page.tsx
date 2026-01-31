@@ -4,6 +4,7 @@ import {
   ContentFeed,
   mapIssueToFeedArticle,
   TitleAndDescriptionHero,
+  useResizedImage,
 } from '@maas/web-components';
 import { cn } from '@maas/core-utils';
 import { useGetFolderById } from '@maas/core-api';
@@ -46,26 +47,27 @@ export const FolderDetailsPages = () => {
   const articles = useMemo(() => {
     return currentFolders?.articles?.map((a) => mapIssueToFeedArticle(a));
   }, [currentFolders]);
+  const { resizedImage: bgImageUrl } = useResizedImage({ images: currentFolders?.cover?.resizedImages, width: 1280 });
 
   if (!currentFolders) return null; //TODO: Add loader or something else
-  const bgImageUrl = currentFolders.cover?.url;
 
   return (
     <div className="flex flex-col gap-tg-xl">
       <div
         className={cn(
-          'w-full bg-repeat bg-cover min-h-[530px] flex justify-center items-center bg-center',
+          'w-full bg-repeat bg-cover relative min-h-[530px] flex justify-center items-center bg-center',
           {
-            'bg-gray-400': !bgImageUrl,
+            'bg-gray-400': !bgImageUrl?.url,
           },
         )}
         style={
-          bgImageUrl ? { backgroundImage: `url(${bgImageUrl})` } : undefined
+          bgImageUrl ? { backgroundImage: `url(${bgImageUrl.url})` } : undefined
         }
       >
+        <div className="absolute inset-0 bg-black/40"></div>
         <TitleAndDescriptionHero
-          titleClassName={'text-white'}
-          descriptionClassName={'text-white'}
+          titleClassName={'text-white z-10'}
+          descriptionClassName={'text-white z-10'}
           title={currentFolders.name}
           description={currentFolders.description || ''}
         />

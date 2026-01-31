@@ -12,8 +12,10 @@ import {
 } from '@maas/web-feature-home';
 import { AccountRoutes } from '@maas/web-feature-users';
 import { PricingRoutes } from '@maas/web-feature-pricing';
+import { useAutoScrollTop } from '../hooks/use-auto-scroll-top';
 
 export const RootRoutes = () => {
+  useAutoScrollTop()
   const connectedUser = useConnectedUser();
 
   return (

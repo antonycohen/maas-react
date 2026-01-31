@@ -1,5 +1,5 @@
 import { Authors } from './authors';
-import { Separator, ShareArticles } from '@maas/web-components';
+import { ShareArticles } from '@maas/web-components';
 import { Thematiques } from './thematiques';
 import { Article } from '@maas/core-api-models';
 
@@ -18,11 +18,9 @@ export const ArticleSidebar = ({ author, categories }: ArticleSidebarProps) => {
       }
     >
       <Authors authors={authors} />
-      <Separator />
       <Thematiques categories={categories} />
-      <Separator />
       <ShareArticles
-        links={{ facebook: '#', x: '#', instagram: '#', linkedin: '#' }}
+        title={author ? `${author.firstName} ${author.lastName}` : ''}
       />
     </aside>
   );

@@ -1,13 +1,14 @@
-import { ArticleAuthor } from '@maas/web-components';
+import { ArticleAuthor, Separator } from '@maas/web-components';
 import { Article } from '@maas/core-api-models';
 import { getImageUrl } from '@maas/core-utils';
 
 type AuthorProps = Article['author']
-export const Authors = ({ authors }: { authors: AuthorProps[] }) => {
+export const Authors = ({ authors, withSeparator = true }: { authors: AuthorProps[]; withSeparator?: boolean }) => {
 
   const filteredAuthors = authors.filter(author => author !== null && author !== undefined);
   if (filteredAuthors.length === 0) return null;
   return (
+    <>
     <div className="flex flex-col gap-5">
       <h2
         className={
@@ -27,5 +28,7 @@ export const Authors = ({ authors }: { authors: AuthorProps[] }) => {
         ))}
       </div>
     </div>
+      {withSeparator && <Separator />}
+    </>
   );
 };
