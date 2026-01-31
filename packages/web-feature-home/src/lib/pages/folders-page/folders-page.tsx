@@ -20,9 +20,9 @@ export const FoldersPage = () => {
         fields: {
           title: null,
           id: null,
-          featuredImage: {
+          cover: {
             fields: {
-              url: null,
+              resizedImages: null,
             },
           },
           author: {

@@ -31,6 +31,7 @@ export const useEditArticleForm = (articleId: string) => {
         cover: null,
         keywords: null,
         metadata: null,
+        pdf: null,
         type: {
           fields: {
             id: null,
