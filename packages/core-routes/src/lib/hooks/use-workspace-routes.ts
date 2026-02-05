@@ -120,6 +120,49 @@ export const useWorkspaceRoutes = (workspaceId: string | null) => {
             notifications: () => `${baseUrl}/${adminUrlBuilders.notifications()}`,
             /** Routing files URL */
             routingFiles: () => `${baseUrl}/${adminUrlBuilders.routingFiles()}`,
+
+            // PMS (Pricing Management System)
+            /** PMS home URL */
+            pms: () => `${baseUrl}/${adminUrlBuilders.pms()}`,
+            // PMS Plans
+            /** PMS Plans list URL */
+            pmsPlans: () => `${baseUrl}/${adminUrlBuilders.pmsPlans()}`,
+            /** New PMS Plan URL */
+            pmsPlanNewInfo: () => `${baseUrl}/${adminUrlBuilders.pmsPlanNewInfo()}`,
+            /** PMS Plan info URL */
+            pmsPlanInfo: (planId: string) => `${baseUrl}/${adminUrlBuilders.pmsPlanInfo(planId)}`,
+            /** PMS Plan products URL */
+            pmsPlanProducts: (planId: string) => `${baseUrl}/${adminUrlBuilders.pmsPlanProducts(planId)}`,
+            // PMS Products
+            /** PMS Products list URL */
+            pmsProducts: () => `${baseUrl}/${adminUrlBuilders.pmsProducts()}`,
+            /** New PMS Product URL */
+            pmsProductNewInfo: () => `${baseUrl}/${adminUrlBuilders.pmsProductNewInfo()}`,
+            /** PMS Product info URL */
+            pmsProductInfo: (productId: string) => `${baseUrl}/${adminUrlBuilders.pmsProductInfo(productId)}`,
+            /** PMS Product prices URL */
+            pmsProductPrices: (productId: string) => `${baseUrl}/${adminUrlBuilders.pmsProductPrices(productId)}`,
+            /** PMS Product features URL */
+            pmsProductFeatures: (productId: string) => `${baseUrl}/${adminUrlBuilders.pmsProductFeatures(productId)}`,
+            // PMS Prices
+            /** PMS Prices list URL */
+            pmsPrices: () => `${baseUrl}/${adminUrlBuilders.pmsPrices()}`,
+            /** Edit PMS Price URL */
+            pmsPriceEdit: (priceId: string) => `${baseUrl}/${adminUrlBuilders.pmsPriceEdit(priceId)}`,
+            // PMS Features
+            /** PMS Features list URL */
+            pmsFeatures: () => `${baseUrl}/${adminUrlBuilders.pmsFeatures()}`,
+            /** Edit PMS Feature URL */
+            pmsFeatureEdit: (featureId: string) => `${baseUrl}/${adminUrlBuilders.pmsFeatureEdit(featureId)}`,
+            // PMS Subscriptions
+            /** PMS Subscriptions list URL */
+            pmsSubscriptions: () => `${baseUrl}/${adminUrlBuilders.pmsSubscriptions()}`,
+            /** View PMS Subscription URL */
+            pmsSubscriptionView: (subscriptionId: string) =>
+                `${baseUrl}/${adminUrlBuilders.pmsSubscriptionView(subscriptionId)}`,
+            // PMS Wizard
+            /** PMS Wizard URL */
+            pmsWizard: () => `${baseUrl}/${adminUrlBuilders.pmsWizard()}`,
         }),
         [baseUrl]
     );

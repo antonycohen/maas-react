@@ -91,6 +91,37 @@ export const adminUrlBuilders = {
     subscriptions: () => ADMIN_ROUTES.SUBSCRIPTIONS,
     notifications: () => ADMIN_ROUTES.NOTIFICATIONS,
     routingFiles: () => ADMIN_ROUTES.ROUTING_FILES,
+
+    // PMS (Pricing Management System)
+    pms: () => ADMIN_ROUTES.PMS,
+    // PMS Plans
+    pmsPlans: () => ADMIN_ROUTES.PMS_PLANS,
+    pmsPlanNewInfo: () => `${SEGMENTS.PMS}/${SEGMENTS.PLANS}/${SEGMENTS.NEW}/${SEGMENTS.INFO}`,
+    pmsPlanInfo: (planId: string) =>
+        buildPath(`${SEGMENTS.PMS}/${SEGMENTS.PLANS}/:planId/${SEGMENTS.INFO}`, { planId }),
+    pmsPlanProducts: (planId: string) =>
+        buildPath(`${SEGMENTS.PMS}/${SEGMENTS.PLANS}/:planId/${SEGMENTS.PRODUCTS}`, { planId }),
+    // PMS Products
+    pmsProducts: () => ADMIN_ROUTES.PMS_PRODUCTS,
+    pmsProductNewInfo: () => `${SEGMENTS.PMS}/${SEGMENTS.PRODUCTS}/${SEGMENTS.NEW}/${SEGMENTS.INFO}`,
+    pmsProductInfo: (productId: string) =>
+        buildPath(`${SEGMENTS.PMS}/${SEGMENTS.PRODUCTS}/:productId/${SEGMENTS.INFO}`, { productId }),
+    pmsProductPrices: (productId: string) =>
+        buildPath(`${SEGMENTS.PMS}/${SEGMENTS.PRODUCTS}/:productId/${SEGMENTS.PRICES}`, { productId }),
+    pmsProductFeatures: (productId: string) =>
+        buildPath(`${SEGMENTS.PMS}/${SEGMENTS.PRODUCTS}/:productId/${SEGMENTS.FEATURES}`, { productId }),
+    // PMS Prices
+    pmsPrices: () => ADMIN_ROUTES.PMS_PRICES,
+    pmsPriceEdit: (priceId: string) => buildPath(`${SEGMENTS.PMS}/${SEGMENTS.PRICES}/:priceId`, { priceId }),
+    // PMS Features
+    pmsFeatures: () => ADMIN_ROUTES.PMS_FEATURES,
+    pmsFeatureEdit: (featureId: string) => buildPath(`${SEGMENTS.PMS}/${SEGMENTS.FEATURES}/:featureId`, { featureId }),
+    // PMS Subscriptions
+    pmsSubscriptions: () => ADMIN_ROUTES.PMS_SUBSCRIPTIONS,
+    pmsSubscriptionView: (subscriptionId: string) =>
+        buildPath(`${SEGMENTS.PMS}/${SEGMENTS.PMS_SUBSCRIPTIONS}/:subscriptionId`, { subscriptionId }),
+    // PMS Wizard
+    pmsWizard: () => ADMIN_ROUTES.PMS_WIZARD,
 };
 
 export type AdminUrlBuilders = typeof adminUrlBuilders;

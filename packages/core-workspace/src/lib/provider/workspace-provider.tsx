@@ -46,6 +46,24 @@ const defaultRoutes = {
     subscriptions: () => '/subscriptions',
     notifications: () => '/notifications',
     routingFiles: () => '/routing-files',
+    // PMS
+    pms: () => '/pms',
+    pmsPlans: () => '/pms/plans',
+    pmsPlanNewInfo: () => '/pms/plans/new/info',
+    pmsPlanInfo: () => '/pms/plans',
+    pmsPlanProducts: () => '/pms/plans',
+    pmsProducts: () => '/pms/products',
+    pmsProductNewInfo: () => '/pms/products/new/info',
+    pmsProductInfo: () => '/pms/products',
+    pmsProductPrices: () => '/pms/products',
+    pmsProductFeatures: () => '/pms/products',
+    pmsPrices: () => '/pms/prices',
+    pmsPriceEdit: () => '/pms/prices',
+    pmsFeatures: () => '/pms/features',
+    pmsFeatureEdit: () => '/pms/features',
+    pmsSubscriptions: () => '/pms/subscriptions',
+    pmsSubscriptionView: () => '/pms/subscriptions',
+    pmsWizard: () => '/pms/wizard',
 } as WorkspaceRoutes;
 
 export const WorkspaceContext = React.createContext<WorkspaceContextType>({

@@ -16,6 +16,14 @@ import {
 } from '@maas/web-feature-magazine';
 import { TeamsRoutes } from '@maas/web-feature-organizations';
 import { SettingsRoutes } from '@maas/web-feature-settings';
+import {
+    PlansRoutes,
+    ProductsRoutes,
+    PricesRoutes,
+    FeaturesRoutes,
+    SubscriptionsRoutes as PmsSubscriptionsRoutes,
+    WizardRoutes,
+} from '@maas/web-feature-pms';
 import { useMainNavigation } from '../hooks/use-main-navigation';
 import { useUserNavigation } from '../hooks/use-user-navigation';
 import { GalleryVerticalEnd } from 'lucide-react';
@@ -99,6 +107,13 @@ const WorkspaceRoutesContent = ({ connectedUser, organizationId, organizations }
                 <Route path={ADMIN_ROUTES.USERS_WILDCARD} element={<UsersRoutes />} />
                 <Route path={ADMIN_ROUTES.TEAMS_WILDCARD} element={<TeamsRoutes />} />
                 <Route path={ADMIN_ROUTES.SETTINGS_WILDCARD} element={<SettingsRoutes />} />
+                {/* PMS Routes */}
+                <Route path={ADMIN_ROUTES.PMS_PLANS_WILDCARD} element={<PlansRoutes />} />
+                <Route path={ADMIN_ROUTES.PMS_PRODUCTS_WILDCARD} element={<ProductsRoutes />} />
+                <Route path={ADMIN_ROUTES.PMS_PRICES_WILDCARD} element={<PricesRoutes />} />
+                <Route path={ADMIN_ROUTES.PMS_FEATURES_WILDCARD} element={<FeaturesRoutes />} />
+                <Route path={ADMIN_ROUTES.PMS_SUBSCRIPTIONS_WILDCARD} element={<PmsSubscriptionsRoutes />} />
+                <Route path={ADMIN_ROUTES.PMS_WIZARD} element={<WizardRoutes />} />
                 <Route path="*" element={<Navigate to={routes.issues()} />} />
             </Route>
         </Routes>
