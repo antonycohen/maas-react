@@ -1,4 +1,4 @@
-import { Product, CreateProduct, UpdateProduct, Feature } from '@maas/core-api-models';
+import { Product, CreateProduct, UpdateProduct, ProductFeature } from '@maas/core-api-models';
 import { ApiClient } from '../api-client/api-client';
 import { ApiCollectionResponse, GetCollectionQueryParams, GetQueryByIdParams } from '../types';
 
@@ -68,8 +68,8 @@ export class ProductsEndpoint {
      * Get features attached to a product
      * GET /api/v1/pms/products/{productId}/features
      */
-    async getProductFeatures(productId: string): Promise<Feature[]> {
-        return this.client.getById<Feature[]>(`${BASE_PATH}/${productId}/features`);
+    async getProductFeatures(productId: string): Promise<ProductFeature[]> {
+        return this.client.getById<ProductFeature[]>(`${BASE_PATH}/${productId}/features`);
     }
 
     /**

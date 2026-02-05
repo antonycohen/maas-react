@@ -39,3 +39,14 @@ export const updateFeatureSchema = z.object({
 });
 
 export type UpdateFeature = z.infer<typeof updateFeatureSchema>;
+
+// ProductFeature schema - represents the link between a product and a feature
+export const productFeatureSchema = z.object({
+    id: z.string(), // pf_xxx - use this for detach operations
+    productId: z.string(),
+    feature: featureSchema,
+    createdAt: z.string().nullable(),
+    updatedAt: z.string().nullable(),
+});
+
+export type ProductFeature = z.infer<typeof productFeatureSchema>;

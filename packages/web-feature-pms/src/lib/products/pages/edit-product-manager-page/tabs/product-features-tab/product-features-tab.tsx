@@ -1,4 +1,9 @@
-import { useGetFeatureById, useGetFeatures } from '@maas/core-api';
+import {
+    useGetFeatureById,
+    useGetProductFeatures,
+    useAttachFeatureToProduct,
+    useDetachFeatureFromProduct,
+} from '@maas/core-api';
 import { Button } from '@maas/web-components';
 import { IconPlus } from '@tabler/icons-react';
 import { useOutletContext } from 'react-router-dom';
@@ -20,38 +25,18 @@ export const ProductFeaturesTab = () => {
         setAddFeatureModalOpen,
     } = useOutletContext<EditProductOutletContext>();
 
-    // Note: In a real implementation, you would fetch ProductFeature junction records
-    // For now, we'll simulate with a direct features query
-    // The backend should have an endpoint like /products/{productId}/features
-    const {
-        data: featuresResponse,
-        isLoading: isLoadingFeatures,
-        refetch: refetchFeatures,
-    } = useGetFeatures(
-        {
-            // This would need to be modified to filter by product
-            fields: {
-                id: null,
-                displayName: null,
-                lookupKey: null,
-                withQuota: null,
-                quotaAggregationFormula: null,
-            },
-            offset: 0,
-            limit: 100,
-        },
-        {
-            enabled: !isCreateMode,
-        }
+    const { data: productFeatures = [], isLoading: isLoadingFeatures } = useGetProductFeatures(
+        { productId },
+        { enabled: !isCreateMode && !!productId }
     );
+
+    const attachFeatureMutation = useAttachFeatureToProduct();
+    const detachFeatureMutation = useDetachFeatureFromProduct();
 
     const isListLoading = isLoadingProduct || isLoadingFeatures;
 
-    // In a real implementation, these would be the features attached to this product
-    // For now, we show all features as a placeholder
-    const features = useMemo(() => featuresResponse?.data ?? [], [featuresResponse?.data]);
-
-    const featureIds = useMemo(() => features.map((f) => f.id), [features]);
+    // Get feature IDs for the modal to exclude already attached features
+    const featureIds = useMemo(() => productFeatures.map((pf) => pf.feature.id), [productFeatures]);
 
     // Fetch selected feature details
     const { data: selectedFeature, isLoading: isLoadingFeature } = useGetFeatureById(
@@ -71,22 +56,41 @@ export const ProductFeaturesTab = () => {
     );
 
     const handleAttachFeature = (feature: Feature) => {
-        // In a real implementation, this would call an API to attach the feature to the product
-        // For now, we just show a success message
-        toast.success(`Feature "${feature.displayName}" attached to product`);
-        setSelectedFeatureId(feature.id);
-        setAddFeatureModalOpen(false);
-        refetchFeatures();
+        attachFeatureMutation.mutate(
+            { productId, featureId: feature.id },
+            {
+                onSuccess: () => {
+                    toast.success(`Feature "${feature.displayName}" attached to product`);
+                    setSelectedFeatureId(feature.id);
+                    setAddFeatureModalOpen(false);
+                },
+                onError: () => {
+                    toast.error('Failed to attach feature to product');
+                },
+            }
+        );
     };
 
-    const handleDetachFeature = (featureId: string) => {
+    const handleDetachFeature = (productFeatureId: string) => {
+        // Find the feature to check if it's selected
+        const pf = productFeatures.find((p) => p.id === productFeatureId);
+        const featureId = pf?.feature.id;
+
         if (window.confirm('Detach this feature from the product?')) {
-            // In a real implementation, this would call an API to detach the feature
-            toast.success('Feature detached from product');
-            if (selectedFeatureId === featureId) {
-                setSelectedFeatureId(null);
-            }
-            refetchFeatures();
+            detachFeatureMutation.mutate(
+                { productId, productFeatureId },
+                {
+                    onSuccess: () => {
+                        toast.success('Feature detached from product');
+                        if (selectedFeatureId === featureId) {
+                            setSelectedFeatureId(null);
+                        }
+                    },
+                    onError: () => {
+                        toast.error('Failed to detach feature from product');
+                    },
+                }
+            );
         }
     };
 
@@ -120,7 +124,7 @@ export const ProductFeaturesTab = () => {
                         </Button>
                     </div>
                     <FeaturesList
-                        features={features}
+                        productFeatures={productFeatures}
                         selectedFeatureId={selectedFeatureId}
                         onSelectFeature={setSelectedFeatureId}
                         onRemoveFeature={handleDetachFeature}
