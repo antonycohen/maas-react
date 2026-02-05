@@ -11,6 +11,7 @@
         "out-tsc",
         "dist",
         "jest.config.ts",
+        "jest.config.cts",
         "src/**/*.spec.ts",
         "src/**/*.test.ts",
         "src/**/*.spec.tsx",
@@ -23,10 +24,5 @@
         "eslint.config.cjs",
         "eslint.config.mjs"
     ],
-    "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
-    "references": [
-        {
-            "path": "../core-routes/tsconfig.lib.json"
-        }
-    ]
+    "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"]
 }
