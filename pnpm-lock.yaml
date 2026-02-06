@@ -352,6 +352,8 @@ importers:
 
   packages/core-api-models: {}
 
+  packages/core-routes: {}
+
   packages/core-store-oauth: {}
 
   packages/core-store-session: {}
