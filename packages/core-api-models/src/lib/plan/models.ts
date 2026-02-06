@@ -26,6 +26,7 @@ export const createPlanSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     description: z.string().nullable().optional(),
     active: z.boolean().optional().default(true),
+    portalConfigurationId: z.string().nullable().optional(),
     metadata: z.record(z.string(), z.unknown()).nullable().optional(),
 });
 
@@ -36,6 +37,7 @@ export const updatePlanSchema = z.object({
     name: z.string().optional(),
     description: z.string().nullable().optional(),
     active: z.boolean().optional(),
+    portalConfigurationId: z.string().nullable().optional(),
     metadata: z.record(z.string(), z.unknown()).nullable().optional(),
 });
 
