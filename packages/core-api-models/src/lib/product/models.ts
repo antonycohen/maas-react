@@ -37,7 +37,7 @@ export const createProductSchema = z.object({
     active: z.boolean().optional().default(true),
     unitLabel: z.string().nullable().optional(),
     type: z.string().nullable().optional(),
-    plan: planRefSchema,
+    plan: planRefSchema.optional(),
     metadata: z.record(z.string(), z.unknown()).nullable().optional(),
     quotas: z.record(z.string(), z.unknown()).nullable().optional(),
 });
