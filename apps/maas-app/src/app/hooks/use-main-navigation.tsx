@@ -1,124 +1,148 @@
 import {
-  Bell,
-  BookCopy,
-  Building2,
-  CreditCard,
-  FileText,
-  FolderTree,
-  LayoutDashboard,
-  List,
-  Newspaper,
-  Route,
-  ShieldCheck,
-  SlidersHorizontal,
-  Tags,
-  Users,
+    Bell,
+    BookCopy,
+    Building2,
+    CircleDollarSignIcon,
+    CreditCard,
+    FileText,
+    FileTextIcon,
+    FolderTree,
+    LayoutDashboard,
+    List,
+    Newspaper,
+    Route,
+    ShieldCheck,
+    ShoppingCartIcon,
+    SlidersHorizontal,
+    Tags,
+    Users,
 } from 'lucide-react';
 import { SidebarNavigationProps } from '@maas/web-components';
+import { useRoutes } from '@maas/core-workspace';
 
-export const useMainNavigation = (
-  workspaceBaseUrl: string,
-): SidebarNavigationProps[] => {
-  return [
-    {
-      sectionName: 'Overview',
-      items: [
+export const useMainNavigation = (): SidebarNavigationProps[] => {
+    const routes = useRoutes();
+
+    return [
         {
-          title: 'Dashboard',
-          url: `${workspaceBaseUrl}/`,
-          icon: LayoutDashboard,
-        },
-      ],
-    },
-    {
-      sectionName: 'Content',
-      items: [
-        {
-          title: 'Magazines',
-          url: `${workspaceBaseUrl}/brands`,
-          icon: Newspaper,
+            sectionName: 'Overview',
+            items: [
+                {
+                    title: 'Dashboard',
+                    url: routes.root(),
+                    icon: LayoutDashboard,
+                },
+            ],
         },
         {
-          title: 'Issues',
-          url: `${workspaceBaseUrl}/issues`,
-          icon: BookCopy,
+            sectionName: 'Content',
+            items: [
+                {
+                    title: 'Magazines',
+                    url: routes.brands(),
+                    icon: Newspaper,
+                },
+                {
+                    title: 'Issues',
+                    url: routes.issues(),
+                    icon: BookCopy,
+                },
+                {
+                    title: 'Folders',
+                    url: routes.folders(),
+                    icon: FolderTree,
+                },
+                {
+                    title: 'Articles',
+                    url: routes.articles(),
+                    icon: FileText,
+                },
+                {
+                    title: 'Categories',
+                    url: routes.categories(),
+                    icon: Tags,
+                },
+                {
+                    title: 'Enums',
+                    url: routes.enums(),
+                    icon: List,
+                },
+                {
+                    title: 'Article Types',
+                    url: routes.articleTypes(),
+                    icon: FolderTree,
+                },
+            ],
         },
         {
-          title: 'Folders',
-          url: `${workspaceBaseUrl}/folders`,
-          icon: FolderTree,
+            sectionName: 'Customers',
+            items: [
+                {
+                    title: 'Users',
+                    url: routes.users(),
+                    icon: Users,
+                },
+                {
+                    title: 'Organizations',
+                    url: routes.organizations(),
+                    icon: Building2,
+                },
+                {
+                    title: 'Subscriptions',
+                    url: routes.subscriptions(),
+                    icon: CreditCard,
+                },
+            ],
         },
         {
-          title: 'Articles',
-          url: `${workspaceBaseUrl}/articles`,
-          icon: FileText,
+            sectionName: 'Products & Plans',
+            items: [
+                {
+                    title: 'Plans',
+                    url: routes.pmsPlans(),
+                    icon: FileTextIcon,
+                },
+                {
+                    title: 'Products',
+                    url: routes.pmsProducts(),
+                    icon: ShoppingCartIcon,
+                },
+                {
+                    title: 'Prices',
+                    url: routes.pmsPrices(),
+                    icon: CircleDollarSignIcon,
+                },
+            ],
         },
         {
-          title: 'Categories',
-          url: `${workspaceBaseUrl}/categories`,
-          icon: Tags,
+            sectionName: 'Engagement',
+            items: [
+                {
+                    title: 'Notifications',
+                    url: routes.notifications(),
+                    icon: Bell,
+                },
+            ],
         },
         {
-          title: 'Enums',
-          url: `${workspaceBaseUrl}/enums`,
-          icon: List,
+            sectionName: 'Administration',
+            items: [
+                {
+                    title: 'Admins',
+                    url: routes.teams(),
+                    icon: ShieldCheck,
+                },
+                {
+                    title: 'App Settings',
+                    url: routes.settings(),
+                    icon: SlidersHorizontal,
+                },
+                {
+                    title: 'Routing Files',
+                    url: routes.routingFiles(),
+                    icon: Route,
+                },
+            ],
         },
-        {
-          title: 'Article Types',
-          url: `${workspaceBaseUrl}/article-types`,
-          icon: FolderTree,
-        },
-      ],
-    },
-    {
-      sectionName: 'Customers',
-      items: [
-        {
-          title: 'Users',
-          url: `${workspaceBaseUrl}/users`,
-          icon: Users,
-        },
-        {
-          title: 'Organizations',
-          url: `${workspaceBaseUrl}/organizations`,
-          icon: Building2,
-        },
-        {
-          title: 'Subscriptions',
-          url: `${workspaceBaseUrl}/subscriptions`,
-          icon: CreditCard,
-        },
-      ],
-    },
-    {
-      sectionName: 'Engagement',
-      items: [
-        {
-          title: 'Notifications',
-          url: `${workspaceBaseUrl}/notifications`,
-          icon: Bell,
-        },
-      ],
-    },
-    {
-      sectionName: 'Administration',
-      items: [
-        {
-          title: 'Admins',
-          url: `${workspaceBaseUrl}/teams`,
-          icon: ShieldCheck,
-        },
-        {
-          title: 'App Settings',
-          url: `${workspaceBaseUrl}/settings`,
-          icon: SlidersHorizontal,
-        },
-        {
-          title: 'Routing Files',
-          url: `${workspaceBaseUrl}/routing-files`,
-          icon: Route,
-        },
-      ],
-    },
-  ];
+    ];
 };

@@ -1,79 +1,85 @@
 {
-  "extends": "./tsconfig.base.json",
-  "compileOnSave": false,
-  "files": [],
-  "references": [
-    {
-      "path": "tools/tailwind-sync-plugin"
-    },
-    {
-      "path": "apps/maas-app"
-    },
-    {
-      "path": "packages/web-components"
-    },
-    {
-      "path": "packages/web-layout"
-    },
-    {
-      "path": "./packages/web-themes"
-    },
-    {
-      "path": "./packages/web-feature-login"
-    },
-    {
-      "path": "./packages/core-store-session"
-    },
-    {
-      "path": "./packages/core-api-models"
-    },
-    {
-      "path": "./packages/core-api"
-    },
-    {
-      "path": "./packages/core-store-oauth"
-    },
-    {
-      "path": "./packages/web-feature-feeds"
-    },
-    {
-      "path": "./packages/core-utils"
-    },
-    {
-      "path": "./packages/web-feature-settings"
-    },
-    {
-      "path": "./packages/web-collection"
-    },
-    {
-      "path": "./packages/web-feature-users"
-    },
-    {
-      "path": "./packages/web-form"
-    },
-    {
-      "path": "./packages/web-feature-home"
-    },
-    {
-      "path": "./packages/web-feature-magazine"
-    },
-    {
-      "path": "./apps/maas-bo-app"
-    },
-    {
-      "path": "./packages/web-cms-editor"
-    },
-    {
-      "path": "./packages/core-translations"
-    },
-    {
-      "path": "./packages/web-feature-organizations"
-    },
-    {
-      "path": "./packages/core-workspace"
-    },
-    {
-      "path": "./packages/web-feature-pricing"
-    }
-  ]
+    "extends": "./tsconfig.base.json",
+    "compileOnSave": false,
+    "files": [],
+    "references": [
+        {
+            "path": "./tools/tailwind-sync-plugin"
+        },
+        {
+            "path": "./apps/maas-app"
+        },
+        {
+            "path": "./packages/web-components"
+        },
+        {
+            "path": "./packages/web-layout"
+        },
+        {
+            "path": "./packages/web-themes"
+        },
+        {
+            "path": "./packages/web-feature-login"
+        },
+        {
+            "path": "./packages/core-store-session"
+        },
+        {
+            "path": "./packages/core-api-models"
+        },
+        {
+            "path": "./packages/core-api"
+        },
+        {
+            "path": "./packages/core-store-oauth"
+        },
+        {
+            "path": "./packages/web-feature-feeds"
+        },
+        {
+            "path": "./packages/core-utils"
+        },
+        {
+            "path": "./packages/web-feature-settings"
+        },
+        {
+            "path": "./packages/web-collection"
+        },
+        {
+            "path": "./packages/web-feature-users"
+        },
+        {
+            "path": "./packages/web-form"
+        },
+        {
+            "path": "./packages/web-feature-home"
+        },
+        {
+            "path": "./packages/web-feature-magazine"
+        },
+        {
+            "path": "./apps/maas-bo-app"
+        },
+        {
+            "path": "./packages/web-cms-editor"
+        },
+        {
+            "path": "./packages/core-translations"
+        },
+        {
+            "path": "./packages/web-feature-organizations"
+        },
+        {
+            "path": "./packages/core-workspace"
+        },
+        {
+            "path": "./packages/web-feature-pricing"
+        },
+        {
+            "path": "./packages/core-routes"
+        },
+        {
+            "path": "./packages/web-feature-pms"
+        }
+    ]
 }
