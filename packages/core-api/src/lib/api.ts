@@ -61,6 +61,8 @@ class MaasApi {
 
 export type { ApiClientConfig } from './api-client/api-client';
 export { ApiError } from './api-client/api-error';
+export { AuthenticationError } from './api-client/authentication-error';
+
 export * from './endpoints/articles';
 export * from './endpoints/article-types';
 export * from './endpoints/brands';

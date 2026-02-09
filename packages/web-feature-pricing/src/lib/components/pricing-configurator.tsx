@@ -2,7 +2,7 @@ import { useMemo, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '@maas/core-utils';
 import { Switch } from '@maas/web-components';
-import { useCreateCheckoutSession, ApiError } from '@maas/core-api';
+import { useCreateCheckoutSession, ApiError, AuthenticationError, CheckoutSession } from '@maas/core-api';
 import type { BillingInterval, PricingPlan } from '../hooks/use-pricing-data';
 import { usePricingStore } from '../store/pricing-store';
 
@@ -106,12 +106,11 @@ export function PricingConfigurator({ plan, selectedInterval }: PricingConfigura
                 cancelUrl: homeUrl,
             },
             {
-                onSuccess: (data) => {
-                    window.location.href = data.url;
+                onSuccess: (data: CheckoutSession) => {
+                    window.location.href = data.checkoutSession.checkoutUrl;
                 },
                 onError: (error) => {
-                    console.log('haha', error);
-                    if (error instanceof ApiError && (error.httpCode === 401 || error.statusCode === 401)) {
+                    if (error instanceof AuthenticationError) {
                         localStorage.setItem('target-url', `${location.pathname}${location.search}`);
                         navigate('/login');
                     }

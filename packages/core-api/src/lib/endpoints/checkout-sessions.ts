@@ -9,7 +9,9 @@ export interface CreateCheckoutSession {
 }
 
 export interface CheckoutSession {
-    url: string;
+    checkoutSession: {
+        checkoutUrl: string;
+    };
 }
 
 export class CheckoutSessionsEndpoint {

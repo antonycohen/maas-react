@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import { LoginRoutes } from '@maas/web-feature-login';
+import { LoginRoutes, LogoutPage } from '@maas/web-feature-login';
 import { AdminRoutes } from './admin-routes';
 import { ProtectedPage, useConnectedUser } from '@maas/core-store-session';
 import { Layout } from '@maas/web-layout';
@@ -15,6 +15,7 @@ export const RootRoutes = () => {
     return (
         <Routes>
             <Route path="/login/*" element={<LoginRoutes />} />
+            <Route path="/logout/*" element={<LogoutPage />} />
             <Route path="/admin/*" element={<ProtectedPage />}>
                 <Route path="*" element={<AdminRoutes />} />
             </Route>
