@@ -35,3 +35,4 @@ export * from './lib/queries/products';
 export * from './lib/queries/prices';
 export * from './lib/queries/features';
 export * from './lib/queries/subscriptions';
+export * from './lib/queries/checkout-sessions';
