@@ -21,7 +21,7 @@ export const DEFAULT_ADDRESS: AddressFormData = {
     line2: '',
     city: '',
     postalCode: '',
-    country: 'FR',
+    country: '',
 };
 
 export interface PricingState {

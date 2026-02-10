@@ -1,8 +1,9 @@
 import { Subscription, SubscriptionStatus } from '@maas/core-api-models';
 import { ApiClient } from '../api-client/api-client';
-import { ApiCollectionResponse, GetCollectionQueryParams, GetQueryByIdParams } from '../types';
+import { ApiCollectionResponse, FieldQuery, GetCollectionQueryParams, GetQueryByIdParams } from '../types';
 
 const BASE_PATH = '/api/v1/pms/subscriptions';
+const ME_PATH = '/api/v1/users/me';
 
 export interface GetSubscriptionsFilter {
     customerId?: string;
@@ -72,5 +73,13 @@ export class SubscriptionsEndpoint {
      */
     async syncSubscription(subscriptionId: string): Promise<Subscription> {
         return this.client.post<Subscription>(`${BASE_PATH}/${subscriptionId}/sync`, {});
+    }
+
+    /**
+     * Get the current user's subscription
+     * GET /api/v1/users/me/subscription
+     */
+    async getMySubscription(fields?: FieldQuery<Subscription>): Promise<Subscription> {
+        return this.client.getById<Subscription>(`${ME_PATH}/subscription`, fields);
     }
 }

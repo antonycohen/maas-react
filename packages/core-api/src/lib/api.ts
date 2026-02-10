@@ -16,6 +16,8 @@ import { PricesEndpoint } from './endpoints/prices';
 import { FeaturesEndpoint } from './endpoints/features';
 import { SubscriptionsEndpoint } from './endpoints/subscriptions';
 import { CheckoutSessionsEndpoint } from './endpoints/checkout-sessions';
+import { CustomersEndpoint } from './endpoints/customers';
+import { PortalSessionsEndpoint } from './endpoints/portal-sessions';
 
 class MaasApi {
     private readonly client: ApiClient;
@@ -36,6 +38,8 @@ class MaasApi {
     public readonly features: FeaturesEndpoint;
     public readonly subscriptions: SubscriptionsEndpoint;
     public readonly checkoutSessions: CheckoutSessionsEndpoint;
+    public readonly customers: CustomersEndpoint;
+    public readonly portalSessions: PortalSessionsEndpoint;
 
     constructor(config: ApiClientConfig) {
         this.client = new ApiClient(config);
@@ -56,6 +60,8 @@ class MaasApi {
         this.features = new FeaturesEndpoint(this.client);
         this.subscriptions = new SubscriptionsEndpoint(this.client);
         this.checkoutSessions = new CheckoutSessionsEndpoint(this.client);
+        this.customers = new CustomersEndpoint(this.client);
+        this.portalSessions = new PortalSessionsEndpoint(this.client);
     }
 }
 
@@ -78,6 +84,8 @@ export * from './endpoints/prices';
 export * from './endpoints/features';
 export * from './endpoints/subscriptions';
 export * from './endpoints/checkout-sessions';
+export * from './endpoints/customers';
+export * from './endpoints/portal-sessions';
 
 export const maasApi = new MaasApi({
     baseUrl: `${import.meta.env['VITE_API_URL']}` || 'https://localhost:8080',

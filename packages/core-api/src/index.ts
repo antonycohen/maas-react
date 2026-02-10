@@ -36,3 +36,5 @@ export * from './lib/queries/prices';
 export * from './lib/queries/features';
 export * from './lib/queries/subscriptions';
 export * from './lib/queries/checkout-sessions';
+export * from './lib/queries/customers';
+export * from './lib/queries/portal-sessions';

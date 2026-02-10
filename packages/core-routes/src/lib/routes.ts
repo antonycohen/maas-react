@@ -57,6 +57,7 @@ export const SEGMENTS = {
     WIZARD: 'wizard',
 
     // Sub-routes / tabs
+    SUBSCRIPTION: 'subscription',
     INFO: 'info',
     ORGANIZER: 'organizer',
     NEW: 'new',
@@ -92,6 +93,7 @@ export const ADMIN_ROUTES = {
     ACCOUNT_PROFILE: `${SEGMENTS.ACCOUNT}/${SEGMENTS.PROFILE}`,
     ACCOUNT_CONNEXION: `${SEGMENTS.ACCOUNT}/${SEGMENTS.CONNEXION}`,
     ACCOUNT_PREFERENCES: `${SEGMENTS.ACCOUNT}/${SEGMENTS.PREFERENCES}`,
+    ACCOUNT_SUBSCRIPTION: `${SEGMENTS.ACCOUNT}/${SEGMENTS.SUBSCRIPTION}`,
 
     // Issues
     ISSUES: SEGMENTS.ISSUES,

@@ -34,6 +34,8 @@ export const useWorkspaceRoutes = (workspaceId: string | null) => {
             accountConnexion: () => `${baseUrl}/${adminUrlBuilders.accountConnexion()}`,
             /** Account preferences URL */
             accountPreferences: () => `${baseUrl}/${adminUrlBuilders.accountPreferences()}`,
+            /** Account subscription URL */
+            accountSubscription: () => `${baseUrl}/${adminUrlBuilders.accountSubscription()}`,
 
             // Issues
             /** Issues list URL */

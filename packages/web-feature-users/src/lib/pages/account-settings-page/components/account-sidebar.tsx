@@ -1,49 +1,48 @@
 import { NavLink } from 'react-router-dom';
-import { User, Lock, Settings, LogOut } from 'lucide-react';
+import { User, Lock, Settings, LogOut, CreditCard } from 'lucide-react';
 
 interface AccountSidebarProps {
-  baseUrl: string;
+    baseUrl: string;
 }
 
 export function AccountSidebar({ baseUrl }: AccountSidebarProps) {
-  const navItems = [
-    { title: 'Mon compte', url: `${baseUrl}/account/profile`, icon: User },
-    { title: 'Connexion', url: `${baseUrl}/account/connexion`, icon: Lock },
-    { title: 'Préférences', url: `${baseUrl}/account/preferences`, icon: Settings },
-  ];
+    const navItems = [
+        { title: 'Mon compte', url: `${baseUrl}/account/profile`, icon: User },
+        { title: 'Connexion', url: `${baseUrl}/account/connexion`, icon: Lock },
+        { title: 'Préférences', url: `${baseUrl}/account/preferences`, icon: Settings },
+        { title: 'Abonnement', url: `${baseUrl}/account/subscription`, icon: CreditCard },
+    ];
 
-  return (
-    <div className="flex flex-col gap-6 w-[290px] shrink-0 border-r border-gray-200 pr-5">
-      <div className="flex flex-col gap-1 w-full">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.url}
-            to={item.url}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-3 rounded-md w-full transition-colors ${
-                isActive
-                  ? 'bg-[#f5f5f5] text-black font-semibold'
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`
-            }
-          >
-            <item.icon className="w-5 h-5" />
-            <span className="text-sm">{item.title}</span>
-          </NavLink>
-        ))}
-      </div>
+    return (
+        <div className="flex w-[290px] shrink-0 flex-col gap-6 border-r border-gray-200 pr-5">
+            <div className="flex w-full flex-col gap-1">
+                {navItems.map((item) => (
+                    <NavLink
+                        key={item.url}
+                        to={item.url}
+                        className={({ isActive }) =>
+                            `flex w-full items-center gap-3 rounded-md px-3 py-3 transition-colors ${
+                                isActive ? 'bg-[#f5f5f5] font-semibold text-black' : 'text-gray-600 hover:bg-gray-50'
+                            }`
+                        }
+                    >
+                        <item.icon className="h-5 w-5" />
+                        <span className="text-sm">{item.title}</span>
+                    </NavLink>
+                ))}
+            </div>
 
-      <div className="h-px bg-gray-200 w-full" />
+            <div className="h-px w-full bg-gray-200" />
 
-      <div className="flex flex-col w-full">
-        <NavLink
-          to="/logout"
-          className="flex items-center gap-3 px-3 py-3 rounded-md w-full text-gray-600 hover:bg-gray-50 transition-colors text-left"
-        >
-          <LogOut className="w-5 h-5" />
-          <span className="text-sm font-semibold">Se déconnecter</span>
-        </NavLink>
-      </div>
-    </div>
-  );
+            <div className="flex w-full flex-col">
+                <NavLink
+                    to="/logout"
+                    className="flex w-full items-center gap-3 rounded-md px-3 py-3 text-left text-gray-600 transition-colors hover:bg-gray-50"
+                >
+                    <LogOut className="h-5 w-5" />
+                    <span className="text-sm font-semibold">Se déconnecter</span>
+                </NavLink>
+            </div>
+        </div>
+    );
 }

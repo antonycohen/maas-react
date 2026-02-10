@@ -33,6 +33,7 @@ export const adminUrlBuilders = {
     accountProfile: () => `${SEGMENTS.ACCOUNT}/${SEGMENTS.PROFILE}`,
     accountConnexion: () => `${SEGMENTS.ACCOUNT}/${SEGMENTS.CONNEXION}`,
     accountPreferences: () => `${SEGMENTS.ACCOUNT}/${SEGMENTS.PREFERENCES}`,
+    accountSubscription: () => `${SEGMENTS.ACCOUNT}/${SEGMENTS.SUBSCRIPTION}`,
 
     // Issues
     issues: () => ADMIN_ROUTES.ISSUES,
