@@ -26,6 +26,7 @@ export interface PlanAddon {
     name: string;
     category: 'addon' | 'shipping';
     prices: PlanPricing[];
+    metadata: Record<string, unknown> | null;
 }
 
 type Metadata = {
@@ -244,6 +245,7 @@ export function usePricingData() {
                     name: p.name ?? '',
                     category: (p.metadata as Record<string, unknown>)?.category as 'addon' | 'shipping',
                     prices: buildPlanPricing(pricesByProduct.get(p.id) ?? []),
+                    metadata: p.metadata,
                 }));
 
             return {
