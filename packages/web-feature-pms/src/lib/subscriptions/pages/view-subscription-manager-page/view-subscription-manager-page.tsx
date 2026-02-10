@@ -1,6 +1,6 @@
 import { Badge, Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@maas/web-components';
 import { LayoutBreadcrumb, LayoutContent } from '@maas/web-layout';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
     useGetSubscriptionById,
     useCancelSubscriptionAtPeriodEnd,
@@ -8,10 +8,12 @@ import {
     useResumeSubscription,
     useSyncSubscription,
 } from '@maas/core-api';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { SubscriptionStatus } from '@maas/core-api-models';
-import { IconRefresh, IconPlayerPause, IconPlayerPlay, IconX } from '@tabler/icons-react';
+import { cn } from '@maas/core-utils';
+import { IconRefresh, IconPlayerPause, IconPlayerPlay, IconX, IconCopy, IconCheck } from '@tabler/icons-react';
 import { toast } from 'sonner';
+import { useState } from 'react';
 
 const getStatusColor = (status: SubscriptionStatus | null): 'default' | 'secondary' | 'destructive' | 'outline' => {
     switch (status) {
@@ -31,9 +33,29 @@ const getStatusColor = (status: SubscriptionStatus | null): 'default' | 'seconda
     }
 };
 
+function CopyField({ value }: { value: string }) {
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(value);
+        setCopied(true);
+        toast.success('Copied to clipboard');
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    return (
+        <div className="bg-muted/50 flex items-center gap-2 rounded-md border px-3 py-2">
+            <span className="min-w-0 flex-1 truncate font-mono text-sm">{value}</span>
+            <Button type="button" variant="ghost" size="icon" className="h-7 w-7 shrink-0" onClick={handleCopy}>
+                {copied ? <IconCheck className="h-4 w-4 text-green-500" /> : <IconCopy className="h-4 w-4" />}
+            </Button>
+        </div>
+    );
+}
+
 export function ViewSubscriptionManagerPage() {
     const { subscriptionId = '' } = useParams<{ subscriptionId: string }>();
-    const workspaceUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
 
     const {
         data: subscription,
@@ -47,11 +69,19 @@ export function ViewSubscriptionManagerPage() {
             currentPeriodStart: null,
             currentPeriodEnd: null,
             cancelAtPeriodEnd: null,
+            customer: {
+                fields: {
+                    id: null,
+                    email: null,
+                    refId: null,
+                },
+            },
             canceledAt: null,
             metadata: null,
+            plan: null,
         },
     });
-
+    console.log(subscription);
     const cancelAtPeriodEndMutation = useCancelSubscriptionAtPeriodEnd({
         onSuccess: () => {
             toast.success('Subscription will be canceled at period end');
@@ -108,8 +138,8 @@ export function ViewSubscriptionManagerPage() {
             <header>
                 <LayoutBreadcrumb
                     items={[
-                        { label: 'Home', to: `${workspaceUrl}/` },
-                        { label: 'Subscriptions', to: `${workspaceUrl}/pms/subscriptions` },
+                        { label: 'Home', to: routes.root() },
+                        { label: 'Subscriptions', to: routes.pmsSubscriptions() },
                         { label: subscription.id.slice(0, 8) + '...' },
                     ]}
                 />
@@ -180,68 +210,122 @@ export function ViewSubscriptionManagerPage() {
             </div>
 
             <LayoutContent>
-                <Card className="gap-0 rounded-2xl">
-                    <CardHeader>
-                        <CardTitle className="text-xl">Subscription Details</CardTitle>
-                        <CardDescription>View and manage this subscription.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="px-6 pt-2">
-                        <div className="space-y-6">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <p className="text-muted-foreground text-sm font-medium">Status</p>
-                                    <Badge variant={getStatusColor(subscription.status)} className="mt-1">
-                                        {subscription.status}
-                                    </Badge>
-                                </div>
-                                <div>
-                                    <p className="text-muted-foreground text-sm font-medium">ID</p>
-                                    <p className="font-mono text-sm">{subscription.id}</p>
-                                </div>
-                            </div>
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                    {/* Left: Details */}
+                    <div className="lg:col-span-2">
+                        <Card className="gap-0 rounded-2xl">
+                            <CardHeader>
+                                <CardTitle className="text-xl">Subscription Details</CardTitle>
+                                <CardDescription>View and manage this subscription.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="px-6 pt-2">
+                                <div className="space-y-6">
+                                    <div>
+                                        <p className="text-muted-foreground mb-1 text-sm font-medium">
+                                            Subscription ID
+                                        </p>
+                                        <CopyField value={subscription.id} />
+                                    </div>
 
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <p className="text-muted-foreground text-sm font-medium">Current Period Start</p>
-                                    <p>
-                                        {subscription.currentPeriodStart
-                                            ? new Date(subscription.currentPeriodStart).toLocaleString()
-                                            : '-'}
-                                    </p>
-                                </div>
-                                <div>
-                                    <p className="text-muted-foreground text-sm font-medium">Current Period End</p>
-                                    <p>
-                                        {subscription.currentPeriodEnd
-                                            ? new Date(subscription.currentPeriodEnd).toLocaleString()
-                                            : '-'}
-                                    </p>
-                                </div>
-                            </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <p className="text-muted-foreground text-sm font-medium">Status</p>
+                                            <Badge variant={getStatusColor(subscription.status)} className="mt-1">
+                                                {subscription.status}
+                                            </Badge>
+                                        </div>
+                                        <div>
+                                            <p className="text-muted-foreground text-sm font-medium">Plan</p>
+                                            {subscription.plan ? (
+                                                <p className="mt-1 text-sm font-medium">
+                                                    {subscription.plan.name ?? subscription.plan.id}
+                                                </p>
+                                            ) : (
+                                                <p className="text-muted-foreground mt-1 text-sm">-</p>
+                                            )}
+                                        </div>
+                                    </div>
 
-                            {subscription.canceledAt && (
-                                <div>
-                                    <p className="text-muted-foreground text-sm font-medium">Canceled At</p>
-                                    <p>{new Date(subscription.canceledAt).toLocaleString()}</p>
-                                </div>
-                            )}
+                                    <div>
+                                        <p className="text-muted-foreground text-sm font-medium">User</p>
+                                        {subscription.customer ? (
+                                            <div className="mt-1">
+                                                <Link
+                                                    to={routes.userEdit(
+                                                        subscription.customer.refId ?? subscription.customer.id
+                                                    )}
+                                                    className="text-primary text-sm font-medium underline underline-offset-4 hover:opacity-80"
+                                                >
+                                                    {subscription.customer.name ??
+                                                        subscription.customer.email ??
+                                                        subscription.customer.id}
+                                                </Link>
+                                                {subscription.customer.email && subscription.customer.name && (
+                                                    <p className="text-muted-foreground text-xs">
+                                                        {subscription.customer.email}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        ) : (
+                                            <p className="text-muted-foreground mt-1 text-sm">-</p>
+                                        )}
+                                    </div>
 
-                            {subscription.metadata && Object.keys(subscription.metadata).length > 0 && (
-                                <div className="border-t pt-6">
-                                    <p className="text-muted-foreground mb-2 text-sm font-medium">Metadata</p>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <p className="text-muted-foreground text-sm font-medium">
+                                                Current Period Start
+                                            </p>
+                                            <p className="mt-1 text-sm">
+                                                {subscription.currentPeriodStart
+                                                    ? new Date(subscription.currentPeriodStart).toLocaleString()
+                                                    : '-'}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-muted-foreground text-sm font-medium">
+                                                Current Period End
+                                            </p>
+                                            <p className="mt-1 text-sm">
+                                                {subscription.currentPeriodEnd
+                                                    ? new Date(subscription.currentPeriodEnd).toLocaleString()
+                                                    : '-'}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {subscription.canceledAt && (
+                                        <div>
+                                            <p className="text-muted-foreground text-sm font-medium">Canceled At</p>
+                                            <p className="mt-1 text-sm">
+                                                {new Date(subscription.canceledAt).toLocaleString()}
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    {/* Right: Metadata */}
+                    <div>
+                        <Card className="gap-0 rounded-2xl">
+                            <CardHeader>
+                                <CardTitle className="text-xl">Metadata</CardTitle>
+                            </CardHeader>
+                            <CardContent className="px-6 pt-2">
+                                {subscription.metadata && Object.keys(subscription.metadata).length > 0 ? (
                                     <pre className="bg-muted/50 overflow-auto rounded-lg p-4 text-xs">
                                         {JSON.stringify(subscription.metadata, null, 2)}
                                     </pre>
-                                </div>
-                            )}
-                        </div>
-                    </CardContent>
-                </Card>
+                                ) : (
+                                    <p className="text-muted-foreground text-sm">No metadata available.</p>
+                                )}
+                            </CardContent>
+                        </Card>
+                    </div>
+                </div>
             </LayoutContent>
         </div>
     );
-}
-
-function cn(...classes: (string | boolean | undefined)[]) {
-    return classes.filter(Boolean).join(' ');
 }

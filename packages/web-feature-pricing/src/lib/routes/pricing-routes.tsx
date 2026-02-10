@@ -1,10 +1,14 @@
 import { Route, Routes } from 'react-router-dom';
 import { PricingPage } from '../pages/pricing-page/pricing-page';
+import { CheckoutSuccessPage } from '../pages/checkout-success-page/checkout-success-page';
+import { CheckoutCancelPage } from '../pages/checkout-cancel-page/checkout-cancel-page';
 
 export function PricingRoutes() {
-  return (
-    <Routes>
-      <Route index element={<PricingPage />} />
-    </Routes>
-  );
+    return (
+        <Routes>
+            <Route index element={<PricingPage />} />
+            <Route path="checkout/success" element={<CheckoutSuccessPage />} />
+            <Route path="checkout/cancel" element={<CheckoutCancelPage />} />
+        </Routes>
+    );
 }

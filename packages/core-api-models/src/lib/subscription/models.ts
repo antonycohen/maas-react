@@ -35,6 +35,7 @@ export const subscriptionSchema = z.object({
             id: z.string(),
             name: z.string().nullable(),
             email: z.string().nullable(),
+            refId: z.string().nullable(),
         })
         .nullable(),
     status: subscriptionStatusEnum.nullable(),

@@ -41,6 +41,12 @@ export const SEGMENTS = {
     NOTIFICATIONS: 'notifications',
     ROUTING_FILES: 'routing-files',
 
+    // Checkout
+    PRICING: 'pricing',
+    CHECKOUT: 'checkout',
+    SUCCESS: 'success',
+    CANCEL: 'cancel',
+
     // PMS (Pricing Management System)
     PMS: 'pms',
     PLANS: 'plans',
@@ -68,6 +74,9 @@ export const PUBLIC_ROUTES = {
     MAGAZINES: `/${SEGMENTS.MAGAZINES}`,
     DOSSIERS: `/${SEGMENTS.DOSSIERS}`,
     CATEGORIES: `/${SEGMENTS.CATEGORIES}`,
+    PRICING: `/${SEGMENTS.PRICING}`,
+    CHECKOUT_SUCCESS: `/${SEGMENTS.PRICING}/${SEGMENTS.CHECKOUT}/${SEGMENTS.SUCCESS}`,
+    CHECKOUT_CANCEL: `/${SEGMENTS.PRICING}/${SEGMENTS.CHECKOUT}/${SEGMENTS.CANCEL}`,
 } as const;
 
 /**

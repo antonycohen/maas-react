@@ -115,7 +115,7 @@ export const useWorkspaceRoutes = (workspaceId: string | null) => {
             /** Organizations URL */
             organizations: () => `${baseUrl}/${adminUrlBuilders.organizations()}`,
             /** Subscriptions URL */
-            subscriptions: () => `${baseUrl}/${adminUrlBuilders.subscriptions()}`,
+            subscriptions: () => `${baseUrl}/${adminUrlBuilders.pmsSubscriptions()}`,
             /** Notifications URL */
             notifications: () => `${baseUrl}/${adminUrlBuilders.notifications()}`,
             /** Routing files URL */

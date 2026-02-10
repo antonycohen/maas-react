@@ -88,7 +88,6 @@ export const adminUrlBuilders = {
 
     // Other
     organizations: () => ADMIN_ROUTES.ORGANIZATIONS,
-    subscriptions: () => ADMIN_ROUTES.SUBSCRIPTIONS,
     notifications: () => ADMIN_ROUTES.NOTIFICATIONS,
     routingFiles: () => ADMIN_ROUTES.ROUTING_FILES,
 

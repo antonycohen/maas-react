@@ -2,7 +2,7 @@ import { useMemo, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '@maas/core-utils';
 import { Switch } from '@maas/web-components';
-import { useCreateCheckoutSession, ApiError, AuthenticationError, CheckoutSession } from '@maas/core-api';
+import { useCreateCheckoutSession, AuthenticationError, CheckoutSession } from '@maas/core-api';
 import type { BillingInterval, PricingPlan } from '../hooks/use-pricing-data';
 import { usePricingStore } from '../store/pricing-store';
 
@@ -97,13 +97,13 @@ export function PricingConfigurator({ plan, selectedInterval }: PricingConfigura
     }, [basePrice, plan.addons, plan.planId, addonToggles, shippingSelections, selectedInterval]);
 
     const handleCheckout = useCallback(() => {
-        const homeUrl = `${window.location.origin}/`;
+        const origin = window.location.origin;
 
         checkoutMutation.mutate(
             {
                 priceIds: selectedPriceIds,
-                successUrl: homeUrl,
-                cancelUrl: homeUrl,
+                successUrl: `${origin}/pricing/checkout/success`,
+                cancelUrl: `${origin}/pricing/checkout/cancel`,
             },
             {
                 onSuccess: (data: CheckoutSession) => {
