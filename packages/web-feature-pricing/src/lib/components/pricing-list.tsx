@@ -5,53 +5,27 @@ import { usePricingData, type BillingInterval } from '../hooks/use-pricing-data'
 import { usePricingStore } from '../store/pricing-store';
 import { PricingConfigurator } from './pricing-configurator';
 
-const INTERVAL_OPTIONS: { value: BillingInterval; label: string; shortLabel: string }[] = [
-    { value: 'semester', label: 'Semestre', shortLabel: '/semestre' },
-    { value: 'annual', label: 'Annuel', shortLabel: '/an' },
-    { value: 'biennial', label: 'Biennal', shortLabel: '/2 ans' },
-];
-
 const FEATURE_DISPLAY_NAMES: Record<string, string> = {
     tangente_mag: 'Tangente Magazine',
     hors_serie: 'Hors-Série',
     digital_access: 'Accès Numérique Illimité',
 };
 
+const INTERVAL_LABELS: Record<BillingInterval, string> = {
+    monthly: '/mois',
+    semester: '/semestre',
+    annual: '/an',
+    biennial: '/2 ans',
+};
+
 function formatCentsToEuros(cents: number): number {
     return Math.round(cents / 100);
 }
 
-function IntervalSelector({
-    selected,
-    onChange,
-}: {
-    selected: BillingInterval;
-    onChange: (interval: BillingInterval) => void;
-}) {
-    return (
-        <div className="border-border bg-background flex items-center gap-1 rounded-lg border p-1">
-            {INTERVAL_OPTIONS.map((option) => (
-                <button
-                    key={option.value}
-                    onClick={() => onChange(option.value)}
-                    className={cn(
-                        'cursor-pointer rounded-md px-4 py-2 text-sm font-medium transition-colors',
-                        selected === option.value
-                            ? 'bg-foreground text-background shadow-sm'
-                            : 'text-text-secondary hover:text-foreground'
-                    )}
-                >
-                    {option.label}
-                </button>
-            ))}
-        </div>
-    );
-}
-
 function PricingListSkeleton() {
     return (
-        <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {[1, 2, 3].map((i) => (
+        <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="border-border flex animate-pulse flex-col gap-6 rounded-xl border p-5">
                     <div className="bg-muted h-6 w-24 rounded" />
                     <div className="flex flex-col gap-2">
@@ -72,10 +46,10 @@ function PricingListSkeleton() {
 }
 
 export function PricingList() {
-    const selectedInterval = usePricingStore((s) => s.selectedInterval);
+    const currentStep = usePricingStore((s) => s.currentStep);
     const selectedPlanId = usePricingStore((s) => s.selectedPlanId);
-    const setSelectedInterval = usePricingStore((s) => s.setSelectedInterval);
     const setSelectedPlanId = usePricingStore((s) => s.setSelectedPlanId);
+    const setCurrentStep = usePricingStore((s) => s.setCurrentStep);
 
     const { pricingPlans, isLoading, isError } = usePricingData();
 
@@ -86,18 +60,19 @@ export function PricingList() {
 
     const cards = useMemo((): PricingCardProps[] => {
         return pricingPlans.map((plan) => {
-            const currentPrice = plan.prices.find((p) => p.interval === selectedInterval);
-            const currentOption = INTERVAL_OPTIONS.find((o) => o.value === selectedInterval);
+            // Find the cheapest price across all intervals
+            const cheapestPrice =
+                plan.prices.length > 0
+                    ? plan.prices.reduce((min, price) =>
+                          price.unitAmountInCents < min.unitAmountInCents ? price : min
+                      )
+                    : null;
 
-            // Build feature texts with quotas
+            const intervalLabel = cheapestPrice ? INTERVAL_LABELS[cheapestPrice.interval] : '';
+
+            // Build feature texts (without quotas since no interval is selected yet)
             const features = plan.features.map((f) => {
                 const displayName = FEATURE_DISPLAY_NAMES[f.lookupKey] ?? f.displayName;
-                if (f.withQuota) {
-                    const quota = f.quotas[selectedInterval];
-                    return {
-                        text: quota != null ? `${quota} numéros de ${displayName}` : displayName,
-                    };
-                }
                 return { text: displayName };
             });
             features.push({ text: 'Résiliable à tout moment.' });
@@ -111,21 +86,25 @@ export function PricingList() {
             if (metadata?.tagSecondary) {
                 tags.push({ label: metadata.tagSecondary as string, style: 'Light' as const });
             }
-
             return {
-                title: (metadata?.titlePrefix as string) ?? 'Tangente',
+                title: !(metadata?.pricingSettings?.hideTitlePrefix as boolean)
+                    ? (metadata?.titlePrefix as string)
+                    : 'Tangente',
                 titleSuffix: (metadata?.titleSuffix as string) ?? plan.name,
-                price: currentPrice ? formatCentsToEuros(currentPrice.unitAmountInCents) : 0,
-                priceLabel: currentOption?.shortLabel,
+                price: cheapestPrice ? formatCentsToEuros(cheapestPrice.unitAmountInCents) : 0,
+                priceLabel: cheapestPrice ? `À partir de ${intervalLabel}` : undefined,
                 description: plan.description,
                 features,
                 tags: tags.length > 0 ? tags : undefined,
                 isHighlighted: metadata?.highlighted === true,
                 isSelected: plan.planId === selectedPlanId,
-                onSelect: () => setSelectedPlanId(plan.planId),
+                onSelect: () => {
+                    setSelectedPlanId(plan.planId);
+                    setCurrentStep('configure');
+                },
             };
         });
-    }, [pricingPlans, selectedInterval, selectedPlanId, setSelectedPlanId]);
+    }, [pricingPlans, selectedPlanId, setSelectedPlanId, setCurrentStep]);
 
     return (
         <div className="container mx-auto flex w-full flex-col items-center gap-6 px-5 py-10 xl:px-0">
@@ -133,8 +112,6 @@ export function PricingList() {
                 <span className="text-foreground">Toutes les formules </span>
                 <span className="text-brand-primary">Tangente Magazine</span>
             </h2>
-
-            <IntervalSelector selected={selectedInterval} onChange={setSelectedInterval} />
 
             {isLoading && <PricingListSkeleton />}
 
@@ -159,7 +136,7 @@ export function PricingList() {
                 </div>
             )}
 
-            {selectedPlan && <PricingConfigurator plan={selectedPlan} selectedInterval={selectedInterval} />}
+            {currentStep === 'configure' && selectedPlan && <PricingConfigurator plan={selectedPlan} />}
         </div>
     );
 }

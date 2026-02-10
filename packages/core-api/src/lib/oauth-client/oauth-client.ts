@@ -43,8 +43,38 @@ const getNewToken = async (refreshToken: string) => {
     });
 };
 
+const loginWithPassword = async (username: string, password: string) => {
+    const body = new URLSearchParams({
+        grant_type: 'password',
+        client_id: `${import.meta.env['VITE_OAUTH_CLIENT_ID']}`,
+        client_secret: `${import.meta.env['VITE_OAUTH_CLIENT_SECRET']}`,
+        username,
+        password,
+        scope: 'email',
+    });
+
+    const response = await fetch(`${import.meta.env['VITE_API_URL']}/token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new AuthenticationError(errorData?.error_description ?? 'Identifiants invalides.');
+    }
+
+    const data = await response.json();
+
+    return {
+        accessToken: data.access_token as string,
+        refreshToken: (data.refresh_token as string) ?? null,
+        expiresAt: Date.now() + (data.expires_in as number) * 1000,
+    };
+};
+
 const getLogoutUrl = () => {
     return `${import.meta.env['VITE_API_URL']}/logout`;
 };
 
-export { getAuthorizationUrl, getTokensFromCodeRedirect, getNewToken, getLogoutUrl };
+export { getAuthorizationUrl, getTokensFromCodeRedirect, getNewToken, getLogoutUrl, loginWithPassword };

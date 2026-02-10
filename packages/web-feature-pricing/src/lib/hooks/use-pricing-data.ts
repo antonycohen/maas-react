@@ -5,7 +5,7 @@ import { getPlans, getProducts, getPrices, getProductFeatures } from '@maas/core
 
 // --- Types ---
 
-export type BillingInterval = 'semester' | 'annual' | 'biennial';
+export type BillingInterval = 'monthly' | 'semester' | 'annual' | 'biennial';
 
 export interface PlanPricing {
     interval: BillingInterval;
@@ -28,11 +28,16 @@ export interface PlanAddon {
     prices: PlanPricing[];
 }
 
+type Metadata = {
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [key: string]: any; // Using any here allows deep dot-notation access
+};
+
 export interface PricingPlan {
     planId: string;
     name: string;
     description: string;
-    metadata: Record<string, unknown>;
+    metadata: Metadata;
     mainProduct: Product | null;
     features: PlanFeatureQuota[];
     prices: PlanPricing[];
@@ -42,6 +47,7 @@ export interface PricingPlan {
 // --- Helpers ---
 
 const INTERVAL_MAP: Record<string, BillingInterval> = {
+    month_1: 'monthly',
     month_6: 'semester',
     year_1: 'annual',
     year_2: 'biennial',
@@ -71,6 +77,7 @@ function buildPlanPricing(prices: Price[]): PlanPricing[] {
 function buildFeatureQuotas(productFeatures: ProductFeature[], productPrices: Price[]): PlanFeatureQuota[] {
     return productFeatures.map((pf) => {
         const quotas: Record<BillingInterval, number | null> = {
+            monthly: null,
             semester: null,
             annual: null,
             biennial: null,
