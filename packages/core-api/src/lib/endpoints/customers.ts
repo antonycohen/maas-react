@@ -5,7 +5,16 @@ import { ApiCollectionResponse, FieldQuery, GetCollectionQueryParams, GetQueryBy
 const BASE_PATH = '/api/v1/pms/customers';
 const ME_PATH = '/api/v1/users/me';
 
-export interface CustomerAddress {
+export interface BillingAddress {
+    name: string;
+    line1: string;
+    line2?: string;
+    city: string;
+    postalCode: string;
+    country: string;
+}
+
+export interface ShippingAddress {
     firstName: string;
     lastName: string;
     line1: string;
@@ -18,8 +27,11 @@ export interface CustomerAddress {
 export interface UpdateMyCustomerData {
     name?: string;
     email?: string;
-    billingAddress?: CustomerAddress;
-    shippingAddress?: CustomerAddress;
+    phone?: string | null;
+    description?: string | null;
+    currency?: string | null;
+    billingAddress?: BillingAddress;
+    shippingAddress?: ShippingAddress;
 }
 
 export interface GetCustomersFilter {
@@ -79,10 +91,26 @@ export class CustomersEndpoint {
     }
 
     /**
+     * Update a customer by ID
+     * PUT /api/v1/pms/customers/{customerId}
+     */
+    async updateCustomer(customerId: string, data: UpdateMyCustomerData): Promise<ReadCustomer> {
+        return this.client.patch<ReadCustomer>(`${BASE_PATH}/${customerId}`, data);
+    }
+
+    /**
      * Get the current user's quotas
      * GET /api/v1/users/me/quotas
      */
     async getMyQuotas(): Promise<Quota[]> {
         return this.client.getById<Quota[]>(`${ME_PATH}/quotas`);
+    }
+
+    /**
+     * Get a customer's quotas
+     * GET /api/v1/pms/customers/{customerId}/quotas
+     */
+    async getCustomerQuotas(customerId: string): Promise<Quota[]> {
+        return this.client.getById<Quota[]>(`${BASE_PATH}/${customerId}/quotas`);
     }
 }

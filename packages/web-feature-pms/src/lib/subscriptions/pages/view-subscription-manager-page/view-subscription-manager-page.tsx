@@ -251,9 +251,7 @@ export function ViewSubscriptionManagerPage() {
                                         {subscription.customer ? (
                                             <div className="mt-1">
                                                 <Link
-                                                    to={routes.userEdit(
-                                                        subscription.customer.refId ?? subscription.customer.id
-                                                    )}
+                                                    to={routes.customerEdit(subscription.customer.id)}
                                                     className="text-primary text-sm font-medium underline underline-offset-4 hover:opacity-80"
                                                 >
                                                     {subscription.customer.name ??

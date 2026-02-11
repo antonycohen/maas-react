@@ -15,6 +15,7 @@ import {
     ShoppingCartIcon,
     SlidersHorizontal,
     Tags,
+    UserRoundSearch,
     Users,
 } from 'lucide-react';
 import { SidebarNavigationProps } from '@maas/web-components';
@@ -77,6 +78,11 @@ export const useMainNavigation = (): SidebarNavigationProps[] => {
         {
             sectionName: 'Customers',
             items: [
+                {
+                    title: 'Customers',
+                    url: routes.customers(),
+                    icon: UserRoundSearch,
+                },
                 {
                     title: 'Users',
                     url: routes.users(),

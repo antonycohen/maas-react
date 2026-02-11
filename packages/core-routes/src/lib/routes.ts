@@ -33,6 +33,7 @@ export const SEGMENTS = {
     DOSSIERS: 'dossiers',
 
     // Administration
+    CUSTOMERS: 'customers',
     USERS: 'users',
     TEAMS: 'teams',
     SETTINGS: 'settings',
@@ -141,6 +142,13 @@ export const ADMIN_ROUTES = {
     ARTICLE_TYPES_WILDCARD: `${SEGMENTS.ARTICLE_TYPES}/*`,
     ARTICLE_TYPE_NEW: `${SEGMENTS.ARTICLE_TYPES}/${SEGMENTS.NEW}`,
     ARTICLE_TYPE_EDIT: `${SEGMENTS.ARTICLE_TYPES}/:articleTypeId`,
+
+    // Customers
+    CUSTOMERS: SEGMENTS.CUSTOMERS,
+    CUSTOMERS_WILDCARD: `${SEGMENTS.CUSTOMERS}/*`,
+    CUSTOMER_EDIT: `${SEGMENTS.CUSTOMERS}/:customerId`,
+    CUSTOMER_INFO: `${SEGMENTS.CUSTOMERS}/:customerId/${SEGMENTS.INFO}`,
+    CUSTOMER_SUBSCRIPTIONS: `${SEGMENTS.CUSTOMERS}/:customerId/${SEGMENTS.SUBSCRIPTIONS}`,
 
     // Users
     USERS: SEGMENTS.USERS,

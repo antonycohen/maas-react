@@ -1,14 +1,14 @@
 import { Collection } from '@maas/web-collection';
-import { useUsersListColumns } from './hooks/use-users-list-columns';
-import { useGetUsers } from '@maas/core-api';
+import { useCustomersListColumns } from './hooks/use-customers-list-columns';
+import { useGetCustomers } from '@maas/core-api';
 import { LayoutBreadcrumb, LayoutContent, LayoutHeader } from '@maas/web-layout';
 import { useRoutes } from '@maas/core-workspace';
 import { Button } from '@maas/web-components';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons-react';
 
-export function UsersListManagerPage() {
-    const columns = useUsersListColumns();
+export function CustomersListManagerPage() {
+    const columns = useCustomersListColumns();
     const routes = useRoutes();
 
     return (
@@ -17,49 +17,41 @@ export function UsersListManagerPage() {
                 <LayoutBreadcrumb
                     items={[
                         { label: 'Home', to: routes.root() },
-                        { label: 'Users', to: routes.users() },
+                        { label: 'Customers', to: routes.customers() },
                     ]}
                 />
+            </header>
+            <LayoutContent>
                 <LayoutHeader
-                    pageTitle="Users"
+                    pageTitle="Customers"
                     actions={
                         <Button asChild>
-                            <Link to={routes.userEdit('new')}>
+                            <Link to={routes.customerInfo('new')}>
                                 <IconPlus className="mr-2 h-4 w-4" />
-                                New User
+                                New Customer
                             </Link>
                         </Button>
                     }
                 />
-            </header>
-            <LayoutContent>
                 <Collection
                     useLocationAsState
                     columns={columns}
                     filtersConfiguration={{
                         textFilter: {
-                            placeholder: 'Search users...',
+                            placeholder: 'Search customers...',
                             queryParamName: 'term',
                         },
-                        facetedFilters: [
-                            {
-                                columnId: 'roles',
-                                title: 'Roles',
-                                queryParamName: 'roles',
-                                options: [
-                                    { value: 'admin', label: 'Admin' },
-                                    { value: 'editor', label: 'Editor' },
-                                    { value: 'viewer', label: 'Viewer' },
-                                ],
-                            },
-                        ],
                     }}
-                    useQueryFn={useGetUsers}
+                    useQueryFn={useGetCustomers}
                     queryFields={{
                         id: null,
-                        firstName: null,
-                        lastName: null,
+                        name: null,
                         email: null,
+                        phone: null,
+                        refId: null,
+                        balance: null,
+                        currency: null,
+                        createdAt: null,
                     }}
                 />
             </LayoutContent>

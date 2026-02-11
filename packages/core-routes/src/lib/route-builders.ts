@@ -77,6 +77,14 @@ export const adminUrlBuilders = {
     articleTypeEdit: (articleTypeId: string) =>
         buildPath(`${SEGMENTS.ARTICLE_TYPES}/:articleTypeId`, { articleTypeId }),
 
+    // Customers
+    customers: () => ADMIN_ROUTES.CUSTOMERS,
+    customerEdit: (customerId: string) => buildPath(`${SEGMENTS.CUSTOMERS}/:customerId`, { customerId }),
+    customerInfo: (customerId: string) =>
+        buildPath(`${SEGMENTS.CUSTOMERS}/:customerId/${SEGMENTS.INFO}`, { customerId }),
+    customerSubscriptions: (customerId: string) =>
+        buildPath(`${SEGMENTS.CUSTOMERS}/:customerId/${SEGMENTS.SUBSCRIPTIONS}`, { customerId }),
+
     // Users
     users: () => ADMIN_ROUTES.USERS,
     userEdit: (userId: string) => buildPath(`${SEGMENTS.USERS}/:userId`, { userId }),

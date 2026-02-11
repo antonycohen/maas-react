@@ -99,6 +99,17 @@ export const useWorkspaceRoutes = (workspaceId: string | null) => {
             /** Edit article type URL */
             articleTypeEdit: (articleTypeId: string) => `${baseUrl}/${adminUrlBuilders.articleTypeEdit(articleTypeId)}`,
 
+            // Customers
+            /** Customers list URL */
+            customers: () => `${baseUrl}/${adminUrlBuilders.customers()}`,
+            /** Edit customer URL */
+            customerEdit: (customerId: string) => `${baseUrl}/${adminUrlBuilders.customerEdit(customerId)}`,
+            /** Customer info URL */
+            customerInfo: (customerId: string) => `${baseUrl}/${adminUrlBuilders.customerInfo(customerId)}`,
+            /** Customer subscriptions URL */
+            customerSubscriptions: (customerId: string) =>
+                `${baseUrl}/${adminUrlBuilders.customerSubscriptions(customerId)}`,
+
             // Users
             /** Users list URL */
             users: () => `${baseUrl}/${adminUrlBuilders.users()}`,

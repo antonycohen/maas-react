@@ -3,7 +3,7 @@ import { AdminLayout } from '@maas/web-layout';
 import { useConnectedUser } from '@maas/core-store-session';
 import { useGetUserOrganizations } from '@maas/core-api';
 import { User } from '@maas/core-api-models';
-import { AccountRoutes, UsersRoutes } from '@maas/web-feature-users';
+import { AccountRoutes, UsersRoutes, CustomersRoutes } from '@maas/web-feature-users';
 import { WorkspaceProvider, useRoutes } from '@maas/core-workspace';
 import {
     ArticlesRoutes,
@@ -104,6 +104,7 @@ const WorkspaceRoutesContent = ({ connectedUser, organizationId, organizations }
                 <Route path={ADMIN_ROUTES.FOLDERS_WILDCARD} element={<FoldersRoutes />} />
                 <Route path={ADMIN_ROUTES.ENUMS_WILDCARD} element={<EnumsRoutes />} />
                 <Route path={ADMIN_ROUTES.BRANDS_WILDCARD} element={<BrandsRoutes />} />
+                <Route path={ADMIN_ROUTES.CUSTOMERS_WILDCARD} element={<CustomersRoutes />} />
                 <Route path={ADMIN_ROUTES.USERS_WILDCARD} element={<UsersRoutes />} />
                 <Route path={ADMIN_ROUTES.TEAMS_WILDCARD} element={<TeamsRoutes />} />
                 <Route path={ADMIN_ROUTES.SETTINGS_WILDCARD} element={<SettingsRoutes />} />

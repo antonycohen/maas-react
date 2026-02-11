@@ -16,7 +16,6 @@ export function EditUserManagerPage() {
             firstName: null,
             lastName: null,
             email: null,
-            customer: null,
         },
     });
 
