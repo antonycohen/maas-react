@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Switch } from '@maas/web-components';
 import type { BillingInterval, PricingPlan } from '../hooks/use-pricing-data';
 import { usePricingStore } from '../store/pricing-store';
+import { cn } from '@maas/core-utils';
 
 const SHIPPING_METRO = 'metro';
 
@@ -26,9 +27,10 @@ interface PricingSummaryProps {
     children?: React.ReactNode;
     /** When true, only show toggles for addons that are NOT already checked (checked ones appear as line items). */
     hideCheckedAddonToggles?: boolean;
+    containerClassName?: string;
 }
 
-export function PricingSummary({ plan, children, hideCheckedAddonToggles }: PricingSummaryProps) {
+export function PricingSummary({ plan, children, hideCheckedAddonToggles, containerClassName }: PricingSummaryProps) {
     const selectedInterval = usePricingStore((s) => s.selectedInterval);
     const addonToggles = usePricingStore((s) => s.addonToggles);
     const toggleAddon = usePricingStore((s) => s.toggleAddon);
@@ -76,7 +78,12 @@ export function PricingSummary({ plan, children, hideCheckedAddonToggles }: Pric
 
     if (!selectedInterval) return null;
     return (
-        <div className="border-border bg-muted/50 flex w-full flex-col gap-4 self-start rounded-xl border p-5 lg:sticky lg:top-6 lg:w-72 lg:shrink-0">
+        <div
+            className={cn(
+                'border-border bg-muted/50 flex w-full flex-col gap-4 self-center rounded-xl border p-5 lg:sticky lg:top-6 lg:shrink-0',
+                containerClassName
+            )}
+        >
             {/* Line items */}
             <div className="flex h-20 flex-col gap-2">
                 <div className="flex items-center justify-between text-sm">

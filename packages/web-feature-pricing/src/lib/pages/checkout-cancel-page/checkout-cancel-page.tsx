@@ -22,7 +22,7 @@ export function CheckoutCancelPage() {
 
                 <div className="flex flex-col gap-3 sm:flex-row">
                     <Button asChild size="lg">
-                        <Link to="/pricing">Retour aux offres</Link>
+                        <Link to="/pricing/paiement">Réessayer le paiement</Link>
                     </Button>
                     <Button asChild variant="outline" size="lg">
                         <Link to="/">Retour à l'accueil</Link>

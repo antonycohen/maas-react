@@ -5,6 +5,23 @@ import { ApiCollectionResponse, FieldQuery, GetCollectionQueryParams, GetQueryBy
 const BASE_PATH = '/api/v1/pms/customers';
 const ME_PATH = '/api/v1/users/me';
 
+export interface CustomerAddress {
+    firstName: string;
+    lastName: string;
+    line1: string;
+    line2?: string;
+    city: string;
+    postalCode: string;
+    country: string;
+}
+
+export interface UpdateMyCustomerData {
+    name?: string;
+    email?: string;
+    billingAddress?: CustomerAddress;
+    shippingAddress?: CustomerAddress;
+}
+
 export interface GetCustomersFilter {
     email?: string;
     name?: string;
@@ -51,6 +68,14 @@ export class CustomersEndpoint {
      */
     async getMyCustomer(fields?: FieldQuery<ReadCustomer>): Promise<ReadCustomer> {
         return this.client.getById<ReadCustomer>(`${ME_PATH}/customer`, fields);
+    }
+
+    /**
+     * Update the current user's customer
+     * PATCH /api/v1/pms/customers/me
+     */
+    async updateMyCustomer(data: UpdateMyCustomerData): Promise<ReadCustomer> {
+        return this.client.put<ReadCustomer>(`${BASE_PATH}/me`, data);
     }
 
     /**

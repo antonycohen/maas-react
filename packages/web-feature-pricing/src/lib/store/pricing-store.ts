@@ -2,7 +2,7 @@ import { create } from 'zustand/react';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import type { BillingInterval } from '../hooks/use-pricing-data';
 
-export type PricingStep = 'plan' | 'configure' | 'auth' | 'address';
+export type PricingStep = 'plan' | 'configure' | 'auth' | 'paiement' | 'adresse';
 
 export interface AddressFormData {
     firstName: string;

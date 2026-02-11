@@ -59,7 +59,7 @@ export function PricingConfigurator({ plan }: PricingConfiguratorProps) {
 
     const handleSubscribe = () => {
         if (accessToken) {
-            navigate('/pricing/informations');
+            navigate('/pricing/paiement');
         } else {
             navigate('/pricing/auth');
         }
@@ -179,7 +179,7 @@ export function PricingConfigurator({ plan }: PricingConfiguratorProps) {
 
                     {/* Right: Summary sidebar */}
                     <div className="lg:pl-8">
-                        <PricingSummary plan={plan}>
+                        <PricingSummary containerClassName="lg:w-72" plan={plan}>
                             <button
                                 onClick={handleSubscribe}
                                 className="bg-brand-primary hover:bg-brand-primary/90 flex h-11 w-full cursor-pointer items-center justify-center rounded-lg px-6 text-sm font-semibold text-white transition-colors"
