@@ -23,3 +23,4 @@ export * from './lib/feature';
 export * from './lib/subscription';
 export * from './lib/customer';
 export * from './lib/quota';
+export * from './lib/invoice';

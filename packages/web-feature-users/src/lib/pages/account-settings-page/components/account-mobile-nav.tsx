@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { User, Lock, Settings, LogOut, CreditCard } from 'lucide-react';
+import { User, Lock, Settings, LogOut, CreditCard, FileText } from 'lucide-react';
 interface AccountMobileNavProps {
     baseUrl: string;
 }
@@ -9,6 +9,7 @@ export function AccountMobileNav({ baseUrl }: AccountMobileNavProps) {
         { title: 'Connexion', url: `${baseUrl}/account/connexion`, icon: Lock },
         { title: 'Préférences', url: `${baseUrl}/account/preferences`, icon: Settings },
         { title: 'Abonnement', url: `${baseUrl}/account/subscription`, icon: CreditCard },
+        { title: 'Factures', url: `${baseUrl}/account/invoices`, icon: FileText },
     ];
     return (
         <div className="fixed bottom-0 left-0 z-50 w-full border-t border-gray-200 bg-white pb-[env(safe-area-inset-bottom)] md:hidden">

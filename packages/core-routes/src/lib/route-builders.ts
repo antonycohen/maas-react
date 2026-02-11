@@ -34,6 +34,7 @@ export const adminUrlBuilders = {
     accountConnexion: () => `${SEGMENTS.ACCOUNT}/${SEGMENTS.CONNEXION}`,
     accountPreferences: () => `${SEGMENTS.ACCOUNT}/${SEGMENTS.PREFERENCES}`,
     accountSubscription: () => `${SEGMENTS.ACCOUNT}/${SEGMENTS.SUBSCRIPTION}`,
+    accountInvoices: () => `${SEGMENTS.ACCOUNT}/${SEGMENTS.INVOICES}`,
 
     // Issues
     issues: () => ADMIN_ROUTES.ISSUES,
@@ -120,6 +121,9 @@ export const adminUrlBuilders = {
     pmsSubscriptions: () => ADMIN_ROUTES.PMS_SUBSCRIPTIONS,
     pmsSubscriptionView: (subscriptionId: string) =>
         buildPath(`${SEGMENTS.PMS}/${SEGMENTS.PMS_SUBSCRIPTIONS}/:subscriptionId`, { subscriptionId }),
+    // PMS Invoices
+    pmsInvoices: () => ADMIN_ROUTES.PMS_INVOICES,
+    pmsInvoiceView: (invoiceId: string) => buildPath(`${SEGMENTS.PMS}/${SEGMENTS.INVOICES}/:invoiceId`, { invoiceId }),
     // PMS Wizard
     pmsWizard: () => ADMIN_ROUTES.PMS_WIZARD,
 };
