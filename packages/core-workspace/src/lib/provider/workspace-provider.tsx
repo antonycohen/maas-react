@@ -10,10 +10,12 @@ type WorkspaceContextType = {
 const defaultRoutes = {
     base: '',
     root: () => '/',
+    login: () => '/login',
     account: () => '/account',
     accountProfile: () => '/account/profile',
     accountConnexion: () => '/account/connexion',
     accountPreferences: () => '/account/preferences',
+    accountSubscription: () => '/account/subscription',
     issues: () => '/issues',
     issueNewInfo: () => '/issues/new/info',
     issueInfo: () => '/issues',

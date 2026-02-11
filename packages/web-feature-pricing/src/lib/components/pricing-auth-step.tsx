@@ -11,8 +11,8 @@ interface LoginFormData {
 }
 
 interface RegisterFormData {
-    firstName: string;
-    lastName: string;
+    firstName?: string;
+    lastName?: string;
     email: string;
     password: string;
     confirmPassword: string;
@@ -92,8 +92,6 @@ function LoginForm({ onSuccess }: { onSuccess: () => void }) {
 
 function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
     const [form, setForm] = useState<RegisterFormData>({
-        firstName: '',
-        lastName: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -108,8 +106,6 @@ function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
         setGlobalError(null);
 
         const newErrors: Partial<Record<keyof RegisterFormData, string>> = {};
-        if (!form.firstName.trim()) newErrors.firstName = 'Le prénom est requis';
-        if (!form.lastName.trim()) newErrors.lastName = 'Le nom est requis';
         if (!form.email.trim()) newErrors.email = "L'email est requis";
         if (!form.password.trim()) newErrors.password = 'Le mot de passe est requis';
         if (form.password.length > 0 && form.password.length < 8)
@@ -127,8 +123,6 @@ function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
 
         try {
             await maasApi.users.createUser({
-                firstName: form.firstName,
-                lastName: form.lastName,
                 email: form.email,
                 password: form.password,
             });
@@ -164,31 +158,6 @@ function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div className="flex flex-col gap-1.5">
-                    <label className="text-foreground text-sm font-medium">Prénom</label>
-                    <Input
-                        value={form.firstName}
-                        onChange={(e) => setForm((prev) => ({ ...prev, firstName: e.target.value }))}
-                        placeholder="Jean"
-                        autoComplete="given-name"
-                        aria-invalid={!!errors.firstName}
-                    />
-                    {errors.firstName && <span className="text-destructive text-xs">{errors.firstName}</span>}
-                </div>
-                <div className="flex flex-col gap-1.5">
-                    <label className="text-foreground text-sm font-medium">Nom</label>
-                    <Input
-                        value={form.lastName}
-                        onChange={(e) => setForm((prev) => ({ ...prev, lastName: e.target.value }))}
-                        placeholder="Dupont"
-                        autoComplete="family-name"
-                        aria-invalid={!!errors.lastName}
-                    />
-                    {errors.lastName && <span className="text-destructive text-xs">{errors.lastName}</span>}
-                </div>
-            </div>
-
             <div className="flex flex-col gap-1.5">
                 <label className="text-foreground text-sm font-medium">Email</label>
                 <Input

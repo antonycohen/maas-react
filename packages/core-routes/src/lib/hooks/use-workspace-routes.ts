@@ -21,6 +21,8 @@ export const useWorkspaceRoutes = (workspaceId: string | null) => {
             /** The workspace base URL (e.g., /admin/w/org-123) */
             base: baseUrl,
 
+            login: () => '/login',
+
             // Dashboard
             /** Dashboard/root URL */
             root: () => `${baseUrl}/`,

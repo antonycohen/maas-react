@@ -4,10 +4,13 @@ import { usePricingData } from '../../hooks/use-pricing-data';
 import { usePricingStore } from '../../store/pricing-store';
 import { PricingAddressStep } from '../../components/pricing-address-step';
 import { PricingSummary } from '../../components/pricing-summary';
+import { usePrefillCustomerAddress } from '../../hooks/use-prefill-customer-address';
 
 export const PricingInformationsPage = () => {
     const navigate = useNavigate();
     const selectedPlanId = usePricingStore((s) => s.selectedPlanId);
+    usePrefillCustomerAddress();
+
     const { pricingPlans, isLoading } = usePricingData();
 
     const selectedPlan = useMemo(

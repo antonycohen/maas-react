@@ -122,7 +122,6 @@ export function PricingAddressStep({ plan }: PricingAddressStepProps) {
     const selectedInterval = usePricingStore((s) => s.selectedInterval);
     const addonToggles = usePricingStore((s) => s.addonToggles);
     const shippingSelections = usePricingStore((s) => s.shippingSelections);
-    const setCurrentStep = usePricingStore((s) => s.setCurrentStep);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -223,7 +222,7 @@ export function PricingAddressStep({ plan }: PricingAddressStepProps) {
                         <h3 className="font-heading text-foreground text-xl font-semibold">{planName}</h3>
                     </div>
                     <button
-                        onClick={() => setCurrentStep('configure')}
+                        onClick={() => navigate('/pricing')}
                         className="text-text-secondary hover:text-foreground cursor-pointer text-sm font-medium transition-colors"
                     >
                         Retour

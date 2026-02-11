@@ -47,7 +47,8 @@ export function usePrefillCustomerAddress() {
             setBillingAddress(DEFAULT_ADDRESS);
             hasPrefilled.current = true;
         }
-    }, [isError, setDeliveryAddress, setBillingAddress]);
+         
+    }, [isError]);
 
     useEffect(() => {
         if (hasPrefilled.current) return;
@@ -87,6 +88,8 @@ export function usePrefillCustomerAddress() {
             setDeliveryAddress(customerDelivery);
         } else if (hasBilling) {
             setDeliveryAddress(customerBilling);
+        } else {
+            setDeliveryAddress(DEFAULT_ADDRESS);
         }
 
         // Prefill billing: use customer address fields, fallback to delivery
@@ -94,11 +97,12 @@ export function usePrefillCustomerAddress() {
             setBillingAddress(customerBilling);
         } else if (hasDelivery) {
             setBillingAddress(customerDelivery);
+        } else {
+            setBillingAddress(DEFAULT_ADDRESS);
         }
 
         hasPrefilled.current = true;
          
     }, [isError, customer, deliveryAddress, billingAddress]);
-
     return { customer, isLoading: isLoading && !!accessToken, isError };
 }
