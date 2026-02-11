@@ -8,3 +8,4 @@ export * from './lib/hooks/use-dialog-state';
 export * from './lib/hooks/use-on-click-outside';
 export * from './lib/tailwind-utils';
 export * from './lib/video-utils';
+export * from './lib/sanitize-html';

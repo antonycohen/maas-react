@@ -4,6 +4,7 @@ export * from './lib/article-type';
 export * from './lib/brand';
 export * from './lib/category';
 export * from './lib/configuration';
+export * from './lib/country';
 export * from './lib/document';
 export * from './lib/enum';
 export * from './lib/organizations';

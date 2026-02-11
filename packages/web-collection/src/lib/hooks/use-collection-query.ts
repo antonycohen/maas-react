@@ -12,7 +12,7 @@ import { UseQueryTable } from '../collection';
  */
 function useStableObject<T>(value: T): T {
     const serialized = JSON.stringify(value);
-     
+
     return useMemo(() => value, [serialized]);
 }
 
@@ -93,12 +93,15 @@ export function useCollectionQuery<T, Q = undefined>({
         };
     }, [pagination.pageIndex, pagination.pageSize, filters, stableQueryFields, stableStaticParams, sort]);
 
-    const { data } = useQueryFn(params, {
+    const { data, error, isError, isLoading } = useQueryFn(params, {
         placeholderData: keepPreviousData,
     });
 
     return {
         items: data?.data || [],
         totalCount: data?.pagination?.count || 0,
+        error,
+        isError,
+        isLoading,
     };
 }

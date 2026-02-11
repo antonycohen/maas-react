@@ -29,18 +29,18 @@ export class TokenManager {
         const currentLock = localStorage.getItem(this.LOCK_KEY);
 
         if (currentLock) {
-            const lockTime = parseInt(currentLock, 10);
+            const lockTime = parseInt(currentLock.split('-')[0], 10);
             if (now - lockTime < this.LOCK_TIMEOUT) {
                 return false;
             }
         }
 
         const lockId = `${now}-${Math.random()}`;
-        localStorage.setItem(this.LOCK_KEY, now.toString());
+        localStorage.setItem(this.LOCK_KEY, lockId);
         this.refreshLock = lockId;
 
         const storedLock = localStorage.getItem(this.LOCK_KEY);
-        return storedLock === now.toString();
+        return storedLock === lockId;
     }
 
     private releaseLock() {
@@ -54,10 +54,6 @@ export class TokenManager {
     isTokenValid(): boolean {
         const { accessTokenExpirationDate } = useOAuthStore.getState();
         if (!accessTokenExpirationDate) return true;
-        console.log('explanation current date', Date.now());
-        console.log('explanation expiration date', accessTokenExpirationDate);
-
-        console.log('is token valid?', Date.now() < accessTokenExpirationDate - 60000);
         return Date.now() < accessTokenExpirationDate - 60000;
     }
 
@@ -101,8 +97,11 @@ export class TokenManager {
 
         if (!this.refreshPromise) {
             this.refreshPromise = this.refreshToken()
-                .catch(() => {
-                    useOAuthStore.getState().reset();
+                .catch((error) => {
+                    if (error instanceof AuthenticationError) {
+                        useOAuthStore.getState().reset();
+                    }
+                    throw error;
                 })
                 .finally(() => {
                     this.refreshPromise = null;

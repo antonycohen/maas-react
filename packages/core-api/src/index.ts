@@ -6,6 +6,7 @@ export * from './lib/queries/articles';
 export * from './lib/queries/article-types';
 export * from './lib/queries/brands';
 export * from './lib/queries/categories';
+export * from './lib/queries/countries';
 export * from './lib/queries/enums';
 export * from './lib/queries/folders';
 export * from './lib/queries/issues';

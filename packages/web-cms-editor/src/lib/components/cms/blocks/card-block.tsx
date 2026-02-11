@@ -1,5 +1,5 @@
 import { CMSCardTextBlock, CMSCardTextWithImageBlock } from '@maas/core-api-models';
-import { getImgSrc } from '@maas/core-utils';
+import { getImgSrc, sanitizeHtml } from '@maas/core-utils';
 
 type CardData = CMSCardTextBlock['data'] | CMSCardTextWithImageBlock['data'];
 
@@ -20,7 +20,10 @@ export const CardBlock = (props: CardBlockProps) => {
             {imgUrl && <img alt="track record logo" className="max-h-24" src={imgUrl} />}
             {title && <p className="font-montserrat font-semibold text-neutral-900">{title}</p>}
             {description && (
-                <p className="text-xs text-neutral-900" dangerouslySetInnerHTML={{ __html: description }} />
+                <p
+                    className="text-xs text-neutral-900"
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(description) }}
+                />
             )}
         </div>
     );

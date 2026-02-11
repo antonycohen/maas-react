@@ -10,28 +10,27 @@ import { Toaster } from 'sonner';
 import { TranslationProvider } from '@maas/core-translations';
 
 const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: Infinity,
+    defaultOptions: {
+        queries: {
+            staleTime: 5 * 60 * 1000,
+        },
     },
-  },
 });
 
-
 export function App() {
-  return (
-      <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools initialIsOpen={false} />
-        <Toaster />
-        <TranslationProvider>
-          <SessionProvider >
-            <BrowserRouter>
-              <RootRoutes />
-            </BrowserRouter>
-          </SessionProvider>
-        </TranslationProvider>
-      </QueryClientProvider>
-  );
+    return (
+        <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools initialIsOpen={false} />
+            <Toaster />
+            <TranslationProvider>
+                <SessionProvider>
+                    <BrowserRouter>
+                        <RootRoutes />
+                    </BrowserRouter>
+                </SessionProvider>
+            </TranslationProvider>
+        </QueryClientProvider>
+    );
 }
 
 export default App;

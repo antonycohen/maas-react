@@ -53,8 +53,7 @@ export function PricingAdresseStep() {
                     country: deliveryAddress.country,
                 },
                 billingAddress: {
-                    firstName: billingAddr.firstName,
-                    lastName: billingAddr.lastName,
+                    name: billingAddr.firstName + ' ' + billingAddr.lastName,
                     line1: billingAddr.line1,
                     line2: billingAddr.line2 || undefined,
                     city: billingAddr.city,
