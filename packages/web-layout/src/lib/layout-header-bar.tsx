@@ -18,8 +18,8 @@ type LayoutHeaderBarProps = {
     connectedUser: User | null;
     menuItems?: MenuItem[];
     onSearchClick?: () => void;
-    onLoginClick?: () => void;
-    onSubscribeClick?: () => void;
+    loginHref?: string;
+    subscribeHref?: string;
     className?: string;
 };
 
@@ -105,14 +105,14 @@ function IconButton({
     );
 }
 
-function SubscribeButton({ onClick, compact = false }: { onClick?: () => void; compact?: boolean }) {
+function SubscribeButton({ href, compact = false }: { href?: string; compact?: boolean }) {
     const { t } = useTranslation();
     return (
-        <button onClick={onClick} className={cn(styles.subscribeButton, compact ? 'px-3' : 'px-4')}>
+        <Link to={href ?? '/pricing'} className={cn(styles.subscribeButton, compact ? 'px-3' : 'px-4')}>
             <span className={cn(styles.subscribeText, compact ? 'text-[13px] md:text-[14px]' : 'text-[14px]')}>
                 {t('home.subscribe')}
             </span>
-        </button>
+        </Link>
     );
 }
 
@@ -198,12 +198,12 @@ function NavigationMenu({ items, className }: { items: MenuItem[]; className?: s
 
 function UserButton({
     connectedUser,
-    onLoginClick,
+    loginHref,
     showLabel = false,
     className,
 }: {
     connectedUser: User | null;
-    onLoginClick?: () => void;
+    loginHref?: string;
     showLabel?: boolean;
     className?: string;
 }) {
@@ -230,8 +230,8 @@ function UserButton({
     }
 
     return (
-        <button
-            onClick={onLoginClick}
+        <Link
+            to={loginHref ?? '/login'}
             className={cn(
                 'flex h-10 items-center justify-center gap-1 rounded border border-[#e0e0e0] bg-white transition-colors hover:bg-gray-50',
                 showLabel ? 'hidden px-4 sm:flex' : 'w-10',
@@ -245,7 +245,7 @@ function UserButton({
                     {t('layout.signIn')}
                 </span>
             )}
-        </button>
+        </Link>
     );
 }
 
@@ -257,8 +257,8 @@ export function LayoutHeaderBar({
     connectedUser,
     menuItems,
     onSearchClick,
-    onLoginClick,
-    onSubscribeClick,
+    loginHref,
+    subscribeHref,
     className,
 }: LayoutHeaderBarProps) {
     const { t } = useTranslation();
@@ -317,9 +317,9 @@ export function LayoutHeaderBar({
                                 <Search className="h-5 w-5 text-black" />
                             </IconButton>
 
-                            <UserButton connectedUser={connectedUser} onLoginClick={onLoginClick} showLabel />
+                            <UserButton connectedUser={connectedUser} loginHref={loginHref} showLabel />
 
-                            <SubscribeButton onClick={onSubscribeClick} compact />
+                            <SubscribeButton href={subscribeHref} compact />
                         </div>
                     </div>
                 </div>
@@ -340,7 +340,7 @@ export function LayoutHeaderBar({
                         <NavigationMenu items={resolvedMenuItems} className="flex flex-1 items-center justify-center" />
 
                         <div className="flex shrink-0 items-center gap-2">
-                            <SubscribeButton onClick={onSubscribeClick} />
+                            <SubscribeButton href={subscribeHref} />
                         </div>
                     </div>
                 </div>
@@ -360,16 +360,14 @@ export function LayoutHeaderBar({
                         ))}
 
                         {!connectedUser && (
-                            <button
-                                onClick={() => {
-                                    closeMobileMenu();
-                                    onLoginClick?.();
-                                }}
+                            <Link
+                                to={loginHref ?? '/login'}
+                                onClick={closeMobileMenu}
                                 className="mx-4 mt-3 flex h-10 items-center justify-center gap-2 rounded border border-[#e0e0e0] bg-white px-4 py-2 transition-colors hover:bg-gray-50"
                             >
                                 <UserCircle className="h-5 w-5 text-black" />
                                 <span className={styles.bodyText}>{t('layout.signIn')}</span>
-                            </button>
+                            </Link>
                         )}
                     </div>
                 </div>

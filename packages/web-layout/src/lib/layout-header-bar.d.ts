@@ -7,10 +7,17 @@ type LayoutHeaderBarProps = {
     connectedUser: User | null;
     menuItems?: MenuItem[];
     onSearchClick?: () => void;
-    onLoginClick?: () => void;
-    onSubscribeClick?: () => void;
+    loginHref?: string;
+    subscribeHref?: string;
     className?: string;
 };
-export declare function LayoutHeaderBar({ connectedUser, menuItems, onSearchClick, onLoginClick, onSubscribeClick, className, }: LayoutHeaderBarProps): import("react/jsx-runtime").JSX.Element;
+export declare function LayoutHeaderBar({
+    connectedUser,
+    menuItems,
+    onSearchClick,
+    loginHref,
+    subscribeHref,
+    className,
+}: LayoutHeaderBarProps): import('react/jsx-runtime').JSX.Element;
 export {};
 //# sourceMappingURL=layout-header-bar.d.ts.map

@@ -9,6 +9,9 @@ type LayoutMainMenuProps = {
     items?: MenuItem[];
     className?: string;
 };
-export declare function LayoutMainMenu({ items, className, }: LayoutMainMenuProps): import("react/jsx-runtime").JSX.Element;
+export declare function LayoutMainMenu({
+    items,
+    className,
+}: LayoutMainMenuProps): import('react/jsx-runtime').JSX.Element;
 export {};
 //# sourceMappingURL=layout-main-menu.d.ts.map

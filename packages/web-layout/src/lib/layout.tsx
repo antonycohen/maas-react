@@ -4,18 +4,23 @@ import { User } from '@maas/core-api-models';
 import { LayoutHeaderBar, MenuItem } from './layout-header-bar';
 
 type LayoutProps = {
-  connectedUser: User | null;
-  menuItems?: MenuItem[];
+    connectedUser: User | null;
+    menuItems?: MenuItem[];
 };
 
 export function Layout(props: LayoutProps) {
-  const { connectedUser, menuItems } = props;
+    const { connectedUser, menuItems } = props;
 
-  return (
-    <div className={'tangente'}>
-      <LayoutHeaderBar connectedUser={connectedUser} menuItems={menuItems} />
-      <Outlet />
-      <Footer />
-    </div>
-  );
+    return (
+        <div className={'tangente'}>
+            <LayoutHeaderBar
+                connectedUser={connectedUser}
+                menuItems={menuItems}
+                loginHref="/login"
+                subscribeHref="/pricing"
+            />
+            <Outlet />
+            <Footer />
+        </div>
+    );
 }
