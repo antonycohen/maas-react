@@ -8,7 +8,8 @@ import { CustomerFormValues } from '../../hooks';
 export const CustomerInfoTab = () => {
     const { isLoading } = useOutletContext<EditCustomerOutletContext>();
 
-    const { ControlledTextInput, ControlledTextAreaInput } = createConnectedInputHelpers<CustomerFormValues>();
+    const { ControlledTextInput, ControlledTextAreaInput, ControlledCountryInput } =
+        createConnectedInputHelpers<CustomerFormValues>();
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -91,7 +92,7 @@ export const CustomerInfoTab = () => {
                                     direction="horizontal"
                                     className="py-6"
                                 />
-                                <ControlledTextInput
+                                <ControlledCountryInput
                                     name="billingAddress.country"
                                     label="Country"
                                     direction="horizontal"
@@ -145,7 +146,7 @@ export const CustomerInfoTab = () => {
                                     direction="horizontal"
                                     className="py-6"
                                 />
-                                <ControlledTextInput
+                                <ControlledCountryInput
                                     name="shippingAddress.country"
                                     label="Country"
                                     direction="horizontal"

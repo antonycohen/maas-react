@@ -19,7 +19,7 @@ export * from './lib/inputs/controlled-slug-value-array-input';
 export * from './lib/inputs/controlled-enum-input';
 export * from './lib/inputs/controlled-checkbox';
 export * from './lib/inputs/controlled-ratio-input';
+export * from './lib/inputs/controlled-country-input';
 
 export * from './lib/helper/create-connected-inputs';
 export * from './lib/helper/handle-api-error';
-

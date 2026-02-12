@@ -1,4 +1,6 @@
-import { Input } from '@maas/web-components';
+import { useMemo, useState } from 'react';
+import { useCountries } from '@maas/core-api';
+import { AsyncCombobox, Input } from '@maas/web-components';
 import type { AddressFormData } from '../store/pricing-store';
 
 export function validateAddress(address: AddressFormData): Partial<Record<keyof AddressFormData, string>> {
@@ -19,6 +21,24 @@ interface AddressFormProps {
 }
 
 export function AddressForm({ address, onChange, errors }: AddressFormProps) {
+    const [countrySearch, setCountrySearch] = useState('');
+    const { data: countries, isLoading: isLoadingCountries } = useCountries();
+
+    const countryOptions = useMemo(() => {
+        const options = Object.entries(countries ?? {}).map(([code, name]) => ({ id: code, label: name }));
+        if (!countrySearch) return options;
+        const term = countrySearch.toLowerCase();
+        return options.filter((o) => o.label.toLowerCase().includes(term));
+    }, [countries, countrySearch]);
+
+    const selectedCountry = useMemo(
+        () =>
+            address.country && countries
+                ? { id: address.country, label: countries[address.country] ?? address.country }
+                : null,
+        [address.country, countries]
+    );
+
     return (
         <div className="flex flex-col gap-4">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -89,10 +109,16 @@ export function AddressForm({ address, onChange, errors }: AddressFormProps) {
 
             <div className="flex flex-col gap-1.5">
                 <label className="text-foreground text-sm font-medium">Pays</label>
-                <Input
-                    value={address.country}
-                    onChange={(e) => onChange({ country: e.target.value })}
-                    placeholder="France"
+                <AsyncCombobox
+                    value={selectedCountry}
+                    onChange={(option) => onChange({ country: option?.id ?? '' })}
+                    onSearchChange={setCountrySearch}
+                    options={countryOptions}
+                    isLoading={isLoadingCountries}
+                    placeholder="Sélectionner un pays"
+                    searchPlaceholder="Rechercher un pays..."
+                    emptyMessage="Aucun pays trouvé."
+                    loadingMessage="Chargement..."
                     aria-invalid={!!errors.country}
                 />
                 {errors.country && <span className="text-destructive text-xs">{errors.country}</span>}

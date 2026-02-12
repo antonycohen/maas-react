@@ -25,36 +25,35 @@ import { ControlledTokenInput } from '../inputs/controlled-token-input';
 import { ControlledVideoInput } from '../inputs/controlled-video-input';
 import { ControlledRatioInput } from '../inputs/controlled-ratio-input';
 import { ControlledColorPickerInput } from '../inputs/controlled-color-picker-input';
+import { ControlledCountryInput } from '../inputs/controlled-country-input';
 
-export function createConnectedInputHelpers<
-  T extends FieldValues,
-  Context = unknown,
->() {
-  return {
-    ControlledArticleInput: ControlledArticleInput<T>,
-    ControlledAssociativeTokenInput: ControlledAssociativeTokenInput<T>,
-    ControlledCheckbox: ControlledCheckbox<T>,
-    ControlledCMSInput: ControlledCMSInput<T, Context>,
-    ControlledDateInput: ControlledDateInput<T>,
-    ControlledEnumInput: ControlledEnumInput<T>,
-    ControlledImageInput: ControlledImageInput<T>,
-    ControlledLanguageInput: ControlledLanguageInput<T>,
-    ControlledMagazineBrandInput: ControlledMagazineBrandInput<T>,
-    ControlledCategoryInput: ControlledCategoryInput<T>,
-    ControlledCategoriesInput: ControlledCategoriesInput<T>,
-    ControlledArticleTypeInput: ControlledArticleTypeInput<T>,
-    ControlledMagazineFolderInput: ControlledMagazineFolderInput<T>,
-    ControlledPasswordInput: ControlledPasswordInput<T>,
-    ControlledRTEInput: ControlledRTEInput<T>,
-    ControlledSelectInput: ControlledSelectInput<T>,
-    ControlledSlugValueInput: ControlledSlugValueInput<T>,
-    ControlledSlugValueArrayInput: ControlledSlugValueArrayInput<T>,
-    ControlledSwitchInput: ControlledSwitchInput<T>,
-    ControlledTextAreaInput: ControlledTextareaInput<T>,
-    ControlledTextInput: ControlledTextInput<T>,
-    ControlledTokenInput: ControlledTokenInput<T>,
-    ControlledVideoInput: ControlledVideoInput<T>,
-    ControlledRatioInput: ControlledRatioInput<T>,
-    ControlledColorPickerInput: ControlledColorPickerInput<T>,
-  };
+export function createConnectedInputHelpers<T extends FieldValues, Context = unknown>() {
+    return {
+        ControlledArticleInput: ControlledArticleInput<T>,
+        ControlledAssociativeTokenInput: ControlledAssociativeTokenInput<T>,
+        ControlledCheckbox: ControlledCheckbox<T>,
+        ControlledCMSInput: ControlledCMSInput<T, Context>,
+        ControlledDateInput: ControlledDateInput<T>,
+        ControlledEnumInput: ControlledEnumInput<T>,
+        ControlledImageInput: ControlledImageInput<T>,
+        ControlledLanguageInput: ControlledLanguageInput<T>,
+        ControlledMagazineBrandInput: ControlledMagazineBrandInput<T>,
+        ControlledCategoryInput: ControlledCategoryInput<T>,
+        ControlledCategoriesInput: ControlledCategoriesInput<T>,
+        ControlledArticleTypeInput: ControlledArticleTypeInput<T>,
+        ControlledMagazineFolderInput: ControlledMagazineFolderInput<T>,
+        ControlledPasswordInput: ControlledPasswordInput<T>,
+        ControlledRTEInput: ControlledRTEInput<T>,
+        ControlledSelectInput: ControlledSelectInput<T>,
+        ControlledSlugValueInput: ControlledSlugValueInput<T>,
+        ControlledSlugValueArrayInput: ControlledSlugValueArrayInput<T>,
+        ControlledSwitchInput: ControlledSwitchInput<T>,
+        ControlledTextAreaInput: ControlledTextareaInput<T>,
+        ControlledTextInput: ControlledTextInput<T>,
+        ControlledTokenInput: ControlledTokenInput<T>,
+        ControlledVideoInput: ControlledVideoInput<T>,
+        ControlledRatioInput: ControlledRatioInput<T>,
+        ControlledColorPickerInput: ControlledColorPickerInput<T>,
+        ControlledCountryInput: ControlledCountryInput<T>,
+    };
 }
