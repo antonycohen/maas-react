@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { FieldPath, FieldValues, useController, useFormContext } from 'react-hook-form';
 import { useCountries } from '@maas/core-api';
 import { AsyncCombobox, Field, FieldError, FieldLabel } from '@maas/web-components';
+import { useTranslation } from '@maas/core-translations';
 
 type ControlledCountryInputProps<T extends FieldValues> = {
     name: FieldPath<T>;
@@ -13,7 +14,15 @@ type ControlledCountryInputProps<T extends FieldValues> = {
 };
 
 export function ControlledCountryInput<T extends FieldValues>(props: ControlledCountryInputProps<T>) {
-    const { name, label, placeholder = 'Select a country', direction = 'vertical', className, disabled } = props;
+    const { t } = useTranslation();
+    const {
+        name,
+        label,
+        placeholder = t('field.placeholder.selectCountry'),
+        direction = 'vertical',
+        className,
+        disabled,
+    } = props;
     const form = useFormContext();
     const { field, fieldState } = useController({ name, control: form.control });
 
@@ -41,9 +50,9 @@ export function ControlledCountryInput<T extends FieldValues>(props: ControlledC
             options={options}
             isLoading={isLoading}
             placeholder={placeholder}
-            searchPlaceholder="Search..."
-            emptyMessage="No country found."
-            loadingMessage="Loading..."
+            searchPlaceholder={t('field.placeholder.searchCountry')}
+            emptyMessage={t('field.placeholder.noCountryFound')}
+            loadingMessage={t('common.loading')}
             disabled={disabled}
             aria-invalid={fieldState.invalid}
         />

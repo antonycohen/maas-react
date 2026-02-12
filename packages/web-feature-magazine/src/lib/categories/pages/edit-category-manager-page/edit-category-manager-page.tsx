@@ -1,18 +1,15 @@
 import { useParams } from 'react-router-dom';
+import { useTranslation } from '@maas/core-translations';
+import { LayoutBreadcrumb, LayoutContent, LayoutHeader } from '@maas/web-layout';
 import {
-  LayoutBreadcrumb,
-  LayoutContent,
-  LayoutHeader,
-} from '@maas/web-layout';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  FieldGroup,
+    Button,
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+    FieldGroup,
 } from '@maas/web-components';
 import { FormProvider } from 'react-hook-form';
 import { Category } from '@maas/core-api-models';
@@ -24,113 +21,94 @@ import { useEditActions } from './hooks/use-edit-actions';
 import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
 
 export function EditCategoryManagerPage() {
-  const { categoryId = '' } = useParams<{ categoryId: string }>();
-  const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const { categoryId = '' } = useParams<{ categoryId: string }>();
+    const { t } = useTranslation();
+    const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
 
-  const { category, isLoading, form, isCreateMode } =
-    useEditCategoryForm(categoryId);
+    const { category, isLoading, form, isCreateMode } = useEditCategoryForm(categoryId);
 
-  const { deleteMutation, handleDelete, isSaving, onSubmit } = useEditActions(
-    form,
-    isCreateMode,
-    categoryId,
-  );
+    const { deleteMutation, handleDelete, isSaving, onSubmit } = useEditActions(form, isCreateMode, categoryId);
 
-  if (!isCreateMode && !isLoading && !category) {
-    return <div>Category not found</div>;
-  }
+    if (!isCreateMode && !isLoading && !category) {
+        return <div>{t('categories.notFound')}</div>;
+    }
 
-  const {
-    ControlledTextInput,
-    ControlledImageInput,
-    ControlledTextAreaInput,
-    ControlledCategoryInput,
-  } = createConnectedInputHelpers<Category>();
+    const { ControlledTextInput, ControlledImageInput, ControlledTextAreaInput, ControlledCategoryInput } =
+        createConnectedInputHelpers<Category>();
 
-  const pageTitle = isCreateMode ? 'New Category' : (category?.name ?? '');
-  const breadcrumbLabel = isCreateMode ? 'New' : (category?.name ?? '');
+    const pageTitle = isCreateMode ? t('categories.new') : (category?.name ?? '');
+    const breadcrumbLabel = isCreateMode ? 'New' : (category?.name ?? '');
 
-  return (
-    <div>
-      <header>
-        <LayoutBreadcrumb
-          items={[
-            { label: 'Home', to: `${currentWorkspaceBaseUrl}` },
-            {
-              label: 'Categories',
-              to: `${currentWorkspaceBaseUrl}/categories`,
-            },
-            { label: breadcrumbLabel },
-          ]}
-        />
-      </header>
-      <LayoutContent>
-        <LayoutHeader
-          pageTitle={pageTitle}
-          actions={
-            !isCreateMode && (
-              <Button
-                variant="destructive"
-                onClick={handleDelete}
-                disabled={deleteMutation.isPending}
-              >
-                <IconTrash className="mr-2 h-4 w-4" />
-                Delete
-              </Button>
-            )
-          }
-        />
-        <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <Card
-              className={cn(
-                'transition-opacity',
-                isLoading && 'pointer-events-none opacity-50',
-              )}
-            >
-              <CardHeader>
-                <CardTitle>Category Details</CardTitle>
-                <CardDescription>
-                  View and update your category information here.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <FieldGroup>
-                  <ControlledTextInput name="name" label="Name" />
-                  <ControlledCategoryInput
-                    name="parent"
-                    label="Parent Category"
-                    placeholder="No Parent"
-                  />
-                  <ControlledImageInput
-                    name="cover"
-                    label="Cover"
-                    ratio={1536 / 1024}
-                  />
-                  <ControlledTextAreaInput
-                    name="description"
-                    label="Description"
-                    maxLength={300}
-                  />
-                </FieldGroup>
-              </CardContent>
-              <CardFooter className="border-t pt-6 gap-3">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => form.reset()}
-                  disabled={isLoading}
-                >
-                  Reset
-                </Button>
-                <Button type="submit" disabled={isSaving || isLoading}>
-                  {isSaving ? 'Saving...' : isCreateMode ? 'Create' : 'Save'}
-                </Button>
-              </CardFooter>
-            </Card>
-          </form>
-        </FormProvider>
-      </LayoutContent>
-    </div>
-  );
+    return (
+        <div>
+            <header>
+                <LayoutBreadcrumb
+                    items={[
+                        { label: 'Home', to: `${currentWorkspaceBaseUrl}` },
+                        {
+                            label: 'Categories',
+                            to: `${currentWorkspaceBaseUrl}/categories`,
+                        },
+                        { label: breadcrumbLabel },
+                    ]}
+                />
+            </header>
+            <LayoutContent>
+                <LayoutHeader
+                    pageTitle={pageTitle}
+                    actions={
+                        !isCreateMode && (
+                            <Button variant="destructive" onClick={handleDelete} disabled={deleteMutation.isPending}>
+                                <IconTrash className="mr-2 h-4 w-4" />
+                                Delete
+                            </Button>
+                        )
+                    }
+                />
+                <FormProvider {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}>
+                        <Card className={cn('transition-opacity', isLoading && 'pointer-events-none opacity-50')}>
+                            <CardHeader>
+                                <CardTitle>{t('categories.categoryDetails')}</CardTitle>
+                                <CardDescription>{t('categories.categoryDetailsDescription')}</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <FieldGroup>
+                                    <ControlledTextInput name="name" label={t('field.name')} />
+                                    <ControlledCategoryInput
+                                        name="parent"
+                                        label={t('field.parentCategory')}
+                                        placeholder={t('field.noParent')}
+                                    />
+                                    <ControlledImageInput name="cover" label={t('field.cover')} ratio={1536 / 1024} />
+                                    <ControlledTextAreaInput
+                                        name="description"
+                                        label={t('field.description')}
+                                        maxLength={300}
+                                    />
+                                </FieldGroup>
+                            </CardContent>
+                            <CardFooter className="gap-3 border-t pt-6">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => form.reset()}
+                                    disabled={isLoading}
+                                >
+                                    {t('common.reset')}
+                                </Button>
+                                <Button type="submit" disabled={isSaving || isLoading}>
+                                    {isSaving
+                                        ? t('common.saving')
+                                        : isCreateMode
+                                          ? t('common.create')
+                                          : t('common.save')}
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    </form>
+                </FormProvider>
+            </LayoutContent>
+        </div>
+    );
 }

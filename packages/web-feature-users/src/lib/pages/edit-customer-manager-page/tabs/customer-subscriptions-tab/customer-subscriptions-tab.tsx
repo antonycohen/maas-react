@@ -20,6 +20,7 @@ import {
 import { LayoutContent } from '@maas/web-layout';
 import { EditCustomerOutletContext } from '../../edit-customer-manager-page';
 import { CustomerInvoiceListSection } from './components/customer-invoice-list-section';
+import { useTranslation } from '@maas/core-translations';
 
 const SUBSCRIPTION_STATUS_STYLES: Record<string, string> = {
     active: 'border-emerald-200 bg-emerald-50 text-emerald-700',
@@ -32,15 +33,15 @@ const SUBSCRIPTION_STATUS_STYLES: Record<string, string> = {
     paused: 'border-yellow-200 bg-yellow-50 text-yellow-700',
 };
 
-const SUBSCRIPTION_STATUS_LABELS: Record<string, string> = {
-    active: 'Active',
-    trialing: 'Trialing',
-    past_due: 'Past Due',
-    canceled: 'Canceled',
-    unpaid: 'Unpaid',
-    incomplete: 'Incomplete',
-    incomplete_expired: 'Expired',
-    paused: 'Paused',
+const SUBSCRIPTION_STATUS_KEYS: Record<string, string> = {
+    active: 'customers.subscriptions.statusActive',
+    trialing: 'customers.subscriptions.statusTrialing',
+    past_due: 'customers.subscriptions.statusPastDue',
+    canceled: 'customers.subscriptions.statusCanceled',
+    unpaid: 'customers.subscriptions.statusUnpaid',
+    incomplete: 'customers.subscriptions.statusIncomplete',
+    incomplete_expired: 'customers.subscriptions.statusExpired',
+    paused: 'customers.subscriptions.statusPaused',
 };
 
 const formatDate = (dateStr: string | null): string => {
@@ -58,6 +59,7 @@ const formatFeatureKey = (key: string): string => {
 
 export const CustomerSubscriptionsTab = () => {
     const { customerId } = useOutletContext<EditCustomerOutletContext>();
+    const { t } = useTranslation();
 
     const { data: subscriptionsData, isLoading: isLoadingSubscriptions } = useGetSubscriptions({
         filters: { customerId },
@@ -100,23 +102,23 @@ export const CustomerSubscriptionsTab = () => {
                 {/* Subscriptions */}
                 <Card className="rounded-2xl">
                     <CardHeader>
-                        <CardTitle className="text-xl">Subscriptions</CardTitle>
-                        <CardDescription>Customer subscription plans.</CardDescription>
+                        <CardTitle className="text-xl">{t('customers.subscriptions.title')}</CardTitle>
+                        <CardDescription>{t('customers.subscriptions.description')}</CardDescription>
                     </CardHeader>
                     <CardContent>
                         {isLoadingSubscriptions ? (
                             <Skeleton className="h-[100px] w-full rounded-xl" />
                         ) : subscriptions.length === 0 ? (
-                            <p className="text-sm text-gray-500">No subscriptions found.</p>
+                            <p className="text-sm text-gray-500">{t('customers.subscriptions.noSubscriptions')}</p>
                         ) : (
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Plan</TableHead>
-                                        <TableHead>Status</TableHead>
-                                        <TableHead>Period Start</TableHead>
-                                        <TableHead>Period End</TableHead>
-                                        <TableHead>Currency</TableHead>
+                                        <TableHead>{t('customers.subscriptions.plan')}</TableHead>
+                                        <TableHead>{t('field.status')}</TableHead>
+                                        <TableHead>{t('customers.subscriptions.periodStart')}</TableHead>
+                                        <TableHead>{t('customers.subscriptions.periodEnd')}</TableHead>
+                                        <TableHead>{t('customers.info.currency')}</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -124,7 +126,8 @@ export const CustomerSubscriptionsTab = () => {
                                         const status = subscription.status ?? 'incomplete';
                                         const statusStyle =
                                             SUBSCRIPTION_STATUS_STYLES[status] ?? SUBSCRIPTION_STATUS_STYLES.incomplete;
-                                        const statusLabel = SUBSCRIPTION_STATUS_LABELS[status] ?? status;
+                                        const statusKey = SUBSCRIPTION_STATUS_KEYS[status];
+                                        const statusLabel = statusKey ? t(statusKey) : status;
 
                                         return (
                                             <TableRow key={subscription.id}>
@@ -163,14 +166,14 @@ export const CustomerSubscriptionsTab = () => {
                 {/* Quotas */}
                 <Card className="rounded-2xl">
                     <CardHeader>
-                        <CardTitle className="text-xl">Quotas</CardTitle>
-                        <CardDescription>Customer usage quotas.</CardDescription>
+                        <CardTitle className="text-xl">{t('customers.quotas.title')}</CardTitle>
+                        <CardDescription>{t('customers.quotas.description')}</CardDescription>
                     </CardHeader>
                     <CardContent>
                         {isLoadingQuotas ? (
                             <Skeleton className="h-[100px] w-full rounded-xl" />
                         ) : !quotas || quotas.length === 0 ? (
-                            <p className="text-sm text-gray-500">No quotas available.</p>
+                            <p className="text-sm text-gray-500">{t('customers.quotas.noQuotas')}</p>
                         ) : (
                             <div className="flex flex-col gap-4">
                                 {quotas

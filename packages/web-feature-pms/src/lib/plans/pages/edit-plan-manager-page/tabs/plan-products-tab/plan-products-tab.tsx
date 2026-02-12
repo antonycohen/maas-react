@@ -7,8 +7,10 @@ import { AddProductToPlanModal } from './modals';
 import { EditPlanOutletContext } from '../../edit-plan-manager-page';
 import { Product } from '@maas/core-api-models';
 import { useMemo } from 'react';
+import { useTranslation } from '@maas/core-translations';
 
 export const PlanProductsTab = () => {
+    const { t } = useTranslation();
     const {
         planId,
         isCreateMode,
@@ -69,7 +71,7 @@ export const PlanProductsTab = () => {
     };
 
     const handleRemoveProduct = (productId: string) => {
-        if (window.confirm('Remove this product from the plan?')) {
+        if (window.confirm(t('plans.removeProductConfirm'))) {
             // Note: Removing product from plan requires updating the product's planId to null
             // This should be done through an API call
             if (selectedProductId === productId) {
@@ -82,7 +84,7 @@ export const PlanProductsTab = () => {
         return (
             <div className="flex flex-1 items-center justify-center p-8">
                 <div className="text-center">
-                    <p className="text-muted-foreground">Save the plan first before adding products.</p>
+                    <p className="text-muted-foreground">{t('plans.saveFirst')}</p>
                 </div>
             </div>
         );
@@ -94,7 +96,7 @@ export const PlanProductsTab = () => {
                 {/* Left: Products List */}
                 <div className="flex h-full w-1/2 min-w-[300px] flex-col border-r">
                     <div className="flex items-center justify-between border-b px-4 py-3">
-                        <h3 className="font-semibold">Products</h3>
+                        <h3 className="font-semibold">{t('plans.products')}</h3>
                         <Button
                             variant="outline"
                             size="sm"
@@ -104,7 +106,7 @@ export const PlanProductsTab = () => {
                             }}
                         >
                             <IconPlus className="mr-2 h-4 w-4" />
-                            Add Product
+                            {t('plans.addProduct')}
                         </Button>
                     </div>
                     <ProductsList

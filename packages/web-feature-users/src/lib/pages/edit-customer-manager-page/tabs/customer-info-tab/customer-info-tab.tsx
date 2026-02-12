@@ -4,15 +4,17 @@ import { createConnectedInputHelpers } from '@maas/web-form';
 import { LayoutContent } from '@maas/web-layout';
 import { EditCustomerOutletContext } from '../../edit-customer-manager-page';
 import { CustomerFormValues } from '../../hooks';
+import { useTranslation } from '@maas/core-translations';
 
 export const CustomerInfoTab = () => {
     const { isLoading } = useOutletContext<EditCustomerOutletContext>();
+    const { t } = useTranslation();
 
     const { ControlledTextInput, ControlledTextAreaInput, ControlledCountryInput } =
         createConnectedInputHelpers<CustomerFormValues>();
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div>{t('common.loading')}</div>;
     }
 
     return (
@@ -21,30 +23,40 @@ export const CustomerInfoTab = () => {
                 {/* Customer Information */}
                 <Card className="gap-0 rounded-2xl">
                     <CardHeader>
-                        <CardTitle className="text-xl">Customer Information</CardTitle>
-                        <CardDescription>General customer details.</CardDescription>
+                        <CardTitle className="text-xl">{t('customers.info.title')}</CardTitle>
+                        <CardDescription>{t('customers.info.description')}</CardDescription>
                     </CardHeader>
                     <CardContent className="px-6 pt-2">
                         <div className="flex flex-col divide-y">
-                            <ControlledTextInput name="name" label="Name" direction="horizontal" className="py-6" />
+                            <ControlledTextInput
+                                name="name"
+                                label={t('field.name')}
+                                direction="horizontal"
+                                className="py-6"
+                            />
                             <ControlledTextInput
                                 name="email"
-                                label="Email"
+                                label={t('field.email')}
                                 direction="horizontal"
                                 className="py-6"
                                 readOnly
                             />
-                            <ControlledTextInput name="phone" label="Phone" direction="horizontal" className="py-6" />
+                            <ControlledTextInput
+                                name="phone"
+                                label={t('field.phone')}
+                                direction="horizontal"
+                                className="py-6"
+                            />
                             <ControlledTextAreaInput
                                 name="description"
-                                label="Description"
+                                label={t('field.description')}
                                 direction="horizontal"
                                 maxLength={500}
                                 className="py-6"
                             />
                             <ControlledTextInput
                                 name="currency"
-                                label="Currency"
+                                label={t('customers.info.currency')}
                                 direction="horizontal"
                                 className="py-6"
                             />
@@ -57,44 +69,44 @@ export const CustomerInfoTab = () => {
                     {/* Billing Address */}
                     <Card className="gap-0 rounded-2xl">
                         <CardHeader>
-                            <CardTitle className="text-xl">Billing Address</CardTitle>
-                            <CardDescription>Customer billing address.</CardDescription>
+                            <CardTitle className="text-xl">{t('customers.info.billingAddress')}</CardTitle>
+                            <CardDescription>{t('customers.info.billingAddressDescription')}</CardDescription>
                         </CardHeader>
                         <CardContent className="px-6 pt-2">
                             <div className="flex flex-col divide-y">
                                 <ControlledTextInput
                                     name="billingAddress.name"
-                                    label="Name"
+                                    label={t('field.name')}
                                     direction="horizontal"
                                     className="py-6"
                                 />
                                 <ControlledTextInput
                                     name="billingAddress.line1"
-                                    label="Address Line 1"
+                                    label={t('customers.info.addressLine1')}
                                     direction="horizontal"
                                     className="py-6"
                                 />
                                 <ControlledTextInput
                                     name="billingAddress.line2"
-                                    label="Address Line 2"
+                                    label={t('customers.info.addressLine2')}
                                     direction="horizontal"
                                     className="py-6"
                                 />
                                 <ControlledTextInput
                                     name="billingAddress.city"
-                                    label="City"
+                                    label={t('customers.info.city')}
                                     direction="horizontal"
                                     className="py-6"
                                 />
                                 <ControlledTextInput
                                     name="billingAddress.postalCode"
-                                    label="Postal Code"
+                                    label={t('customers.info.postalCode')}
                                     direction="horizontal"
                                     className="py-6"
                                 />
                                 <ControlledCountryInput
                                     name="billingAddress.country"
-                                    label="Country"
+                                    label={t('customers.info.country')}
                                     direction="horizontal"
                                     className="py-6"
                                 />
@@ -105,50 +117,50 @@ export const CustomerInfoTab = () => {
                     {/* Delivery Address */}
                     <Card className="gap-0 rounded-2xl">
                         <CardHeader>
-                            <CardTitle className="text-xl">Delivery Address</CardTitle>
-                            <CardDescription>Customer delivery/shipping address.</CardDescription>
+                            <CardTitle className="text-xl">{t('customers.info.deliveryAddress')}</CardTitle>
+                            <CardDescription>{t('customers.info.deliveryAddressDescription')}</CardDescription>
                         </CardHeader>
                         <CardContent className="px-6 pt-2">
                             <div className="flex flex-col divide-y">
                                 <ControlledTextInput
                                     name="shippingAddress.firstName"
-                                    label="First Name"
+                                    label={t('customers.info.firstName')}
                                     direction="horizontal"
                                     className="py-6"
                                 />
                                 <ControlledTextInput
                                     name="shippingAddress.lastName"
-                                    label="Last Name"
+                                    label={t('customers.info.lastName')}
                                     direction="horizontal"
                                     className="py-6"
                                 />
                                 <ControlledTextInput
                                     name="shippingAddress.line1"
-                                    label="Address Line 1"
+                                    label={t('customers.info.addressLine1')}
                                     direction="horizontal"
                                     className="py-6"
                                 />
                                 <ControlledTextInput
                                     name="shippingAddress.line2"
-                                    label="Address Line 2"
+                                    label={t('customers.info.addressLine2')}
                                     direction="horizontal"
                                     className="py-6"
                                 />
                                 <ControlledTextInput
                                     name="shippingAddress.city"
-                                    label="City"
+                                    label={t('customers.info.city')}
                                     direction="horizontal"
                                     className="py-6"
                                 />
                                 <ControlledTextInput
                                     name="shippingAddress.postalCode"
-                                    label="Postal Code"
+                                    label={t('customers.info.postalCode')}
                                     direction="horizontal"
                                     className="py-6"
                                 />
                                 <ControlledCountryInput
                                     name="shippingAddress.country"
-                                    label="Country"
+                                    label={t('customers.info.country')}
                                     direction="horizontal"
                                     className="py-6"
                                 />

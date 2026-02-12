@@ -2,6 +2,7 @@ import { Product } from '@maas/core-api-models';
 import { cn } from '@maas/core-utils';
 import { Button, Badge } from '@maas/web-components';
 import { IconTrash, IconPackage } from '@tabler/icons-react';
+import { useTranslation } from '@maas/core-translations';
 
 interface ProductsListProps {
     products: Product[];
@@ -18,10 +19,12 @@ export const ProductsList = ({
     onRemoveProduct,
     isLoading,
 }: ProductsListProps) => {
+    const { t } = useTranslation();
+
     if (isLoading) {
         return (
             <div className="flex h-full items-center justify-center p-4">
-                <span className="text-muted-foreground">Loading products...</span>
+                <span className="text-muted-foreground">{t('plans.loadingProducts')}</span>
             </div>
         );
     }
@@ -30,8 +33,8 @@ export const ProductsList = ({
         return (
             <div className="flex h-full flex-col items-center justify-center p-8 text-center">
                 <IconPackage className="text-muted-foreground mb-4 h-12 w-12" />
-                <p className="text-muted-foreground">No products added to this plan yet.</p>
-                <p className="text-muted-foreground mt-1 text-sm">Click "Add Product" to link products to this plan.</p>
+                <p className="text-muted-foreground">{t('plans.noProducts')}</p>
+                <p className="text-muted-foreground mt-1 text-sm">{t('plans.noProductsHint')}</p>
             </div>
         );
     }
@@ -55,11 +58,11 @@ export const ProductsList = ({
                             <div className="min-w-0 flex-1">
                                 <p className="truncate font-medium">{product.name}</p>
                                 <p className="text-muted-foreground truncate text-sm">
-                                    {product.description || 'No description'}
+                                    {product.description || t('plans.noDescription')}
                                 </p>
                             </div>
                             <Badge variant={product.active ? 'default' : 'secondary'}>
-                                {product.active ? 'Active' : 'Inactive'}
+                                {product.active ? t('status.active') : t('status.inactive')}
                             </Badge>
                         </div>
                         <Button

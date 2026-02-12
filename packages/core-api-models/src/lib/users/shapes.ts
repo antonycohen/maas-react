@@ -13,4 +13,5 @@ export const userShape: User = {
     localizationPreferences: null,
     roles: null,
     notificationsPreferences: null,
+    locale: null,
 };

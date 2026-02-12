@@ -6,8 +6,10 @@ import { cn } from '@maas/core-utils';
 import { Link } from 'react-router-dom';
 import { IconEdit, IconLayoutGrid, IconTrash } from '@tabler/icons-react';
 import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useTranslation } from '@maas/core-translations';
 
 export function usePlansListColumns(): ColumnDef<Plan>[] {
+    const { t } = useTranslation();
     const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
 
     return [
@@ -17,7 +19,7 @@ export function usePlansListColumns(): ColumnDef<Plan>[] {
                 <Checkbox
                     checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
                     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
+                    aria-label={t('table.selectAll')}
                     className="translate-y-[2px]"
                 />
             ),
@@ -31,7 +33,7 @@ export function usePlansListColumns(): ColumnDef<Plan>[] {
                 <Checkbox
                     checked={row.getIsSelected()}
                     onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
+                    aria-label={t('table.selectRow')}
                     className="translate-y-[2px]"
                 />
             ),
@@ -40,7 +42,7 @@ export function usePlansListColumns(): ColumnDef<Plan>[] {
         },
         {
             accessorKey: 'name',
-            header: ({ column }) => <CollectionColumnHeader column={column} title="Name" />,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.name')} />,
             cell: ({ row }) => {
                 return (
                     <Link
@@ -60,16 +62,20 @@ export function usePlansListColumns(): ColumnDef<Plan>[] {
         },
         {
             accessorKey: 'description',
-            header: ({ column }) => <CollectionColumnHeader column={column} title="Description" />,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.description')} />,
             cell: ({ row }) => <LongText className="max-w-64">{row.getValue('description')}</LongText>,
             enableSorting: false,
         },
         {
             accessorKey: 'active',
-            header: ({ column }) => <CollectionColumnHeader column={column} title="Status" />,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.status')} />,
             cell: ({ row }) => {
                 const active = row.getValue('active');
-                return <Badge variant={active ? 'default' : 'secondary'}>{active ? 'Active' : 'Inactive'}</Badge>;
+                return (
+                    <Badge variant={active ? 'default' : 'secondary'}>
+                        {active ? t('status.active') : t('status.inactive')}
+                    </Badge>
+                );
             },
             enableSorting: false,
         },
@@ -80,12 +86,12 @@ export function usePlansListColumns(): ColumnDef<Plan>[] {
                     row={row}
                     actions={[
                         {
-                            label: 'Edit Plan',
+                            label: t('plans.edit'),
                             icon: IconEdit,
                             linkTo: (plan: Plan) => `${currentWorkspaceBaseUrl}/pms/plans/${plan.id}/info`,
                         },
                         {
-                            label: 'Delete Plan',
+                            label: t('plans.delete'),
                             icon: IconTrash,
                             group: 'danger',
                             className: 'text-red-500!',

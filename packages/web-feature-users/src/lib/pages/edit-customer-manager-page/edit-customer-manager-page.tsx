@@ -7,13 +7,7 @@ import { ReadCustomer } from '@maas/core-api-models';
 import { FormProvider, UseFormReturn } from 'react-hook-form';
 import { CustomerFormValues, useEditCustomerActions, useEditCustomerForm } from './hooks';
 import { IconDeviceFloppy, IconLoader2 } from '@tabler/icons-react';
-
-const getTabItems = (baseUrl: string, customerId: string) => {
-    return [
-        { title: 'Info', url: `${baseUrl}/customers/${customerId}/info` },
-        { title: 'Subscriptions', url: `${baseUrl}/customers/${customerId}/subscriptions` },
-    ];
-};
+import { useTranslation } from '@maas/core-translations';
 
 export type EditCustomerOutletContext = {
     customerId: string;
@@ -25,6 +19,7 @@ export type EditCustomerOutletContext = {
 export function EditCustomerManagerPage() {
     const { customerId = '' } = useParams<{ customerId: string }>();
     const workspaceUrl = useCurrentWorkspaceUrlPrefix();
+    const { t } = useTranslation();
 
     const { data: customer, isLoading } = useGetCustomerById({
         id: customerId,
@@ -56,12 +51,17 @@ export function EditCustomerManagerPage() {
 
     const pageTitle = customer?.name ?? '';
 
+    const getTabItems = (baseUrl: string, id: string) => [
+        { title: t('customers.tabs.info'), url: `${baseUrl}/customers/${id}/info` },
+        { title: t('customers.tabs.subscriptions'), url: `${baseUrl}/customers/${id}/subscriptions` },
+    ];
+
     if (isLoading) {
-        return <div className="flex h-screen items-center justify-center">Loading...</div>;
+        return <div className="flex h-screen items-center justify-center">{t('common.loading')}</div>;
     }
 
     if (!isLoading && !customer) {
-        return <div className="flex h-screen items-center justify-center">Customer not found</div>;
+        return <div className="flex h-screen items-center justify-center">{t('customers.notFound')}</div>;
     }
 
     const outletContext: EditCustomerOutletContext = {
@@ -81,8 +81,8 @@ export function EditCustomerManagerPage() {
                 <header className="shrink-0">
                     <LayoutBreadcrumb
                         items={[
-                            { label: 'Home', to: `${workspaceUrl}/` },
-                            { label: 'Customers', to: `${workspaceUrl}/customers` },
+                            { label: t('common.home'), to: `${workspaceUrl}/` },
+                            { label: t('customers.title'), to: `${workspaceUrl}/customers` },
                             { label: customer?.name ?? customerId },
                         ]}
                     />
@@ -91,7 +91,9 @@ export function EditCustomerManagerPage() {
                 {/* Sticky Action Bar */}
                 <div className="bg-background sticky top-0 z-10 flex items-center justify-between border-b px-6 py-3">
                     <div className="flex items-center gap-3">
-                        <h1 className="max-w-md truncate text-xl font-semibold">{pageTitle || 'Untitled'}</h1>
+                        <h1 className="max-w-md truncate text-xl font-semibold">
+                            {pageTitle || t('customers.untitled')}
+                        </h1>
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -102,18 +104,18 @@ export function EditCustomerManagerPage() {
                             onClick={() => form.reset()}
                             disabled={isLoading || !form.formState.isDirty}
                         >
-                            Discard
+                            {t('common.discard')}
                         </Button>
                         <Button type="submit" size="sm" disabled={isSaving || isLoading}>
                             {isSaving ? (
                                 <>
                                     <IconLoader2 className="mr-1.5 h-4 w-4 animate-spin" />
-                                    Saving...
+                                    {t('common.saving')}
                                 </>
                             ) : (
                                 <>
                                     <IconDeviceFloppy className="mr-1.5 h-4 w-4" />
-                                    Save
+                                    {t('common.save')}
                                 </>
                             )}
                         </Button>

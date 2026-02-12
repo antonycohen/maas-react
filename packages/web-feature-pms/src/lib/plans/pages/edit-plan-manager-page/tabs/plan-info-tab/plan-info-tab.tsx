@@ -4,45 +4,52 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@maas
 import { createConnectedInputHelpers } from '@maas/web-form';
 import { LayoutContent } from '@maas/web-layout';
 import { EditPlanOutletContext } from '../../edit-plan-manager-page';
+import { useTranslation } from '@maas/core-translations';
 
 export const PlanInfoTab = () => {
+    const { t } = useTranslation();
     const { isCreateMode, isLoading } = useOutletContext<EditPlanOutletContext>();
 
     const { ControlledTextInput, ControlledTextAreaInput, ControlledSwitchInput } =
         createConnectedInputHelpers<PlanFormValues>();
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div>{t('common.loading')}</div>;
     }
 
     return (
         <LayoutContent>
             <Card className="gap-0 rounded-2xl">
                 <CardHeader>
-                    <CardTitle className="text-xl">{isCreateMode ? 'Create Plan' : 'Plan Information'}</CardTitle>
+                    <CardTitle className="text-xl">
+                        {isCreateMode ? t('plans.createPlan') : t('plans.planInformation')}
+                    </CardTitle>
                     <CardDescription>
-                        {isCreateMode
-                            ? 'Fill in the details to create a new subscription plan.'
-                            : 'Update the plan details below.'}
+                        {isCreateMode ? t('plans.fillDetails') : t('plans.updateDetails')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="px-6 pt-2">
                     <div className="flex flex-col divide-y">
-                        <ControlledTextInput name="name" label="Name" direction="horizontal" className="py-6" />
+                        <ControlledTextInput
+                            name="name"
+                            label={t('field.name')}
+                            direction="horizontal"
+                            className="py-6"
+                        />
                         <ControlledTextAreaInput
                             name="description"
-                            label="Description"
+                            label={t('field.description')}
                             direction="horizontal"
                             maxLength={500}
                             className="py-6"
                         />
                         <ControlledTextInput
                             name="portalConfigurationId"
-                            label="Portal Configuration ID"
+                            label={t('plans.portalConfigurationId')}
                             direction="horizontal"
                             className="py-6"
                         />
-                        <ControlledSwitchInput name="active" label="Active" className="py-6" />
+                        <ControlledSwitchInput name="active" label={t('field.active')} className="py-6" />
                     </div>
                 </CardContent>
             </Card>

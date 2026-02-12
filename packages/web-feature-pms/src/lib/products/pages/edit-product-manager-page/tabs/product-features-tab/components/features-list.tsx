@@ -2,6 +2,7 @@ import { ProductFeature } from '@maas/core-api-models';
 import { cn } from '@maas/core-utils';
 import { Button, Badge } from '@maas/web-components';
 import { IconTrash, IconSparkles } from '@tabler/icons-react';
+import { useTranslation } from '@maas/core-translations';
 
 interface FeaturesListProps {
     productFeatures: ProductFeature[];
@@ -18,10 +19,12 @@ export const FeaturesList = ({
     onRemoveFeature,
     isLoading,
 }: FeaturesListProps) => {
+    const { t } = useTranslation();
+
     if (isLoading) {
         return (
             <div className="flex h-full items-center justify-center p-4">
-                <span className="text-muted-foreground">Loading features...</span>
+                <span className="text-muted-foreground">{t('products.loadingFeatures')}</span>
             </div>
         );
     }
@@ -30,10 +33,8 @@ export const FeaturesList = ({
         return (
             <div className="flex h-full flex-col items-center justify-center p-8 text-center">
                 <IconSparkles className="text-muted-foreground mb-4 h-12 w-12" />
-                <p className="text-muted-foreground">No features attached to this product yet.</p>
-                <p className="text-muted-foreground mt-1 text-sm">
-                    Click "Attach Feature" to link features to this product.
-                </p>
+                <p className="text-muted-foreground">{t('products.noFeatures')}</p>
+                <p className="text-muted-foreground mt-1 text-sm">{t('products.noFeaturesHint')}</p>
             </div>
         );
     }
@@ -60,7 +61,7 @@ export const FeaturesList = ({
                                     {pf.feature.lookupKey}
                                 </p>
                             </div>
-                            {pf.feature.withQuota && <Badge variant="outline">Quota</Badge>}
+                            {pf.feature.withQuota && <Badge variant="outline">{t('products.quota')}</Badge>}
                         </div>
                         <Button
                             variant="ghost"

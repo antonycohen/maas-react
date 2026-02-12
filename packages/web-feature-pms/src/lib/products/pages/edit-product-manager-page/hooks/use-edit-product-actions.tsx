@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
 import { toast } from 'sonner';
 import { ProductFormValues } from './use-edit-product-form';
+import { useTranslation } from '@maas/core-translations';
 
 export const useEditProductActions = (
     form: UseFormReturn<ProductFormValues>,
@@ -13,6 +14,7 @@ export const useEditProductActions = (
 ) => {
     const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const handleApiError = (error: ApiError) => {
         if (error.parametersErrors) {
@@ -28,14 +30,14 @@ export const useEditProductActions = (
     const createMutation = useCreateProduct({
         onSuccess: (data) => {
             navigate(`${workspaceBaseUrl}/pms/products/${data.id}/info`);
-            toast.success('Product created successfully');
+            toast.success(t('products.createdSuccess'));
         },
         onError: handleApiError,
     });
 
     const updateMutation = useUpdateProduct({
         onSuccess: () => {
-            toast.success('Product updated successfully');
+            toast.success(t('products.updatedSuccess'));
         },
         onError: handleApiError,
     });
@@ -43,7 +45,7 @@ export const useEditProductActions = (
     const deleteMutation = useDeleteProduct({
         onSuccess: () => {
             navigate(`${workspaceBaseUrl}/pms/products`);
-            toast.success('Product deleted successfully');
+            toast.success(t('products.deletedSuccess'));
         },
     });
 
@@ -59,7 +61,7 @@ export const useEditProductActions = (
     }
 
     function handleDelete() {
-        if (window.confirm('Are you sure you want to delete this product?')) {
+        if (window.confirm(t('products.deleteConfirm'))) {
             deleteMutation.mutate(productId);
         }
     }

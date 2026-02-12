@@ -2,6 +2,7 @@ import { ApiError, useUpdateCustomer } from '@maas/core-api';
 import { UseFormReturn } from 'react-hook-form';
 import { toast } from 'sonner';
 import { CustomerFormValues } from './use-edit-customer-form';
+import { useTranslation } from '@maas/core-translations';
 
 const hasData = (obj: Record<string, unknown> | undefined): boolean => {
     if (!obj) return false;
@@ -34,6 +35,8 @@ const toShippingAddress = (address: CustomerFormValues['shippingAddress']) => {
 };
 
 export const useEditCustomerActions = (form: UseFormReturn<CustomerFormValues>, customerId: string) => {
+    const { t } = useTranslation();
+
     const handleApiError = (error: ApiError) => {
         if (error.parametersErrors) {
             Object.entries(error.parametersErrors).forEach(([field, messages]) => {
@@ -47,7 +50,7 @@ export const useEditCustomerActions = (form: UseFormReturn<CustomerFormValues>, 
 
     const updateMutation = useUpdateCustomer({
         onSuccess: () => {
-            toast.success('Customer updated successfully');
+            toast.success(t('customers.saveSuccess'));
         },
         onError: handleApiError,
     });

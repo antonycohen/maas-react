@@ -40,6 +40,7 @@ export const readUserSchema = z.object({
             dateFormat: z.string().nullable(),
         })
         .nullable(),
+    locale: z.string().nullable(),
     roles: z.array(z.string()).nullable(),
     notificationsPreferences: z
         .object({

@@ -6,6 +6,7 @@ import { cn } from '@maas/core-utils';
 import { Link } from 'react-router-dom';
 import { IconEdit, IconCoin, IconTrash } from '@tabler/icons-react';
 import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useTranslation } from '@maas/core-translations';
 
 const formatPrice = (price: Price): string => {
     const amount = price.unitAmountInCents ?? 0;
@@ -18,6 +19,7 @@ const formatPrice = (price: Price): string => {
 
 export function usePricesListColumns(): ColumnDef<Price>[] {
     const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const { t } = useTranslation();
 
     return [
         {
@@ -26,7 +28,7 @@ export function usePricesListColumns(): ColumnDef<Price>[] {
                 <Checkbox
                     checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
                     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
+                    aria-label={t('table.selectAll')}
                     className="translate-y-[2px]"
                 />
             ),
@@ -40,7 +42,7 @@ export function usePricesListColumns(): ColumnDef<Price>[] {
                 <Checkbox
                     checked={row.getIsSelected()}
                     onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
+                    aria-label={t('table.selectRow')}
                     className="translate-y-[2px]"
                 />
             ),
@@ -49,7 +51,7 @@ export function usePricesListColumns(): ColumnDef<Price>[] {
         },
         {
             accessorKey: 'unitAmountInCents',
-            header: ({ column }) => <CollectionColumnHeader column={column} title="Price" />,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('prices.amount')} />,
             cell: ({ row }) => {
                 return (
                     <Link
@@ -69,27 +71,37 @@ export function usePricesListColumns(): ColumnDef<Price>[] {
         },
         {
             accessorKey: 'lookupKey',
-            header: ({ column }) => <CollectionColumnHeader column={column} title="Lookup Key" />,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('prices.lookupKey')} />,
             cell: ({ row }) => <span className="font-mono text-xs">{row.getValue('lookupKey') || '-'}</span>,
             enableSorting: false,
         },
         {
             accessorKey: 'recurringInterval',
-            header: ({ column }) => <CollectionColumnHeader column={column} title="Interval" />,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('prices.billingInterval')} />,
             cell: ({ row }) => {
                 const interval = row.getValue('recurringInterval');
                 const count = row.original.recurringIntervalCount ?? 1;
-                if (!interval) return <span>One-time</span>;
-                return <span>{count === 1 ? `per ${interval}` : `every ${count} ${interval}s`}</span>;
+                if (!interval) return <span>{t('prices.oneTime')}</span>;
+                return (
+                    <span>
+                        {count === 1
+                            ? t('prices.perInterval', { interval })
+                            : t('prices.everyInterval', { count, interval })}
+                    </span>
+                );
             },
             enableSorting: false,
         },
         {
             accessorKey: 'active',
-            header: ({ column }) => <CollectionColumnHeader column={column} title="Status" />,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.status')} />,
             cell: ({ row }) => {
                 const active = row.getValue('active');
-                return <Badge variant={active ? 'default' : 'secondary'}>{active ? 'Active' : 'Inactive'}</Badge>;
+                return (
+                    <Badge variant={active ? 'default' : 'secondary'}>
+                        {active ? t('status.active') : t('status.inactive')}
+                    </Badge>
+                );
             },
             enableSorting: false,
         },
@@ -100,12 +112,12 @@ export function usePricesListColumns(): ColumnDef<Price>[] {
                     row={row}
                     actions={[
                         {
-                            label: 'Edit Price',
+                            label: t('prices.edit'),
                             icon: IconEdit,
                             linkTo: (price: Price) => `${currentWorkspaceBaseUrl}/pms/prices/${price.id}`,
                         },
                         {
-                            label: 'Delete Price',
+                            label: t('prices.delete'),
                             icon: IconTrash,
                             group: 'danger',
                             className: 'text-red-500!',

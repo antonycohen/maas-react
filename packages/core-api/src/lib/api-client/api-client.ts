@@ -59,10 +59,14 @@ class ApiClient {
             async (error: AxiosError) => {
                 const originalRequest = error.config;
                 if (error.response?.status === 401 && originalRequest && !originalRequest.headers.RetryRequest) {
-                    originalRequest.headers.RetryRequest = true;
-                    const newToken = await this.getValidToken();
-                    originalRequest.headers.Authorization = `Bearer ${newToken}`;
-                    return this.axiosInstance(originalRequest);
+                    try {
+                        originalRequest.headers.RetryRequest = true;
+                        const newToken = await this.getValidToken();
+                        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                        return this.axiosInstance(originalRequest);
+                    } catch (refreshError) {
+                        return Promise.reject(refreshError);
+                    }
                 }
 
                 return Promise.reject(error);

@@ -1,6 +1,7 @@
 import { ColumnDef, flexRender, RowData, Table as TanstackTable } from '@tanstack/react-table';
 import { UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
 import { ReactNode } from 'react';
+import { useTranslation } from '@maas/core-translations';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@maas/web-components';
 import { CollectionToolbar, CollectionToolbarProps } from './collection-toolbar';
@@ -107,6 +108,8 @@ function DefaultContent<T>({
     columns: ColumnDef<T>[];
     isError?: boolean;
 }) {
+    const { t } = useTranslation();
+
     return (
         <div className="rounded-md border">
             <Table>
@@ -142,9 +145,9 @@ function DefaultContent<T>({
                         <TableRow>
                             <TableCell colSpan={columns.length} className="h-24 text-center">
                                 {isError ? (
-                                    <span className="text-destructive">Failed to load data. Please try again.</span>
+                                    <span className="text-destructive">{t('table.failedToLoad')}</span>
                                 ) : (
-                                    'No results.'
+                                    t('common.noResults')
                                 )}
                             </TableCell>
                         </TableRow>

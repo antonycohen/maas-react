@@ -2,8 +2,10 @@ import { getTokensFromCodeRedirect } from '@maas/core-api';
 import { useOAuthStore } from '@maas/core-store-oauth';
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from '@maas/core-translations';
 
 export const OauthCallbackPage = () => {
+    const { t } = useTranslation();
     const hasFetchToken = useRef(false);
 
     const setAuth = useOAuthStore((state) => state.setAuth);
@@ -41,7 +43,7 @@ export const OauthCallbackPage = () => {
 
     return (
         <div className="flex h-screen items-center justify-center">
-            <h1 className="text-2xl font-bold">OAuth Callback Page</h1>
+            <h1 className="text-2xl font-bold">{t('login.oauthCallback')}</h1>
         </div>
     );
 };
