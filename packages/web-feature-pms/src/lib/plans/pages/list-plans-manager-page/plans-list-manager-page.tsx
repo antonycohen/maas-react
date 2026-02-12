@@ -6,31 +6,33 @@ import { Button } from '@maas/web-components';
 import { Link } from 'react-router-dom';
 import { IconPlus, IconWand } from '@tabler/icons-react';
 import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useTranslation } from '@maas/core-translations';
 
 export function PlansListManagerPage() {
+    const { t } = useTranslation();
     const columns = usePlansListColumns();
     const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
 
     return (
         <div>
             <header>
-                <LayoutBreadcrumb items={[{ label: 'Home', to: '/' }, { label: 'Subscription Plans' }]} />
+                <LayoutBreadcrumb items={[{ label: t('common.home'), to: '/' }, { label: t('plans.title') }]} />
             </header>
             <LayoutContent>
                 <LayoutHeader
-                    pageTitle="Subscription Plans"
+                    pageTitle={t('plans.title')}
                     actions={
                         <div className="flex gap-2">
                             <Button variant="outline" asChild>
                                 <Link to={`${currentWorkspaceBaseUrl}/pms/wizard/create-plan`}>
                                     <IconWand className="mr-2 h-4 w-4" />
-                                    Create with Wizard
+                                    {t('plans.createWithWizard')}
                                 </Link>
                             </Button>
                             <Button asChild>
                                 <Link to={`${currentWorkspaceBaseUrl}/pms/plans/new/info`}>
                                     <IconPlus className="mr-2 h-4 w-4" />
-                                    New Plan
+                                    {t('plans.new')}
                                 </Link>
                             </Button>
                         </div>
@@ -41,7 +43,7 @@ export function PlansListManagerPage() {
                     columns={columns}
                     filtersConfiguration={{
                         textFilter: {
-                            placeholder: 'Search plans...',
+                            placeholder: t('plans.search'),
                             queryParamName: 'term',
                         },
                     }}

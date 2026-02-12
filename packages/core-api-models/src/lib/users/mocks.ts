@@ -14,4 +14,5 @@ export const mockUser: User = {
     localizationPreferences: null,
     roles: null,
     notificationsPreferences: null,
+    locale: null,
 };

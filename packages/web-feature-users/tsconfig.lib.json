@@ -36,6 +36,9 @@
             "path": "../core-utils/tsconfig.lib.json"
         },
         {
+            "path": "../core-translations/tsconfig.lib.json"
+        },
+        {
             "path": "../web-form/tsconfig.lib.json"
         },
         {

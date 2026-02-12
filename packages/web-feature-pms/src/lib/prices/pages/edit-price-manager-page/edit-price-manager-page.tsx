@@ -18,12 +18,14 @@ import { useForm } from 'react-hook-form';
 import { UpdatePrice } from '@maas/core-api-models';
 import { IconDeviceFloppy, IconLoader2, IconTrash } from '@tabler/icons-react';
 import { toast } from 'sonner';
+import { useTranslation } from '@maas/core-translations';
 
 export function EditPriceManagerPage() {
     const { priceId = '' } = useParams<{ priceId: string }>();
     const isCreateMode = priceId === 'new';
     const workspaceUrl = useCurrentWorkspaceUrlPrefix();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const { data: price, isLoading } = useGetPriceById(
         {
@@ -62,14 +64,14 @@ export function EditPriceManagerPage() {
 
     const updateMutation = useUpdatePrice({
         onSuccess: () => {
-            toast.success('Price updated successfully');
+            toast.success(t('prices.updatedSuccess'));
         },
     });
 
     const deleteMutation = useDeletePrice({
         onSuccess: () => {
             navigate(`${workspaceUrl}/pms/prices`);
-            toast.success('Price deleted successfully');
+            toast.success(t('prices.deletedSuccess'));
         },
     });
 
@@ -81,17 +83,17 @@ export function EditPriceManagerPage() {
     };
 
     const handleDelete = () => {
-        if (window.confirm('Are you sure you want to delete this price?')) {
+        if (window.confirm(t('prices.deleteConfirm'))) {
             deleteMutation.mutate(priceId);
         }
     };
 
     if (isLoading) {
-        return <div className="flex h-screen items-center justify-center">Loading...</div>;
+        return <div className="flex h-screen items-center justify-center">{t('common.loading')}</div>;
     }
 
     if (!price) {
-        return <div className="flex h-screen items-center justify-center">Price not found</div>;
+        return <div className="flex h-screen items-center justify-center">{t('prices.notFound')}</div>;
     }
 
     const formatPrice = (amount: number, currency: string): string => {
@@ -106,8 +108,8 @@ export function EditPriceManagerPage() {
             <header>
                 <LayoutBreadcrumb
                     items={[
-                        { label: 'Home', to: `${workspaceUrl}/` },
-                        { label: 'Prices', to: `${workspaceUrl}/pms/prices` },
+                        { label: t('common.home'), to: `${workspaceUrl}/` },
+                        { label: t('prices.title'), to: `${workspaceUrl}/pms/prices` },
                         { label: formatPrice(price.unitAmountInCents ?? 0, price.currency ?? 'usd') },
                     ]}
                 />
@@ -120,7 +122,7 @@ export function EditPriceManagerPage() {
                         {formatPrice(price.unitAmountInCents ?? 0, price.currency ?? 'usd')}
                     </h1>
                     <Badge variant={price.active ? 'default' : 'secondary'}>
-                        {price.active ? 'Active' : 'Inactive'}
+                        {price.active ? t('status.active') : t('status.inactive')}
                     </Badge>
                 </div>
 
@@ -134,18 +136,18 @@ export function EditPriceManagerPage() {
                         className="text-destructive hover:text-destructive hover:bg-destructive/10"
                     >
                         <IconTrash className="mr-1.5 h-4 w-4" />
-                        Delete
+                        {t('common.delete')}
                     </Button>
                     <Button type="submit" size="sm" disabled={updateMutation.isPending}>
                         {updateMutation.isPending ? (
                             <>
                                 <IconLoader2 className="mr-1.5 h-4 w-4 animate-spin" />
-                                Saving...
+                                {t('common.saving')}
                             </>
                         ) : (
                             <>
                                 <IconDeviceFloppy className="mr-1.5 h-4 w-4" />
-                                Save
+                                {t('common.save')}
                             </>
                         )}
                     </Button>
@@ -155,37 +157,35 @@ export function EditPriceManagerPage() {
             <LayoutContent>
                 <Card className="gap-0 rounded-2xl">
                     <CardHeader>
-                        <CardTitle className="text-xl">Price Details</CardTitle>
-                        <CardDescription>
-                            Update the price configuration. Note: Some fields cannot be modified after creation.
-                        </CardDescription>
+                        <CardTitle className="text-xl">{t('prices.priceDetails')}</CardTitle>
+                        <CardDescription>{t('prices.priceDetailsDescription')}</CardDescription>
                     </CardHeader>
                     <CardContent className="px-6 pt-2">
                         <div className="space-y-6">
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <Label className="text-muted-foreground">Amount</Label>
+                                    <Label className="text-muted-foreground">{t('prices.amount')}</Label>
                                     <p className="text-lg font-semibold">
                                         {formatPrice(price.unitAmountInCents ?? 0, price.currency ?? 'usd')}
                                     </p>
                                 </div>
                                 <div>
-                                    <Label className="text-muted-foreground">Currency</Label>
+                                    <Label className="text-muted-foreground">{t('prices.currency')}</Label>
                                     <p className="text-lg">{price.currency?.toUpperCase()}</p>
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <Label className="text-muted-foreground">Billing Interval</Label>
+                                    <Label className="text-muted-foreground">{t('prices.billingInterval')}</Label>
                                     <p>
                                         {price.recurringInterval
                                             ? `${price.recurringIntervalCount ?? 1} ${price.recurringInterval}`
-                                            : 'One-time'}
+                                            : t('prices.oneTime')}
                                     </p>
                                 </div>
                                 <div>
-                                    <Label className="text-muted-foreground">Usage Type</Label>
+                                    <Label className="text-muted-foreground">{t('prices.usageType')}</Label>
                                     <p>{price.recurringUsageType || '-'}</p>
                                 </div>
                             </div>
@@ -193,10 +193,10 @@ export function EditPriceManagerPage() {
                             <div className="border-t pt-6">
                                 <div className="space-y-4">
                                     <div className="space-y-2">
-                                        <Label htmlFor="lookupKey">Lookup Key</Label>
+                                        <Label htmlFor="lookupKey">{t('prices.lookupKey')}</Label>
                                         <Input
                                             id="lookupKey"
-                                            placeholder="e.g., monthly_basic"
+                                            placeholder={t('prices.lookupKeyPlaceholder')}
                                             {...form.register('lookupKey')}
                                         />
                                     </div>
@@ -208,7 +208,7 @@ export function EditPriceManagerPage() {
                                             {...form.register('active')}
                                             className="h-4 w-4"
                                         />
-                                        <Label htmlFor="active">Active</Label>
+                                        <Label htmlFor="active">{t('field.active')}</Label>
                                     </div>
                                 </div>
                             </div>

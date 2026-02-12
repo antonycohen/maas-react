@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { useRoutes } from '@maas/core-workspace';
+import { useTranslation } from '@maas/core-translations';
 
 const formatBalance = (balance: number | null, currency: string | null): string => {
     if (balance === null) return '—';
@@ -20,6 +21,7 @@ const formatBalance = (balance: number | null, currency: string | null): string 
 
 export function useCustomersListColumns(): ColumnDef<ReadCustomer>[] {
     const routes = useRoutes();
+    const { t } = useTranslation();
 
     return [
         {
@@ -28,7 +30,7 @@ export function useCustomersListColumns(): ColumnDef<ReadCustomer>[] {
                 <Checkbox
                     checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
                     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
+                    aria-label={t('table.selectAll')}
                     className="translate-y-[2px]"
                 />
             ),
@@ -42,7 +44,7 @@ export function useCustomersListColumns(): ColumnDef<ReadCustomer>[] {
                 <Checkbox
                     checked={row.getIsSelected()}
                     onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
+                    aria-label={t('table.selectRow')}
                     className="translate-y-[2px]"
                 />
             ),
@@ -51,7 +53,7 @@ export function useCustomersListColumns(): ColumnDef<ReadCustomer>[] {
         },
         {
             accessorKey: 'name',
-            header: ({ column }) => <CollectionColumnHeader column={column} title="Name" />,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.name')} />,
             cell: ({ row }) => {
                 const name = row.original.name;
                 return (
@@ -66,18 +68,18 @@ export function useCustomersListColumns(): ColumnDef<ReadCustomer>[] {
         },
         {
             accessorKey: 'email',
-            header: ({ column }) => <CollectionColumnHeader column={column} title="Email" />,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.email')} />,
             cell: ({ row }) => <div className="w-fit text-nowrap">{row.getValue('email')}</div>,
         },
         {
             accessorKey: 'phone',
-            header: ({ column }) => <CollectionColumnHeader column={column} title="Phone" />,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.phone')} />,
             cell: ({ row }) => <div>{row.getValue('phone') ?? '—'}</div>,
             enableSorting: false,
         },
         {
             accessorKey: 'refId',
-            header: ({ column }) => <CollectionColumnHeader column={column} title="Ref ID" />,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.refId')} />,
             cell: ({ row }) => (
                 <div className="w-fit font-mono text-xs text-nowrap">{row.getValue('refId') ?? '—'}</div>
             ),
@@ -85,7 +87,7 @@ export function useCustomersListColumns(): ColumnDef<ReadCustomer>[] {
         },
         {
             accessorKey: 'balance',
-            header: ({ column }) => <CollectionColumnHeader column={column} title="Balance" />,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.balance')} />,
             cell: ({ row }) => (
                 <div className="w-fit text-nowrap">{formatBalance(row.original.balance, row.original.currency)}</div>
             ),
@@ -93,7 +95,7 @@ export function useCustomersListColumns(): ColumnDef<ReadCustomer>[] {
         },
         {
             accessorKey: 'createdAt',
-            header: ({ column }) => <CollectionColumnHeader column={column} title="Created" />,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.created')} />,
             cell: ({ row }) => (
                 <div className="w-fit text-nowrap">
                     {row.getValue('createdAt') ? format(row.getValue('createdAt'), 'dd MMM, yyyy') : ''}
@@ -108,12 +110,12 @@ export function useCustomersListColumns(): ColumnDef<ReadCustomer>[] {
                     row={row}
                     actions={[
                         {
-                            label: 'Edit Customer',
+                            label: t('customers.edit'),
                             icon: IconEdit,
                             linkTo: (customer: ReadCustomer) => routes.customerInfo(customer.id),
                         },
                         {
-                            label: 'Delete Customer',
+                            label: t('customers.delete'),
                             icon: IconTrash,
                             group: 'danger',
                             className: 'text-red-500!',

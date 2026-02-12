@@ -18,6 +18,7 @@ import {
 import { useCreatePrice } from '@maas/core-api';
 import { CreatePrice, PriceInterval, PriceUsageType, Price } from '@maas/core-api-models';
 import { toast } from 'sonner';
+import { useTranslation } from '@maas/core-translations';
 
 interface CreatePriceModalProps {
     open: boolean;
@@ -27,6 +28,8 @@ interface CreatePriceModalProps {
 }
 
 export const CreatePriceModal = ({ open, onOpenChange, productId, onSuccess }: CreatePriceModalProps) => {
+    const { t } = useTranslation();
+
     const form = useForm<CreatePrice>({
         defaultValues: {
             currency: 'usd',
@@ -42,13 +45,13 @@ export const CreatePriceModal = ({ open, onOpenChange, productId, onSuccess }: C
 
     const createMutation = useCreatePrice({
         onSuccess: (data) => {
-            toast.success('Price created successfully');
+            toast.success(t('prices.createdSuccess'));
             onSuccess(data);
             onOpenChange(false);
             form.reset();
         },
-        onError: (error) => {
-            toast.error('Failed to create price');
+        onError: () => {
+            toast.error(t('prices.createFailed'));
         },
     });
 
@@ -63,14 +66,14 @@ export const CreatePriceModal = ({ open, onOpenChange, productId, onSuccess }: C
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Create New Price</DialogTitle>
-                    <DialogDescription>Add a new pricing option for this product.</DialogDescription>
+                    <DialogTitle>{t('prices.createNewPrice')}</DialogTitle>
+                    <DialogDescription>{t('prices.createDescription')}</DialogDescription>
                 </DialogHeader>
 
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="unitAmountInCents">Amount (in cents)</Label>
+                            <Label htmlFor="unitAmountInCents">{t('prices.amountInCents')}</Label>
                             <Input
                                 id="unitAmountInCents"
                                 type="number"
@@ -84,13 +87,13 @@ export const CreatePriceModal = ({ open, onOpenChange, productId, onSuccess }: C
                             )}
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="currency">Currency</Label>
+                            <Label htmlFor="currency">{t('prices.currency')}</Label>
                             <Select
                                 value={form.watch('currency') ?? 'usd'}
                                 onValueChange={(value) => form.setValue('currency', value)}
                             >
                                 <SelectTrigger>
-                                    <SelectValue placeholder="Select currency" />
+                                    <SelectValue placeholder={t('prices.selectCurrency')} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="usd">USD</SelectItem>
@@ -102,30 +105,34 @@ export const CreatePriceModal = ({ open, onOpenChange, productId, onSuccess }: C
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="lookupKey">Lookup Key (optional)</Label>
-                        <Input id="lookupKey" placeholder="e.g., monthly_basic" {...form.register('lookupKey')} />
+                        <Label htmlFor="lookupKey">{t('prices.lookupKeyOptional')}</Label>
+                        <Input
+                            id="lookupKey"
+                            placeholder={t('prices.lookupKeyPlaceholder')}
+                            {...form.register('lookupKey')}
+                        />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="recurringInterval">Billing Interval</Label>
+                            <Label htmlFor="recurringInterval">{t('prices.billingInterval')}</Label>
                             <Select
                                 value={form.watch('recurringInterval') ?? 'month'}
                                 onValueChange={(value) => form.setValue('recurringInterval', value as PriceInterval)}
                             >
                                 <SelectTrigger>
-                                    <SelectValue placeholder="Select interval" />
+                                    <SelectValue placeholder={t('prices.selectInterval')} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="day">Daily</SelectItem>
-                                    <SelectItem value="week">Weekly</SelectItem>
-                                    <SelectItem value="month">Monthly</SelectItem>
-                                    <SelectItem value="year">Yearly</SelectItem>
+                                    <SelectItem value="day">{t('prices.daily')}</SelectItem>
+                                    <SelectItem value="week">{t('prices.weekly')}</SelectItem>
+                                    <SelectItem value="month">{t('prices.monthly')}</SelectItem>
+                                    <SelectItem value="year">{t('prices.yearly')}</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="recurringIntervalCount">Interval Count</Label>
+                            <Label htmlFor="recurringIntervalCount">{t('prices.intervalCount')}</Label>
                             <Input
                                 id="recurringIntervalCount"
                                 type="number"
@@ -136,27 +143,27 @@ export const CreatePriceModal = ({ open, onOpenChange, productId, onSuccess }: C
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="recurringUsageType">Usage Type</Label>
+                        <Label htmlFor="recurringUsageType">{t('prices.usageType')}</Label>
                         <Select
                             value={form.watch('recurringUsageType') ?? 'licensed'}
                             onValueChange={(value) => form.setValue('recurringUsageType', value as PriceUsageType)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Select usage type" />
+                                <SelectValue placeholder={t('prices.selectUsageType')} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="licensed">Licensed</SelectItem>
-                                <SelectItem value="metered">Metered</SelectItem>
+                                <SelectItem value="licensed">{t('prices.licensed')}</SelectItem>
+                                <SelectItem value="metered">{t('prices.metered')}</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
 
                     <DialogFooter>
                         <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-                            Cancel
+                            {t('common.cancel')}
                         </Button>
                         <Button type="submit" disabled={createMutation.isPending}>
-                            {createMutation.isPending ? 'Creating...' : 'Create Price'}
+                            {createMutation.isPending ? t('prices.creating') : t('prices.createPrice')}
                         </Button>
                     </DialogFooter>
                 </form>

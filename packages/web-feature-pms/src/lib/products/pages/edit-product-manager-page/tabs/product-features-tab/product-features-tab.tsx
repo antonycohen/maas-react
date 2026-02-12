@@ -13,6 +13,7 @@ import { EditProductOutletContext } from '../../edit-product-manager-page';
 import { Feature } from '@maas/core-api-models';
 import { useMemo } from 'react';
 import { toast } from 'sonner';
+import { useTranslation } from '@maas/core-translations';
 
 export const ProductFeaturesTab = () => {
     const {
@@ -24,6 +25,7 @@ export const ProductFeaturesTab = () => {
         addFeatureModalOpen,
         setAddFeatureModalOpen,
     } = useOutletContext<EditProductOutletContext>();
+    const { t } = useTranslation();
 
     const { data: productFeatures = [], isLoading: isLoadingFeatures } = useGetProductFeatures(
         { productId },
@@ -60,12 +62,12 @@ export const ProductFeaturesTab = () => {
             { productId, featureId: feature.id },
             {
                 onSuccess: () => {
-                    toast.success(`Feature "${feature.displayName}" attached to product`);
+                    toast.success(t('products.featureAttached', { name: feature.displayName }));
                     setSelectedFeatureId(feature.id);
                     setAddFeatureModalOpen(false);
                 },
                 onError: () => {
-                    toast.error('Failed to attach feature to product');
+                    toast.error(t('products.featureAttachFailed'));
                 },
             }
         );
@@ -76,18 +78,18 @@ export const ProductFeaturesTab = () => {
         const pf = productFeatures.find((p) => p.id === productFeatureId);
         const featureId = pf?.feature.id;
 
-        if (window.confirm('Detach this feature from the product?')) {
+        if (window.confirm(t('products.detachFeatureConfirm'))) {
             detachFeatureMutation.mutate(
                 { productId, productFeatureId },
                 {
                     onSuccess: () => {
-                        toast.success('Feature detached from product');
+                        toast.success(t('products.featureDetached'));
                         if (selectedFeatureId === featureId) {
                             setSelectedFeatureId(null);
                         }
                     },
                     onError: () => {
-                        toast.error('Failed to detach feature from product');
+                        toast.error(t('products.featureDetachFailed'));
                     },
                 }
             );
@@ -98,7 +100,7 @@ export const ProductFeaturesTab = () => {
         return (
             <div className="flex flex-1 items-center justify-center p-8">
                 <div className="text-center">
-                    <p className="text-muted-foreground">Save the product first before attaching features.</p>
+                    <p className="text-muted-foreground">{t('products.saveFirstFeatures')}</p>
                 </div>
             </div>
         );
@@ -110,7 +112,7 @@ export const ProductFeaturesTab = () => {
                 {/* Left: Features List */}
                 <div className="flex h-full w-1/2 min-w-[300px] flex-col border-r">
                     <div className="flex items-center justify-between border-b px-4 py-3">
-                        <h3 className="font-semibold">Features</h3>
+                        <h3 className="font-semibold">{t('products.features')}</h3>
                         <Button
                             variant="outline"
                             size="sm"
@@ -120,7 +122,7 @@ export const ProductFeaturesTab = () => {
                             }}
                         >
                             <IconPlus className="mr-2 h-4 w-4" />
-                            Attach Feature
+                            {t('products.attachFeature')}
                         </Button>
                     </div>
                     <FeaturesList

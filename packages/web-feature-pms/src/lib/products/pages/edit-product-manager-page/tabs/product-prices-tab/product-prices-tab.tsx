@@ -8,6 +8,7 @@ import { EditProductOutletContext } from '../../edit-product-manager-page';
 import { Price } from '@maas/core-api-models';
 import { useMemo } from 'react';
 import { toast } from 'sonner';
+import { useTranslation } from '@maas/core-translations';
 
 export const ProductPricesTab = () => {
     const {
@@ -19,6 +20,7 @@ export const ProductPricesTab = () => {
         addPriceModalOpen,
         setAddPriceModalOpen,
     } = useOutletContext<EditProductOutletContext>();
+    const { t } = useTranslation();
 
     // Fetch prices for this product
     const {
@@ -71,14 +73,14 @@ export const ProductPricesTab = () => {
 
     const deleteMutation = useDeletePrice({
         onSuccess: () => {
-            toast.success('Price deleted successfully');
+            toast.success(t('prices.deletedSuccess'));
             refetchPrices();
             if (selectedPriceId) {
                 setSelectedPriceId(null);
             }
         },
         onError: () => {
-            toast.error('Failed to delete price');
+            toast.error(t('prices.deleteFailed'));
         },
     });
 
@@ -88,7 +90,7 @@ export const ProductPricesTab = () => {
     };
 
     const handleRemovePrice = (priceId: string) => {
-        if (window.confirm('Are you sure you want to delete this price?')) {
+        if (window.confirm(t('prices.deleteConfirm'))) {
             deleteMutation.mutate(priceId);
         }
     };
@@ -97,7 +99,7 @@ export const ProductPricesTab = () => {
         return (
             <div className="flex flex-1 items-center justify-center p-8">
                 <div className="text-center">
-                    <p className="text-muted-foreground">Save the product first before adding prices.</p>
+                    <p className="text-muted-foreground">{t('products.saveFirstPrices')}</p>
                 </div>
             </div>
         );
@@ -109,7 +111,7 @@ export const ProductPricesTab = () => {
                 {/* Left: Prices List */}
                 <div className="flex h-full w-1/2 min-w-[300px] flex-col border-r">
                     <div className="flex items-center justify-between border-b px-4 py-3">
-                        <h3 className="font-semibold">Prices</h3>
+                        <h3 className="font-semibold">{t('products.prices')}</h3>
                         <Button
                             variant="outline"
                             size="sm"
@@ -119,7 +121,7 @@ export const ProductPricesTab = () => {
                             }}
                         >
                             <IconPlus className="mr-2 h-4 w-4" />
-                            Add Price
+                            {t('products.addPrice')}
                         </Button>
                     </div>
                     <PricesList

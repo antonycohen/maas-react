@@ -2,6 +2,7 @@ import { Price } from '@maas/core-api-models';
 import { cn } from '@maas/core-utils';
 import { Button, Badge } from '@maas/web-components';
 import { IconTrash, IconCoin } from '@tabler/icons-react';
+import { useTranslation } from '@maas/core-translations';
 
 interface PricesListProps {
     prices: Price[];
@@ -20,21 +21,23 @@ const formatPrice = (price: Price): string => {
     }).format(amount / 100);
 };
 
-const formatInterval = (price: Price): string => {
-    if (!price.recurringInterval) return 'One-time';
-    const interval = price.recurringInterval;
-    const count = price.recurringIntervalCount ?? 1;
-    if (count === 1) {
-        return `per ${interval}`;
-    }
-    return `every ${count} ${interval}s`;
-};
-
 export const PricesList = ({ prices, selectedPriceId, onSelectPrice, onRemovePrice, isLoading }: PricesListProps) => {
+    const { t } = useTranslation();
+
+    const formatInterval = (price: Price): string => {
+        if (!price.recurringInterval) return t('prices.oneTime');
+        const interval = price.recurringInterval;
+        const count = price.recurringIntervalCount ?? 1;
+        if (count === 1) {
+            return t('prices.perInterval', { interval });
+        }
+        return t('prices.everyInterval', { count, interval });
+    };
+
     if (isLoading) {
         return (
             <div className="flex h-full items-center justify-center p-4">
-                <span className="text-muted-foreground">Loading prices...</span>
+                <span className="text-muted-foreground">{t('products.loadingPrices')}</span>
             </div>
         );
     }
@@ -43,10 +46,8 @@ export const PricesList = ({ prices, selectedPriceId, onSelectPrice, onRemovePri
         return (
             <div className="flex h-full flex-col items-center justify-center p-8 text-center">
                 <IconCoin className="text-muted-foreground mb-4 h-12 w-12" />
-                <p className="text-muted-foreground">No prices added to this product yet.</p>
-                <p className="text-muted-foreground mt-1 text-sm">
-                    Click "Add Price" to create pricing for this product.
-                </p>
+                <p className="text-muted-foreground">{t('products.noPrices')}</p>
+                <p className="text-muted-foreground mt-1 text-sm">{t('products.noPricesHint')}</p>
             </div>
         );
     }
@@ -74,7 +75,7 @@ export const PricesList = ({ prices, selectedPriceId, onSelectPrice, onRemovePri
                                 <p className="text-muted-foreground truncate text-sm">{price.lookupKey || price.id}</p>
                             </div>
                             <Badge variant={price.active ? 'default' : 'secondary'}>
-                                {price.active ? 'Active' : 'Inactive'}
+                                {price.active ? t('status.active') : t('status.inactive')}
                             </Badge>
                         </div>
                         <Button

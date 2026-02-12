@@ -6,24 +6,26 @@ import { Button } from '@maas/web-components';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons-react';
 import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useTranslation } from '@maas/core-translations';
 
 export function ProductsListManagerPage() {
     const columns = useProductsListColumns();
     const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const { t } = useTranslation();
 
     return (
         <div>
             <header>
-                <LayoutBreadcrumb items={[{ label: 'Home', to: '/' }, { label: 'Products' }]} />
+                <LayoutBreadcrumb items={[{ label: t('common.home'), to: '/' }, { label: t('products.title') }]} />
             </header>
             <LayoutContent>
                 <LayoutHeader
-                    pageTitle="Products"
+                    pageTitle={t('products.title')}
                     actions={
                         <Button asChild>
                             <Link to={`${currentWorkspaceBaseUrl}/pms/products/new/info`}>
                                 <IconPlus className="mr-2 h-4 w-4" />
-                                New Product
+                                {t('products.new')}
                             </Link>
                         </Button>
                     }
@@ -33,7 +35,7 @@ export function ProductsListManagerPage() {
                     columns={columns}
                     filtersConfiguration={{
                         textFilter: {
-                            placeholder: 'Search products...',
+                            placeholder: t('products.search'),
                             queryParamName: 'term',
                         },
                     }}

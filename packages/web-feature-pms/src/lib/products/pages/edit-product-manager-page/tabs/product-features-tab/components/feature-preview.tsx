@@ -3,6 +3,7 @@ import { Badge } from '@maas/web-components';
 import { IconSparkles } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useTranslation } from '@maas/core-translations';
 
 interface FeaturePreviewProps {
     feature: Feature | null;
@@ -11,11 +12,12 @@ interface FeaturePreviewProps {
 
 export const FeaturePreview = ({ feature, isLoading }: FeaturePreviewProps) => {
     const workspaceUrl = useCurrentWorkspaceUrlPrefix();
+    const { t } = useTranslation();
 
     if (isLoading) {
         return (
             <div className="flex h-full items-center justify-center">
-                <span className="text-muted-foreground">Loading...</span>
+                <span className="text-muted-foreground">{t('common.loading')}</span>
             </div>
         );
     }
@@ -24,7 +26,7 @@ export const FeaturePreview = ({ feature, isLoading }: FeaturePreviewProps) => {
         return (
             <div className="flex h-full flex-col items-center justify-center p-8 text-center">
                 <IconSparkles className="text-muted-foreground mb-4 h-12 w-12" />
-                <p className="text-muted-foreground">Select a feature to view details</p>
+                <p className="text-muted-foreground">{t('products.selectFeatureToView')}</p>
             </div>
         );
     }
@@ -38,14 +40,14 @@ export const FeaturePreview = ({ feature, isLoading }: FeaturePreviewProps) => {
                         <h3 className="text-lg font-semibold">{feature.displayName}</h3>
                         <p className="text-muted-foreground mt-1 font-mono text-sm">{feature.lookupKey}</p>
                     </div>
-                    {feature.withQuota && <Badge variant="outline">Has Quota</Badge>}
+                    {feature.withQuota && <Badge variant="outline">{t('products.hasQuota')}</Badge>}
                 </div>
 
                 {/* Details */}
                 <div className="space-y-4">
                     {feature.withQuota && feature.quotaAggregationFormula && (
                         <div className="bg-muted/50 rounded-lg p-4">
-                            <h4 className="mb-2 text-sm font-medium">Quota Aggregation Formula</h4>
+                            <h4 className="mb-2 text-sm font-medium">{t('products.quotaAggregationFormula')}</h4>
                             <pre className="overflow-auto text-xs">{feature.quotaAggregationFormula}</pre>
                         </div>
                     )}
@@ -57,7 +59,7 @@ export const FeaturePreview = ({ feature, isLoading }: FeaturePreviewProps) => {
                         to={`${workspaceUrl}/pms/features/${feature.id}`}
                         className="text-primary text-sm hover:underline"
                     >
-                        View full feature details →
+                        {`${t('products.viewFullFeatureDetails')} \u2192`}
                     </Link>
                 </div>
             </div>

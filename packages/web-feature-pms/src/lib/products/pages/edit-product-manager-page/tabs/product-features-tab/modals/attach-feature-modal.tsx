@@ -11,6 +11,7 @@ import {
 import { useGetFeatures } from '@maas/core-api';
 import { Feature } from '@maas/core-api-models';
 import { IconSparkles, IconSearch } from '@tabler/icons-react';
+import { useTranslation } from '@maas/core-translations';
 
 interface AttachFeatureModalProps {
     open: boolean;
@@ -28,6 +29,7 @@ export const AttachFeatureModal = ({
     existingFeatureIds,
 }: AttachFeatureModalProps) => {
     const [searchTerm, setSearchTerm] = useState('');
+    const { t } = useTranslation();
 
     const { data: featuresResponse, isLoading } = useGetFeatures(
         {
@@ -53,15 +55,15 @@ export const AttachFeatureModal = ({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-lg">
                 <DialogHeader>
-                    <DialogTitle>Attach Feature to Product</DialogTitle>
-                    <DialogDescription>Select a feature to attach to this product.</DialogDescription>
+                    <DialogTitle>{t('products.attachFeatureTitle')}</DialogTitle>
+                    <DialogDescription>{t('products.attachFeatureDescription')}</DialogDescription>
                 </DialogHeader>
 
                 <div className="space-y-4">
                     <div className="relative">
                         <IconSearch className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                         <Input
-                            placeholder="Search features..."
+                            placeholder={t('products.searchFeatures')}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="pl-9"
@@ -70,9 +72,11 @@ export const AttachFeatureModal = ({
 
                     <div className="max-h-[300px] overflow-y-auto rounded-md border">
                         {isLoading ? (
-                            <div className="text-muted-foreground p-4 text-center">Loading features...</div>
+                            <div className="text-muted-foreground p-4 text-center">{t('products.loadingFeatures')}</div>
                         ) : availableFeatures.length === 0 ? (
-                            <div className="text-muted-foreground p-4 text-center">No available features found.</div>
+                            <div className="text-muted-foreground p-4 text-center">
+                                {t('products.noAvailableFeatures')}
+                            </div>
                         ) : (
                             <ul className="divide-y">
                                 {availableFeatures.map((feature) => (
@@ -93,7 +97,7 @@ export const AttachFeatureModal = ({
                                             </div>
                                         </div>
                                         <Button variant="outline" size="sm">
-                                            Attach
+                                            {t('products.attachFeature')}
                                         </Button>
                                     </li>
                                 ))}

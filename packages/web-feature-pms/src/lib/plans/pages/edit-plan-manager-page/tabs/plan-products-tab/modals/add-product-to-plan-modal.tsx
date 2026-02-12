@@ -11,6 +11,7 @@ import {
 import { useGetProducts } from '@maas/core-api';
 import { Product } from '@maas/core-api-models';
 import { IconPackage, IconSearch } from '@tabler/icons-react';
+import { useTranslation } from '@maas/core-translations';
 
 interface AddProductToPlanModalProps {
     open: boolean;
@@ -27,6 +28,7 @@ export const AddProductToPlanModal = ({
     onSelectExisting,
     existingProductIds,
 }: AddProductToPlanModalProps) => {
+    const { t } = useTranslation();
     const [searchTerm, setSearchTerm] = useState('');
 
     const { data: productsResponse, isLoading } = useGetProducts(
@@ -53,15 +55,15 @@ export const AddProductToPlanModal = ({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-lg">
                 <DialogHeader>
-                    <DialogTitle>Add Product to Plan</DialogTitle>
-                    <DialogDescription>Select a product to add to this plan.</DialogDescription>
+                    <DialogTitle>{t('plans.addProductTitle')}</DialogTitle>
+                    <DialogDescription>{t('plans.addProductDescription')}</DialogDescription>
                 </DialogHeader>
 
                 <div className="space-y-4">
                     <div className="relative">
                         <IconSearch className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                         <Input
-                            placeholder="Search products..."
+                            placeholder={t('plans.searchProducts')}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="pl-9"
@@ -70,9 +72,11 @@ export const AddProductToPlanModal = ({
 
                     <div className="max-h-[300px] overflow-y-auto rounded-md border">
                         {isLoading ? (
-                            <div className="text-muted-foreground p-4 text-center">Loading products...</div>
+                            <div className="text-muted-foreground p-4 text-center">{t('plans.loadingProducts')}</div>
                         ) : availableProducts.length === 0 ? (
-                            <div className="text-muted-foreground p-4 text-center">No available products found.</div>
+                            <div className="text-muted-foreground p-4 text-center">
+                                {t('plans.noAvailableProducts')}
+                            </div>
                         ) : (
                             <ul className="divide-y">
                                 {availableProducts.map((product) => (
@@ -88,12 +92,12 @@ export const AddProductToPlanModal = ({
                                             <div>
                                                 <p className="text-sm font-medium">{product.name}</p>
                                                 <p className="text-muted-foreground text-xs">
-                                                    {product.description || 'No description'}
+                                                    {product.description || t('plans.noDescription')}
                                                 </p>
                                             </div>
                                         </div>
                                         <Button variant="outline" size="sm">
-                                            Add
+                                            {t('common.add')}
                                         </Button>
                                     </li>
                                 ))}

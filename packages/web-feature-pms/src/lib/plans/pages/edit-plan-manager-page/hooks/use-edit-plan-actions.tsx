@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
 import { toast } from 'sonner';
 import { PlanFormValues } from './use-edit-plan-form';
+import { useTranslation } from '@maas/core-translations';
 
 export const useEditPlanActions = (form: UseFormReturn<PlanFormValues>, isCreateMode: boolean, planId: string) => {
+    const { t } = useTranslation();
     const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
     const navigate = useNavigate();
 
@@ -24,14 +26,14 @@ export const useEditPlanActions = (form: UseFormReturn<PlanFormValues>, isCreate
     const createMutation = useCreatePlan({
         onSuccess: (data) => {
             navigate(`${workspaceBaseUrl}/pms/plans/${data.id}/info`);
-            toast.success('Plan created successfully');
+            toast.success(t('plans.createdSuccess'));
         },
         onError: handleApiError,
     });
 
     const updateMutation = useUpdatePlan({
         onSuccess: () => {
-            toast.success('Plan updated successfully');
+            toast.success(t('plans.updatedSuccess'));
         },
         onError: handleApiError,
     });
@@ -39,7 +41,7 @@ export const useEditPlanActions = (form: UseFormReturn<PlanFormValues>, isCreate
     const deleteMutation = useDeletePlan({
         onSuccess: () => {
             navigate(`${workspaceBaseUrl}/pms/plans`);
-            toast.success('Plan deleted successfully');
+            toast.success(t('plans.deletedSuccess'));
         },
     });
 
@@ -55,7 +57,7 @@ export const useEditPlanActions = (form: UseFormReturn<PlanFormValues>, isCreate
     }
 
     function handleDelete() {
-        if (window.confirm('Are you sure you want to delete this plan?')) {
+        if (window.confirm(t('plans.deleteConfirm'))) {
             deleteMutation.mutate(planId);
         }
     }

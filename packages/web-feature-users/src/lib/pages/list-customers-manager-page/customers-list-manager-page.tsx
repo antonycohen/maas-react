@@ -6,29 +6,31 @@ import { useRoutes } from '@maas/core-workspace';
 import { Button } from '@maas/web-components';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons-react';
+import { useTranslation } from '@maas/core-translations';
 
 export function CustomersListManagerPage() {
     const columns = useCustomersListColumns();
     const routes = useRoutes();
+    const { t } = useTranslation();
 
     return (
         <div>
             <header>
                 <LayoutBreadcrumb
                     items={[
-                        { label: 'Home', to: routes.root() },
-                        { label: 'Customers', to: routes.customers() },
+                        { label: t('common.home'), to: routes.root() },
+                        { label: t('customers.title'), to: routes.customers() },
                     ]}
                 />
             </header>
             <LayoutContent>
                 <LayoutHeader
-                    pageTitle="Customers"
+                    pageTitle={t('customers.title')}
                     actions={
                         <Button asChild>
                             <Link to={routes.customerInfo('new')}>
                                 <IconPlus className="mr-2 h-4 w-4" />
-                                New Customer
+                                {t('customers.new')}
                             </Link>
                         </Button>
                     }
@@ -38,7 +40,7 @@ export function CustomersListManagerPage() {
                     columns={columns}
                     filtersConfiguration={{
                         textFilter: {
-                            placeholder: 'Search customers...',
+                            placeholder: t('customers.search'),
                             queryParamName: 'term',
                         },
                     }}

@@ -8,14 +8,7 @@ import { Product } from '@maas/core-api-models';
 import { FormProvider, UseFormReturn } from 'react-hook-form';
 import { ProductFormValues, useEditProductActions, useEditProductForm } from './hooks';
 import { IconDeviceFloppy, IconLoader2, IconTrash } from '@tabler/icons-react';
-
-const getTabItems = (baseUrl: string, productId: string) => {
-    return [
-        { title: 'Info', url: `${baseUrl}/pms/products/${productId}/info` },
-        { title: 'Prices', url: `${baseUrl}/pms/products/${productId}/prices` },
-        { title: 'Features', url: `${baseUrl}/pms/products/${productId}/features` },
-    ];
-};
+import { useTranslation } from '@maas/core-translations';
 
 export type EditProductOutletContext = {
     productId: string;
@@ -42,6 +35,15 @@ export function EditProductManagerPage() {
     const { productId = '' } = useParams<{ productId: string }>();
     const isCreateMode = productId === 'new';
     const workspaceUrl = useCurrentWorkspaceUrlPrefix();
+    const { t } = useTranslation();
+
+    const getTabItems = (baseUrl: string, id: string) => {
+        return [
+            { title: t('products.tabs.info'), url: `${baseUrl}/pms/products/${id}/info` },
+            { title: t('products.tabs.prices'), url: `${baseUrl}/pms/products/${id}/prices` },
+            { title: t('products.tabs.features'), url: `${baseUrl}/pms/products/${id}/features` },
+        ];
+    };
 
     // Selection states for organizers
     const [selectedPriceId, setSelectedPriceId] = useState<string | null>(null);
@@ -82,17 +84,17 @@ export function EditProductManagerPage() {
     const { onSubmit, handleDelete, isSaving, deleteMutation } = useEditProductActions(form, isCreateMode, productId);
 
     const active = form.watch('active');
-    const pageTitle = isCreateMode ? 'New Product' : (product?.name ?? '');
+    const pageTitle = isCreateMode ? t('products.new') : (product?.name ?? '');
 
     if (!isCreateMode && isLoading) {
-        return <div className="flex h-screen items-center justify-center">Loading...</div>;
+        return <div className="flex h-screen items-center justify-center">{t('common.loading')}</div>;
     }
 
     if (!isCreateMode && !isLoading && !product) {
-        return <div className="flex h-screen items-center justify-center">Product not found</div>;
+        return <div className="flex h-screen items-center justify-center">{t('products.notFound')}</div>;
     }
 
-    const breadcrumbLabel = isCreateMode ? 'New' : (product?.name ?? '');
+    const breadcrumbLabel = isCreateMode ? t('products.new') : (product?.name ?? '');
 
     const outletContext: EditProductOutletContext = {
         productId,
@@ -121,8 +123,8 @@ export function EditProductManagerPage() {
                 <header className="shrink-0">
                     <LayoutBreadcrumb
                         items={[
-                            { label: 'Home', to: `${workspaceUrl}/` },
-                            { label: 'Products', to: `${workspaceUrl}/pms/products` },
+                            { label: t('common.home'), to: `${workspaceUrl}/` },
+                            { label: t('products.title'), to: `${workspaceUrl}/pms/products` },
                             { label: breadcrumbLabel },
                         ]}
                     />
@@ -131,12 +133,14 @@ export function EditProductManagerPage() {
                 {/* Sticky Action Bar */}
                 <div className="bg-background sticky top-0 z-10 flex items-center justify-between border-b px-6 py-3">
                     <div className="flex items-center gap-3">
-                        <h1 className="max-w-md truncate text-xl font-semibold">{pageTitle || 'Untitled'}</h1>
+                        <h1 className="max-w-md truncate text-xl font-semibold">
+                            {pageTitle || t('products.untitled')}
+                        </h1>
                         <div className="flex items-center gap-2">
                             {active ? (
-                                <Badge variant="default">Active</Badge>
+                                <Badge variant="default">{t('status.active')}</Badge>
                             ) : (
-                                <Badge variant="secondary">Inactive</Badge>
+                                <Badge variant="secondary">{t('status.inactive')}</Badge>
                             )}
                         </div>
                     </div>
@@ -152,7 +156,7 @@ export function EditProductManagerPage() {
                                 className="text-destructive hover:text-destructive hover:bg-destructive/10"
                             >
                                 <IconTrash className="mr-1.5 h-4 w-4" />
-                                Delete
+                                {t('common.delete')}
                             </Button>
                         )}
                         <Button
@@ -162,18 +166,18 @@ export function EditProductManagerPage() {
                             onClick={() => form.reset()}
                             disabled={isLoading || !form.formState.isDirty}
                         >
-                            Discard
+                            {t('common.discard')}
                         </Button>
                         <Button type="submit" size="sm" disabled={isSaving || isLoading}>
                             {isSaving ? (
                                 <>
                                     <IconLoader2 className="mr-1.5 h-4 w-4 animate-spin" />
-                                    Saving...
+                                    {t('common.saving')}
                                 </>
                             ) : (
                                 <>
                                     <IconDeviceFloppy className="mr-1.5 h-4 w-4" />
-                                    {isCreateMode ? 'Create' : 'Save'}
+                                    {isCreateMode ? t('common.create') : t('common.save')}
                                 </>
                             )}
                         </Button>

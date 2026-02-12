@@ -3,6 +3,7 @@ import { Badge } from '@maas/web-components';
 import { IconCoin } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useTranslation } from '@maas/core-translations';
 
 interface PricePreviewProps {
     price: Price | null;
@@ -20,11 +21,12 @@ const formatPrice = (price: Price): string => {
 
 export const PricePreview = ({ price, isLoading }: PricePreviewProps) => {
     const workspaceUrl = useCurrentWorkspaceUrlPrefix();
+    const { t } = useTranslation();
 
     if (isLoading) {
         return (
             <div className="flex h-full items-center justify-center">
-                <span className="text-muted-foreground">Loading...</span>
+                <span className="text-muted-foreground">{t('common.loading')}</span>
             </div>
         );
     }
@@ -33,7 +35,7 @@ export const PricePreview = ({ price, isLoading }: PricePreviewProps) => {
         return (
             <div className="flex h-full flex-col items-center justify-center p-8 text-center">
                 <IconCoin className="text-muted-foreground mb-4 h-12 w-12" />
-                <p className="text-muted-foreground">Select a price to view details</p>
+                <p className="text-muted-foreground">{t('products.selectPriceToView')}</p>
             </div>
         );
     }
@@ -45,10 +47,12 @@ export const PricePreview = ({ price, isLoading }: PricePreviewProps) => {
                 <div className="flex items-start justify-between">
                     <div>
                         <h3 className="text-lg font-semibold">{formatPrice(price)}</h3>
-                        <p className="text-muted-foreground mt-1 text-sm">{price.lookupKey || 'No lookup key'}</p>
+                        <p className="text-muted-foreground mt-1 text-sm">
+                            {price.lookupKey || t('products.noLookupKey')}
+                        </p>
                     </div>
                     <Badge variant={price.active ? 'default' : 'secondary'}>
-                        {price.active ? 'Active' : 'Inactive'}
+                        {price.active ? t('status.active') : t('status.inactive')}
                     </Badge>
                 </div>
 
@@ -56,30 +60,30 @@ export const PricePreview = ({ price, isLoading }: PricePreviewProps) => {
                 <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <p className="text-muted-foreground text-sm font-medium">Currency</p>
+                            <p className="text-muted-foreground text-sm font-medium">{t('prices.currency')}</p>
                             <p className="text-sm">{price.currency?.toUpperCase() || '-'}</p>
                         </div>
                         <div>
-                            <p className="text-muted-foreground text-sm font-medium">Interval</p>
+                            <p className="text-muted-foreground text-sm font-medium">{t('prices.billingInterval')}</p>
                             <p className="text-sm">
                                 {price.recurringInterval
                                     ? `${price.recurringIntervalCount ?? 1} ${price.recurringInterval}`
-                                    : 'One-time'}
+                                    : t('prices.oneTime')}
                             </p>
                         </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <p className="text-muted-foreground text-sm font-medium">Interval</p>
+                            <p className="text-muted-foreground text-sm font-medium">{t('prices.billingInterval')}</p>
                             <p className="text-sm">
                                 {price.recurringInterval
                                     ? `${price.recurringIntervalCount ?? 1} ${price.recurringInterval}`
-                                    : 'One-time'}
+                                    : t('prices.oneTime')}
                             </p>
                         </div>
                         <div>
-                            <p className="text-muted-foreground text-sm font-medium">Usage Type</p>
+                            <p className="text-muted-foreground text-sm font-medium">{t('prices.usageType')}</p>
                             <p className="text-sm">{price.recurringUsageType || '-'}</p>
                         </div>
                     </div>
@@ -91,7 +95,7 @@ export const PricePreview = ({ price, isLoading }: PricePreviewProps) => {
                         to={`${workspaceUrl}/pms/prices/${price.id}`}
                         className="text-primary text-sm hover:underline"
                     >
-                        View full price details →
+                        {`${t('products.viewFullPriceDetails')} \u2192`}
                     </Link>
                 </div>
             </div>

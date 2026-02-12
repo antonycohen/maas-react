@@ -79,6 +79,9 @@ export class TokenManager {
                 refreshToken: response.refreshToken,
                 accessTokenExpirationDate: response.expiresAt,
             });
+        } catch (error) {
+            useOAuthStore.getState().reset();
+            throw new AuthenticationError('Token refresh failed');
         } finally {
             this.releaseLock();
         }

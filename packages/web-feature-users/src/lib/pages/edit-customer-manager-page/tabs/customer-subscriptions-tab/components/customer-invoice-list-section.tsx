@@ -18,6 +18,7 @@ import {
 import { Download } from 'lucide-react';
 import { toast } from 'sonner';
 import { triggerBlobDownload } from '../../../../account-settings-page/tabs/account-invoices-tab/utils/trigger-blob-download';
+import { useTranslation } from '@maas/core-translations';
 
 const STATUS_STYLES: Record<string, string> = {
     paid: 'border-emerald-200 bg-emerald-50 text-emerald-700',
@@ -27,12 +28,12 @@ const STATUS_STYLES: Record<string, string> = {
     uncollectible: 'border-orange-200 bg-orange-50 text-orange-700',
 };
 
-const STATUS_LABELS: Record<string, string> = {
-    paid: 'Payée',
-    open: 'Ouverte',
-    draft: 'Brouillon',
-    void: 'Annulée',
-    uncollectible: 'Irrécouvrable',
+const STATUS_KEYS: Record<string, string> = {
+    paid: 'customers.invoices.statusPaid',
+    open: 'customers.invoices.statusOpen',
+    draft: 'customers.invoices.statusDraft',
+    void: 'customers.invoices.statusVoid',
+    uncollectible: 'customers.invoices.statusUncollectible',
 };
 
 const formatAmount = (amountInCents: number, currency: string | null): string => {
@@ -59,6 +60,8 @@ type Props = {
 };
 
 export const CustomerInvoiceListSection = ({ invoices, isLoading }: Props) => {
+    const { t } = useTranslation();
+
     const { mutate: download, isPending: isDownloading } = useDownloadInvoice({
         onSuccess: (blob, invoiceId) => {
             const invoice = invoices?.find((inv) => inv.id === invoiceId);
@@ -66,7 +69,7 @@ export const CustomerInvoiceListSection = ({ invoices, isLoading }: Props) => {
             triggerBlobDownload(blob, filename);
         },
         onError: () => {
-            toast.error('Unable to download invoice.');
+            toast.error(t('customers.invoices.downloadError'));
         },
     });
 
@@ -74,8 +77,8 @@ export const CustomerInvoiceListSection = ({ invoices, isLoading }: Props) => {
         return (
             <Card className="rounded-2xl">
                 <CardHeader>
-                    <CardTitle className="text-xl">Invoices</CardTitle>
-                    <CardDescription>Loading...</CardDescription>
+                    <CardTitle className="text-xl">{t('customers.invoices.title')}</CardTitle>
+                    <CardDescription>{t('common.loading')}</CardDescription>
                 </CardHeader>
             </Card>
         );
@@ -85,8 +88,8 @@ export const CustomerInvoiceListSection = ({ invoices, isLoading }: Props) => {
         return (
             <Card className="rounded-2xl">
                 <CardHeader>
-                    <CardTitle className="text-xl">Invoices</CardTitle>
-                    <CardDescription>No invoices available.</CardDescription>
+                    <CardTitle className="text-xl">{t('customers.invoices.title')}</CardTitle>
+                    <CardDescription>{t('customers.invoices.noInvoices')}</CardDescription>
                 </CardHeader>
             </Card>
         );
@@ -95,25 +98,26 @@ export const CustomerInvoiceListSection = ({ invoices, isLoading }: Props) => {
     return (
         <Card className="rounded-2xl">
             <CardHeader>
-                <CardTitle className="text-xl">Invoices</CardTitle>
-                <CardDescription>Customer invoice history.</CardDescription>
+                <CardTitle className="text-xl">{t('customers.invoices.title')}</CardTitle>
+                <CardDescription>{t('customers.invoices.description')}</CardDescription>
             </CardHeader>
             <CardContent>
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Date</TableHead>
-                            <TableHead>Number</TableHead>
-                            <TableHead>Amount</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
+                            <TableHead>{t('customers.invoices.date')}</TableHead>
+                            <TableHead>{t('customers.invoices.number')}</TableHead>
+                            <TableHead>{t('customers.invoices.amount')}</TableHead>
+                            <TableHead>{t('field.status')}</TableHead>
+                            <TableHead className="text-right">{t('field.actions')}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {invoices.map((invoice) => {
                             const status = invoice.status ?? 'draft';
                             const statusStyle = STATUS_STYLES[status] ?? STATUS_STYLES.draft;
-                            const statusLabel = STATUS_LABELS[status] ?? status;
+                            const statusKey = STATUS_KEYS[status];
+                            const statusLabel = statusKey ? t(statusKey) : status;
 
                             return (
                                 <TableRow key={invoice.id}>
@@ -140,7 +144,7 @@ export const CustomerInvoiceListSection = ({ invoices, isLoading }: Props) => {
                                             className="h-8 w-8"
                                             disabled={isDownloading}
                                             onClick={() => download(invoice.id)}
-                                            title="Download"
+                                            title={t('customers.invoices.download')}
                                         >
                                             <Download className="h-4 w-4" />
                                         </Button>

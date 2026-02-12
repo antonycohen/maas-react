@@ -10,6 +10,7 @@ const userSessionFields: FieldQuery<User> = {
     lastName: undefined,
     email: undefined,
     roles: undefined,
+    locale: undefined,
 };
 
 export function useSetupSessionUser() {
