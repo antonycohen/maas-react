@@ -16,6 +16,7 @@ export * from './lib/cms';
 export * from './lib/users';
 
 // PMS (Pricing Management System)
+export * from './lib/dashboard';
 export * from './lib/address';
 export * from './lib/plan';
 export * from './lib/product';

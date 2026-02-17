@@ -14,6 +14,7 @@ import {
     FoldersRoutes,
     IssuesRoutes,
 } from '@maas/web-feature-magazine';
+import { DashboardRoutes } from '@maas/web-feature-dashboard';
 import { TeamsRoutes } from '@maas/web-feature-organizations';
 import { SettingsRoutes } from '@maas/web-feature-settings';
 import {
@@ -96,6 +97,7 @@ const WorkspaceRoutesContent = ({ connectedUser, organizationId, organizations }
                     />
                 }
             >
+                <Route index element={<DashboardRoutes />} />
                 <Route path={ADMIN_ROUTES.ACCOUNT} element={<AccountRoutes baseUrl={routes.base} />} />
                 <Route path={ADMIN_ROUTES.ISSUES_WILDCARD} element={<IssuesRoutes />} />
                 <Route path={ADMIN_ROUTES.ARTICLES_WILDCARD} element={<ArticlesRoutes />} />

@@ -1,5 +1,6 @@
 import { ApiClient, ApiClientConfig } from './api-client/api-client';
 import { ArticlesEndpoint } from './endpoints/articles';
+import { DashboardEndpoint } from './endpoints/dashboard';
 import { ArticleTypesEndpoint } from './endpoints/article-types';
 import { BrandsEndpoint } from './endpoints/brands';
 import { CategoriesEndpoint } from './endpoints/categories';
@@ -25,6 +26,7 @@ class MaasApi {
     private readonly client: ApiClient;
     public readonly articles: ArticlesEndpoint;
     public readonly articleTypes: ArticleTypesEndpoint;
+    public readonly dashboard: DashboardEndpoint;
     public readonly brands: BrandsEndpoint;
     public readonly categories: CategoriesEndpoint;
     public readonly countries: CountriesEndpoint;
@@ -49,6 +51,7 @@ class MaasApi {
         this.client = new ApiClient(config);
         this.articles = new ArticlesEndpoint(this.client);
         this.articleTypes = new ArticleTypesEndpoint(this.client);
+        this.dashboard = new DashboardEndpoint(this.client);
         this.brands = new BrandsEndpoint(this.client);
         this.categories = new CategoriesEndpoint(this.client);
         this.countries = new CountriesEndpoint(this.client);
@@ -77,6 +80,7 @@ export { AuthenticationError } from './api-client/authentication-error';
 
 export * from './endpoints/articles';
 export * from './endpoints/article-types';
+export * from './endpoints/dashboard';
 export * from './endpoints/brands';
 export * from './endpoints/categories';
 export * from './endpoints/countries';

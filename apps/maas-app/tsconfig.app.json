@@ -29,6 +29,9 @@
     "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
     "references": [
         {
+            "path": "../../packages/web-feature-dashboard/tsconfig.lib.json"
+        },
+        {
             "path": "../../packages/web-feature-pms/tsconfig.lib.json"
         },
         {
