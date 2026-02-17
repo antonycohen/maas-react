@@ -85,16 +85,16 @@ export const useMainNavigation = (): SidebarNavigationProps[] => {
                     url: routes.customers(),
                     icon: UserRoundSearch,
                 },
-                {
-                    title: t('nav.users'),
-                    url: routes.users(),
-                    icon: Users,
-                },
-                {
-                    title: t('nav.organizations'),
-                    url: routes.organizations(),
-                    icon: Building2,
-                },
+                // {
+                //     title: t('nav.users'),
+                //     url: routes.users(),
+                //     icon: Users,
+                // },
+                // {
+                //     title: t('nav.organizations'),
+                //     url: routes.organizations(),
+                //     icon: Building2,
+                // },
                 {
                     title: t('nav.subscriptions'),
                     url: routes.subscriptions(),

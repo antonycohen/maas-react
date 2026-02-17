@@ -34,13 +34,13 @@
             "path": "../core-store-oauth/tsconfig.lib.json"
         },
         {
-            "path": "../core-api/tsconfig.lib.json"
+            "path": "../core-utils/tsconfig.lib.json"
         },
         {
             "path": "../web-components/tsconfig.lib.json"
         },
         {
-            "path": "../core-utils/tsconfig.lib.json"
+            "path": "../core-api/tsconfig.lib.json"
         }
     ]
 }

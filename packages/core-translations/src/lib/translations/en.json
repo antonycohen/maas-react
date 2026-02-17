@@ -36,12 +36,12 @@
     "common.redirecting": "Redirecting",
     "common.hello": "Hello",
     "common.characters": "{count}/{max} characters",
-
     "status.published": "Published",
     "status.draft": "Draft",
     "status.active": "Active",
     "status.inactive": "Inactive",
     "status.public": "Public",
+    "status.subscribers": "Subscribers Only",
     "status.private": "Private",
     "status.verified": "Verified",
     "status.notVerified": "Not verified",
@@ -49,7 +49,6 @@
     "status.pending": "Pending",
     "status.accepted": "Active",
     "status.suspended": "Suspended",
-
     "nav.overview": "Overview",
     "nav.dashboard": "Dashboard",
     "nav.content": "Content",
@@ -74,7 +73,6 @@
     "nav.admins": "Admins",
     "nav.appSettings": "App Settings",
     "nav.routingFiles": "Routing Files",
-
     "nav.public.featured": "Featured",
     "nav.public.easyMath": "Easy Math",
     "nav.public.themes": "Themes",
@@ -84,7 +82,6 @@
     "nav.public.folders": "Folders",
     "nav.public.videos": "Videos",
     "nav.public.readingNotes": "Reading Notes",
-
     "table.rowsPerPage": "Rows per page",
     "table.pageOf": "Page {page} of {total}",
     "table.rowsSelected": "{count} of {total} row(s) selected.",
@@ -101,7 +98,6 @@
     "table.asc": "Asc",
     "table.desc": "Desc",
     "table.hide": "Hide",
-
     "field.name": "Name",
     "field.email": "Email",
     "field.title": "Title",
@@ -146,7 +142,6 @@
     "field.registeredDate": "Registered Date",
     "field.phoneNumber": "Phone Number",
     "field.customFields": "Custom Fields",
-
     "field.placeholder.searchByTitle": "Search by title...",
     "field.placeholder.searchByName": "Search by name...",
     "field.placeholder.enterArticleTitle": "Enter article title...",
@@ -173,7 +168,6 @@
     "field.placeholder.noLanguageFound": "No language found.",
     "field.placeholder.select": "Select...",
     "field.placeholder.search": "Search...",
-
     "fieldType.enum": "Enum",
     "fieldType.category": "Category",
     "fieldType.string": "String",
@@ -182,14 +176,12 @@
     "fieldType.image": "Image",
     "fieldType.video": "Video",
     "fieldType.cms": "CMS",
-
     "message.success.created": "{entity} created successfully",
     "message.success.updated": "{entity} updated successfully",
     "message.success.deleted": "{entity} deleted successfully",
     "message.error.notFound": "{entity} not found",
     "message.error.failedToLoad": "Failed to load data. Please try again.",
     "message.confirm.delete": "Are you sure you want to delete this {entity}?",
-
     "articles.title": "Articles",
     "articles.new": "New Article",
     "articles.search": "Search articles...",
@@ -210,7 +202,6 @@
     "articles.blocks": "{count} block(s)",
     "articles.complexValue": "Complex value",
     "articles.similarArticles": "Similar Articles",
-
     "issues.title": "Issues",
     "issues.new": "New Issue",
     "issues.search": "Search issues...",
@@ -224,7 +215,6 @@
     "issues.edit": "Edit Issue",
     "issues.delete": "Delete Issue",
     "issues.articles": "{count} article(s)",
-
     "folders.title": "Folders",
     "folders.new": "New Folder",
     "folders.search": "Search folders...",
@@ -248,7 +238,6 @@
     "folders.selectFolder": "Select a folder",
     "folders.selectArticleToPreview": "Select an article to preview",
     "folders.selectFolderToViewArticles": "Select a folder to view articles",
-
     "brands.title": "Brands",
     "brands.new": "New Brand",
     "brands.search": "Search brands...",
@@ -258,7 +247,6 @@
     "brands.issueConfigurationDescription": "Default settings for new issues created under this brand.",
     "brands.edit": "Edit Brand",
     "brands.delete": "Delete Brand",
-
     "categories.title": "Categories",
     "categories.new": "New Category",
     "categories.search": "Search categories...",
@@ -267,7 +255,6 @@
     "categories.notFound": "Category not found",
     "categories.edit": "Edit Category",
     "categories.delete": "Delete Category",
-
     "enums.title": "Enums",
     "enums.new": "New Enum",
     "enums.search": "Search enums...",
@@ -279,7 +266,6 @@
     "enums.edit": "Edit Enum",
     "enums.delete": "Delete Enum",
     "enums.valueCount": "{count} value(s)",
-
     "articleTypes.title": "Article Types",
     "articleTypes.new": "New Article Type",
     "articleTypes.search": "Search article types...",
@@ -294,7 +280,6 @@
     "articleTypes.noFieldsDefined": "No custom fields defined yet. Click \"Add Field\" to create one.",
     "articleTypes.allowMultiple": "Allow multiple values (list)",
     "articleTypes.fieldLabel": "Field {index}",
-
     "organizations.team": "Team",
     "organizations.invitingPeople": "Inviting people to {name}.",
     "organizations.noOrgFound": "No organization found.",
@@ -333,7 +318,6 @@
     "organizations.invitationCancelled": "Invitation cancelled",
     "organizations.memberRemoved": "Member removed from workspace",
     "organizations.failedToRemove": "Failed to remove member",
-
     "users.welcome": "Welcome",
     "users.generalInformation": "General Information",
     "users.profilePhoto": "Profile Photo",
@@ -368,7 +352,6 @@
     "users.french": "French",
     "users.spanish": "Spanish",
     "users.german": "German",
-
     "customers.title": "Customers",
     "customers.new": "New Customer",
     "customers.search": "Search customers...",
@@ -426,12 +409,9 @@
     "customers.validation.invalidEmail": "Invalid email format",
     "customers.tabs.info": "Info",
     "customers.tabs.subscriptions": "Subscriptions",
-
     "subscriptions.title": "Subscriptions",
-
     "login.redirecting": "Redirecting",
     "login.oauthCallback": "OAuth Callback Page",
-
     "home.latestMathNews": "The latest in mathematics",
     "home.continuous": " continuously",
     "home.discover": "Discover ",
@@ -460,19 +440,16 @@
     "home.mostRecent": "Most recent",
     "home.oldest": "Oldest",
     "home.searchOnTangente": "Search on Tangente",
-
     "home.gettingStarted": "Getting Started",
     "home.guides": "Guides",
     "home.apiReference": "API Reference",
     "home.fullApiDocumentation": "Full API documentation",
     "home.searchDocumentation": "Search documentation...",
-
     "layout.back": "Back",
     "layout.guestUser": "Guest User",
     "layout.notifications": "Notifications",
     "layout.myAccount": "My account",
     "layout.signIn": "Sign in",
-
     "issues.addArticle": "Add Article",
     "issues.addArticleDescription": "Search for an existing article or create a new one.",
     "issues.searchExistingArticle": "Search existing article",
@@ -494,15 +471,12 @@
     "issues.folderAlreadyInIssue": "This folder is already in the issue",
     "issues.createFolderTitle": "Create Folder",
     "issues.createFolderDescription": "Create a new folder for this issue.",
-
     "feeds.title": "Flow",
-
     "funnel.navigation.back": "Back",
     "funnel.navigation.exit": "Exit",
     "funnel.steps.step-1": "Step 1",
     "funnel.steps.step-2": "Step 2",
     "funnel.steps.step-3": "Step 3",
-
     "plans.title": "Subscription Plans",
     "plans.new": "New Plan",
     "plans.search": "Search plans...",
@@ -536,7 +510,6 @@
     "plans.selectProductToView": "Select a product to view details",
     "plans.viewFullProductDetails": "View full product details",
     "plans.noDescription": "No description",
-
     "products.title": "Products",
     "products.new": "New Product",
     "products.search": "Search products...",
@@ -587,7 +560,6 @@
     "products.quotaAggregationFormula": "Quota Aggregation Formula",
     "products.loadingPrices": "Loading prices...",
     "products.noDescription": "No description",
-
     "prices.title": "Prices",
     "prices.new": "New Price",
     "prices.search": "Search prices...",
@@ -626,5 +598,53 @@
     "prices.updatedSuccess": "Price updated successfully",
     "prices.deletedSuccess": "Price deleted successfully",
     "prices.deleteFailed": "Failed to delete price",
-    "prices.deleteConfirm": "Are you sure you want to delete this price?"
+    "prices.deleteConfirm": "Are you sure you want to delete this price?",
+    "planChange.title": "Change Plan",
+    "planChange.description": "Compare plans and change your subscription.",
+    "planChange.noSubscription": "You don't have an active subscription.",
+    "planChange.discoverOffers": "Discover our offers",
+    "planChange.currentBadge": "Current",
+    "planChange.choosePlan": "Choose a plan",
+    "planChange.customizeChange": "Customize your change",
+    "planChange.duration": "Duration",
+    "planChange.options": "Options",
+    "planChange.shipping": "Shipping",
+    "planChange.shippingMetropole": "Mainland France",
+    "planChange.shippingMetropoleIncluded": "Included",
+    "planChange.shippingOverseas": "Overseas",
+    "planChange.shippingOverseasLineItem": "Overseas shipping",
+    "planChange.total": "Total",
+    "planChange.currentlyLabel": "Currently: {amount}{interval}",
+    "planChange.upgrade": "Switch to this plan",
+    "planChange.downgrade": "Downgrade",
+    "planChange.savingsText": "You save {amount} over {duration}",
+    "planChange.successToast": "Your subscription has been updated successfully.",
+    "planChange.errorToast": "Unable to change your subscription. Please try again.",
+    "planChange.loadingError": "An error occurred while loading plans. Please try again.",
+    "planChange.formulaPrefix": "Plan {name}",
+    "planChange.interval.monthly": "1 month",
+    "planChange.interval.semester": "6 months",
+    "planChange.interval.annual": "1 year",
+    "planChange.interval.biennial": "2 years",
+    "planChange.intervalLabel.monthly": "/month",
+    "planChange.intervalLabel.semester": "/semester",
+    "planChange.intervalLabel.annual": "/year",
+    "planChange.intervalLabel.biennial": "/2 years",
+    "planChange.shippingContactSupport": "Contact support to change your shipping zone.",
+    "planChange.upgradeImmediate": "Change takes effect immediately with prorated billing.",
+    "planChange.downgradeScheduled": "Change takes effect at the end of the current billing period.",
+    "planChange.downgradeSuccessToast": "Your downgrade has been scheduled for the end of the billing period.",
+    "planChange.previewButton": "Preview changes",
+    "planChange.confirmButton": "Confirm change",
+    "planChange.previewLoading": "Calculating...",
+    "planChange.previewChangeType.upgrade": "Upgrade",
+    "planChange.previewChangeType.downgrade": "Downgrade",
+    "planChange.previewChangeType.same": "No change",
+    "planChange.previewEffectiveDate": "Effective date",
+    "planChange.previewImmediate": "Immediate",
+    "planChange.previewBlocked": "This change cannot be applied",
+    "planChange.previewBackendUpgrade": "You will be charged the prorated difference immediately.",
+    "planChange.previewBackendDowngrade": "Your current plan remains active until the end of the billing period.",
+    "planChange.previewModify": "Modify selection",
+    "planChange.noChangeHint": "Select a different interval or toggle options to make a change."
 }

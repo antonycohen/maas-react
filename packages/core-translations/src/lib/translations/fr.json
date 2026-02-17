@@ -36,7 +36,6 @@
     "common.redirecting": "Redirection",
     "common.hello": "Bonjour",
     "common.characters": "{count}/{max} caractères",
-
     "status.published": "Publié",
     "status.draft": "Brouillon",
     "status.active": "Actif",
@@ -44,12 +43,12 @@
     "status.public": "Public",
     "status.private": "Privé",
     "status.verified": "Vérifié",
+    "status.subscribers": "Abonnés uniquement",
     "status.notVerified": "Non vérifié",
     "status.canceled": "Annulé",
     "status.pending": "En attente",
     "status.accepted": "Actif",
     "status.suspended": "Suspendu",
-
     "nav.overview": "Vue d'ensemble",
     "nav.dashboard": "Tableau de bord",
     "nav.content": "Contenu",
@@ -74,7 +73,6 @@
     "nav.admins": "Administrateurs",
     "nav.appSettings": "Paramètres",
     "nav.routingFiles": "Fichiers de routage",
-
     "nav.public.featured": "À la une",
     "nav.public.easyMath": "Maths faciles",
     "nav.public.themes": "Thématiques",
@@ -84,7 +82,6 @@
     "nav.public.folders": "Dossiers",
     "nav.public.videos": "Vidéos",
     "nav.public.readingNotes": "Notes de lecture",
-
     "table.rowsPerPage": "Lignes par page",
     "table.pageOf": "Page {page} sur {total}",
     "table.rowsSelected": "{count} sur {total} ligne(s) sélectionnée(s).",
@@ -101,7 +98,6 @@
     "table.asc": "Croissant",
     "table.desc": "Décroissant",
     "table.hide": "Masquer",
-
     "field.name": "Nom",
     "field.email": "E-mail",
     "field.title": "Titre",
@@ -146,7 +142,6 @@
     "field.registeredDate": "Date d'inscription",
     "field.phoneNumber": "Numéro de téléphone",
     "field.customFields": "Champs personnalisés",
-
     "field.placeholder.searchByTitle": "Rechercher par titre...",
     "field.placeholder.searchByName": "Rechercher par nom...",
     "field.placeholder.enterArticleTitle": "Saisir le titre de l'article...",
@@ -173,7 +168,6 @@
     "field.placeholder.noLanguageFound": "Aucune langue trouvée.",
     "field.placeholder.select": "Sélectionner...",
     "field.placeholder.search": "Rechercher...",
-
     "fieldType.enum": "Énumération",
     "fieldType.category": "Catégorie",
     "fieldType.string": "Chaîne",
@@ -182,14 +176,12 @@
     "fieldType.image": "Image",
     "fieldType.video": "Vidéo",
     "fieldType.cms": "CMS",
-
     "message.success.created": "{entity} créé(e) avec succès",
     "message.success.updated": "{entity} mis(e) à jour avec succès",
     "message.success.deleted": "{entity} supprimé(e) avec succès",
     "message.error.notFound": "{entity} introuvable",
     "message.error.failedToLoad": "Échec du chargement des données. Veuillez réessayer.",
     "message.confirm.delete": "Êtes-vous sûr de vouloir supprimer cet(te) {entity} ?",
-
     "articles.title": "Articles",
     "articles.new": "Nouvel article",
     "articles.search": "Rechercher des articles...",
@@ -210,7 +202,6 @@
     "articles.blocks": "{count} bloc(s)",
     "articles.complexValue": "Valeur complexe",
     "articles.similarArticles": "Articles similaires",
-
     "issues.title": "Numéros",
     "issues.new": "Nouveau numéro",
     "issues.search": "Rechercher des numéros...",
@@ -245,7 +236,6 @@
     "issues.folderAlreadyInIssue": "Ce dossier est déjà dans le numéro",
     "issues.createFolderTitle": "Créer un dossier",
     "issues.createFolderDescription": "Créez un nouveau dossier pour ce numéro.",
-
     "folders.title": "Dossiers",
     "folders.new": "Nouveau dossier",
     "folders.search": "Rechercher des dossiers...",
@@ -269,7 +259,6 @@
     "folders.selectFolder": "Sélectionner un dossier",
     "folders.selectArticleToPreview": "Sélectionnez un article pour l'aperçu",
     "folders.selectFolderToViewArticles": "Sélectionnez un dossier pour voir les articles",
-
     "brands.title": "Marques",
     "brands.new": "Nouvelle marque",
     "brands.search": "Rechercher des marques...",
@@ -279,7 +268,6 @@
     "brands.issueConfigurationDescription": "Paramètres par défaut pour les nouveaux numéros créés sous cette marque.",
     "brands.edit": "Modifier la marque",
     "brands.delete": "Supprimer la marque",
-
     "categories.title": "Catégories",
     "categories.new": "Nouvelle catégorie",
     "categories.search": "Rechercher des catégories...",
@@ -288,7 +276,6 @@
     "categories.notFound": "Catégorie introuvable",
     "categories.edit": "Modifier la catégorie",
     "categories.delete": "Supprimer la catégorie",
-
     "enums.title": "Énumérations",
     "enums.new": "Nouvelle énumération",
     "enums.search": "Rechercher des énumérations...",
@@ -300,7 +287,6 @@
     "enums.edit": "Modifier l'énumération",
     "enums.delete": "Supprimer l'énumération",
     "enums.valueCount": "{count} valeur(s)",
-
     "articleTypes.title": "Types d'articles",
     "articleTypes.new": "Nouveau type d'article",
     "articleTypes.search": "Rechercher des types d'articles...",
@@ -315,7 +301,6 @@
     "articleTypes.noFieldsDefined": "Aucun champ personnalisé défini. Cliquez sur \"Ajouter un champ\" pour en créer un.",
     "articleTypes.allowMultiple": "Autoriser plusieurs valeurs (liste)",
     "articleTypes.fieldLabel": "Champ {index}",
-
     "organizations.team": "Équipe",
     "organizations.invitingPeople": "Inviter des personnes à {name}.",
     "organizations.noOrgFound": "Aucune organisation trouvée.",
@@ -354,7 +339,6 @@
     "organizations.invitationCancelled": "Invitation annulée",
     "organizations.memberRemoved": "Membre retiré de l'espace de travail",
     "organizations.failedToRemove": "Échec du retrait du membre",
-
     "users.welcome": "Bienvenue",
     "users.generalInformation": "Informations générales",
     "users.profilePhoto": "Photo de profil",
@@ -389,7 +373,6 @@
     "users.french": "Français",
     "users.spanish": "Espagnol",
     "users.german": "Allemand",
-
     "customers.title": "Clients",
     "customers.new": "Nouveau client",
     "customers.search": "Rechercher des clients...",
@@ -447,12 +430,9 @@
     "customers.validation.invalidEmail": "Format d'e-mail invalide",
     "customers.tabs.info": "Infos",
     "customers.tabs.subscriptions": "Abonnements",
-
     "subscriptions.title": "Abonnements",
-
     "login.redirecting": "Redirection",
     "login.oauthCallback": "Page de rappel OAuth",
-
     "home.latestMathNews": "L'actualité mathématique",
     "home.continuous": " en continu",
     "home.discover": "Découvrez les ",
@@ -481,27 +461,22 @@
     "home.mostRecent": "Les plus récents",
     "home.oldest": "Les plus anciens",
     "home.searchOnTangente": "Rechercher sur Tangente",
-
     "home.gettingStarted": "Premiers pas",
     "home.guides": "Guides",
     "home.apiReference": "Référence API",
     "home.fullApiDocumentation": "Documentation complète de l'API",
     "home.searchDocumentation": "Rechercher dans la documentation...",
-
     "layout.back": "Retour",
     "layout.guestUser": "Utilisateur invité",
     "layout.notifications": "Notifications",
     "layout.myAccount": "Mon compte",
     "layout.signIn": "Se connecter",
-
     "feeds.title": "Flow",
-
     "funnel.navigation.back": "Retour",
     "funnel.navigation.exit": "Quitter",
     "funnel.steps.step-1": "Étape 1",
     "funnel.steps.step-2": "Étape 2",
     "funnel.steps.step-3": "Étape 3",
-
     "plans.title": "Forfaits d'abonnement",
     "plans.new": "Nouveau forfait",
     "plans.search": "Rechercher des forfaits...",
@@ -535,7 +510,6 @@
     "plans.selectProductToView": "Sélectionnez un produit pour voir les détails",
     "plans.viewFullProductDetails": "Voir tous les détails du produit",
     "plans.noDescription": "Aucune description",
-
     "products.title": "Produits",
     "products.new": "Nouveau produit",
     "products.search": "Rechercher des produits...",
@@ -586,7 +560,6 @@
     "products.quotaAggregationFormula": "Formule d'agrégation du quota",
     "products.loadingPrices": "Chargement des tarifs...",
     "products.noDescription": "Aucune description",
-
     "prices.title": "Tarifs",
     "prices.new": "Nouveau tarif",
     "prices.search": "Rechercher des tarifs...",
@@ -625,5 +598,53 @@
     "prices.updatedSuccess": "Tarif mis à jour avec succès",
     "prices.deletedSuccess": "Tarif supprimé avec succès",
     "prices.deleteFailed": "Échec de la suppression du tarif",
-    "prices.deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce tarif ?"
+    "prices.deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce tarif ?",
+    "planChange.title": "Changer de formule",
+    "planChange.description": "Comparez les formules et modifiez votre abonnement.",
+    "planChange.noSubscription": "Vous n'avez pas d'abonnement actif.",
+    "planChange.discoverOffers": "Découvrir nos offres",
+    "planChange.currentBadge": "Actuel",
+    "planChange.choosePlan": "Choisir une formule",
+    "planChange.customizeChange": "Personnalisez votre changement",
+    "planChange.duration": "Durée",
+    "planChange.options": "Options",
+    "planChange.shipping": "Livraison",
+    "planChange.shippingMetropole": "Métropole",
+    "planChange.shippingMetropoleIncluded": "Inclus",
+    "planChange.shippingOverseas": "Hors Métropole",
+    "planChange.shippingOverseasLineItem": "Livraison hors métropole",
+    "planChange.total": "Total",
+    "planChange.currentlyLabel": "Actuellement : {amount}{interval}",
+    "planChange.upgrade": "Passer à cette formule",
+    "planChange.downgrade": "Rétrograder",
+    "planChange.savingsText": "Vous économisez {amount} sur {duration}",
+    "planChange.successToast": "Votre abonnement a été mis à jour avec succès.",
+    "planChange.errorToast": "Impossible de modifier l'abonnement. Veuillez réessayer.",
+    "planChange.loadingError": "Une erreur est survenue lors du chargement des formules. Veuillez réessayer.",
+    "planChange.formulaPrefix": "Formule {name}",
+    "planChange.interval.monthly": "1 mois",
+    "planChange.interval.semester": "6 mois",
+    "planChange.interval.annual": "1 an",
+    "planChange.interval.biennial": "2 ans",
+    "planChange.intervalLabel.monthly": "/mois",
+    "planChange.intervalLabel.semester": "/semestre",
+    "planChange.intervalLabel.annual": "/an",
+    "planChange.intervalLabel.biennial": "/2 ans",
+    "planChange.shippingContactSupport": "Contactez le support pour modifier votre zone de livraison.",
+    "planChange.upgradeImmediate": "Le changement prend effet immédiatement avec un ajustement au prorata.",
+    "planChange.downgradeScheduled": "Le changement prend effet à la fin de la période de facturation en cours.",
+    "planChange.downgradeSuccessToast": "Votre rétrogradation a été programmée pour la fin de la période de facturation.",
+    "planChange.previewButton": "Aperçu des changements",
+    "planChange.confirmButton": "Confirmer le changement",
+    "planChange.previewLoading": "Calcul en cours...",
+    "planChange.previewChangeType.upgrade": "Montée en gamme",
+    "planChange.previewChangeType.downgrade": "Rétrogradation",
+    "planChange.previewChangeType.same": "Aucun changement",
+    "planChange.previewEffectiveDate": "Date d'effet",
+    "planChange.previewImmediate": "Immédiat",
+    "planChange.previewBlocked": "Ce changement ne peut pas être appliqué",
+    "planChange.previewBackendUpgrade": "La différence au prorata sera facturée immédiatement.",
+    "planChange.previewBackendDowngrade": "Votre formule actuelle reste active jusqu'à la fin de la période de facturation.",
+    "planChange.previewModify": "Modifier la sélection",
+    "planChange.noChangeHint": "Sélectionnez une durée différente ou modifiez les options pour effectuer un changement."
 }

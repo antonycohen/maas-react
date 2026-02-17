@@ -29,7 +29,7 @@ export function AccountSettingsPage({ baseUrl }: { baseUrl: string }) {
 
                 <AccountMobileNav baseUrl={baseUrl} />
 
-                <div className="mx-auto w-full max-w-[600px] flex-1">
+                <div className="mx-auto w-full max-w-[700px] flex-1">
                     <Outlet context={outletContext} />
                 </div>
             </div>

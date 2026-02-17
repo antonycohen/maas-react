@@ -32,7 +32,7 @@ const ArticleDetailsPage = () => {
                 <ArticleSidebar categories={article?.categories} author={article?.author} />
                 <main className={'lg:justify-left flex w-full shrink-0 flex-row justify-center lg:w-[600px]'}>
                     <div className="flex flex-col">
-                        <ArticleContent content={article?.content} />
+                        <ArticleContent visibility={article?.visibility} content={article?.content} />
                     </div>
                 </main>
             </div>

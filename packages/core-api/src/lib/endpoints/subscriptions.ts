@@ -13,6 +13,10 @@ export interface GetSubscriptionsFilter {
     refId?: string;
 }
 
+export interface MySubscriptionStatus {
+    isSubscribed: boolean;
+}
+
 export class SubscriptionsEndpoint {
     constructor(private client: ApiClient) {}
 
@@ -81,5 +85,13 @@ export class SubscriptionsEndpoint {
      */
     async getMySubscription(fields?: FieldQuery<Subscription>): Promise<Subscription> {
         return this.client.getById<Subscription>(`${ME_PATH}/subscription`, fields);
+    }
+
+    /**
+     * Check if the current user has an active subscription
+     * GET /api/v1/users/me/subscription/status
+     */
+    async getMySubscriptionStatus(): Promise<MySubscriptionStatus> {
+        return this.client.getById<MySubscriptionStatus>(`${ME_PATH}/subscription/status`);
     }
 }
