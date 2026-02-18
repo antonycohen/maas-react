@@ -16,12 +16,18 @@ import { getDashboardStats } from '@maas/core-api';
 import { useTranslation } from '@maas/core-translations';
 import { useRoutes } from '@maas/core-workspace';
 
+const numberFormatCache = new Map<string, Intl.NumberFormat>();
+const getCurrencyFormatter = (locale: string, currency: string): Intl.NumberFormat => {
+    const key = `${locale}-${currency}`;
+    if (!numberFormatCache.has(key)) {
+        numberFormatCache.set(key, new Intl.NumberFormat(locale, { style: 'currency', currency }));
+    }
+    return numberFormatCache.get(key)!;
+};
+
 const formatCurrency = (amountInCents: number | null, currency: string | null, locale?: string): string => {
     if (amountInCents == null) return '-';
-    return new Intl.NumberFormat(locale ?? navigator.language, {
-        style: 'currency',
-        currency: currency ?? 'EUR',
-    }).format(amountInCents / 100);
+    return getCurrencyFormatter(locale ?? navigator.language, currency ?? 'EUR').format(amountInCents / 100);
 };
 
 const formatDate = (dateString: string | null, locale?: string): string => {

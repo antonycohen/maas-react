@@ -43,6 +43,9 @@ export const useEditPlanActions = (form: UseFormReturn<PlanFormValues>, isCreate
             navigate(`${workspaceBaseUrl}/pms/plans`);
             toast.success(t('plans.deletedSuccess'));
         },
+        onError: () => {
+            toast.error(t('plans.deleteFailed'));
+        },
     });
 
     function onSubmit(data: PlanFormValues) {

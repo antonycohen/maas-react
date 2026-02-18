@@ -3,6 +3,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { CreateCategory, UpdateCategory } from '@maas/core-api-models';
 import { useNavigate } from 'react-router-dom';
 import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
 
 export const useEditActions = (
@@ -42,6 +43,9 @@ export const useEditActions = (
     const deleteMutation = useDeleteCategory({
         onSuccess: () => {
             navigate(`${currentWorkspaceBaseUrl}/categories`);
+        },
+        onError: () => {
+            toast.error(t('message.error.deleted', { entity: t('categories.title') }));
         },
     });
 

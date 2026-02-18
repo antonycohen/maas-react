@@ -47,6 +47,9 @@ export const useEditActions = (
             navigate(`${workspaceBaseUrl}/articles`);
             toast.success(t('message.success.deleted', { entity: t('articles.title') }));
         },
+        onError: () => {
+            toast.error(t('message.error.deleted', { entity: t('articles.title') }));
+        },
     });
 
     function onSubmit(data: CreateArticle | UpdateArticle) {

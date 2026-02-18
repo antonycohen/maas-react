@@ -299,6 +299,7 @@ export function EditArticleManagerPage() {
                             >
                                 <FieldGroup className="space-y-4">
                                     <ControlledSwitchInput name="isPublished" label={t('status.published')} />
+                                    <ControlledSwitchInput name="isFeatured" label={t('field.featured')} />
                                     <ControlledArticleTypeInput name="type" label={t('field.articleType')} />
                                     <ControlledSelectInput
                                         name="visibility"

@@ -1,7 +1,7 @@
 import { cn } from '@maas/core-utils';
 import { User } from '@maas/core-api-models';
 import { Menu, Search, UserCircle, X } from 'lucide-react';
-import { useState, useEffect, useRef, RefObject, ReactNode } from 'react';
+import { useState, useEffect, useRef, useMemo, RefObject, ReactNode } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useTranslation } from '@maas/core-translations';
 
@@ -264,12 +264,15 @@ export function LayoutHeaderBar({
     const { t } = useTranslation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    const resolvedMenuItems =
-        menuItems ??
-        defaultMenuItemKeys.map((item) => ({
-            label: t(item.key),
-            href: item.href,
-        }));
+    const resolvedMenuItems = useMemo(
+        () =>
+            menuItems ??
+            defaultMenuItemKeys.map((item) => ({
+                label: t(item.key),
+                href: item.href,
+            })),
+        [menuItems, t]
+    );
     const topBarRef = useRef<HTMLDivElement>(null);
 
     const { isMobileScrolled, isDesktopScrolled, topBarHeight } = useHeaderScroll(topBarRef);

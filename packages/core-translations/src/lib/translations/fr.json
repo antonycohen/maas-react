@@ -113,6 +113,7 @@
     "field.active": "Actif",
     "field.published": "Publié",
     "field.visibility": "Visibilité",
+    "field.featured": "À la une",
     "field.featuredImage": "Image à la une",
     "field.coverImage": "Image de couverture",
     "field.categories": "Catégories",

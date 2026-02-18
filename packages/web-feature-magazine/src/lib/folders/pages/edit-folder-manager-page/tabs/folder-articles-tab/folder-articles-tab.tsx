@@ -24,12 +24,11 @@ export const FolderArticlesTab = () => {
     // Get article IDs from form (source of truth for which articles are in folder)
     const watchedArticles = form.watch('articles');
     const articleIds = useMemo(() => watchedArticles ?? [], [watchedArticles]);
-    const articleIdList = useMemo(() => articleIds.map((a) => a.id), [articleIds]);
 
-    // Fetch all articles by IDs
+    // Fetch all articles belonging to this folder
     const { data: articlesResponse, isLoading: isLoadingArticles } = useGetArticles(
         {
-            filters: { id: articleIdList },
+            filters: { folderId },
             fields: {
                 id: null,
                 title: null,
@@ -39,10 +38,10 @@ export const FolderArticlesTab = () => {
                 featuredImage: null,
             },
             offset: 0,
-            limit: articleIdList.length || 1,
+            limit: 100,
         },
         {
-            enabled: articleIdList.length > 0,
+            enabled: !!folderId,
         }
     );
 

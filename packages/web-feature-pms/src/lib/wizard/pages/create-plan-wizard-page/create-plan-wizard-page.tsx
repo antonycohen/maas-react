@@ -32,6 +32,16 @@ import {
 } from '@tabler/icons-react';
 import { toast } from 'sonner';
 
+const numberFormatCache = new Map<string, Intl.NumberFormat>();
+const getCurrencyFormatter = (locale: string, currency: string): Intl.NumberFormat => {
+    const key = `${locale}-${currency}`;
+    const cached = numberFormatCache.get(key);
+    if (cached) return cached;
+    const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency });
+    numberFormatCache.set(key, formatter);
+    return formatter;
+};
+
 type WizardStep = 'plan' | 'products' | 'prices' | 'review';
 
 type ProductDraft = {
@@ -177,9 +187,8 @@ export function CreatePlanWizardPage() {
 
             toast.success('Plan created successfully!');
             navigate(`${workspaceUrl}/pms/plans/${plan.id}/info`);
-        } catch (error) {
+        } catch {
             toast.error('Failed to create plan. Please try again.');
-            console.error(error);
         } finally {
             setIsSubmitting(false);
         }
@@ -492,10 +501,10 @@ export function CreatePlanWizardPage() {
                                                         <ul className="ml-4 list-disc">
                                                             {product.prices.map((price, priceIndex) => (
                                                                 <li key={priceIndex} className="text-sm">
-                                                                    {new Intl.NumberFormat('en-US', {
-                                                                        style: 'currency',
-                                                                        currency: price.currency.toUpperCase(),
-                                                                    }).format(price.unitAmount / 100)}{' '}
+                                                                    {getCurrencyFormatter(
+                                                                        'en-US',
+                                                                        price.currency.toUpperCase()
+                                                                    ).format(price.unitAmount / 100)}{' '}
                                                                     / {price.recurringInterval}
                                                                 </li>
                                                             ))}

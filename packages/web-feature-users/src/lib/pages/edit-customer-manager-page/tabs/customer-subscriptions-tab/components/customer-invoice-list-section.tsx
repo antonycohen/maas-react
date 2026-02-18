@@ -36,13 +36,20 @@ const STATUS_KEYS: Record<string, string> = {
     uncollectible: 'customers.invoices.statusUncollectible',
 };
 
+const numberFormatCache = new Map<string, Intl.NumberFormat>();
+const getCurrencyFormatter = (locale: string, currency: string): Intl.NumberFormat => {
+    const key = `${locale}-${currency}`;
+    const cached = numberFormatCache.get(key);
+    if (cached) return cached;
+    const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency });
+    numberFormatCache.set(key, formatter);
+    return formatter;
+};
+
 const formatAmount = (amountInCents: number, currency: string | null): string => {
     const amount = amountInCents / 100;
     const currencyCode = currency?.toUpperCase() ?? 'EUR';
-    return new Intl.NumberFormat('fr-FR', {
-        style: 'currency',
-        currency: currencyCode,
-    }).format(amount);
+    return getCurrencyFormatter('fr-FR', currencyCode).format(amount);
 };
 
 const formatDate = (dateStr: string | null): string => {

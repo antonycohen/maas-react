@@ -52,14 +52,14 @@ export const SsoConnectSection = ({ user }: { user: ReadUser }) => {
     const linkedInId = socialIdentifiers['linkedin'] ?? null;
     const microsoftId = socialIdentifiers['microsoft'] ?? null;
 
-    const handleConnect = (provider: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const handleConnect = (_provider: string) => {
         // TODO: Implement OAuth connection flow
-        console.log(`Connect to ${provider}`);
     };
 
-    const handleDisconnect = (provider: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const handleDisconnect = (_provider: string) => {
         // TODO: Implement disconnect flow
-        console.log(`Disconnect from ${provider}`);
     };
 
     return (

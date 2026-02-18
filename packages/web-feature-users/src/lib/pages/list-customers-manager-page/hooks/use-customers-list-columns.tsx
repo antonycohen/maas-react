@@ -9,14 +9,21 @@ import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 
+const numberFormatCache = new Map<string, Intl.NumberFormat>();
+const getCurrencyFormatter = (locale: string, currency: string): Intl.NumberFormat => {
+    const key = `${locale}-${currency}`;
+    const cached = numberFormatCache.get(key);
+    if (cached) return cached;
+    const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency });
+    numberFormatCache.set(key, formatter);
+    return formatter;
+};
+
 const formatBalance = (balance: number | null, currency: string | null): string => {
     if (balance === null) return '—';
     const amount = balance / 100;
     const currencyCode = currency?.toUpperCase() ?? 'EUR';
-    return new Intl.NumberFormat('fr-FR', {
-        style: 'currency',
-        currency: currencyCode,
-    }).format(amount);
+    return getCurrencyFormatter('fr-FR', currencyCode).format(amount);
 };
 
 export function useCustomersListColumns(): ColumnDef<ReadCustomer>[] {

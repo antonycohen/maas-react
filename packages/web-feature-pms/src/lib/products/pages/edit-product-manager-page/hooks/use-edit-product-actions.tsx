@@ -47,6 +47,9 @@ export const useEditProductActions = (
             navigate(`${workspaceBaseUrl}/pms/products`);
             toast.success(t('products.deletedSuccess'));
         },
+        onError: () => {
+            toast.error(t('products.deleteFailed'));
+        },
     });
 
     function onSubmit(data: ProductFormValues) {

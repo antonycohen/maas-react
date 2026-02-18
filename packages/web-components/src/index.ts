@@ -47,7 +47,7 @@ export * from './lib/pro-blocks/nav-user';
 export * from './lib/pro-blocks/sidebar-navigation';
 export * from './lib/pro-blocks/team-switcher';
 
-export * from './lib/ui/icons'
+export * from './lib/ui/icons';
 
 export * from './lib/maas/async-combobox';
 export * from './lib/maas/async-multi-combobox';
@@ -70,10 +70,10 @@ export * from './lib/maas/rich-text-editor';
 export * from './lib/maas/lexical';
 export * from './lib/maas/sso-connector';
 export * from './lib/maas/tab-nav-links';
-export * from './lib/maas/article-author'
-export * from './lib/maas/share-articles'
+export * from './lib/maas/article-author';
+export * from './lib/maas/share-articles';
 
 export * from './lib/shadcn-io/color-picker';
 
-
 export * from './lib/hooks';
+export { ErrorBoundary } from './lib/ui/error-boundary';

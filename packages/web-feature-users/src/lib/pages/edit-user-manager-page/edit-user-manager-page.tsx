@@ -28,11 +28,9 @@ export function EditUserManagerPage() {
         values: user,
     });
 
-    function onSubmit(data: User) {
-        console.log(data);
-    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+    function onSubmit(_data: User) {}
 
-    console.log('user', user);
     if (!user) {
         return <div>Loading...</div>;
     }
