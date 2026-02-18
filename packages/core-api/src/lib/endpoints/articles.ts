@@ -85,4 +85,18 @@ export class ArticlesEndpoint {
     async deleteArticle(articleId: string): Promise<void> {
         return this.client.delete<void>(`${BASE_PATH}/${articleId}`);
     }
+
+    /**
+     * Get similar articles for a given article
+     * GET /api/v1/articles/{articleId}/similar
+     */
+    async getSimilarArticles(
+        params: GetCollectionQueryParams<Article> & { articleId: string }
+    ): Promise<ApiCollectionResponse<Article>> {
+        const { articleId, fields, offset, limit } = params;
+        return this.client.getCollection<Article>(`${BASE_PATH}/${articleId}/similar`, fields, {
+            offset,
+            limit,
+        });
+    }
 }
