@@ -27,6 +27,7 @@ export const FoldersPage = () => {
                             resizedImages: null,
                         },
                     },
+                    publishedAt: null,
                     author: {
                         fields: {
                             firstName: null,

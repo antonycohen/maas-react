@@ -3,6 +3,7 @@ import {
     ArticlesHighlight,
     CategoryArticles,
     ContentFeed,
+    Skeleton,
     useResizedImage,
     type FeedArticleData,
     type CategoryArticle,
@@ -34,8 +35,14 @@ function mapArticleToFeedItem(article: HomepageArticle, categoryName: string): F
         image,
         title: article.title,
         category: categoryName,
-        author: '',
-        date: '',
+        author: `${article.author?.firstName || ''} ${article.author?.lastName || ''}`.trim(),
+        date: article.publishedAt
+            ? new Date(article.publishedAt).toLocaleDateString('fr-FR', {
+                  day: 'numeric',
+                  month: 'short',
+                  year: 'numeric',
+              })
+            : '',
         link: `/articles/${article.id}`,
     };
 }
@@ -46,17 +53,78 @@ function mapArticleToCategoryArticle(article: HomepageArticle, categoryName: str
         image,
         title: article.title,
         category: categoryName,
-        author: '',
-        date: '',
+        author: `${article.author?.firstName || ''} ${article.author?.lastName || ''}`.trim(),
+        date: article.publishedAt
+            ? new Date(article.publishedAt).toLocaleDateString('fr-FR', {
+                  day: 'numeric',
+                  month: 'short',
+                  year: 'numeric',
+              })
+            : '',
         link: `/articles/${article.id}`,
     };
 }
 
+const HighlightSkeleton = () => (
+    <section className="flex w-full items-center justify-center">
+        <div className="container flex w-full items-center justify-center px-5 py-4 md:pt-5 md:pb-10 xl:px-0">
+            <div className="flex h-[640px] w-full flex-col gap-3 md:h-[480px] md:flex-row md:gap-5">
+                <Skeleton className="min-w-0 flex-1 basis-0 rounded-[12px]" />
+                <div className="flex min-w-0 flex-1 basis-0 gap-3 md:gap-5">
+                    <div className="flex h-full min-w-0 flex-1 basis-0 flex-col gap-3 md:gap-5">
+                        <Skeleton className="min-h-0 flex-1 basis-0 rounded-[12px]" />
+                        <Skeleton className="min-h-0 flex-1 basis-0 rounded-[12px]" />
+                    </div>
+                    <div className="flex h-full min-w-0 flex-1 basis-0 flex-col gap-3 md:gap-5">
+                        <Skeleton className="min-h-0 flex-1 basis-0 rounded-[12px]" />
+                        <Skeleton className="min-h-0 flex-1 basis-0 rounded-[12px]" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+);
+
+const ContentFeedSkeleton = () => (
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="flex flex-col gap-3">
+                <Skeleton className="aspect-[282/199] w-full rounded-[12px]" />
+                <Skeleton className="h-4 w-20 rounded" />
+                <Skeleton className="h-5 w-full rounded" />
+                <Skeleton className="h-5 w-3/4 rounded" />
+            </div>
+        ))}
+    </div>
+);
+
+const CategoryArticlesSkeleton = () => (
+    <div className="flex flex-col gap-5">
+        {Array.from({ length: 2 }).map((_, rowIndex) => (
+            <div key={rowIndex} className="flex gap-5">
+                {Array.from({ length: 2 }).map((_, i) => (
+                    <div key={i} className="flex min-w-0 flex-1 basis-0 gap-3 rounded-[12px] border border-[#333] p-3">
+                        <Skeleton className="aspect-[282/199] min-w-0 flex-1 basis-0 rounded" />
+                        <div className="flex min-w-0 flex-1 basis-0 flex-col justify-between px-3 py-2">
+                            <div className="flex flex-col gap-2">
+                                <Skeleton className="h-6 w-24 rounded" />
+                                <Skeleton className="h-5 w-full rounded" />
+                                <Skeleton className="h-5 w-3/4 rounded" />
+                            </div>
+                            <Skeleton className="h-4 w-32 rounded" />
+                        </div>
+                    </div>
+                ))}
+            </div>
+        ))}
+    </div>
+);
+
 export const HomePage = () => {
     const { t } = useTranslation();
-    const { data: homepage } = useGetHomepage({
-        issueFields: 'id,title,cover',
-        articleFields: 'id,title,cover,categories',
+    const { data: homepage, isPending } = useGetHomepage({
+        issueFields: 'id,title,cover,published_at,author',
+        articleFields: 'id,title,cover,categories,published_at,author',
         categoriesSlugs: HOMEPAGE_SLUGS,
     });
 
@@ -112,7 +180,7 @@ export const HomePage = () => {
         <div className="flex flex-col">
             {/* Articles Highlight Section */}
             <div className="container mx-auto">
-                <ArticlesHighlight articles={highlightArticles} />
+                {isPending ? <HighlightSkeleton /> : <ArticlesHighlight articles={highlightArticles} />}
             </div>
 
             {/* Maths et art - Content Feed Section */}
@@ -121,7 +189,7 @@ export const HomePage = () => {
                     <span className="text-brand-primary">{t('home.latestMathNews')}</span>
                     <span className="text-black">{t('home.continuous')}</span>
                 </h2>
-                <ContentFeed items={mathsArtFeedItems} />
+                {isPending ? <ContentFeedSkeleton /> : <ContentFeed items={mathsArtFeedItems} />}
             </div>
 
             {/* Jeux & Défis Section - Dark Background */}
@@ -131,11 +199,15 @@ export const HomePage = () => {
                         <span className="text-white">{t('home.discover')}</span>
                         <span className="text-brand-secondary">{t('home.gamesChallenges')}</span>
                     </h2>
-                    <CategoryArticles
-                        articles={jeuxDefiFeedItems}
-                        viewAllLabel={t('home.viewAllGamesChallenges')}
-                        viewAllLink="/categories/jeux-et-defi"
-                    />
+                    {isPending ? (
+                        <CategoryArticlesSkeleton />
+                    ) : (
+                        <CategoryArticles
+                            articles={jeuxDefiFeedItems}
+                            viewAllLabel={t('home.viewAllGamesChallenges')}
+                            viewAllLink="/categories/jeux-et-defi"
+                        />
+                    )}
                 </div>
             </div>
 
@@ -145,7 +217,7 @@ export const HomePage = () => {
                     <span className="text-brand-primary">{t('home.latestMathNews')}</span>
                     <span className="text-black">{t('home.continuous')}</span>
                 </h2>
-                <ContentFeed items={histoireCulturesFeedItems} />
+                {isPending ? <ContentFeedSkeleton /> : <ContentFeed items={histoireCulturesFeedItems} />}
             </div>
         </div>
     );

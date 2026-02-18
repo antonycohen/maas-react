@@ -85,6 +85,7 @@ export const CategoryPage = () => {
                         title: null,
                         description: null,
                         categories: null,
+                        publishedAt: null,
                         cover: {
                             fields: {
                                 resizedImages: null,

@@ -1,6 +1,7 @@
 import * as z from 'zod';
 import { readImageSchema } from '../image';
 import { categorySchema } from '../category';
+import { readUserRefSchema } from '../users';
 
 export const homepageIssueSchema = z.object({
     id: z.string(),
@@ -15,6 +16,8 @@ export const homepageArticleSchema = z.object({
     title: z.string(),
     cover: z.object(readImageSchema).nullable(),
     categories: z.array(categorySchema).nullable(),
+    publishedAt: z.string().nullable(),
+    author: readUserRefSchema.nullable(),
 });
 
 export type HomepageArticle = z.infer<typeof homepageArticleSchema>;

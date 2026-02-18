@@ -9,7 +9,7 @@ export interface FeedArticleData {
     category: string;
     subcategory?: string;
     author: string;
-    date: string;
+    date?: string;
     link: string;
 }
 
