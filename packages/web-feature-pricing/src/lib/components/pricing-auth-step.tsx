@@ -20,10 +20,14 @@ export function PricingAuthStep() {
             return;
         }
 
-        getAuthorizationUrl().then((url) => {
-            setIframeUrl(`${url}&template=iframe`);
-            setIsLoading(false);
-        });
+        getAuthorizationUrl()
+            .then((url) => {
+                setIframeUrl(`${url}&template=iframe`);
+                setIsLoading(false);
+            })
+            .catch(() => {
+                setIsLoading(false);
+            });
     }, [accessToken, navigate]);
 
     // Poll for auth token changes (iframe sets cookies, we rehydrate to detect)

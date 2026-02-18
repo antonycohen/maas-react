@@ -429,6 +429,10 @@ importers:
         specifier: ^0.16.7
         version: 0.16.7
 
+  packages/web-feature-dashboard: {}
+
+  packages/web-feature-diffusion-lists: {}
+
   packages/web-feature-feeds: {}
 
   packages/web-feature-home: {}

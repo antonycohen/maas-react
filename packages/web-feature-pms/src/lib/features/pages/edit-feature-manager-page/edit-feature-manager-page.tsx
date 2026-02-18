@@ -63,12 +63,15 @@ export function EditFeatureManagerPage() {
                 quotaAggregationFormula: feature.quotaAggregationFormula ?? null,
             });
         }
-    }, [feature, form]);
+    }, [feature, form.reset]);
 
     const createMutation = useCreateFeature({
         onSuccess: (data) => {
             navigate(`${workspaceUrl}/pms/features/${data.id}`);
             toast.success('Feature created successfully');
+        },
+        onError: () => {
+            toast.error('Failed to create feature');
         },
     });
 
@@ -76,12 +79,18 @@ export function EditFeatureManagerPage() {
         onSuccess: () => {
             toast.success('Feature updated successfully');
         },
+        onError: () => {
+            toast.error('Failed to update feature');
+        },
     });
 
     const deleteMutation = useDeleteFeature({
         onSuccess: () => {
             navigate(`${workspaceUrl}/pms/features`);
             toast.success('Feature deleted successfully');
+        },
+        onError: () => {
+            toast.error('Failed to delete feature');
         },
     });
 

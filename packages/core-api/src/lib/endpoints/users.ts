@@ -20,7 +20,6 @@ export class UsersEndpoint {
     async getUser(params: GetQueryByIdParams<User>): Promise<User> {
         const response = this.client.getById<User>(`/api/v1/users/${params.id}`, params.fields);
 
-        console.log(response);
         return response;
     }
 

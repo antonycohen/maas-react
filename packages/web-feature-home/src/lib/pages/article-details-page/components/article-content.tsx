@@ -1,23 +1,26 @@
-// import { SubscriptionCTA } from './subscription-cta';
+import { SubscriptionCTA } from './subscription-cta';
 import { useRenderBlocks } from '@maas/web-cms-editor';
 import { Article } from '@maas/core-api-models';
-
-
-
+import { useSubscriptionStatus } from '@maas/core-api';
 
 export const ArticleContent = ({
-  content,
+    content,
+    visibility,
 }: {
-  content?: Article['content'];
+    content?: Article['content'];
+    visibility?: Article['visibility'];
 }) => {
-  const blocks = useRenderBlocks(content);
-  return (
-    <article className="flex flex-col gap-10 items-start w-full lg:max-w-[600px]">
-      <div className="flex flex-col gap-5 items-start w-full relative">
-        {blocks}
-        {/*<div className="absolute bottom-0 left-0 w-full h-[200px] bg-gradient-to-t from-white to-transparent pointer-events-none"></div>*/}
-      </div>
-      {/*<SubscriptionCTA />*/}
-    </article>
-  );
+    const { isUserSubscribed } = useSubscriptionStatus();
+    const blocks = useRenderBlocks(content);
+    return (
+        <article className="flex w-full flex-col items-start gap-10 lg:max-w-[600px]">
+            <div className="relative flex w-full flex-col items-start gap-5">
+                {blocks}
+                {!isUserSubscribed && visibility !== 'public' && (
+                    <div className="pointer-events-none absolute bottom-0 left-0 h-[200px] w-full bg-gradient-to-t from-white to-transparent"></div>
+                )}
+            </div>
+            {!isUserSubscribed && visibility !== 'public' && <SubscriptionCTA />}
+        </article>
+    );
 };

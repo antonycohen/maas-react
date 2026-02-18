@@ -48,10 +48,12 @@ export const useEditFolderActions = (
             navigate(`${workspaceBaseUrl}/folders`);
             toast.success(t('message.success.deleted', { entity: t('folders.title') }));
         },
+        onError: () => {
+            toast.error(t('message.error.deleted', { entity: t('folders.title') }));
+        },
     });
 
     function onSubmit(data: FolderFormValues) {
-        console.log(data);
         const articlesRefs = data.articles?.map((a) => ({ id: a.id })) ?? null;
 
         if (isCreateMode) {

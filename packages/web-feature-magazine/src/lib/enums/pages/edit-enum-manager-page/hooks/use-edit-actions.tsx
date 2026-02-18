@@ -43,6 +43,9 @@ export const useEditActions = (form: UseFormReturn<CreateEnum | UpdateEnum>, isC
             navigate(`${workspaceBaseUrl}/enums`);
             toast.success(t('message.success.deleted', { entity: t('enums.title') }));
         },
+        onError: () => {
+            toast.error(t('message.error.deleted', { entity: t('enums.title') }));
+        },
     });
 
     function onSubmit(data: CreateEnum | UpdateEnum) {

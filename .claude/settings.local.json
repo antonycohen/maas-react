@@ -25,7 +25,8 @@
             "Bash(grep:*)",
             "Bash(npx eslint:*)",
             "Bash(npx nx lint:*)",
-            "mcp__sequential-thinking__sequentialthinking"
+            "mcp__sequential-thinking__sequentialthinking",
+            "WebFetch(domain:localhost)"
         ],
         "deny": []
     }

@@ -47,6 +47,9 @@ export const useEditActions = (
             navigate(`${workspaceBaseUrl}/brands`);
             toast.success(t('message.success.deleted', { entity: t('brands.title') }));
         },
+        onError: () => {
+            toast.error(t('message.error.deleted', { entity: t('brands.title') }));
+        },
     });
 
     function onSubmit(data: CreateBrand | UpdateBrand) {

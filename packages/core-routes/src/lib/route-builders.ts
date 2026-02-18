@@ -101,6 +101,11 @@ export const adminUrlBuilders = {
     notifications: () => ADMIN_ROUTES.NOTIFICATIONS,
     routingFiles: () => ADMIN_ROUTES.ROUTING_FILES,
 
+    // Diffusion Lists
+    diffusionLists: () => ADMIN_ROUTES.DIFFUSION_LISTS,
+    diffusionListDetail: (diffusionListId: string) =>
+        buildPath(`${SEGMENTS.DIFFUSION_LISTS}/:diffusionListId`, { diffusionListId }),
+
     // PMS (Pricing Management System)
     pms: () => ADMIN_ROUTES.PMS,
     // PMS Plans

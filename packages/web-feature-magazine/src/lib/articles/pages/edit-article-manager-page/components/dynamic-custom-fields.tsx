@@ -128,12 +128,10 @@ function initCustomFields(articleType: ArticleType): Record<string, unknown> {
 export function DynamicCustomFields() {
     const { t } = useTranslation();
     const { control, setValue, getValues } = useFormContext<Article>();
-    const customFields = useWatch({
+    useWatch({
         control,
         name: 'customFields',
     });
-
-    console.log(customFields);
 
     const previousTypeIdRef = useRef<string | null>(null);
 

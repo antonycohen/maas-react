@@ -2,7 +2,7 @@ import { useGetMySubscription, useGetMyQuotas } from '@maas/core-api';
 import { Skeleton } from '@maas/web-components';
 import { SubscriptionOverviewSection } from './components/subscription-overview-section';
 import { QuotaUsageSection } from './components/quota-usage-section';
-import { ManagementActionsSection } from './components/management-actions-section';
+import { PaymentMethodSection } from './components/payment-method-section';
 
 export const AccountSubscriptionTab = () => {
     const { data: subscription, isLoading: isLoadingSubscription } = useGetMySubscription({
@@ -29,7 +29,8 @@ export const AccountSubscriptionTab = () => {
             <div className="flex flex-col gap-6">
                 <Skeleton className="h-[200px] w-full rounded-2xl" />
                 <Skeleton className="h-[200px] w-full rounded-2xl" />
-                <Skeleton className="h-[120px] w-full rounded-2xl" />
+                <Skeleton className="h-[300px] w-full rounded-2xl" />
+                <Skeleton className="h-[80px] w-full rounded-2xl" />
             </div>
         );
     }
@@ -38,7 +39,7 @@ export const AccountSubscriptionTab = () => {
         <div className="flex flex-col gap-6">
             <SubscriptionOverviewSection subscription={subscription} />
             <QuotaUsageSection quotas={quotas} />
-            <ManagementActionsSection />
+            <PaymentMethodSection />
         </div>
     );
 };

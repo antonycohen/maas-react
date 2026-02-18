@@ -81,7 +81,6 @@ export function ViewSubscriptionManagerPage() {
             plan: null,
         },
     });
-    console.log(subscription);
     const cancelAtPeriodEndMutation = useCancelSubscriptionAtPeriodEnd({
         onSuccess: () => {
             toast.success('Subscription will be canceled at period end');

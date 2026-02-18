@@ -1,33 +1,23 @@
-import {
-  DefaultValues,
-  FieldValues,
-  FormProvider,
-  useForm,
-} from 'react-hook-form';
+import { DefaultValues, FieldValues, FormProvider, useForm } from 'react-hook-form';
 import { PropsWithChildren, useId } from 'react';
 
 type FormProps<T> = {
-  defaultValues?: DefaultValues<T> | undefined;
+    defaultValues?: DefaultValues<T> | undefined;
 };
-export function Form<T extends FieldValues>(
-  props: PropsWithChildren<FormProps<T>>,
-) {
-  const { defaultValues } = props;
-  const form = useForm<T>({
-    defaultValues: defaultValues,
-  });
+export function Form<T extends FieldValues>(props: PropsWithChildren<FormProps<T>>) {
+    const { defaultValues } = props;
+    const form = useForm<T>({
+        defaultValues: defaultValues,
+    });
 
-  function onSubmit(data: T) {
-    console.log(data);
-  }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+    function onSubmit(_data: T) {}
 
-  const id = useId();
+    const id = useId();
 
-  return (
-    <form id={id} onSubmit={form.handleSubmit(onSubmit)}>
-      <FormProvider {...form}>
-        {props.children}
-      </FormProvider>
-    </form>
-  );
+    return (
+        <form id={id} onSubmit={form.handleSubmit(onSubmit)}>
+            <FormProvider {...form}>{props.children}</FormProvider>
+        </form>
+    );
 }

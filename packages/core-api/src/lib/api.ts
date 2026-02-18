@@ -1,5 +1,6 @@
 import { ApiClient, ApiClientConfig } from './api-client/api-client';
 import { ArticlesEndpoint } from './endpoints/articles';
+import { DashboardEndpoint } from './endpoints/dashboard';
 import { ArticleTypesEndpoint } from './endpoints/article-types';
 import { BrandsEndpoint } from './endpoints/brands';
 import { CategoriesEndpoint } from './endpoints/categories';
@@ -20,11 +21,14 @@ import { CheckoutSessionsEndpoint } from './endpoints/checkout-sessions';
 import { CustomersEndpoint } from './endpoints/customers';
 import { PortalSessionsEndpoint } from './endpoints/portal-sessions';
 import { InvoicesEndpoint } from './endpoints/invoices';
+import { DiffusionListsEndpoint } from './endpoints/diffusion-lists';
+import { HomepageEndpoint } from './endpoints/homepage';
 
 class MaasApi {
     private readonly client: ApiClient;
     public readonly articles: ArticlesEndpoint;
     public readonly articleTypes: ArticleTypesEndpoint;
+    public readonly dashboard: DashboardEndpoint;
     public readonly brands: BrandsEndpoint;
     public readonly categories: CategoriesEndpoint;
     public readonly countries: CountriesEndpoint;
@@ -44,11 +48,14 @@ class MaasApi {
     public readonly customers: CustomersEndpoint;
     public readonly portalSessions: PortalSessionsEndpoint;
     public readonly invoices: InvoicesEndpoint;
+    public readonly diffusionLists: DiffusionListsEndpoint;
+    public readonly homepage: HomepageEndpoint;
 
     constructor(config: ApiClientConfig) {
         this.client = new ApiClient(config);
         this.articles = new ArticlesEndpoint(this.client);
         this.articleTypes = new ArticleTypesEndpoint(this.client);
+        this.dashboard = new DashboardEndpoint(this.client);
         this.brands = new BrandsEndpoint(this.client);
         this.categories = new CategoriesEndpoint(this.client);
         this.countries = new CountriesEndpoint(this.client);
@@ -68,6 +75,8 @@ class MaasApi {
         this.customers = new CustomersEndpoint(this.client);
         this.portalSessions = new PortalSessionsEndpoint(this.client);
         this.invoices = new InvoicesEndpoint(this.client);
+        this.diffusionLists = new DiffusionListsEndpoint(this.client);
+        this.homepage = new HomepageEndpoint(this.client);
     }
 }
 
@@ -77,6 +86,7 @@ export { AuthenticationError } from './api-client/authentication-error';
 
 export * from './endpoints/articles';
 export * from './endpoints/article-types';
+export * from './endpoints/dashboard';
 export * from './endpoints/brands';
 export * from './endpoints/categories';
 export * from './endpoints/countries';
@@ -94,6 +104,8 @@ export * from './endpoints/checkout-sessions';
 export * from './endpoints/customers';
 export * from './endpoints/portal-sessions';
 export * from './endpoints/invoices';
+export * from './endpoints/diffusion-lists';
+export * from './endpoints/homepage';
 
 export const maasApi = new MaasApi({
     baseUrl: `${import.meta.env['VITE_API_URL']}` || 'https://localhost:8080',

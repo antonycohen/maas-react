@@ -52,6 +52,9 @@ const defaultRoutes = {
     subscriptions: () => '/subscriptions',
     notifications: () => '/notifications',
     routingFiles: () => '/routing-files',
+    // Diffusion Lists
+    diffusionLists: () => '/diffusion-lists',
+    diffusionListDetail: () => '/diffusion-lists',
     // PMS
     pms: () => '/pms',
     pmsPlans: () => '/pms/plans',

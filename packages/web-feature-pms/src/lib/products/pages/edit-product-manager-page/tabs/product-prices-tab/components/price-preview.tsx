@@ -10,13 +10,20 @@ interface PricePreviewProps {
     isLoading: boolean;
 }
 
+const numberFormatCache = new Map<string, Intl.NumberFormat>();
+const getCurrencyFormatter = (locale: string, currency: string): Intl.NumberFormat => {
+    const key = `${locale}-${currency}`;
+    const cached = numberFormatCache.get(key);
+    if (cached) return cached;
+    const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency });
+    numberFormatCache.set(key, formatter);
+    return formatter;
+};
+
 const formatPrice = (price: Price): string => {
     const amount = price.unitAmountInCents ?? 0;
     const currency = price.currency?.toUpperCase() ?? 'USD';
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency,
-    }).format(amount / 100);
+    return getCurrencyFormatter('en-US', currency).format(amount / 100);
 };
 
 export const PricePreview = ({ price, isLoading }: PricePreviewProps) => {

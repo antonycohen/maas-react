@@ -88,8 +88,8 @@ export function AddFolderModal({
         try {
             onCreate(data);
             handleClose();
-        } catch (error) {
-            console.error('Zod parse error:', error);
+        } catch {
+            // handled by caller
         }
     };
 
@@ -193,9 +193,7 @@ export function AddFolderModal({
                         <form
                             onSubmit={(e) => {
                                 e.stopPropagation();
-                                createForm.handleSubmit(handleCreate, (errors) => {
-                                    console.log('Form errors:', errors);
-                                })(e);
+                                createForm.handleSubmit(handleCreate)(e);
                             }}
                         >
                             <DialogHeader>

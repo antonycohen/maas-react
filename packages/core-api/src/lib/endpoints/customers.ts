@@ -35,6 +35,7 @@ export interface UpdateMyCustomerData {
 }
 
 export interface GetCustomersFilter {
+    query?: string;
     email?: string;
     name?: string;
     refType?: string;
@@ -57,6 +58,7 @@ export class CustomersEndpoint {
         return this.client.getCollection<ReadCustomer>(BASE_PATH, fields, {
             offset,
             limit,
+            ...(filters?.query && { query: filters.query }),
             ...(filters?.email && { email: filters.email }),
             ...(filters?.name && { name: filters.name }),
             ...(filters?.refType && { refType: filters.refType }),

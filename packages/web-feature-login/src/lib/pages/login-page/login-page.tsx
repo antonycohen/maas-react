@@ -8,9 +8,13 @@ export function LoginPage() {
         if (hasRedirected.current) return;
         hasRedirected.current = true;
         const searchParams = new URLSearchParams(window.location.search);
-        getAuthorizationUrl().then((url) => {
-            document.location.href = `${url}&${searchParams.toString()}`;
-        });
+        getAuthorizationUrl()
+            .then((url) => {
+                document.location.href = `${url}&${searchParams.toString()}`;
+            })
+            .catch(() => {
+                document.location.href = '/login?error=auth_failed';
+            });
     }, []);
 
     return null;

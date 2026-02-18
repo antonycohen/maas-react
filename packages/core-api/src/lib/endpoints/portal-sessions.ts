@@ -12,6 +12,12 @@ export interface PortalSession {
     };
 }
 
+export interface PaymentMethodPortalSession {
+    portalSession: {
+        url: string;
+    };
+}
+
 export class PortalSessionsEndpoint {
     constructor(private client: ApiClient) {}
 
@@ -25,9 +31,9 @@ export class PortalSessionsEndpoint {
 
     /**
      * Create a portal session for payment method update
-     * POST /api/v1/pms/portal-sessions/payment-method-update
+     * POST /api/v1/pms/payment-methods/portal
      */
-    async createPaymentMethodUpdateSession(data: CreatePortalSession): Promise<PortalSession> {
-        return this.client.post<PortalSession>(`${BASE_PATH}/payment-method-update`, data);
+    async createPaymentMethodUpdateSession(data: CreatePortalSession): Promise<PaymentMethodPortalSession> {
+        return this.client.post<PaymentMethodPortalSession>('/api/v1/pms/payment-methods/portal', data);
     }
 }

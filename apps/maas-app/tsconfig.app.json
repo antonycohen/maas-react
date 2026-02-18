@@ -29,10 +29,16 @@
     "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
     "references": [
         {
+            "path": "../../packages/web-feature-diffusion-lists/tsconfig.lib.json"
+        },
+        {
             "path": "../../packages/web-feature-pms/tsconfig.lib.json"
         },
         {
             "path": "../../packages/web-feature-organizations/tsconfig.lib.json"
+        },
+        {
+            "path": "../../packages/web-feature-dashboard/tsconfig.lib.json"
         },
         {
             "path": "../../packages/web-feature-magazine/tsconfig.lib.json"

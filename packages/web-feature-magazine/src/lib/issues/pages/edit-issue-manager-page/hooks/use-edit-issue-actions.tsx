@@ -43,6 +43,9 @@ export const useEditIssueActions = (form: UseFormReturn<IssueFormValues>, isCrea
             navigate(`${workspaceBaseUrl}/issues`);
             toast.success(t('message.success.deleted', { entity: t('issues.title') }));
         },
+        onError: () => {
+            toast.error(t('message.error.deleted', { entity: t('issues.title') }));
+        },
     });
 
     function onSubmit(data: IssueFormValues) {

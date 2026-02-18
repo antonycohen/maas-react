@@ -34,6 +34,9 @@
             "path": "./packages/core-store-oauth"
         },
         {
+            "path": "./packages/web-feature-dashboard"
+        },
+        {
             "path": "./packages/web-feature-feeds"
         },
         {
@@ -80,6 +83,9 @@
         },
         {
             "path": "./packages/web-feature-pms"
+        },
+        {
+            "path": "./packages/web-feature-diffusion-lists"
         }
     ]
 }

@@ -31,6 +31,7 @@ export * from './lib/queries/organization-members/use-suspend-organization-membe
 export * from './lib/queries/organization-members/use-unsuspend-organization-member';
 
 // PMS Queries
+export * from './lib/queries/dashboard';
 export * from './lib/queries/plans';
 export * from './lib/queries/products';
 export * from './lib/queries/prices';
@@ -40,3 +41,9 @@ export * from './lib/queries/checkout-sessions';
 export * from './lib/queries/customers';
 export * from './lib/queries/portal-sessions';
 export * from './lib/queries/invoices';
+
+// Diffusion Lists
+export * from './lib/queries/diffusion-lists';
+
+// Homepage
+export * from './lib/queries/homepage';

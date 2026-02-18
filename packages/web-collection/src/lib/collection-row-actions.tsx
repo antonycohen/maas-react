@@ -15,6 +15,7 @@ import {
 import { cn, useDialogState } from '@maas/core-utils';
 import { useTranslation } from '@maas/core-translations';
 
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ComponentType } from 'react';
 
@@ -72,7 +73,7 @@ export function CollectionRowActions<T>({ row, actions }: Props<T>) {
         return (
             <DropdownMenuItem
                 className={cn('', action.className)}
-                key={index}
+                key={action.label}
                 onClick={() => setOpen(action.dialog.id)}
             >
                 <Icon size={16} />
@@ -84,7 +85,7 @@ export function CollectionRowActions<T>({ row, actions }: Props<T>) {
     const renderLinkActionMenuItem = (action: LinkAction<T>, index: number) => {
         const Icon = action.icon;
         return (
-            <DropdownMenuItem className={action.className} key={index} asChild>
+            <DropdownMenuItem className={action.className} key={action.label} asChild>
                 <Link to={action.linkTo(row.original)}>
                     <Icon size={16} />
                     {action.label}
@@ -96,7 +97,11 @@ export function CollectionRowActions<T>({ row, actions }: Props<T>) {
     const renderOnClickActionMenuItem = (action: OnClickAction<T>, index: number) => {
         const Icon = action.icon;
         return (
-            <DropdownMenuItem className={action.className} key={index} onClick={() => action.onClick(row.original)}>
+            <DropdownMenuItem
+                className={action.className}
+                key={action.label}
+                onClick={() => action.onClick(row.original)}
+            >
                 <Icon size={16} />
                 {action.label}
             </DropdownMenuItem>
@@ -126,10 +131,10 @@ export function CollectionRowActions<T>({ row, actions }: Props<T>) {
                     {actions.map((action, index) => {
                         const needsSeparator = index > 0 && action.group !== actions[index - 1].group;
                         return (
-                            <>
-                                {needsSeparator && <DropdownMenuSeparator key={`separator-${index}`} />}
+                            <React.Fragment key={action.label}>
+                                {needsSeparator && <DropdownMenuSeparator />}
                                 {renderActionMenuItem(action, index)}
-                            </>
+                            </React.Fragment>
                         );
                     })}
                 </DropdownMenuContent>

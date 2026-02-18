@@ -20,6 +20,20 @@ import { IconDeviceFloppy, IconLoader2, IconTrash } from '@tabler/icons-react';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
 
+const numberFormatCache = new Map<string, Intl.NumberFormat>();
+const getCurrencyFormatter = (locale: string, currency: string): Intl.NumberFormat => {
+    const key = `${locale}-${currency}`;
+    const cached = numberFormatCache.get(key);
+    if (cached) return cached;
+    const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency });
+    numberFormatCache.set(key, formatter);
+    return formatter;
+};
+
+const formatPrice = (amount: number, currency: string): string => {
+    return getCurrencyFormatter('en-US', currency.toUpperCase()).format(amount / 100);
+};
+
 export function EditPriceManagerPage() {
     const { priceId = '' } = useParams<{ priceId: string }>();
     const isCreateMode = priceId === 'new';
@@ -60,11 +74,14 @@ export function EditPriceManagerPage() {
                 lookupKey: price.lookupKey ?? '',
             });
         }
-    }, [price, form]);
+    }, [price, form.reset]);
 
     const updateMutation = useUpdatePrice({
         onSuccess: () => {
             toast.success(t('prices.updatedSuccess'));
+        },
+        onError: () => {
+            toast.error(t('prices.updateFailed'));
         },
     });
 
@@ -72,6 +89,9 @@ export function EditPriceManagerPage() {
         onSuccess: () => {
             navigate(`${workspaceUrl}/pms/prices`);
             toast.success(t('prices.deletedSuccess'));
+        },
+        onError: () => {
+            toast.error(t('prices.deleteFailed'));
         },
     });
 
@@ -95,13 +115,6 @@ export function EditPriceManagerPage() {
     if (!price) {
         return <div className="flex h-screen items-center justify-center">{t('prices.notFound')}</div>;
     }
-
-    const formatPrice = (amount: number, currency: string): string => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: currency.toUpperCase(),
-        }).format(amount / 100);
-    };
 
     return (
         <form onSubmit={form.handleSubmit(onSubmit)}>
