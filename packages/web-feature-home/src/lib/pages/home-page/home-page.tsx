@@ -9,7 +9,7 @@ import {
 } from '@maas/web-components';
 import { useTranslation } from '@maas/core-translations';
 import { useGetHomepage } from '@maas/core-api';
-import { HomepageArticle, HomepageCategoryEntry, ReadResizedImage } from '@maas/core-api-models';
+import { HomepageArticle, ReadResizedImage } from '@maas/core-api-models';
 
 const HOMEPAGE_SLUGS = ['maths-et-art', 'jeux-et-defi', 'histoire-et-cultures'];
 
@@ -27,30 +27,28 @@ function mapFeaturedToHighlight(article: HomepageArticle) {
     };
 }
 
-function mapToFeedArticle(entry: HomepageCategoryEntry): FeedArticleData {
-    const image =
-        getResizedImageUrl(entry.latestArticle?.cover?.resizedImages) || entry.latestArticle?.cover?.url || '';
+function mapArticleToFeedItem(article: HomepageArticle, categoryName: string): FeedArticleData {
+    const image = getResizedImageUrl(article.cover?.resizedImages) || article.cover?.url || '';
     return {
         type: 'article',
         image,
-        title: entry.latestArticle?.title || '',
-        category: entry.category.name,
+        title: article.title,
+        category: categoryName,
         author: '',
         date: '',
-        link: `/articles/${entry.latestArticle?.id}`,
+        link: `/articles/${article.id}`,
     };
 }
 
-function mapToCategoryArticle(entry: HomepageCategoryEntry): CategoryArticle {
-    const image =
-        getResizedImageUrl(entry.latestArticle?.cover?.resizedImages) || entry.latestArticle?.cover?.url || '';
+function mapArticleToCategoryArticle(article: HomepageArticle, categoryName: string): CategoryArticle {
+    const image = getResizedImageUrl(article.cover?.resizedImages) || article.cover?.url || '';
     return {
         image,
-        title: entry.latestArticle?.title || '',
-        category: entry.category.name,
+        title: article.title,
+        category: categoryName,
         author: '',
         date: '',
-        link: `/articles/${entry.latestArticle?.id}`,
+        link: `/articles/${article.id}`,
     };
 }
 
@@ -83,14 +81,31 @@ export const HomePage = () => {
         return articles;
     }, [homepage, issueCover]);
 
-    const feedItems = useMemo(() => {
-        if (!homepage?.categories) return [];
-        return homepage.categories.filter((entry) => entry.latestArticle).map(mapToFeedArticle);
+    const mathsArtFeedItems = useMemo(() => {
+        const entry = homepage?.categories?.[0];
+        if (!entry) return [];
+        return entry.articles
+            .filter((a) => a.cover)
+            .slice(0, 12)
+            .map((article) => mapArticleToFeedItem(article, entry.category.name));
     }, [homepage]);
 
-    const categoryArticles = useMemo(() => {
-        if (!homepage?.categories) return [];
-        return homepage.categories.filter((entry) => entry.latestArticle).map(mapToCategoryArticle);
+    const jeuxDefiFeedItems = useMemo(() => {
+        const entry = homepage?.categories?.[1];
+        if (!entry) return [];
+        return entry.articles
+            .filter((a) => a.cover)
+            .slice(0, 12)
+            .map((article) => mapArticleToCategoryArticle(article, entry.category.name));
+    }, [homepage]);
+
+    const histoireCulturesFeedItems = useMemo(() => {
+        const entry = homepage?.categories?.[2];
+        if (!entry) return [];
+        return entry.articles
+            .filter((a) => a.cover)
+            .slice(0, 12)
+            .map((article) => mapArticleToFeedItem(article, entry.category.name));
     }, [homepage]);
 
     return (
@@ -100,13 +115,13 @@ export const HomePage = () => {
                 <ArticlesHighlight articles={highlightArticles} />
             </div>
 
-            {/* Content Feed Section */}
+            {/* Maths et art - Content Feed Section */}
             <div className="container mx-auto flex flex-col gap-5 px-5 pt-5 pb-10 xl:px-0">
                 <h2 className="font-heading text-2xl leading-[40px] font-semibold tracking-[-0.85px] md:text-[34px]">
                     <span className="text-brand-primary">{t('home.latestMathNews')}</span>
                     <span className="text-black">{t('home.continuous')}</span>
                 </h2>
-                <ContentFeed items={feedItems} />
+                <ContentFeed items={mathsArtFeedItems} />
             </div>
 
             {/* Jeux & Défis Section - Dark Background */}
@@ -117,20 +132,20 @@ export const HomePage = () => {
                         <span className="text-brand-secondary">{t('home.gamesChallenges')}</span>
                     </h2>
                     <CategoryArticles
-                        articles={categoryArticles}
+                        articles={jeuxDefiFeedItems}
                         viewAllLabel={t('home.viewAllGamesChallenges')}
-                        viewAllLink="/categories/jeux-et-defis"
+                        viewAllLink="/categories/jeux-et-defi"
                     />
                 </div>
             </div>
 
-            {/* Content Feed Section */}
+            {/* Histoire & Cultures - Content Feed Section */}
             <div className="container mx-auto flex flex-col gap-5 px-5 pt-5 pb-10 xl:px-0">
                 <h2 className="font-heading text-2xl leading-[40px] font-semibold tracking-[-0.85px] md:text-[34px]">
                     <span className="text-brand-primary">{t('home.latestMathNews')}</span>
                     <span className="text-black">{t('home.continuous')}</span>
                 </h2>
-                <ContentFeed items={feedItems} />
+                <ContentFeed items={histoireCulturesFeedItems} />
             </div>
         </div>
     );

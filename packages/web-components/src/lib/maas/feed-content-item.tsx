@@ -77,6 +77,7 @@ export const FeedArticleItem = ({ item }: FeedArticleItemProps) => {
 
 export function mapIssueToFeedArticle(article: Article): FeedArticleData {
     const coverImages = article.cover?.resizedImages?.find((i) => i.width === 640);
+    console.log(article);
     return {
         type: 'article',
         image:

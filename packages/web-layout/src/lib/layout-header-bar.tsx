@@ -29,14 +29,12 @@ type LayoutHeaderBarProps = {
 
 const defaultMenuItemKeys: { key: string; href: string }[] = [
     { key: 'nav.public.featured', href: '/' },
-    { key: 'nav.public.easyMath', href: '/categories/maths-faciles' },
-    { key: 'nav.public.themes', href: '/categories/thematiques' },
-    { key: 'nav.public.historyCulture', href: '/categories/histoire-culture' },
-    { key: 'nav.public.gamesChallenges', href: '/categories/jeux-defis' },
+    { key: 'nav.public.easyMath', href: '/categories/math-faciles' },
+    { key: 'nav.public.historyCulture', href: '/categories/histoire-et-cultures' },
+    { key: 'nav.public.gamesChallenges', href: '/categories/jeux-et-defi' },
     { key: 'nav.public.magazines', href: '/magazines' },
     { key: 'nav.public.folders', href: '/dossiers' },
-    { key: 'nav.public.videos', href: '/categories/videos' },
-    { key: 'nav.public.readingNotes', href: '/categories/notes-lecture' },
+    { key: 'nav.public.readingNotes', href: '/categories/note-de-lecture' },
 ];
 
 const styles = {

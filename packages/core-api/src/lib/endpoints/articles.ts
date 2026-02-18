@@ -12,6 +12,7 @@ export interface GetArticlesFilter {
     visibility?: string;
     isPublished?: boolean;
     folderId?: string;
+    categorySlug?: string;
     id?: string[] | string;
 }
 
@@ -41,6 +42,7 @@ export class ArticlesEndpoint {
             ...(filters?.visibility && { visibility: filters.visibility }),
             ...(filters?.isPublished !== undefined && { is_published: filters.isPublished }),
             ...(filters?.folderId && { folder_id: filters.folderId }),
+            ...(filters?.categorySlug && { categorySlug: filters.categorySlug }),
         });
     }
 

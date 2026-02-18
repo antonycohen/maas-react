@@ -21,7 +21,7 @@ export type HomepageArticle = z.infer<typeof homepageArticleSchema>;
 
 export const homepageCategoryEntrySchema = z.object({
     category: categorySchema,
-    latestArticle: homepageArticleSchema.nullable(),
+    articles: z.array(homepageArticleSchema),
 });
 
 export type HomepageCategoryEntry = z.infer<typeof homepageCategoryEntrySchema>;

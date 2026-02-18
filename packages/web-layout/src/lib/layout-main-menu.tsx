@@ -20,14 +20,12 @@ type LayoutMainMenuProps = {
 
 const defaultMenuItemKeys: { key: string; href: string }[] = [
     { key: 'nav.public.featured', href: '/' },
-    { key: 'nav.public.easyMath', href: '/maths-faciles' },
-    { key: 'nav.public.themes', href: '/thematiques' },
-    { key: 'nav.public.historyCulture', href: '/histoire-culture' },
-    { key: 'nav.public.gamesChallenges', href: '/jeux-defis' },
+    { key: 'nav.public.easyMath', href: '/categories/math-faciles' },
+    { key: 'nav.public.historyCulture', href: '/categories/histoire-et-cultures' },
+    { key: 'nav.public.gamesChallenges', href: '/categories/jeux-et-defi' },
     { key: 'nav.public.magazines', href: '/magazines' },
     { key: 'nav.public.folders', href: '/dossiers' },
-    { key: 'nav.public.videos', href: '/videos' },
-    { key: 'nav.public.readingNotes', href: '/notes-lecture' },
+    { key: 'nav.public.readingNotes', href: '/categories/note-de-lecture' },
 ];
 
 interface NavItemProps {

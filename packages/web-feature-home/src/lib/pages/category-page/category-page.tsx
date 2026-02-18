@@ -1,8 +1,9 @@
 import { mapIssueToFeedArticle, FeedArticleItem, TitleAndDescriptionHero } from '@maas/web-components';
 import { Collection, CollectionRenderProps } from '@maas/web-collection';
-import { useGetArticles } from '@maas/core-api';
+import { useGetArticles, useGetCategories } from '@maas/core-api';
 import { Article } from '@maas/core-api-models';
 import { ColumnDef } from '@tanstack/react-table';
+import { useParams } from 'react-router-dom';
 import {
     renderMagazineCollectionLayout,
     renderMagazineCollectionPagination,
@@ -35,6 +36,20 @@ const columns: ColumnDef<Article>[] = [
 ];
 
 export const CategoryPage = () => {
+    const { slug } = useParams<{ slug: string }>();
+
+    const { data: categoriesData } = useGetCategories(
+        {
+            offset: 0,
+            limit: 1,
+            filters: { slug },
+            fields: { id: null, name: null, description: null },
+        },
+        { enabled: !!slug }
+    );
+
+    const category = categoriesData?.data?.[0];
+
     const renderContent = ({ items }: CollectionRenderProps<Article>) => {
         if (items.length === 0) {
             return (
@@ -56,36 +71,20 @@ export const CategoryPage = () => {
     return (
         <div className="gap-tg-xl flex flex-col px-5 xl:px-0">
             <div className="container mx-auto">
-                <TitleAndDescriptionHero
-                    title="Histoire & Culture"
-                    description="Découvrez comment les grands mathématiciens ont façonné notre monde, explorez les liens entre les maths et les autres domaines comme l'art, la musique ou même la philosophie, et revivez les moments clés qui ont marqué leur évolution."
-                />
+                <TitleAndDescriptionHero title={category?.name ?? ''} description={category?.description ?? ''} />
             </div>
             <div className="container mx-auto pb-10 md:pt-5">
                 <Collection
                     columns={columns}
                     useLocationAsState
-                    staticParams={{ filters: { isPublished: true } }}
-                    filtersConfiguration={{
-                        facetedFilters: [
-                            {
-                                columnId: 'categories',
-                                queryParamName: 'issueId',
-                                title: 'Category',
-                                options: [
-                                    {
-                                        label: 'Hello',
-                                        value: 'cool',
-                                    },
-                                ],
-                            },
-                        ],
-                    }}
+                    staticParams={{ filters: { isPublished: true, categorySlug: slug } }}
+                    filtersConfiguration={{}}
                     useQueryFn={useGetArticles}
                     queryFields={{
                         id: null,
                         title: null,
                         description: null,
+                        categories: null,
                         cover: {
                             fields: {
                                 resizedImages: null,
