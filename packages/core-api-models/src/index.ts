@@ -26,3 +26,4 @@ export * from './lib/subscription';
 export * from './lib/customer';
 export * from './lib/quota';
 export * from './lib/invoice';
+export * from './lib/diffusion-list';

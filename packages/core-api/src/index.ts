@@ -41,3 +41,6 @@ export * from './lib/queries/checkout-sessions';
 export * from './lib/queries/customers';
 export * from './lib/queries/portal-sessions';
 export * from './lib/queries/invoices';
+
+// Diffusion Lists
+export * from './lib/queries/diffusion-lists';

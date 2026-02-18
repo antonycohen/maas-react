@@ -21,6 +21,7 @@ import { CheckoutSessionsEndpoint } from './endpoints/checkout-sessions';
 import { CustomersEndpoint } from './endpoints/customers';
 import { PortalSessionsEndpoint } from './endpoints/portal-sessions';
 import { InvoicesEndpoint } from './endpoints/invoices';
+import { DiffusionListsEndpoint } from './endpoints/diffusion-lists';
 
 class MaasApi {
     private readonly client: ApiClient;
@@ -46,6 +47,7 @@ class MaasApi {
     public readonly customers: CustomersEndpoint;
     public readonly portalSessions: PortalSessionsEndpoint;
     public readonly invoices: InvoicesEndpoint;
+    public readonly diffusionLists: DiffusionListsEndpoint;
 
     constructor(config: ApiClientConfig) {
         this.client = new ApiClient(config);
@@ -71,6 +73,7 @@ class MaasApi {
         this.customers = new CustomersEndpoint(this.client);
         this.portalSessions = new PortalSessionsEndpoint(this.client);
         this.invoices = new InvoicesEndpoint(this.client);
+        this.diffusionLists = new DiffusionListsEndpoint(this.client);
     }
 }
 
@@ -98,6 +101,7 @@ export * from './endpoints/checkout-sessions';
 export * from './endpoints/customers';
 export * from './endpoints/portal-sessions';
 export * from './endpoints/invoices';
+export * from './endpoints/diffusion-lists';
 
 export const maasApi = new MaasApi({
     baseUrl: `${import.meta.env['VITE_API_URL']}` || 'https://localhost:8080',

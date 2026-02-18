@@ -21,6 +21,12 @@
         },
         {
             "path": "../core-api/tsconfig.lib.json"
+        },
+        {
+            "path": "../core-translations/tsconfig.lib.json"
+        },
+        {
+            "path": "../core-workspace/tsconfig.lib.json"
         }
     ]
 }

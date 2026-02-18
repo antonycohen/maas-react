@@ -136,6 +136,13 @@ export const useWorkspaceRoutes = (workspaceId: string | null) => {
             /** Routing files URL */
             routingFiles: () => `${baseUrl}/${adminUrlBuilders.routingFiles()}`,
 
+            // Diffusion Lists
+            /** Diffusion lists URL */
+            diffusionLists: () => `${baseUrl}/${adminUrlBuilders.diffusionLists()}`,
+            /** Diffusion list detail URL */
+            diffusionListDetail: (diffusionListId: string) =>
+                `${baseUrl}/${adminUrlBuilders.diffusionListDetail(diffusionListId)}`,
+
             // PMS (Pricing Management System)
             /** PMS home URL */
             pms: () => `${baseUrl}/${adminUrlBuilders.pms()}`,

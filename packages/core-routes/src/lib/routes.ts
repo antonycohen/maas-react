@@ -41,6 +41,7 @@ export const SEGMENTS = {
     SUBSCRIPTIONS: 'subscriptions',
     NOTIFICATIONS: 'notifications',
     ROUTING_FILES: 'routing-files',
+    DIFFUSION_LISTS: 'diffusion-lists',
 
     // Checkout
     PRICING: 'pricing',
@@ -169,6 +170,11 @@ export const ADMIN_ROUTES = {
     SUBSCRIPTIONS: SEGMENTS.SUBSCRIPTIONS,
     NOTIFICATIONS: SEGMENTS.NOTIFICATIONS,
     ROUTING_FILES: SEGMENTS.ROUTING_FILES,
+
+    // Diffusion Lists
+    DIFFUSION_LISTS: SEGMENTS.DIFFUSION_LISTS,
+    DIFFUSION_LISTS_WILDCARD: `${SEGMENTS.DIFFUSION_LISTS}/*`,
+    DIFFUSION_LIST_DETAIL: `${SEGMENTS.DIFFUSION_LISTS}/:diffusionListId`,
 
     // PMS (Pricing Management System)
     PMS: SEGMENTS.PMS,

@@ -41,7 +41,7 @@ export function CustomersListManagerPage() {
                     filtersConfiguration={{
                         textFilter: {
                             placeholder: t('customers.search'),
-                            queryParamName: 'term',
+                            queryParamName: 'query',
                         },
                     }}
                     useQueryFn={useGetCustomers}

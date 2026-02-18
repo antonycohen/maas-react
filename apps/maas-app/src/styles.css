@@ -19,6 +19,7 @@
 @source '../../../packages/web-feature-organizations';
 @source '../../../packages/web-feature-pricing';
 @source '../../../packages/web-feature-settings';
+@source '../../../packages/web-feature-diffusion-lists';
 @source '../../../packages/web-feature-users';
 @source '../../../packages/web-form';
 @source '../../../packages/web-layout';

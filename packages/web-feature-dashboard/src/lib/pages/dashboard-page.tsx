@@ -13,30 +13,23 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
 import { getDashboardStats } from '@maas/core-api';
+import { useTranslation } from '@maas/core-translations';
+import { useRoutes } from '@maas/core-workspace';
 
-const formatCurrency = (amountInCents: number | null, currency: string | null): string => {
+const formatCurrency = (amountInCents: number | null, currency: string | null, locale?: string): string => {
     if (amountInCents == null) return '-';
-    return new Intl.NumberFormat('fr-FR', {
+    return new Intl.NumberFormat(locale ?? navigator.language, {
         style: 'currency',
         currency: currency ?? 'EUR',
     }).format(amountInCents / 100);
 };
 
-const formatDate = (dateString: string | null): string => {
+const formatDate = (dateString: string | null, locale?: string): string => {
     if (!dateString) return '-';
-    return new Intl.DateTimeFormat('fr-FR', {
+    return new Intl.DateTimeFormat(locale ?? navigator.language, {
         dateStyle: 'medium',
         timeStyle: 'short',
     }).format(new Date(dateString));
-};
-
-const formatInterval = (interval: string | null, count: number | null): string => {
-    if (!interval) return '';
-    const c = count ?? 1;
-    if (interval === 'month' && c === 1) return 'Monthly';
-    if (interval === 'year' && c === 1) return 'Yearly';
-    if (c === 1) return `Every ${interval}`;
-    return `Every ${c} ${interval}s`;
 };
 
 function StatCard({
@@ -67,25 +60,30 @@ function StatCard({
 }
 
 function SubscriptionBreakdown({ stats }: { stats: DashboardStats }) {
+    const { t } = useTranslation();
     const subscriptions = stats.subscriptions;
     if (!subscriptions) return null;
 
     const items = [
-        { label: 'Active', value: subscriptions.active, color: 'bg-emerald-500' },
-        { label: 'Past Due', value: subscriptions.pastDue, color: 'bg-amber-500' },
-        { label: 'Canceled', value: subscriptions.canceled, color: 'bg-red-500' },
-        { label: 'Unpaid', value: subscriptions.unpaid, color: 'bg-red-400' },
-        { label: 'Incomplete', value: subscriptions.incomplete, color: 'bg-orange-400' },
-        { label: 'Incomplete Expired', value: subscriptions.incompleteExpired, color: 'bg-gray-400' },
-        { label: 'Paused', value: subscriptions.paused, color: 'bg-blue-400' },
-        { label: 'Cancel Pending', value: subscriptions.cancelPending, color: 'bg-yellow-500' },
+        { label: t('dashboard.statusActive'), value: subscriptions.active, color: 'bg-emerald-500' },
+        { label: t('dashboard.statusPastDue'), value: subscriptions.pastDue, color: 'bg-amber-500' },
+        { label: t('dashboard.statusCanceled'), value: subscriptions.canceled, color: 'bg-red-500' },
+        { label: t('dashboard.statusUnpaid'), value: subscriptions.unpaid, color: 'bg-red-400' },
+        { label: t('dashboard.statusIncomplete'), value: subscriptions.incomplete, color: 'bg-orange-400' },
+        {
+            label: t('dashboard.statusIncompleteExpired'),
+            value: subscriptions.incompleteExpired,
+            color: 'bg-gray-400',
+        },
+        { label: t('dashboard.statusPaused'), value: subscriptions.paused, color: 'bg-blue-400' },
+        { label: t('dashboard.statusCancelPending'), value: subscriptions.cancelPending, color: 'bg-yellow-500' },
     ];
 
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Subscription Breakdown</CardTitle>
-                <CardDescription>Distribution by status</CardDescription>
+                <CardTitle>{t('dashboard.subscriptionBreakdown')}</CardTitle>
+                <CardDescription>{t('dashboard.distributionByStatus')}</CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="space-y-3">
@@ -105,15 +103,26 @@ function SubscriptionBreakdown({ stats }: { stats: DashboardStats }) {
 }
 
 function RevenuePlanBreakdown({ plans, currency }: { plans: DashboardRevenuePlan[]; currency: string | null }) {
+    const { t } = useTranslation();
+
+    const formatInterval = (interval: string | null, count: number | null): string => {
+        if (!interval) return '';
+        const c = count ?? 1;
+        if (interval === 'month' && c === 1) return t('dashboard.intervalMonthly');
+        if (interval === 'year' && c === 1) return t('dashboard.intervalYearly');
+        if (c === 1) return t('dashboard.intervalEvery', { interval });
+        return t('dashboard.intervalEveryCount', { count: c, interval });
+    };
+
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Revenue by Plan</CardTitle>
-                <CardDescription>MRR breakdown per plan and billing interval</CardDescription>
+                <CardTitle>{t('dashboard.revenueByPlan')}</CardTitle>
+                <CardDescription>{t('dashboard.revenueByPlanDescription')}</CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
-                    {plans.map((plan, index) => (
+                    {plans.map((plan) => (
                         <div
                             key={`${plan.planId}-${plan.recurringInterval}-${plan.recurringIntervalCount}`}
                             className="flex items-center justify-between"
@@ -126,7 +135,7 @@ function RevenuePlanBreakdown({ plans, currency }: { plans: DashboardRevenuePlan
                                     </span>
                                 </div>
                                 <span className="text-muted-foreground text-xs">
-                                    {plan.subscriptionCount ?? 0} subscriptions
+                                    {t('dashboard.subscriptions', { count: plan.subscriptionCount ?? 0 })}
                                 </span>
                             </div>
                             <span className="text-sm font-semibold">{formatCurrency(plan.mrr, currency)}</span>
@@ -185,7 +194,9 @@ function DashboardSkeleton() {
 }
 
 export function DashboardPage() {
-    const { data: stats, isLoading } = useGetDashboardStats();
+    const { t } = useTranslation();
+    const routes = useRoutes();
+    const { data: stats, isLoading, isError } = useGetDashboardStats();
     const queryClient = useQueryClient();
     const [isReloading, setIsReloading] = useState(false);
 
@@ -194,6 +205,8 @@ export function DashboardPage() {
         try {
             const freshStats = await getDashboardStats({ forceReload: true });
             queryClient.setQueryData(['dashboard', undefined], freshStats);
+        } catch {
+            // Reload failed silently, user can retry
         } finally {
             setIsReloading(false);
         }
@@ -202,43 +215,60 @@ export function DashboardPage() {
     return (
         <div>
             <header>
-                <LayoutBreadcrumb items={[{ label: 'Home', to: '/' }, { label: 'Dashboard' }]} />
+                <LayoutBreadcrumb
+                    items={[{ label: t('common.home'), to: routes.root() }, { label: t('dashboard.title') }]}
+                />
             </header>
             <LayoutContent>
                 <LayoutHeader
-                    pageTitle="Dashboard"
-                    pageDescription="Overview of your subscription business"
+                    pageTitle={t('dashboard.title')}
+                    pageDescription={t('dashboard.description')}
                     actions={
                         <Button variant="outline" size="sm" onClick={handleReload} disabled={isReloading}>
                             <IconRefresh className={`mr-2 h-4 w-4 ${isReloading ? 'animate-spin' : ''}`} />
-                            {isReloading ? 'Reloading...' : 'Reload'}
+                            {isReloading ? t('common.reloading') : t('common.reload')}
                         </Button>
                     }
                 />
 
                 {isLoading && <DashboardSkeleton />}
 
+                {isError && (
+                    <div className="text-muted-foreground flex flex-col items-center justify-center py-12 text-center">
+                        <p className="text-sm">{t('common.errorLoading')}</p>
+                        <Button variant="outline" size="sm" className="mt-4" onClick={handleReload}>
+                            {t('common.reload')}
+                        </Button>
+                    </div>
+                )}
+
                 {stats && (
                     <div className="mt-6 space-y-6">
                         {/* Top-level stat cards */}
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                             <StatCard
-                                title="Total Subscriptions"
+                                title={t('dashboard.totalSubscriptions')}
                                 value={stats.subscriptions?.total ?? 0}
-                                description={`${stats.subscriptions?.active ?? 0} active`}
+                                description={t('dashboard.active', { count: stats.subscriptions?.active ?? 0 })}
                                 icon={IconCreditCard}
                             />
                             <StatCard
-                                title="Monthly Recurring Revenue"
+                                title={t('dashboard.mrr')}
                                 value={formatCurrency(stats.revenue?.mrr ?? null, stats.revenue?.currency ?? 'EUR')}
-                                description="MRR"
+                                description={t('dashboard.mrrLabel')}
                                 icon={IconCurrencyEuro}
                             />
-                            <StatCard title="Total Customers" value={stats.customers?.total ?? 0} icon={IconUsers} />
                             <StatCard
-                                title="Churn This Month"
+                                title={t('dashboard.totalCustomers')}
+                                value={stats.customers?.total ?? 0}
+                                icon={IconUsers}
+                            />
+                            <StatCard
+                                title={t('dashboard.churnThisMonth')}
                                 value={stats.churn?.canceledThisMonth ?? 0}
-                                description={`${stats.churn?.cancelPendingCount ?? 0} cancel pending`}
+                                description={t('dashboard.cancelPending', {
+                                    count: stats.churn?.cancelPendingCount ?? 0,
+                                })}
                                 icon={IconTrendingDown}
                             />
                         </div>
@@ -255,7 +285,7 @@ export function DashboardPage() {
                         {stats.lastUpdatedAt && (
                             <div className="text-muted-foreground flex items-center gap-1.5 text-xs">
                                 <IconClock className="h-3.5 w-3.5" />
-                                <span>Last updated: {formatDate(stats.lastUpdatedAt)}</span>
+                                <span>{t('dashboard.lastUpdated', { date: formatDate(stats.lastUpdatedAt) })}</span>
                             </div>
                         )}
                     </div>

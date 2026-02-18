@@ -83,6 +83,9 @@
         },
         {
             "path": "./packages/web-feature-pms"
+        },
+        {
+            "path": "./packages/web-feature-diffusion-lists"
         }
     ]
 }

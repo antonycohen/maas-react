@@ -25,6 +25,7 @@ import {
     SubscriptionsRoutes as PmsSubscriptionsRoutes,
     WizardRoutes,
 } from '@maas/web-feature-pms';
+import { DiffusionListsRoutes } from '@maas/web-feature-diffusion-lists';
 import { useMainNavigation } from '../hooks/use-main-navigation';
 import { useUserNavigation } from '../hooks/use-user-navigation';
 import { GalleryVerticalEnd } from 'lucide-react';
@@ -110,6 +111,7 @@ const WorkspaceRoutesContent = ({ connectedUser, organizationId, organizations }
                 <Route path={ADMIN_ROUTES.USERS_WILDCARD} element={<UsersRoutes />} />
                 <Route path={ADMIN_ROUTES.TEAMS_WILDCARD} element={<TeamsRoutes />} />
                 <Route path={ADMIN_ROUTES.SETTINGS_WILDCARD} element={<SettingsRoutes />} />
+                <Route path={ADMIN_ROUTES.DIFFUSION_LISTS_WILDCARD} element={<DiffusionListsRoutes />} />
                 {/* PMS Routes */}
                 <Route path={ADMIN_ROUTES.PMS_PLANS_WILDCARD} element={<PlansRoutes />} />
                 <Route path={ADMIN_ROUTES.PMS_PRODUCTS_WILDCARD} element={<ProductsRoutes />} />
