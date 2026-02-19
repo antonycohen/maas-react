@@ -31,6 +31,29 @@ export default defineConfig(() => ({
     commonjsOptions: {
       transformMixedEsModules: true,
     },
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('/react-dom/') || id.includes('/react/') || id.includes('/react-router')) {
+              return 'vendor-react';
+            }
+            if (id.includes('/@radix-ui/')) {
+              return 'vendor-radix';
+            }
+            if (id.includes('/lexical/') || id.includes('/@lexical/')) {
+              return 'vendor-lexical';
+            }
+            if (id.includes('/codemirror') || id.includes('/@codemirror/')) {
+              return 'vendor-codemirror';
+            }
+            if (id.includes('/recharts/')) {
+              return 'vendor-recharts';
+            }
+          }
+        },
+      },
+    },
   },
   test: {
     watch: false,

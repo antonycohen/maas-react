@@ -7,36 +7,36 @@ import { CMSBlockCommon, cmsBlockCommonSchema } from '../common';
 type CMSBlockChildren = any[];
 
 export interface CMSFrameBlock extends CMSBlockCommon {
-  type: 'frame';
-  data: {
-    title?: string;
-    children: CMSBlockChildren;
-  };
+    type: 'frame';
+    data: {
+        title?: string | null;
+        children: CMSBlockChildren;
+    };
 }
 
 // Schema will be created with z.lazy() in unions.ts to handle circular reference
 // This is a placeholder for the data schema structure
 export const cmsFrameBlockDataSchema = z.object({
-  title: z.string().optional(),
-  // children schema will be added via z.lazy() in unions.ts
+    title: z.string().nullish(),
+    // children schema will be added via z.lazy() in unions.ts
 });
 
 // Factory function to create the full schema with children
 export const createCmsFrameBlockSchema = (childrenSchema: z.ZodTypeAny) =>
-  z.object({
-    ...cmsBlockCommonSchema,
-    type: z.literal('frame'),
-    data: z.object({
-      title: z.string().optional(),
-      children: z.array(childrenSchema),
-    }),
-  });
+    z.object({
+        ...cmsBlockCommonSchema,
+        type: z.literal('frame'),
+        data: z.object({
+            title: z.string().nullish(),
+            children: z.array(childrenSchema),
+        }),
+    });
 
 export const frameBlockShape: CMSFrameBlock = {
-  id: 'to_regenerate',
-  type: 'frame',
-  data: {
-    title: '',
-    children: [],
-  },
+    id: 'to_regenerate',
+    type: 'frame',
+    data: {
+        title: '',
+        children: [],
+    },
 };

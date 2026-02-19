@@ -1,29 +1,30 @@
 {
-  "compilerOptions": {
-    "rootDir": ".",
-    "composite": true,
-    "declarationMap": true,
-    "emitDeclarationOnly": true,
-    "importHelpers": true,
-    "isolatedModules": true,
-    "lib": ["es2022"],
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "es2022",
-    "customConditions": ["development"],
-    "baseUrl": ".",
-    "paths": {
-      "@maas/*": ["packages/*/src/index.ts"],
-      "@maas/tailwind-sync-plugin:update-tailwind-globs": [
-        "tools/tailwind-sync-plugin/src/index.ts"
-      ]
+    "compilerOptions": {
+        "rootDir": ".",
+        "composite": true,
+        "declarationMap": true,
+        "emitDeclarationOnly": true,
+        "importHelpers": true,
+        "isolatedModules": true,
+        "lib": ["es2022"],
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "noEmitOnError": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "target": "es2022",
+        "customConditions": ["development"],
+        "baseUrl": ".",
+        "paths": {
+            "@maas/web-components/chart": ["packages/web-components/src/lib/ui/chart.tsx"],
+            "@maas/web-components/rich-text-editor": ["packages/web-components/src/lib/maas/rich-text-editor.tsx"],
+            "@maas/web-components/lexical": ["packages/web-components/src/lib/maas/lexical/index.ts"],
+            "@maas/*": ["packages/*/src/index.ts"],
+            "@maas/tailwind-sync-plugin:update-tailwind-globs": ["tools/tailwind-sync-plugin/src/index.ts"]
+        }
     }
-  }
 }
