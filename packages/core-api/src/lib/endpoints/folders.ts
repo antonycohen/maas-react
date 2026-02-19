@@ -22,13 +22,14 @@ export class FoldersEndpoint {
     async getFolders(
         params: GetCollectionQueryParams<Folder> & { filters?: GetFoldersFilter }
     ): Promise<ApiCollectionResponse<Folder>> {
-        const { fields, offset, limit, filters } = params;
+        const { fields, offset, limit, filters, sort } = params;
         return this.client.getCollection<Folder>(BASE_PATH, fields, {
             offset,
             limit,
             ...(filters?.issueId && { issue_id: filters.issueId }),
             ...(filters?.name && { name: filters.name }),
             ...(filters?.isPublished !== undefined && { is_published: filters.isPublished }),
+            ...(sort && { sortKey: sort.field, sortDirection: sort.direction }),
         });
     }
 

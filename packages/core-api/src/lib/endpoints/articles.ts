@@ -30,7 +30,7 @@ export class ArticlesEndpoint {
             ...params.filters,
             ...(params.staticParams as GetCollectionQueryParams<Article>['filters']),
         };
-        const { fields, offset, limit, filters } = params;
+        const { fields, offset, limit, filters, sort } = params;
         return this.client.getCollection<Article>(BASE_PATH, fields, {
             offset,
             limit,
@@ -43,6 +43,7 @@ export class ArticlesEndpoint {
             ...(filters?.isPublished !== undefined && { is_published: filters.isPublished }),
             ...(filters?.folderId && { folder_id: filters.folderId }),
             ...(filters?.categorySlug && { categorySlug: filters.categorySlug }),
+            ...(sort && { sortKey: sort.field, sortDirection: sort.direction }),
         });
     }
 

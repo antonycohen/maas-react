@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
+import { format } from 'date-fns';
 
 export function useIssuesListColumns(): ColumnDef<Issue>[] {
     const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
@@ -115,6 +116,16 @@ export function useIssuesListColumns(): ColumnDef<Issue>[] {
             cell: ({ row }) => <div className="text-center">{row.getValue('articleCount') ?? 0}</div>,
             enableSorting: false,
             meta: { className: 'w-20' },
+        },
+        {
+            accessorKey: 'publishedAt',
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.publishedAt')} />,
+            cell: ({ row }) => (
+                <div className="w-fit text-nowrap">
+                    {row.getValue('publishedAt') ? format(row.getValue('publishedAt'), 'dd MMM, yyyy') : '-'}
+                </div>
+            ),
+            enableSorting: true,
         },
         {
             id: 'actions',

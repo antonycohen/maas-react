@@ -64,6 +64,7 @@ export function IssuesListManagerPage() {
                         issueNumber: null,
                         cover: null,
                         isPublished: null,
+                        publishedAt: null,
                         folderCount: null,
                         articleCount: null,
                         brand: {

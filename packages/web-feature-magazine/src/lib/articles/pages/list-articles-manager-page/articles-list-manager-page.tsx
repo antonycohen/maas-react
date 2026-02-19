@@ -63,6 +63,8 @@ export function ArticlesListManagerPage() {
                         description: null,
                         type: null,
                         isPublished: null,
+                        publishedAt: null,
+                        createdAt: null,
                         featuredImage: null,
                         cover: null,
                     }}
