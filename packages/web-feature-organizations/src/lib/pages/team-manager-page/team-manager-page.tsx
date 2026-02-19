@@ -19,11 +19,13 @@ export function TeamManagerPage() {
     const [suspendMember, setSuspendMember] = useState<OrganizationMember | null>(null);
     const [unsuspendMember, setUnsuspendMember] = useState<OrganizationMember | null>(null);
     const [removeMember, setRemoveMember] = useState<OrganizationMember | null>(null);
-
-    const { data: organization } = useGetOrganizationById({
-        id: organizationId ?? '',
-        fields: { id: null, name: null },
-    });
+    const { data: organization } = useGetOrganizationById(
+        {
+            id: organizationId ?? '',
+            fields: { id: null, name: null },
+        },
+        { enabled: !!organizationId }
+    );
 
     const columns = useTeamMembersColumns({
         organizationId: organizationId ?? '',
@@ -82,7 +84,7 @@ export function TeamManagerPage() {
                                 ],
                             }}
                             useQueryFn={useGetOrganizationMembers}
-                            staticParams={{ organizationId }}
+                            staticParams={{ filters: { organizationId } }}
                             queryFields={{
                                 id: null,
                                 firstName: null,
