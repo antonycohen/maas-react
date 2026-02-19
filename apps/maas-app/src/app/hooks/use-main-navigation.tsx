@@ -123,16 +123,16 @@ export const useMainNavigation = (): SidebarNavigationProps[] => {
                     },
                 ],
             },
-            {
-                sectionName: t('nav.engagement'),
-                items: [
-                    {
-                        title: t('nav.notifications'),
-                        url: routes.notifications(),
-                        icon: Bell,
-                    },
-                ],
-            },
+            // {
+            //     sectionName: t('nav.engagement'),
+            //     items: [
+            //         {
+            //             title: t('nav.notifications'),
+            //             url: routes.notifications(),
+            //             icon: Bell,
+            //         },
+            //     ],
+            // },
             {
                 sectionName: t('nav.administration'),
                 items: [
@@ -141,20 +141,20 @@ export const useMainNavigation = (): SidebarNavigationProps[] => {
                         url: routes.teams(),
                         icon: ShieldCheck,
                     },
-                    {
-                        title: t('nav.appSettings'),
-                        url: routes.settings(),
-                        icon: SlidersHorizontal,
-                    },
+                    // {
+                    //     title: t('nav.appSettings'),
+                    //     url: routes.settings(),
+                    //     icon: SlidersHorizontal,
+                    // },
+                    // {
+                    //     title: t('nav.routingFiles'),
+                    //     url: routes.routingFiles(),
+                    //     icon: Route,
+                    // },
                     {
                         title: t('nav.routingFiles'),
-                        url: routes.routingFiles(),
-                        icon: Route,
-                    },
-                    {
-                        title: t('nav.diffusionLists'),
                         url: routes.diffusionLists(),
-                        icon: ListChecks,
+                        icon: Route,
                     },
                 ],
             },

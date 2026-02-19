@@ -1,51 +1,82 @@
 import { useParams } from 'react-router-dom';
 
-import { ContentFeed, mapIssueToFeedArticle, TitleAndDescriptionHero, useResizedImage } from '@maas/web-components';
+import {
+    ContentFeed,
+    mapIssueToFeedArticle,
+    NotFoundPage,
+    Skeleton,
+    TitleAndDescriptionHero,
+    useResizedImage,
+} from '@maas/web-components';
 import { cn } from '@maas/core-utils';
-import { useGetFolderById } from '@maas/core-api';
+import { ApiError, useGetFolderById } from '@maas/core-api';
 import { useMemo } from 'react';
+
+const FolderDetailsSkeleton = () => (
+    <div className="gap-tg-xl flex flex-col">
+        <Skeleton className="min-h-[530px] w-full" />
+        <div className="container mx-auto flex flex-col gap-5 px-5 pt-5 pb-10">
+            <Skeleton className="h-10 w-72" />
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="flex flex-col gap-3">
+                        <Skeleton className="aspect-[4/3] w-full rounded" />
+                        <Skeleton className="h-5 w-3/4" />
+                        <Skeleton className="h-4 w-1/2" />
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
+);
 
 export const FolderDetailsPages = () => {
     const { id } = useParams();
-    const { data: currentFolders } = useGetFolderById({
-        id: id as string,
-        fields: {
-            id: null,
-            name: null,
-            description: null,
-            cover: {
-                fields: {
-                    url: null,
-                    resizedImages: null,
-                },
-            },
-            articles: {
-                fields: {
-                    title: null,
-                    id: null,
-                    publishedAt: null,
-                    cover: {
-                        fields: {
-                            url: null,
-                            resizedImages: null,
-                        },
+    const { data: currentFolders, error } = useGetFolderById(
+        {
+            id: id as string,
+            fields: {
+                id: null,
+                name: null,
+                description: null,
+                cover: {
+                    fields: {
+                        url: null,
+                        resizedImages: null,
                     },
-                    author: {
-                        fields: {
-                            firstName: null,
-                            lastName: null,
+                },
+                articles: {
+                    fields: {
+                        title: null,
+                        id: null,
+                        publishedAt: null,
+                        cover: {
+                            fields: {
+                                url: null,
+                                resizedImages: null,
+                            },
+                        },
+                        author: {
+                            fields: {
+                                firstName: null,
+                                lastName: null,
+                            },
                         },
                     },
                 },
             },
         },
-    });
+        {
+            retry: (_, error) => !(error instanceof ApiError && error.code === 1001),
+        }
+    );
     const articles = useMemo(() => {
         return currentFolders?.articles?.map((a) => mapIssueToFeedArticle(a));
     }, [currentFolders]);
     const { resizedImage: bgImageUrl } = useResizedImage({ images: currentFolders?.cover?.resizedImages, width: 1280 });
 
-    if (!currentFolders) return null; //TODO: Add loader or something else
+    if (error instanceof ApiError && error.code === 1001) return <NotFoundPage />;
+    if (!currentFolders) return <FolderDetailsSkeleton />;
 
     return (
         <div className="gap-tg-xl flex flex-col">

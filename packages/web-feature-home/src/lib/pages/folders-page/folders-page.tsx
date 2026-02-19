@@ -1,4 +1,4 @@
-import { FolderCard, TitleAndDescriptionHero } from '@maas/web-components';
+import { FolderCard, FolderCardSkeleton, TitleAndDescriptionHero } from '@maas/web-components';
 import { useGetFolders } from '@maas/core-api';
 import { useTranslation } from '@maas/core-translations';
 
@@ -45,9 +45,11 @@ export const FoldersPage = () => {
                 <TitleAndDescriptionHero title={t('home.foldersTitle')} description={t('home.foldersDescription')} />
             </div>
             <div className="gap-tg-lg py-tg-xl container mx-auto flex flex-col">
-                {response?.data?.map((folder) => (
-                    <FolderCard key={`folder-${folder.id}`} folder={folder} link={`/dossiers/${folder.id}`} />
-                ))}
+                {!response
+                    ? Array.from({ length: 3 }).map((_, i) => <FolderCardSkeleton key={i} />)
+                    : response.data?.map((folder) => (
+                          <FolderCard key={`folder-${folder.id}`} folder={folder} link={`/dossiers/${folder.id}`} />
+                      ))}
             </div>
         </div>
     );

@@ -1,4 +1,4 @@
-import { mapIssueToFeedArticle, FeedArticleItem, TitleAndDescriptionHero } from '@maas/web-components';
+import { mapIssueToFeedArticle, FeedArticleItem, Skeleton, TitleAndDescriptionHero } from '@maas/web-components';
 import { Collection, CollectionRenderProps } from '@maas/web-collection';
 import { useGetArticles, useGetCategories } from '@maas/core-api';
 import { Article } from '@maas/core-api-models';
@@ -71,7 +71,14 @@ export const CategoryPage = () => {
     return (
         <div className="gap-tg-xl flex flex-col px-5 xl:px-0">
             <div className="container mx-auto">
-                <TitleAndDescriptionHero title={category?.name ?? ''} description={category?.description ?? ''} />
+                {!category ? (
+                    <div className="flex flex-col items-center gap-3 py-10">
+                        <Skeleton className="h-10 w-64" />
+                        <Skeleton className="h-5 w-96" />
+                    </div>
+                ) : (
+                    <TitleAndDescriptionHero title={category.name ?? ''} description={category.description ?? ''} />
+                )}
             </div>
             <div className="container mx-auto pb-10 md:pt-5">
                 <Collection
