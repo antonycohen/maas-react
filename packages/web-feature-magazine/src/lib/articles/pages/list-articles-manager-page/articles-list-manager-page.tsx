@@ -6,7 +6,7 @@ import { Button } from '@maas/web-components';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons-react';
 import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
-import { usePublishedStatusOptions } from '../../../hook/use-filter-options';
+import { useArticleTypeOptions, usePublishedStatusOptions } from '../../../hook/use-filter-options';
 import { useTranslation } from '@maas/core-translations';
 
 export function ArticlesListManagerPage() {
@@ -14,6 +14,7 @@ export function ArticlesListManagerPage() {
     const columns = useArticlesListColumns();
     const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
     const publishedStatusOptions = usePublishedStatusOptions();
+    const articleTypeOptions = useArticleTypeOptions();
 
     return (
         <div>
@@ -46,6 +47,12 @@ export function ArticlesListManagerPage() {
                                 queryParamName: 'isPublished',
                                 title: t('articles.publishedStatus'),
                                 options: publishedStatusOptions,
+                            },
+                            {
+                                columnId: 'type',
+                                queryParamName: 'typeId',
+                                title: t('articles.type'),
+                                options: articleTypeOptions,
                             },
                         ],
                     }}

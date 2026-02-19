@@ -200,6 +200,7 @@
     "articles.new": "New Article",
     "articles.search": "Search articles...",
     "articles.publishedStatus": "Published Status",
+    "articles.type": "Article Type",
     "articles.backToArticles": "Back to Articles",
     "articles.notFound": "Not Found",
     "articles.articleNotFound": "Article not found",
