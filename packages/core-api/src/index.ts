@@ -47,3 +47,6 @@ export * from './lib/queries/diffusion-lists';
 
 // Homepage
 export * from './lib/queries/homepage';
+
+// Search
+export * from './lib/queries/search';

@@ -28,3 +28,4 @@ export * from './lib/quota';
 export * from './lib/invoice';
 export * from './lib/diffusion-list';
 export * from './lib/homepage';
+export * from './lib/search';

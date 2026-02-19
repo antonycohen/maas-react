@@ -56,6 +56,7 @@ export * from './lib/maas/content-feed';
 export * from './lib/maas/date-picker';
 export * from './lib/maas/documentation-search-input';
 export * from './lib/maas/feed-content-item';
+export * from './lib/maas/global-search';
 export * from './lib/maas/pagination';
 export * from './lib/maas/folder-card';
 export * from './lib/maas/image-picker';

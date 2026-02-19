@@ -87,9 +87,9 @@ function DynamicJsonField({ field }: DynamicFieldProps) {
     const handleChange = useCallback(
         (val: string) => {
             try {
-                setValue(fieldName, JSON.parse(val), { shouldDirty: true });
+                setValue(fieldName, JSON.parse(val?.trim()), { shouldDirty: true });
             } catch {
-                setValue(fieldName, val, { shouldDirty: true });
+                setValue(fieldName, val?.trim(), { shouldDirty: true });
             }
         },
         [fieldName, setValue]
