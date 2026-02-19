@@ -20,12 +20,7 @@ const columns: ColumnDef<Issue>[] = [
         accessorKey: 'title',
     },
     {
-        id: 'term',
-        accessorKey: 'term',
-    },
-    {
-        id: 'publishedAt',
-        accessorKey: 'publishedAt',
+        id: 'brandId',
     },
 ];
 
@@ -90,13 +85,13 @@ export const MagazinesPage = () => {
                 filtersConfiguration={{
                     facetedFilters: [
                         {
-                            columnId: 'term' as any,
-                            queryParamName: 'term',
+                            columnId: 'brandId' as any,
+                            queryParamName: 'brandId',
                             title: t('home.category'),
                             options: [
                                 { label: t('home.all'), value: 'all' },
-                                { label: t('home.tangentNumbers'), value: 'tangente' },
-                                { label: t('home.specialIssues'), value: 'hors-series' },
+                                { label: t('home.tangentNumbers'), value: '019c76d0-d0fc-7d73-9c71-258c1bbf1061' },
+                                { label: t('home.specialIssues'), value: '019c76d1-0321-745e-bff9-2dde3650876a' },
                             ],
                         },
                     ],
@@ -107,6 +102,7 @@ export const MagazinesPage = () => {
                     description: null,
                     publishedAt: null,
                     issueNumber: null,
+                    brand: null,
                     cover: {
                         fields: {
                             resizedImages: null,

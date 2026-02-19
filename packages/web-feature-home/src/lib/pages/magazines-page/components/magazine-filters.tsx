@@ -12,7 +12,7 @@ export function MagazineFilters<T>({ table }: MagazineFiltersProps<T>) {
     if (!table) {
         return null;
     }
-    const categoryColumn = table.getColumn('term');
+    const categoryColumn = table.getColumn('brandId');
     const activeCategory = (categoryColumn?.getFilterValue() as string) || 'all';
 
     const onCategoryChange = (val: string) => {
@@ -25,8 +25,8 @@ export function MagazineFilters<T>({ table }: MagazineFiltersProps<T>) {
 
     const categories = [
         { id: 'all', label: t('home.all') },
-        { id: 'tangente', label: t('home.tangentNumbers') },
-        { id: 'hors-series', label: t('home.specialIssues') },
+        { id: '019c76d0-d0fc-7d73-9c71-258c1bbf1061', label: t('home.tangentNumbers') },
+        { id: '019c76d1-0321-745e-bff9-2dde3650876a', label: t('home.specialIssues') },
     ];
 
     const setSortOrder = (order: string) => {

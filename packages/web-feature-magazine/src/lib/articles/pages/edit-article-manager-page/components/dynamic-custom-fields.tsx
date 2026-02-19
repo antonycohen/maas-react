@@ -1,13 +1,27 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useGetArticleTypeById, useGetEnumById } from '@maas/core-api';
 import { useTranslation } from '@maas/core-translations';
 import { Article, ArticleType, ArticleTypeField, ReadArticleTypeRef } from '@maas/core-api-models';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, FieldGroup, Skeleton } from '@maas/web-components';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+    Field,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+    Skeleton,
+} from '@maas/web-components';
 import { camelize } from '@nx/devkit/src/utils/string-utils';
 import { createConnectedInputHelpers } from '@maas/web-form';
 import { editorPlugins } from '../edit-article-manager-page';
 import { camelCase } from 'change-case';
+import CodeMirror from '@uiw/react-codemirror';
+import { json, jsonParseLinter } from '@codemirror/lang-json';
+import { linter } from '@codemirror/lint';
 
 type DynamicFieldProps = {
     field: ArticleTypeField;
@@ -21,6 +35,7 @@ const {
     ControlledCMSInput,
     ControlledImageInput,
     ControlledVideoInput,
+    ControlledCheckbox,
 } = createConnectedInputHelpers<any>();
 
 function DynamicEnumField({ field }: DynamicFieldProps) {
@@ -53,6 +68,46 @@ function DynamicEnumField({ field }: DynamicFieldProps) {
             options={options}
             placeholder={`Select ${field.label.toLowerCase()}...`}
         />
+    );
+}
+
+const jsonExtensions = [json(), linter(jsonParseLinter())];
+
+function DynamicJsonField({ field }: DynamicFieldProps) {
+    const fieldName = `customFields.${camelize(field.key)}`;
+    const { control, setValue, formState } = useFormContext();
+
+    const value = useWatch({ control, name: fieldName });
+    const fieldError = formState.errors?.customFields?.[
+        camelize(field.key) as keyof typeof formState.errors.customFields
+    ] as { message?: string } | undefined;
+
+    const displayValue = typeof value === 'string' ? value : (JSON.stringify(value, null, 2) ?? '');
+
+    const handleChange = useCallback(
+        (val: string) => {
+            try {
+                setValue(fieldName, JSON.parse(val), { shouldDirty: true });
+            } catch {
+                setValue(fieldName, val, { shouldDirty: true });
+            }
+        },
+        [fieldName, setValue]
+    );
+
+    return (
+        <Field data-invalid={!!fieldError}>
+            <FieldLabel>{field.label}</FieldLabel>
+            <CodeMirror
+                value={displayValue}
+                extensions={jsonExtensions}
+                onChange={handleChange}
+                height="200px"
+                basicSetup={{ lineNumbers: true, foldGutter: true }}
+                className="overflow-hidden rounded-md border"
+            />
+            {fieldError && <FieldError errors={[fieldError]} />}
+        </Field>
     );
 }
 
@@ -91,6 +146,12 @@ function DynamicField({ field }: DynamicFieldProps) {
         case 'video':
             return <ControlledVideoInput name={fieldName} label={field.label} />;
 
+        case 'boolean':
+            return <ControlledCheckbox name={fieldName} label={field.label} />;
+
+        case 'json':
+            return <DynamicJsonField field={field} />;
+
         default:
             return null;
     }
@@ -108,6 +169,12 @@ function initCustomFields(articleType: ArticleType): Record<string, unknown> {
                     break;
                 case 'number':
                     fields[key] = field.isList ? [] : null;
+                    break;
+                case 'boolean':
+                    fields[key] = false;
+                    break;
+                case 'json':
+                    fields[key] = null;
                     break;
                 case 'enum':
                 case 'category':
