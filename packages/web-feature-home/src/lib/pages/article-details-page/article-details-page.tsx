@@ -47,6 +47,7 @@ const ArticleDetailsPage = () => {
                 title: null,
                 featuredImage: null,
                 categories: null,
+                visibility: null,
                 author: {
                     fields: {
                         id: null,
