@@ -26,6 +26,9 @@
     "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
     "references": [
         {
+            "path": "../core-api/tsconfig.lib.json"
+        },
+        {
             "path": "../core-routes/tsconfig.lib.json"
         }
     ]

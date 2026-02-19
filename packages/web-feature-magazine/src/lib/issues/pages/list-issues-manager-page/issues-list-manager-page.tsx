@@ -6,6 +6,7 @@ import { Button } from '@maas/web-components';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons-react';
 import { useBrandOptions } from '../../../brands/hooks/use-brand-options';
+import { usePublishedStatusOptions } from '../../../hook/use-filter-options';
 import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 
@@ -15,6 +16,7 @@ export function IssuesListManagerPage() {
     const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
 
     const brandOptions = useBrandOptions();
+    const publishedStatusOptions = usePublishedStatusOptions();
     return (
         <div>
             <header>
@@ -38,14 +40,20 @@ export function IssuesListManagerPage() {
                     filtersConfiguration={{
                         textFilter: {
                             placeholder: t('issues.search'),
-                            queryParamName: 'title',
+                            queryParamName: 'term',
                         },
                         facetedFilters: [
                             {
                                 columnId: 'brand',
-                                queryParamName: 'brand',
+                                queryParamName: 'brandId',
                                 title: t('field.brand'),
                                 options: brandOptions,
+                            },
+                            {
+                                columnId: 'isPublished',
+                                queryParamName: 'isPublished',
+                                title: t('articles.publishedStatus'),
+                                options: publishedStatusOptions,
                             },
                         ],
                     }}

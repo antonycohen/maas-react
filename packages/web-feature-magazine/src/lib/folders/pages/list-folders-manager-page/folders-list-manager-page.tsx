@@ -6,6 +6,7 @@ import { Button } from '@maas/web-components';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons-react';
 import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { usePublishedStatusOptions } from '../../../hook/use-filter-options';
 import { useTranslation } from '@maas/core-translations';
 
 export function FoldersListManagerPage() {
@@ -13,6 +14,7 @@ export function FoldersListManagerPage() {
     const columns = useFoldersListColumns();
 
     const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const publishedStatusOptions = usePublishedStatusOptions();
 
     return (
         <div>
@@ -37,8 +39,16 @@ export function FoldersListManagerPage() {
                     filtersConfiguration={{
                         textFilter: {
                             placeholder: t('folders.search'),
-                            queryParamName: 'term',
+                            queryParamName: 'name',
                         },
+                        facetedFilters: [
+                            {
+                                columnId: 'isPublished',
+                                queryParamName: 'isPublished',
+                                title: t('articles.publishedStatus'),
+                                options: publishedStatusOptions,
+                            },
+                        ],
                     }}
                     useQueryFn={useGetFolders}
                     queryFields={{

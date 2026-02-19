@@ -51,6 +51,10 @@ class MaasApi {
     public readonly diffusionLists: DiffusionListsEndpoint;
     public readonly homepage: HomepageEndpoint;
 
+    setOrganizationId(organizationId: string | null) {
+        this.client.setOrganizationId(organizationId);
+    }
+
     constructor(config: ApiClientConfig) {
         this.client = new ApiClient(config);
         this.articles = new ArticlesEndpoint(this.client);

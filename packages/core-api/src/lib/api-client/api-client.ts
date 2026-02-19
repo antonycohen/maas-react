@@ -15,6 +15,7 @@ class ApiClient {
     private readonly config: ApiClientConfig;
     private readonly tokenManager: TokenManager | null = null;
     private readonly axiosInstance: AxiosInstance;
+    private organizationId: string | null = null;
 
     constructor(config: ApiClientConfig) {
         this.config = config;
@@ -39,11 +40,15 @@ class ApiClient {
             },
         });
 
-        // Request interceptor to add token
+        // Request interceptor to add token and organization header
         this.axiosInstance.interceptors.request.use(async (config) => {
             try {
                 const token = await this.getValidToken();
                 config.headers.Authorization = `Bearer ${token}`;
+
+                if (this.organizationId) {
+                    config.headers['X-Organization-Id'] = this.organizationId;
+                }
             } catch (error) {
                 // Allow unauthenticated requests for public routes (no token available)
                 if (!(error instanceof AuthenticationError)) {
@@ -79,6 +84,10 @@ class ApiClient {
             throw new Error('Token manager not configured');
         }
         return this.tokenManager.getValidToken();
+    }
+
+    setOrganizationId(organizationId: string | null) {
+        this.organizationId = organizationId;
     }
 
     async request<T>(endpoint: string, config: AxiosRequestConfig = {}): Promise<AxiosResponse<T>> {

@@ -1,5 +1,6 @@
-import React, { PropsWithChildren, useMemo } from 'react';
+import React, { PropsWithChildren, useEffect, useMemo } from 'react';
 import { buildWorkspaceBaseUrl, useWorkspaceRoutes, type WorkspaceRoutes } from '@maas/core-routes';
+import { maasApi } from '@maas/core-api';
 
 type WorkspaceContextType = {
     selectedWorkspaceId: string | null;
@@ -87,6 +88,11 @@ type WorkspaceProviderProps = PropsWithChildren<{
 
 export const WorkspaceProvider = (props: WorkspaceProviderProps) => {
     const routes = useWorkspaceRoutes(props.selectedWorkspaceId);
+
+    useEffect(() => {
+        maasApi.setOrganizationId(props.selectedWorkspaceId);
+        return () => maasApi.setOrganizationId(null);
+    }, [props.selectedWorkspaceId]);
 
     const contextValue = useMemo(
         () => ({

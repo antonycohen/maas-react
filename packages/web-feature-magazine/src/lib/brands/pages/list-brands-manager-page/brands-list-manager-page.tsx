@@ -36,7 +36,7 @@ export function BrandsListManagerPage() {
                     filtersConfiguration={{
                         textFilter: {
                             placeholder: t('brands.search'),
-                            queryParamName: 'term',
+                            queryParamName: 'name',
                         },
                     }}
                     useQueryFn={useGetBrands}
