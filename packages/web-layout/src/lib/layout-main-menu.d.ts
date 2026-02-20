@@ -14,4 +14,3 @@ export declare function LayoutMainMenu({
     className,
 }: LayoutMainMenuProps): import('react/jsx-runtime').JSX.Element;
 export {};
-//# sourceMappingURL=layout-main-menu.d.ts.map
