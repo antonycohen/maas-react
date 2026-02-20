@@ -189,6 +189,7 @@
     "fieldType.number": "Nombre",
     "fieldType.image": "Image",
     "fieldType.video": "Vidéo",
+    "fieldType.json": "JSON",
     "fieldType.cms": "CMS",
     "message.success.created": "{entity} créé(e) avec succès",
     "message.success.updated": "{entity} mis(e) à jour avec succès",

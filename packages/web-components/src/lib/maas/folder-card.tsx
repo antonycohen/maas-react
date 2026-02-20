@@ -151,7 +151,7 @@ export const FolderCard = ({
                     {/* Tag & Title */}
                     <div className="flex flex-col gap-1">
                         <div className="flex flex-wrap items-start gap-0.5">
-                            {folder.type && <FolderTag label={folder.type} />}
+                            {/* {folder.type && <FolderTag label={folder.type} />} */}
                         </div>
                         <h3 className="font-heading truncate text-[26px] leading-8 font-semibold tracking-[-0.52px] text-black">
                             {folder.name}

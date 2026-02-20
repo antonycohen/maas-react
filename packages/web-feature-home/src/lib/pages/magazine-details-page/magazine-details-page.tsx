@@ -38,6 +38,7 @@ export const MagazineDetailsPage = () => {
                                 id: null,
                                 cover: null,
                                 publishedAt: null,
+                                categories: null,
                                 author: {
                                     fields: {
                                         firstName: null,
@@ -75,7 +76,6 @@ export const MagazineDetailsPage = () => {
                 ?.articles?.map((a) => mapIssueToFeedArticle(a)) || []
         );
     }, [magazines]);
-    console.log(orphanArticles);
     if (error instanceof ApiError && error.code === 1001) return <NotFoundPage />;
 
     return (

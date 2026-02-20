@@ -22,6 +22,7 @@ const useFieldTypeOptions = () => {
         { value: 'category' as ArticleTypeFieldType, label: t('fieldType.category') },
         { value: 'image' as ArticleTypeFieldType, label: t('fieldType.image') },
         { value: 'video' as ArticleTypeFieldType, label: t('fieldType.video') },
+        { value: 'json' as ArticleTypeFieldType, label: t('fieldType.json') },
     ];
 };
 
