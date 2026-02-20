@@ -11,6 +11,7 @@ export interface FeedArticleData {
     author: string;
     date?: string;
     link: string;
+    articleType?: string;
 }
 
 interface FeedArticleItemProps {
@@ -80,7 +81,6 @@ export const FeedArticleItem = ({ item, onClick }: FeedArticleItemProps) => {
 
 export function mapIssueToFeedArticle(article: Article): FeedArticleData {
     const coverImages = article.cover?.resizedImages?.find((i) => i.width === 640);
-    console.log(article);
     return {
         type: 'article',
         image:
@@ -98,6 +98,7 @@ export function mapIssueToFeedArticle(article: Article): FeedArticleData {
               })
             : '',
         link: `/articles/${article.id}`,
+        articleType: article?.type?.name,
     };
 }
 

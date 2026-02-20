@@ -46,6 +46,9 @@
         },
         {
             "path": "../web-components/tsconfig.lib.json"
+        },
+        {
+            "path": "../core-store-session/tsconfig.lib.json"
         }
     ]
 }

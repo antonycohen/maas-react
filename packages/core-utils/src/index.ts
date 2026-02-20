@@ -9,3 +9,4 @@ export * from './lib/hooks/use-on-click-outside';
 export * from './lib/tailwind-utils';
 export * from './lib/video-utils';
 export * from './lib/sanitize-html';
+export * from './lib/string-utils';

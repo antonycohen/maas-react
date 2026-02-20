@@ -48,6 +48,12 @@ const ArticleDetailsPage = () => {
                 featuredImage: null,
                 categories: null,
                 visibility: null,
+                customFields: null,
+                type: {
+                    fields: {
+                        name: null,
+                    },
+                },
                 author: {
                     fields: {
                         id: null,
@@ -91,7 +97,6 @@ const ArticleDetailsPage = () => {
 
     if (error instanceof ApiError && error.code === 1001) return <NotFoundPage />;
     if (!article) return <ArticleDetailsSkeleton />;
-
     return (
         <section className={'container mx-auto space-y-10 px-5 py-10'}>
             <div className={'flex flex-col items-start gap-5 gap-y-16 lg:flex-row'}>
@@ -103,6 +108,8 @@ const ArticleDetailsPage = () => {
                             featuredImage={article?.featuredImage}
                             visibility={article?.visibility}
                             content={article?.content}
+                            type={article?.type}
+                            customFields={article?.customFields}
                         />
                     </div>
                 </main>
