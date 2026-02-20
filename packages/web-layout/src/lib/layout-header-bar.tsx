@@ -57,7 +57,7 @@ const defaultMenuItemKeys: MenuItemKeyDef[] = [
     },
     {
         key: 'nav.public.historyCulture',
-        href: '/categories/histoire-et-culture',
+        href: '/categories/histoire-et-cultures',
         children: [
             { key: 'nav.public.interview', href: '/categories/interview' },
             { key: 'nav.public.famousPersonalities', href: '/categories/personnages-celebres' },
@@ -80,7 +80,7 @@ const defaultMenuItemKeys: MenuItemKeyDef[] = [
     },
     {
         key: 'nav.public.mathThemes',
-        href: '/mathematical-themes',
+        href: '#',
         children: [
             { key: 'nav.public.geometry', href: '/mathematical-themes/geometry' },
             { key: 'nav.public.algebra', href: '/mathematical-themes/algebra' },
