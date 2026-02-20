@@ -24,6 +24,7 @@ interface FeedTagProps {
 }
 
 const FeedTag = ({ label, variant = 'default' }: FeedTagProps) => {
+    if (!label?.trim()) return null;
     return (
         <div className="flex h-6 items-center justify-center rounded border border-[#e0e0e0] bg-white px-2">
             <span
@@ -236,7 +237,7 @@ export const FeedFolderItem = ({ item, onClick }: FeedFolderItemProps) => {
                 <div className="flex flex-col gap-1">
                     {/* Tags */}
                     <div className="flex flex-wrap items-start gap-0.5">
-                        <FeedTag label={item.category} variant="accent" />
+                        {item.category && <FeedTag label={item.category} variant="accent" />}
                         {item.subcategory && <FeedTag label={item.subcategory} />}
                     </div>
 
