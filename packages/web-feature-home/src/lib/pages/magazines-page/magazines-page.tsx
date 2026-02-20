@@ -81,6 +81,7 @@ export const MagazinesPage = () => {
                 columns={columns}
                 useQueryFn={useGetIssues}
                 useLocationAsState
+                defaultPageSize={20}
                 staticParams={{ filters: { isPublished: true } }}
                 filtersConfiguration={{
                     facetedFilters: [

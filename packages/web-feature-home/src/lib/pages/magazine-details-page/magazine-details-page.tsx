@@ -102,7 +102,7 @@ export const MagazineDetailsPage = () => {
                           <FolderCard key={folder.id} folder={folder} link={`/dossiers/${folder.id}`} />
                       ))}
             </div>
-            <div className="gap-tg-lg container mx-auto flex flex-col p-5">
+            <div className="gap-tg-lg container mx-auto flex flex-col p-5 pb-10">
                 <h2 className="font-heading text-2xl leading-[40px] font-semibold tracking-[-0.85px] md:text-[34px]">
                     <span className="text-brand-primary">{'Tous les articles '}</span>
                     <span className="text-black">{'de ce numéro'}</span>

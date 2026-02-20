@@ -44,7 +44,7 @@ export const FoldersPage = () => {
             <div className="container mx-auto">
                 <TitleAndDescriptionHero title={t('home.foldersTitle')} description={t('home.foldersDescription')} />
             </div>
-            <div className="gap-tg-lg py-tg-xl container mx-auto flex flex-col">
+            <div className="gap-tg-lg py-tg-xl container mx-auto flex flex-col pb-8">
                 {!response
                     ? Array.from({ length: 3 }).map((_, i) => <FolderCardSkeleton key={i} />)
                     : response.data?.map((folder) => (

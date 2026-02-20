@@ -59,6 +59,7 @@ interface Props<T, S> {
     queryFields?: FieldQuery<T>;
     staticParams?: S;
     showColumnSelector?: boolean;
+    defaultPageSize?: number;
     /**
      * Custom toolbar renderer. Receives items, table instance, and state.
      * Default: CollectionToolbar with search and faceted filters
@@ -204,12 +205,13 @@ export function Collection<T, Q = undefined>({
     queryFields,
     staticParams = undefined as Q,
     showColumnSelector = false,
+    defaultPageSize,
     renderToolbar,
     renderContent,
     renderPagination,
     renderLayout,
 }: Props<T, Q>) {
-    const state = useCollectionState({ useLocationAsState });
+    const state = useCollectionState({ useLocationAsState, defaultPageSize });
 
     const { items, totalCount, isError, isFetching } = useCollectionQuery({
         pagination: state.pagination,

@@ -108,7 +108,7 @@ const ArticleDetailsPage = () => {
                 </main>
             </div>
             {similarFeedItems.length > 0 && (
-                <div className="container mx-auto flex flex-col gap-5 pt-5 pb-10">
+                <div className="container mx-auto flex flex-col gap-5 pt-5">
                     <h2 className="font-heading text-2xl leading-[40px] font-semibold tracking-[-0.85px] md:text-[34px]">
                         {t('home.similarArticles')}
                     </h2>
