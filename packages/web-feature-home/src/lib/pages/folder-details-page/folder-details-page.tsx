@@ -73,6 +73,7 @@ export const FolderDetailsPages = () => {
     const articles = useMemo(() => {
         return currentFolders?.articles?.map((a) => mapIssueToFeedArticle(a));
     }, [currentFolders]);
+
     const { resizedImage: bgImageUrl } = useResizedImage({ images: currentFolders?.cover?.resizedImages, width: 1280 });
 
     if (error instanceof ApiError && error.code === 1001) return <NotFoundPage />;

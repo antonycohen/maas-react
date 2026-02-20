@@ -68,6 +68,7 @@ function mapNewsItemToFeedItem(item: HomepageNewsItem): FeedContentItemData | nu
                 title: issue.title,
                 category: 'Magazine',
                 edition: issue.title,
+                issueNumber: issue.issueNumber,
                 date: formatDate(issue.publishedAt),
                 link: `/magazines/${issue.id}`,
             } satisfies FeedMagazineData;
@@ -80,7 +81,7 @@ function mapNewsItemToFeedItem(item: HomepageNewsItem): FeedContentItemData | nu
                 image,
                 title: folder.name,
                 category: 'Dossier',
-                articleCount: 0,
+                articleCount: folder.articleCount ?? 0,
                 date: '',
                 link: `/dossiers/${folder.id}`,
             } satisfies FeedFolderData;
@@ -98,6 +99,7 @@ function mapArticleToCategoryArticle(article: HomepageArticle): CategoryArticle 
     return {
         image,
         title: article.title,
+        description: article.description || '',
         category: article.categories?.[0]?.name || '',
         author: `${article.author?.firstName || ''} ${article.author?.lastName || ''}`.trim(),
         date: formatDate(article.publishedAt),
@@ -163,8 +165,8 @@ const CategoryArticlesSkeleton = () => (
 export const HomePage = () => {
     const { t } = useTranslation();
     const { data: homepage, isPending } = useGetHomepage({
-        issueFields: 'id,title,cover,published_at',
-        articleFields: 'id,title,cover,categories,published_at,author',
+        issueFields: 'id,title,cover,published_at,issue_number',
+        articleFields: 'id,title,cover,categories,published_at,author,description',
     });
 
     const { resizedImage: issueCover } = useResizedImage({

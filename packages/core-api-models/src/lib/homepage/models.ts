@@ -8,6 +8,7 @@ export const homepageIssueSchema = z.object({
     title: z.string(),
     cover: z.object(readImageSchema).nullable(),
     publishedAt: z.string().nullable(),
+    issueNumber: z.number().nullable(),
 });
 
 export type HomepageIssue = z.infer<typeof homepageIssueSchema>;
@@ -18,6 +19,7 @@ export const homepageArticleSchema = z.object({
     cover: z.object(readImageSchema).nullable(),
     categories: z.array(categorySchema).nullable(),
     publishedAt: z.string().nullable(),
+    description: z.string().nullable(),
     author: readUserRefSchema.nullable(),
 });
 
@@ -39,6 +41,7 @@ export const homepageFolderSchema = z.object({
     description: z.string().nullable(),
     cover: z.object(readImageSchema).nullable(),
     isPublished: z.boolean().nullable(),
+    articleCount: z.number().nullable(),
 });
 
 export type HomepageFolder = z.infer<typeof homepageFolderSchema>;

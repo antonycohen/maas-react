@@ -113,6 +113,7 @@ export interface FeedMagazineData {
     title: string;
     category: string;
     edition: string;
+    issueNumber?: number | null;
     date: string;
     link: string;
 }
@@ -159,8 +160,13 @@ export const FeedMagazineItem = ({ item, onClick }: FeedMagazineItemProps) => {
                     </h3>
                 </div>
 
-                {/* Date */}
-                <div className="flex h-5 items-center">
+                {/* Issue Number & Date */}
+                <div className="flex h-5 items-center justify-between gap-2">
+                    {item.issueNumber && (
+                        <span className="font-body text-[13px] leading-[18px] font-semibold text-white">
+                            N°{item.issueNumber}
+                        </span>
+                    )}
                     <span className="font-body text-[13px] leading-[18px] font-normal text-white">{item.date}</span>
                 </div>
             </div>
