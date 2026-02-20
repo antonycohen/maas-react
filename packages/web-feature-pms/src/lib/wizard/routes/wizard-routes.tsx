@@ -4,7 +4,7 @@ import { CreatePlanWizardPage } from '../pages/create-plan-wizard-page/create-pl
 export const WizardRoutes = () => {
     return (
         <Routes>
-            <Route path="/create-plan" element={<CreatePlanWizardPage />} />
+            <Route path="create-plan" element={<CreatePlanWizardPage />} />
         </Routes>
     );
 };

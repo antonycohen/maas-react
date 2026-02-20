@@ -11,10 +11,9 @@ export const AdminRoutes = () => {
 
     useEffect(() => {
         if (!connectedUser || !connectedUser.roles?.includes('ADMIN')) {
-            navigate(routes.login());
+            navigate(routes.login(), { replace: true });
         }
-         
-    }, [connectedUser]);
+    }, [connectedUser, navigate, routes]);
 
     if (!connectedUser || !connectedUser.roles?.includes('ADMIN')) {
         return null;
@@ -23,7 +22,7 @@ export const AdminRoutes = () => {
     return (
         <Routes>
             <Route path={'w/:organizationId?/*'} element={<WorkspaceRoutes />} />
-            <Route path={'*'} element={<Navigate to={'w/'} />} />
+            <Route path={'*'} element={<Navigate to={'/admin/w/'} replace />} />
         </Routes>
     );
 };

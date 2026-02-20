@@ -10,11 +10,11 @@ export const AccountRoutes = ({ baseUrl = '' }: { baseUrl?: string }) => {
     return (
         <Routes>
             <Route element={<AccountSettingsPage baseUrl={baseUrl} />}>
-                <Route path="/profile" element={<AccountProfileTab />} />
-                <Route path="/connexion" element={<AccountConnexionTab />} />
-                <Route path="/preferences" element={<AccountPreferencesTab />} />
-                <Route path="/subscription" element={<AccountSubscriptionTab />} />
-                <Route path="/invoices" element={<AccountInvoicesTab />} />
+                <Route path="profile" element={<AccountProfileTab />} />
+                <Route path="connexion" element={<AccountConnexionTab />} />
+                <Route path="preferences" element={<AccountPreferencesTab />} />
+                <Route path="subscription" element={<AccountSubscriptionTab />} />
+                <Route path="invoices" element={<AccountInvoicesTab />} />
                 <Route path="*" element={<Navigate to="profile" replace />} />
             </Route>
         </Routes>

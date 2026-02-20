@@ -1,8 +1,6 @@
-import { DocumentationSearchInput, SidebarTrigger } from '@maas/web-components';
+import { SidebarTrigger } from '@maas/web-components';
 import { ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { cn } from '@maas/core-utils';
-import { useTranslation } from '@maas/core-translations';
 
 type LayoutTopbarProps = {
     buttons?: ReactNode[];
@@ -11,8 +9,6 @@ type LayoutTopbarProps = {
 
 export function AdminLayoutTopbar(props: LayoutTopbarProps) {
     const { buttons, className } = props;
-    const { t } = useTranslation();
-    const navigate = useNavigate();
 
     return (
         <div
@@ -27,7 +23,8 @@ export function AdminLayoutTopbar(props: LayoutTopbarProps) {
             </div>
 
             {/* Center - Search input */}
-            <div className="absolute top-1/2 left-1/2 w-[373px] -translate-x-1/2 -translate-y-1/2">
+            {/* TODO: put back the search input when we have the documentation page ready */}
+            {/* <div className="absolute top-1/2 left-1/2 w-[373px] -translate-x-1/2 -translate-y-1/2">
                 <DocumentationSearchInput
                     source={[
                         {
@@ -48,7 +45,7 @@ export function AdminLayoutTopbar(props: LayoutTopbarProps) {
                     className="w-full"
                     onNavigate={(url) => navigate(url)}
                 />
-            </div>
+            </div> */}
 
             <div className="flex items-center gap-4">
                 {buttons && buttons.length > 0 && buttons.map((button, index) => <div key={index}>{button}</div>)}

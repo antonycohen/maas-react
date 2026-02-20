@@ -75,10 +75,13 @@ class ApiClient {
                     if (originalRequest && !originalRequest.headers.RetryRequest) {
                         try {
                             originalRequest.headers.RetryRequest = true;
-                            const newToken = await this.getValidToken();
+                            const newToken = await this.tokenManager!.forceRefresh();
                             originalRequest.headers.Authorization = `Bearer ${newToken}`;
                             return this.axiosInstance(originalRequest);
                         } catch (refreshError) {
+                            if (refreshError instanceof AuthenticationError && data?.code) {
+                                return Promise.reject(new AuthenticationError(refreshError.message, data.code));
+                            }
                             return Promise.reject(refreshError);
                         }
                     }

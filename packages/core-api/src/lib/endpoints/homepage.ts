@@ -6,14 +6,13 @@ const BASE_PATH = '/api/v1/homepage';
 export interface GetHomepageParams {
     issueFields?: string;
     articleFields?: string;
-    categoriesSlugs?: string[];
 }
 
 export class HomepageEndpoint {
     constructor(private client: ApiClient) {}
 
     /**
-     * Get homepage data (latest issue + category articles)
+     * Get homepage data (latest issue, featured articles, news feed)
      * GET /api/v1/homepage
      */
     async getHomepage(params?: GetHomepageParams): Promise<HomepageResponse> {
@@ -21,7 +20,6 @@ export class HomepageEndpoint {
             params: {
                 ...(params?.issueFields && { issue_fields: params.issueFields }),
                 ...(params?.articleFields && { article_fields: params.articleFields }),
-                ...(params?.categoriesSlugs && { categories_slug: params.categoriesSlugs.join(',') }),
             },
         });
     }

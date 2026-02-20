@@ -2,25 +2,13 @@ import { useOAuthStore } from '@maas/core-store-oauth';
 import { getNewToken } from '../oauth-client/oauth-client';
 import { AuthenticationError } from './authentication-error';
 
+const MAX_REFRESH_RETRIES = 3;
+const LOCK_WAIT_MS = 150;
+
 export class TokenManager {
     private refreshPromise: Promise<void> | null = null;
-    private refreshLock: string | null = null;
     private readonly LOCK_KEY = 'api-refresh-lock';
     private readonly LOCK_TIMEOUT = 10000;
-
-    constructor() {
-        this.setupCrossTabLock();
-    }
-
-    private setupCrossTabLock() {
-        if (typeof window === 'undefined') return;
-
-        window.addEventListener('storage', (event) => {
-            if (event.key === this.LOCK_KEY && event.newValue === null) {
-                this.refreshLock = null;
-            }
-        });
-    }
 
     private acquireLock(): boolean {
         if (typeof window === 'undefined') return true;
@@ -29,31 +17,24 @@ export class TokenManager {
         const currentLock = localStorage.getItem(this.LOCK_KEY);
 
         if (currentLock) {
-            const lockTime = parseInt(currentLock.split('-')[0], 10);
+            const lockTime = parseInt(currentLock, 10);
             if (now - lockTime < this.LOCK_TIMEOUT) {
                 return false;
             }
         }
 
-        const lockId = `${now}-${Math.random()}`;
-        localStorage.setItem(this.LOCK_KEY, lockId);
-        this.refreshLock = lockId;
-
-        const storedLock = localStorage.getItem(this.LOCK_KEY);
-        return storedLock === lockId;
+        localStorage.setItem(this.LOCK_KEY, String(now));
+        return true;
     }
 
     private releaseLock() {
         if (typeof window === 'undefined') return;
-        if (this.refreshLock) {
-            localStorage.removeItem(this.LOCK_KEY);
-            this.refreshLock = null;
-        }
+        localStorage.removeItem(this.LOCK_KEY);
     }
 
     isTokenValid(): boolean {
         const { accessTokenExpirationDate } = useOAuthStore.getState();
-        if (!accessTokenExpirationDate) return true;
+        if (!accessTokenExpirationDate) return false;
         return Date.now() < accessTokenExpirationDate - 60000;
     }
 
@@ -64,12 +45,16 @@ export class TokenManager {
         }
 
         if (!this.acquireLock()) {
-            await new Promise((resolve) => setTimeout(resolve, 100));
-            const { accessToken } = useOAuthStore.getState();
-            if (accessToken && this.isTokenValid()) {
-                return;
+            // Another tab is refreshing — wait and check if it succeeded
+            for (let attempt = 0; attempt < MAX_REFRESH_RETRIES; attempt++) {
+                await new Promise((resolve) => setTimeout(resolve, LOCK_WAIT_MS));
+                const { accessToken } = useOAuthStore.getState();
+                if (accessToken && this.isTokenValid()) {
+                    return;
+                }
             }
-            return this.refreshToken();
+            // Other tab's refresh didn't produce a valid token — force our own attempt
+            this.releaseLock();
         }
 
         try {
@@ -77,9 +62,9 @@ export class TokenManager {
             useOAuthStore.getState().setAuth({
                 accessToken: response.accessToken,
                 refreshToken: response.refreshToken,
-                accessTokenExpirationDate: response.expiresAt,
+                accessTokenExpirationDate: response.expiresAt ?? Date.now() + 3600 * 1000,
             });
-        } catch (error) {
+        } catch {
             useOAuthStore.getState().reset();
             throw new AuthenticationError('Token refresh failed');
         } finally {
@@ -103,16 +88,9 @@ export class TokenManager {
         }
 
         if (!this.refreshPromise) {
-            this.refreshPromise = this.refreshToken()
-                .catch((error) => {
-                    if (error instanceof AuthenticationError) {
-                        useOAuthStore.getState().reset();
-                    }
-                    throw error;
-                })
-                .finally(() => {
-                    this.refreshPromise = null;
-                });
+            this.refreshPromise = this.refreshToken().finally(() => {
+                this.refreshPromise = null;
+            });
         }
 
         await this.refreshPromise;
@@ -120,6 +98,25 @@ export class TokenManager {
         const newToken = useOAuthStore.getState().accessToken;
         if (!newToken) {
             throw new AuthenticationError('Failed to obtain valid token');
+        }
+
+        return newToken;
+    }
+
+    /**
+     * Force a token refresh regardless of current token validity.
+     * Used by the 401 response interceptor when the server rejects the token.
+     */
+    async forceRefresh(): Promise<string> {
+        this.refreshPromise = this.refreshToken().finally(() => {
+            this.refreshPromise = null;
+        });
+
+        await this.refreshPromise;
+
+        const newToken = useOAuthStore.getState().accessToken;
+        if (!newToken) {
+            throw new AuthenticationError('Failed to obtain valid token after force refresh');
         }
 
         return newToken;

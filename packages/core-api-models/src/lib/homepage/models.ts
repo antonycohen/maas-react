@@ -7,6 +7,7 @@ export const homepageIssueSchema = z.object({
     id: z.string(),
     title: z.string(),
     cover: z.object(readImageSchema).nullable(),
+    publishedAt: z.string().nullable(),
 });
 
 export type HomepageIssue = z.infer<typeof homepageIssueSchema>;
@@ -22,17 +23,54 @@ export const homepageArticleSchema = z.object({
 
 export type HomepageArticle = z.infer<typeof homepageArticleSchema>;
 
-export const homepageCategoryEntrySchema = z.object({
-    category: categorySchema,
-    articles: z.array(homepageArticleSchema),
+export const homepageFolderSchema = z.object({
+    id: z.string(),
+    organization: z
+        .object({
+            id: z.string(),
+            name: z.string().nullable(),
+            type: z.string().nullable(),
+            logo: z.object(readImageSchema).nullable(),
+        })
+        .nullable(),
+    type: z.string().nullable(),
+    isDefault: z.boolean().nullable(),
+    name: z.string(),
+    description: z.string().nullable(),
+    cover: z.object(readImageSchema).nullable(),
+    isPublished: z.boolean().nullable(),
 });
 
-export type HomepageCategoryEntry = z.infer<typeof homepageCategoryEntrySchema>;
+export type HomepageFolder = z.infer<typeof homepageFolderSchema>;
+
+export const homepageNewsArticleSchema = z.object({
+    type: z.literal('article'),
+    article: homepageArticleSchema,
+});
+
+export const homepageNewsIssueSchema = z.object({
+    type: z.literal('issue'),
+    issue: homepageIssueSchema,
+});
+
+export const homepageNewsFolderSchema = z.object({
+    type: z.literal('folder'),
+    folder: homepageFolderSchema,
+});
+
+export const homepageNewsItemSchema = z.discriminatedUnion('type', [
+    homepageNewsArticleSchema,
+    homepageNewsIssueSchema,
+    homepageNewsFolderSchema,
+]);
+
+export type HomepageNewsItem = z.infer<typeof homepageNewsItemSchema>;
 
 export const homepageResponseSchema = z.object({
     latestIssue: homepageIssueSchema.nullable(),
     featuredArticles: z.array(homepageArticleSchema),
-    categories: z.array(homepageCategoryEntrySchema),
+    news: z.array(homepageNewsItemSchema),
+    jeuxDefis: z.array(homepageArticleSchema),
 });
 
 export type HomepageResponse = z.infer<typeof homepageResponseSchema>;

@@ -3,10 +3,10 @@ import { FeedPage } from '../feed-page/feed-page';
 import { BrowserPage } from '../feed-page/browser-page';
 
 export const FeedsRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/" element={<FeedPage />} />
-      <Route path="/browse" element={<BrowserPage />} />
-    </Routes>
-  );
+    return (
+        <Routes>
+            <Route index element={<FeedPage />} />
+            <Route path="browse" element={<BrowserPage />} />
+        </Routes>
+    );
 };

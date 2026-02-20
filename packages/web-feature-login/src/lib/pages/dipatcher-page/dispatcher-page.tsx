@@ -10,11 +10,9 @@ export const DispatcherPage = () => {
     const connectedUser = useConnectedUser();
     const accessToken = useOAuthStore((state) => state.accessToken);
 
-    const targetUrl = localStorage.getItem('target-url') ?? '';
-
     useEffect(() => {
         if (!connectedUser && !accessToken) {
-            navigate('/login');
+            navigate('/login', { replace: true });
             return;
         }
 
@@ -22,14 +20,15 @@ export const DispatcherPage = () => {
             return;
         }
 
+        const targetUrl = localStorage.getItem('target-url');
         if (targetUrl) {
             localStorage.removeItem('target-url');
-            navigate(targetUrl);
+            navigate(targetUrl, { replace: true });
             return;
         }
 
         navigate('/', { replace: true });
-    }, [accessToken, connectedUser, navigate, targetUrl]);
+    }, [accessToken, connectedUser, navigate]);
 
     return (
         <div>

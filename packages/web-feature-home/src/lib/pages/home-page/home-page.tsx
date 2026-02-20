@@ -6,13 +6,14 @@ import {
     Skeleton,
     useResizedImage,
     type FeedArticleData,
+    type FeedMagazineData,
+    type FeedFolderData,
+    type FeedContentItemData,
     type CategoryArticle,
 } from '@maas/web-components';
 import { useTranslation } from '@maas/core-translations';
 import { useGetHomepage } from '@maas/core-api';
-import { HomepageArticle, ReadResizedImage } from '@maas/core-api-models';
-
-const HOMEPAGE_SLUGS = ['maths-et-art', 'jeux-et-defi', 'histoire-et-cultures'];
+import { HomepageArticle, HomepageNewsItem, ReadResizedImage } from '@maas/core-api-models';
 
 function getResizedImageUrl(images: ReadResizedImage[] | null | undefined, width = 640): string {
     const resized = images?.find((i) => i.width === width);
@@ -28,39 +29,78 @@ function mapFeaturedToHighlight(article: HomepageArticle) {
     };
 }
 
-function mapArticleToFeedItem(article: HomepageArticle, categoryName: string): FeedArticleData {
-    const image = getResizedImageUrl(article.cover?.resizedImages) || article.cover?.url || '';
-    return {
-        type: 'article',
-        image,
-        title: article.title,
-        category: categoryName,
-        author: `${article.author?.firstName || ''} ${article.author?.lastName || ''}`.trim(),
-        date: article.publishedAt
-            ? new Date(article.publishedAt).toLocaleDateString('fr-FR', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric',
-              })
-            : '',
-        link: `/articles/${article.id}`,
-    };
+function formatDate(dateStr: string | null | undefined): string {
+    if (!dateStr) return '';
+    return new Date(dateStr).toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+    });
 }
 
-function mapArticleToCategoryArticle(article: HomepageArticle, categoryName: string): CategoryArticle {
-    const image = getResizedImageUrl(article.cover?.resizedImages) || article.cover?.url || '';
+function mapNewsItemToFeedItem(item: HomepageNewsItem): FeedContentItemData | null {
+    switch (item.type) {
+        case 'article': {
+            const { article } = item;
+            const image =
+                getResizedImageUrl(article.cover?.resizedImages) ||
+                article.cover?.url ||
+                'https://images.unsplash.com/photo-1623039405147-547794f92e9e?q=80&w=640&auto=format&fit=crop';
+            return {
+                type: 'article',
+                image,
+                title: article.title,
+                category: article.categories?.[0]?.name || '',
+                author: `${article.author?.firstName || ''} ${article.author?.lastName || ''}`.trim(),
+                date: formatDate(article.publishedAt),
+                link: `/articles/${article.id}`,
+            } satisfies FeedArticleData;
+        }
+        case 'issue': {
+            const { issue } = item;
+            const image =
+                getResizedImageUrl(issue.cover?.resizedImages) ||
+                issue.cover?.url ||
+                'https://images.unsplash.com/photo-1623039405147-547794f92e9e?q=80&w=640&auto=format&fit=crop';
+            return {
+                type: 'magazine',
+                image,
+                title: issue.title,
+                category: 'Magazine',
+                edition: issue.title,
+                date: formatDate(issue.publishedAt),
+                link: `/magazines/${issue.id}`,
+            } satisfies FeedMagazineData;
+        }
+        case 'folder': {
+            const { folder } = item;
+            const image = getResizedImageUrl(folder.cover?.resizedImages) || folder.cover?.url || '';
+            return {
+                type: 'folder',
+                image,
+                title: folder.name,
+                category: 'Dossier',
+                articleCount: 0,
+                date: '',
+                link: `/dossiers/${folder.id}`,
+            } satisfies FeedFolderData;
+        }
+        default:
+            return null;
+    }
+}
+
+function mapArticleToCategoryArticle(article: HomepageArticle): CategoryArticle {
+    const image =
+        getResizedImageUrl(article.cover?.resizedImages) ||
+        article.cover?.url ||
+        'https://images.unsplash.com/photo-1623039405147-547794f92e9e?q=80&w=640&auto=format&fit=crop';
     return {
         image,
         title: article.title,
-        category: categoryName,
+        category: article.categories?.[0]?.name || '',
         author: `${article.author?.firstName || ''} ${article.author?.lastName || ''}`.trim(),
-        date: article.publishedAt
-            ? new Date(article.publishedAt).toLocaleDateString('fr-FR', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric',
-              })
-            : '',
+        date: formatDate(article.publishedAt),
         link: `/articles/${article.id}`,
     };
 }
@@ -123,9 +163,8 @@ const CategoryArticlesSkeleton = () => (
 export const HomePage = () => {
     const { t } = useTranslation();
     const { data: homepage, isPending } = useGetHomepage({
-        issueFields: 'id,title,cover,published_at,author',
+        issueFields: 'id,title,cover,published_at',
         articleFields: 'id,title,cover,categories,published_at,author',
-        categoriesSlugs: HOMEPAGE_SLUGS,
     });
 
     const { resizedImage: issueCover } = useResizedImage({
@@ -149,31 +188,25 @@ export const HomePage = () => {
         return articles;
     }, [homepage, issueCover]);
 
-    const mathsArtFeedItems = useMemo(() => {
-        const entry = homepage?.categories?.[0];
-        if (!entry) return [];
-        return entry.articles
-            .filter((a) => a.cover)
+    const firstNewsFeedItems = useMemo(() => {
+        if (!homepage?.news) return [];
+        return homepage.news
             .slice(0, 12)
-            .map((article) => mapArticleToFeedItem(article, entry.category.name));
+            .map(mapNewsItemToFeedItem)
+            .filter((item): item is FeedContentItemData => item !== null);
     }, [homepage]);
 
-    const jeuxDefiFeedItems = useMemo(() => {
-        const entry = homepage?.categories?.[1];
-        if (!entry) return [];
-        return entry.articles
-            .filter((a) => a.cover)
-            .slice(0, 12)
-            .map((article) => mapArticleToCategoryArticle(article, entry.category.name));
+    const jeuxDefiItems = useMemo(() => {
+        if (!homepage?.jeuxDefis) return [];
+        return homepage.jeuxDefis.map((article) => mapArticleToCategoryArticle(article));
     }, [homepage]);
 
-    const histoireCulturesFeedItems = useMemo(() => {
-        const entry = homepage?.categories?.[2];
-        if (!entry) return [];
-        return entry.articles
-            .filter((a) => a.cover)
-            .slice(0, 12)
-            .map((article) => mapArticleToFeedItem(article, entry.category.name));
+    const lastNewsFeedItems = useMemo(() => {
+        if (!homepage?.news) return [];
+        return homepage.news
+            .slice(-12)
+            .map(mapNewsItemToFeedItem)
+            .filter((item): item is FeedContentItemData => item !== null);
     }, [homepage]);
 
     return (
@@ -183,13 +216,13 @@ export const HomePage = () => {
                 {isPending ? <HighlightSkeleton /> : <ArticlesHighlight articles={highlightArticles} />}
             </div>
 
-            {/* Maths et art - Content Feed Section */}
+            {/* First News Feed Section */}
             <div className="container mx-auto flex flex-col gap-5 px-5 pt-5 pb-10 xl:px-0">
                 <h2 className="font-heading text-2xl leading-[40px] font-semibold tracking-[-0.85px] md:text-[34px]">
                     <span className="text-brand-primary">{t('home.latestMathNews')}</span>
                     <span className="text-black">{t('home.continuous')}</span>
                 </h2>
-                {isPending ? <ContentFeedSkeleton /> : <ContentFeed items={mathsArtFeedItems} />}
+                {isPending ? <ContentFeedSkeleton /> : <ContentFeed items={firstNewsFeedItems} />}
             </div>
 
             {/* Jeux & Défis Section - Dark Background */}
@@ -203,7 +236,7 @@ export const HomePage = () => {
                         <CategoryArticlesSkeleton />
                     ) : (
                         <CategoryArticles
-                            articles={jeuxDefiFeedItems}
+                            articles={jeuxDefiItems}
                             viewAllLabel={t('home.viewAllGamesChallenges')}
                             viewAllLink="/categories/jeux-et-defi"
                         />
@@ -211,13 +244,13 @@ export const HomePage = () => {
                 </div>
             </div>
 
-            {/* Histoire & Cultures - Content Feed Section */}
+            {/* Last News Feed Section */}
             <div className="container mx-auto flex flex-col gap-5 px-5 pt-5 pb-10 xl:px-0">
                 <h2 className="font-heading text-2xl leading-[40px] font-semibold tracking-[-0.85px] md:text-[34px]">
                     <span className="text-brand-primary">{t('home.latestMathNews')}</span>
                     <span className="text-black">{t('home.continuous')}</span>
                 </h2>
-                {isPending ? <ContentFeedSkeleton /> : <ContentFeed items={histoireCulturesFeedItems} />}
+                {isPending ? <ContentFeedSkeleton /> : <ContentFeed items={lastNewsFeedItems} />}
             </div>
         </div>
     );
