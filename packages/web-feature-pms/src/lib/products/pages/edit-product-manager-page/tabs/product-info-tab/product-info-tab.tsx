@@ -10,7 +10,7 @@ export const ProductInfoTab = () => {
     const { isCreateMode, isLoading } = useOutletContext<EditProductOutletContext>();
     const { t } = useTranslation();
 
-    const { ControlledTextInput, ControlledTextAreaInput, ControlledSwitchInput } =
+    const { ControlledTextInput, ControlledTextAreaInput, ControlledSwitchInput, ControlledPlanInput } =
         createConnectedInputHelpers<ProductFormValues>();
 
     if (isLoading) {
@@ -52,6 +52,12 @@ export const ProductInfoTab = () => {
                         <ControlledTextInput
                             name="unitLabel"
                             label={t('products.unitLabel')}
+                            direction="horizontal"
+                            className="py-6"
+                        />
+                        <ControlledPlanInput
+                            name="plan"
+                            label={t('plans.plan')}
                             direction="horizontal"
                             className="py-6"
                         />

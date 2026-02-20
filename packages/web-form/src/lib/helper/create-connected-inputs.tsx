@@ -26,6 +26,7 @@ import { ControlledVideoInput } from '../inputs/controlled-video-input';
 import { ControlledRatioInput } from '../inputs/controlled-ratio-input';
 import { ControlledColorPickerInput } from '../inputs/controlled-color-picker-input';
 import { ControlledCountryInput } from '../inputs/controlled-country-input';
+import { ControlledPlanInput } from '../inputs/controlled-plan-input';
 
 export function createConnectedInputHelpers<T extends FieldValues, Context = unknown>() {
     return {
@@ -55,5 +56,6 @@ export function createConnectedInputHelpers<T extends FieldValues, Context = unk
         ControlledRatioInput: ControlledRatioInput<T>,
         ControlledColorPickerInput: ControlledColorPickerInput<T>,
         ControlledCountryInput: ControlledCountryInput<T>,
+        ControlledPlanInput: ControlledPlanInput<T>,
     };
 }

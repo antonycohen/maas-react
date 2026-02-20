@@ -66,6 +66,7 @@ export function EditProductManagerPage() {
                 description: null,
                 active: null,
                 unitLabel: null,
+                plan: null,
                 metadata: null,
             },
         },

@@ -39,6 +39,7 @@ export interface CollectionRenderProps<T> {
     table: TanstackTable<T>;
     state: CollectionState;
     filtersConfiguration: Omit<CollectionToolbarProps<T>, 'table' | 'showColumnSelector'> | undefined;
+    isFetching: boolean;
 }
 
 /**
@@ -88,12 +89,21 @@ function DefaultToolbar<T>({
     table,
     showColumnSelector,
     filtersConfiguration,
+    isFetching,
 }: {
     table: TanstackTable<T>;
     showColumnSelector: boolean;
     filtersConfiguration?: Omit<CollectionToolbarProps<T>, 'table' | 'showColumnSelector'>;
+    isFetching?: boolean;
 }) {
-    return <CollectionToolbar table={table} showColumnSelector={showColumnSelector} {...filtersConfiguration} />;
+    return (
+        <CollectionToolbar
+            table={table}
+            showColumnSelector={showColumnSelector}
+            isFetching={isFetching}
+            {...filtersConfiguration}
+        />
+    );
 }
 
 /**
@@ -201,7 +211,7 @@ export function Collection<T, Q = undefined>({
 }: Props<T, Q>) {
     const state = useCollectionState({ useLocationAsState });
 
-    const { items, totalCount, isError } = useCollectionQuery({
+    const { items, totalCount, isError, isFetching } = useCollectionQuery({
         pagination: state.pagination,
         globalFilter: state.globalFilter,
         debouncedGlobalFilter: state.debouncedGlobalFilter,
@@ -227,6 +237,7 @@ export function Collection<T, Q = undefined>({
         table,
         state,
         filtersConfiguration,
+        isFetching,
     };
 
     // Render each section (custom or default)
@@ -237,6 +248,7 @@ export function Collection<T, Q = undefined>({
             table={table}
             showColumnSelector={showColumnSelector}
             filtersConfiguration={filtersConfiguration}
+            isFetching={isFetching}
         />
     );
 

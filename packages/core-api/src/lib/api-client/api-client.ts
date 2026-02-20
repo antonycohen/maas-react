@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { TokenManager } from './token-manager';
 import { AuthenticationError } from './authentication-error';
+import { AuthorizationError } from './authorization-error';
 import { ApiError } from './api-error';
 import { toSnakeCase } from './case-converter';
 import applyCaseMiddleware from 'axios-case-converter';
@@ -61,16 +62,25 @@ class ApiClient {
         // Response interceptor for token refresh
         this.axiosInstance.interceptors.response.use(
             (response) => response,
-            async (error: AxiosError) => {
+            async (error: AxiosError<{ code?: number; message?: string }>) => {
                 const originalRequest = error.config;
-                if (error.response?.status === 401 && originalRequest && !originalRequest.headers.RetryRequest) {
-                    try {
-                        originalRequest.headers.RetryRequest = true;
-                        const newToken = await this.getValidToken();
-                        originalRequest.headers.Authorization = `Bearer ${newToken}`;
-                        return this.axiosInstance(originalRequest);
-                    } catch (refreshError) {
-                        return Promise.reject(refreshError);
+
+                if (error.response?.status === 401) {
+                    const data = error.response.data;
+                    if (data?.code === 401 && data?.message === 'Access token could not be verified') {
+                        this.tokenManager?.resetAuth();
+                        return Promise.reject(new AuthorizationError('Access token could not be verified'));
+                    }
+
+                    if (originalRequest && !originalRequest.headers.RetryRequest) {
+                        try {
+                            originalRequest.headers.RetryRequest = true;
+                            const newToken = await this.getValidToken();
+                            originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                            return this.axiosInstance(originalRequest);
+                        } catch (refreshError) {
+                            return Promise.reject(refreshError);
+                        }
                     }
                 }
 

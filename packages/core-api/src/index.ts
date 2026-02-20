@@ -1,6 +1,7 @@
 export * from './lib/oauth-client/oauth-client';
 export * from './lib/api';
 export * from './lib/types';
+export * from './lib/api-client/authorization-error';
 
 export * from './lib/queries/articles';
 export * from './lib/queries/article-types';

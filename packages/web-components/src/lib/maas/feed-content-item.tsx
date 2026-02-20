@@ -15,6 +15,7 @@ export interface FeedArticleData {
 
 interface FeedArticleItemProps {
     item: FeedArticleData;
+    onClick?: () => void;
 }
 
 interface FeedTagProps {
@@ -34,10 +35,11 @@ const FeedTag = ({ label, variant = 'default' }: FeedTagProps) => {
     );
 };
 
-export const FeedArticleItem = ({ item }: FeedArticleItemProps) => {
+export const FeedArticleItem = ({ item, onClick }: FeedArticleItemProps) => {
     return (
         <Link
             to={item.link}
+            onClick={onClick}
             className="group flex flex-col gap-3 rounded-[12px] border border-[#e0e0e0] bg-white p-3 transition-shadow hover:shadow-md"
         >
             {/* Image */}
@@ -102,6 +104,7 @@ export type FeedContentItemData = FeedArticleData | FeedFolderData | FeedMagazin
 
 interface FeedContentItemProps {
     item: FeedContentItemData;
+    onClick?: () => void;
 }
 
 export interface FeedMagazineData {
@@ -116,12 +119,14 @@ export interface FeedMagazineData {
 
 interface FeedMagazineItemProps {
     item: FeedMagazineData;
+    onClick?: () => void;
 }
 
-export const FeedMagazineItem = ({ item }: FeedMagazineItemProps) => {
+export const FeedMagazineItem = ({ item, onClick }: FeedMagazineItemProps) => {
     return (
         <Link
             to={item.link}
+            onClick={onClick}
             className="group bg-brand-primary relative flex h-[450px] flex-col items-start justify-end overflow-clip rounded-[12px] md:h-auto"
         >
             {/* Magazine Cover Image - positioned bottom right */}
@@ -177,9 +182,10 @@ export interface FeedFolderData {
 
 interface FeedFolderItemProps {
     item: FeedFolderData;
+    onClick?: () => void;
 }
 
-export const FeedFolderItem = ({ item }: FeedFolderItemProps) => {
+export const FeedFolderItem = ({ item, onClick }: FeedFolderItemProps) => {
     // Get up to 3 images from articles for the stack effect
     const articleImages = item.articles?.slice(0, 3).map((a) => a.image) || [];
     const [backImg, midImg, frontImg] = [
@@ -191,6 +197,7 @@ export const FeedFolderItem = ({ item }: FeedFolderItemProps) => {
     return (
         <Link
             to={item.link}
+            onClick={onClick}
             className="group flex h-full flex-col gap-3 rounded-[12px] border border-[#e0e0e0] bg-white p-3 transition-shadow hover:shadow-md"
         >
             {/* Stacked Images */}
@@ -246,14 +253,14 @@ export const FeedFolderItem = ({ item }: FeedFolderItemProps) => {
     );
 };
 
-export const FeedContentItem = ({ item }: FeedContentItemProps) => {
+export const FeedContentItem = ({ item, onClick }: FeedContentItemProps) => {
     switch (item.type) {
         case 'article':
-            return <FeedArticleItem item={item} />;
+            return <FeedArticleItem item={item} onClick={onClick} />;
         case 'folder':
-            return <FeedFolderItem item={item} />;
+            return <FeedFolderItem item={item} onClick={onClick} />;
         case 'magazine':
-            return <FeedMagazineItem item={item} />;
+            return <FeedMagazineItem item={item} onClick={onClick} />;
         default:
             return null;
     }

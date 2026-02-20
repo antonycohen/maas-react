@@ -87,6 +87,10 @@ export class TokenManager {
         }
     }
 
+    resetAuth(): void {
+        useOAuthStore.getState().reset();
+    }
+
     async getValidToken(): Promise<string> {
         const { accessToken } = useOAuthStore.getState();
 

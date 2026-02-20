@@ -5,6 +5,7 @@ import { Table } from '@tanstack/react-table';
 import { Button, Input } from '@maas/web-components';
 import { useTranslation } from '@maas/core-translations';
 import { ObjectDotNotation } from '@maas/core-utils';
+import { Loader2 } from 'lucide-react';
 import { CollectionFacetedFilter, CollectionFacetedFilterProps } from './collection-faceted-filter';
 import { CollectionViewOptions } from './collection-view-options';
 
@@ -23,6 +24,7 @@ export interface CollectionToolbarProps<TData> {
     showColumnSelector: boolean;
     textFilter?: TextFilterConfiguration;
     facetedFilters?: FacetedFilterConfiguration<TData>[];
+    isFetching?: boolean;
 }
 
 export function CollectionToolbar<TData>({
@@ -30,6 +32,7 @@ export function CollectionToolbar<TData>({
     showColumnSelector,
     textFilter,
     facetedFilters,
+    isFetching,
 }: CollectionToolbarProps<TData>) {
     const { t } = useTranslation();
     const isFiltered = table.getState().columnFilters.length > 0;
@@ -67,7 +70,10 @@ export function CollectionToolbar<TData>({
                     </Button>
                 )}
             </div>
-            {showColumnSelector && <CollectionViewOptions table={table} />}
+            <div className="flex items-center gap-x-2">
+                {isFetching && <Loader2 className="text-muted-foreground h-4 w-4 animate-spin" />}
+                {showColumnSelector && <CollectionViewOptions table={table} />}
+            </div>
         </div>
     );
 }

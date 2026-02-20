@@ -28,6 +28,7 @@ export const useEditProductForm = ({ product, isCreateMode, planId }: UseEditPro
                       description: product.description ?? '',
                       active: product.active ?? true,
                       unitLabel: product.unitLabel ?? '',
+                      plan: product.plan ? { id: product.plan.id } : undefined,
                       metadata: product.metadata ?? {},
                   }
                 : undefined,

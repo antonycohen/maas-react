@@ -88,14 +88,17 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
         return () => clearTimeout(timer);
     }, [query]);
 
-    // Reset on close
-    useEffect(() => {
-        if (!open) {
-            setQuery('');
-            setDebouncedQuery('');
-            setActiveFilter('all');
-        }
-    }, [open]);
+    const handleOpenChange = useCallback(
+        (nextOpen: boolean) => {
+            if (!nextOpen) {
+                setQuery('');
+                setDebouncedQuery('');
+                setActiveFilter('all');
+            }
+            onOpenChange(nextOpen);
+        },
+        [onOpenChange]
+    );
 
     // Focus input on open
     useEffect(() => {
@@ -109,14 +112,14 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
         const handleKeyDown = (e: KeyboardEvent) => {
             if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
                 e.preventDefault();
-                onOpenChange(true);
+                handleOpenChange(true);
             }
         };
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [onOpenChange]);
+    }, [handleOpenChange]);
 
-    const handleClose = useCallback(() => onOpenChange(false), [onOpenChange]);
+    const handleClose = useCallback(() => handleOpenChange(false), [handleOpenChange]);
 
     const filteredResults = useMemo(() => {
         if (!data?.results) return [];
@@ -153,7 +156,7 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
     const hasResults = filteredResults.length > 0;
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog open={open} onOpenChange={handleOpenChange}>
             <DialogContent
                 className="flex h-[95vh] max-h-[95vh] w-full max-w-[calc(100%-1rem)] flex-col gap-0 overflow-hidden p-0 sm:h-[85vh] sm:max-h-[85vh] sm:max-w-3xl md:max-w-5xl lg:max-w-6xl xl:max-w-7xl"
                 showCloseButton={false}
@@ -264,7 +267,7 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
                             )}
                             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                                 {filteredResults.map((item, index) => (
-                                    <FeedContentItem key={item.link || index} item={item} />
+                                    <FeedContentItem key={item.link || index} item={item} onClick={handleClose} />
                                 ))}
                             </div>
                         </div>
