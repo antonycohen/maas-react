@@ -13,6 +13,8 @@ export interface GetArticlesFilter {
     isPublished?: boolean;
     folderId?: string;
     categorySlug?: string;
+    theme?: string;
+    level?: string;
     id?: string[] | string;
 }
 
@@ -43,6 +45,8 @@ export class ArticlesEndpoint {
             ...(filters?.isPublished !== undefined && { is_published: filters.isPublished }),
             ...(filters?.folderId && { folder_id: filters.folderId }),
             ...(filters?.categorySlug && { categorySlug: filters.categorySlug }),
+            ...(filters?.theme && { theme: filters.theme }),
+            ...(filters?.level && { level: filters.level }),
             ...(sort && { sortKey: sort.field, sortDirection: sort.direction }),
         });
     }

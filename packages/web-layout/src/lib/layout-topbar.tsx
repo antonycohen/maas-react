@@ -86,7 +86,7 @@ export function LayoutTopbar({
                             onClick={onSubscribeClick}
                             className="bg-brand-primary hover:bg-brand-primary/90 flex h-10 items-center justify-center gap-1 rounded px-3 py-2 transition-colors md:px-4"
                         >
-                            <span className="font-body px-1 text-[13px] leading-5 font-semibold tracking-[-0.07px] text-white md:text-[14px]">
+                            <span className="font-body px-1 text-[12px] leading-5 font-semibold tracking-[-0.07px] text-white md:text-[14px]">
                                 {t('home.subscribe')}
                             </span>
                         </button>

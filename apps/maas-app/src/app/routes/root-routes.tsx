@@ -13,6 +13,7 @@ const MagazinesRoutes = lazy(() => import('@maas/web-feature-home').then((m) => 
 const FolderRoutes = lazy(() => import('@maas/web-feature-home').then((m) => ({ default: m.FolderRoutes })));
 const ArticlesRoutes = lazy(() => import('@maas/web-feature-home').then((m) => ({ default: m.ArticlesRoutes })));
 const CategoryPage = lazy(() => import('@maas/web-feature-home').then((m) => ({ default: m.CategoryPage })));
+const MathThemesPage = lazy(() => import('@maas/web-feature-home').then((m) => ({ default: m.MathThemesPage })));
 const PricingRoutes = lazy(() => import('@maas/web-feature-pricing').then((m) => ({ default: m.PricingRoutes })));
 const AccountRoutes = lazy(() => import('@maas/web-feature-users').then((m) => ({ default: m.AccountRoutes })));
 
@@ -33,6 +34,7 @@ export const RootRoutes = () => {
                     <Route path="magazines/*" element={<MagazinesRoutes />} />
                     <Route path="dossiers/*" element={<FolderRoutes />} />
                     <Route path="categories/:slug" element={<CategoryPage />} />
+                    <Route path="mathematical-themes/:theme?" element={<MathThemesPage />} />
                     <Route path="articles/*" element={<ArticlesRoutes />} />
                     <Route path={'pricing/*'} element={<PricingRoutes />} />
                     <Route path="account/*" element={<ProtectedPage />}>
