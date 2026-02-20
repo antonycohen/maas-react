@@ -61,9 +61,6 @@
             "path": "./packages/web-feature-magazine"
         },
         {
-            "path": "./apps/maas-bo-app"
-        },
-        {
             "path": "./packages/web-cms-editor"
         },
         {

@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import { AdminRoutes } from './admin-routes';
 import { ProtectedPage, useConnectedUser } from '@maas/core-store-session';
 import { Layout } from '@maas/web-layout';
+import { NotFoundPage } from '@maas/web-components';
 import { useAutoScrollTop } from '../hooks/use-auto-scroll-top';
 
 // Lazy-loaded public feature routes for code splitting
@@ -40,6 +41,7 @@ export const RootRoutes = () => {
                     <Route path="account/*" element={<ProtectedPage />}>
                         <Route path="*" element={<AccountRoutes />} />
                     </Route>
+                    <Route path="*" element={<NotFoundPage />} />
                 </Route>
             </Routes>
         </Suspense>

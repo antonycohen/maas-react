@@ -9,7 +9,7 @@ import { useMainNavigation } from '../hooks/use-main-navigation';
 import { useUserNavigation } from '../hooks/use-user-navigation';
 import { GalleryVerticalEnd } from 'lucide-react';
 import { ADMIN_ROUTES, buildWorkspaceBaseUrl } from '@maas/core-routes';
-import { ErrorBoundary } from '@maas/web-components';
+import { ErrorBoundary, NotFoundPage } from '@maas/web-components';
 
 // Feature route components — lazily loaded for code splitting
 const AccountRoutes = lazy(() => import('@maas/web-feature-users').then((m) => ({ default: m.AccountRoutes })));
@@ -148,7 +148,7 @@ const WorkspaceRoutesContent = ({ connectedUser, organizationId, organizations }
                         <Route path={ADMIN_ROUTES.PMS_FEATURES_WILDCARD} element={<FeaturesRoutes />} />
                         <Route path={ADMIN_ROUTES.PMS_SUBSCRIPTIONS_WILDCARD} element={<PmsSubscriptionsRoutes />} />
                         <Route path={ADMIN_ROUTES.PMS_WIZARD} element={<WizardRoutes />} />
-                        <Route path="*" element={<Navigate to={routes.issues()} />} />
+                        <Route path="*" element={<NotFoundPage />} />
                     </Route>
                 </Routes>
             </Suspense>

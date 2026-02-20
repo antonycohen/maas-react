@@ -2,6 +2,7 @@ import { User } from '@maas/core-api-models';
 export interface MenuItem {
     label: string;
     href: string;
+    children?: MenuItem[];
 }
 type LayoutHeaderBarProps = {
     connectedUser: User | null;

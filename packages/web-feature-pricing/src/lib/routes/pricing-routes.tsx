@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import { NotFoundPage } from '@maas/web-components';
 import { PricingPage } from '../pages/pricing-page/pricing-page';
 import { PricingAuthPage } from '../pages/pricing-auth-page/pricing-auth-page';
 import { PricingPaiementPage } from '../pages/pricing-paiement-page/pricing-paiement-page';
@@ -15,6 +16,7 @@ export function PricingRoutes() {
             <Route path="adresse" element={<PricingAdressePage />} />
             <Route path="checkout/success" element={<CheckoutSuccessPage />} />
             <Route path="checkout/cancel" element={<CheckoutCancelPage />} />
+            <Route path="*" element={<NotFoundPage />} />
         </Routes>
     );
 }

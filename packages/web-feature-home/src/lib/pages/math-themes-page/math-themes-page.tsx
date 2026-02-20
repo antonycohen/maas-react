@@ -3,6 +3,7 @@ import {
     mapIssueToFeedArticle,
     FeedArticleItem,
     TitleAndDescriptionHero,
+    NotFoundPage,
     Pagination,
     Select,
     SelectContent,
@@ -17,6 +18,18 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from '@maas/core-translations';
 
+const VALID_THEMES = [
+    'geometry',
+    'algebra',
+    'analysis',
+    'arithmetic',
+    'numerical',
+    'logic',
+    'combinatorics_and_games',
+    'applied_mathematics',
+    'probability_and_statistics',
+] as const;
+
 const columns: ColumnDef<Article>[] = [
     {
         id: 'publishedAt',
@@ -28,6 +41,10 @@ const columns: ColumnDef<Article>[] = [
 export const MathThemesPage = () => {
     const { theme } = useParams<{ theme?: string }>();
     const { t } = useTranslation();
+
+    if (theme && !VALID_THEMES.includes(theme as (typeof VALID_THEMES)[number])) {
+        return <NotFoundPage />;
+    }
 
     const renderContent = ({ items }: CollectionRenderProps<Article>) => {
         if (items.length === 0) {
