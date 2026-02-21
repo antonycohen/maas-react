@@ -2,7 +2,7 @@ import { ApiError, useCreateCategory, useDeleteCategory, useUpdateCategory } fro
 import { UseFormReturn } from 'react-hook-form';
 import { CreateCategory, UpdateCategory } from '@maas/core-api-models';
 import { useNavigate } from 'react-router-dom';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
 
@@ -13,7 +13,7 @@ export const useEditActions = (
 ) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
 
     const handleApiError = (error: ApiError) => {
         if (error.parametersErrors) {
@@ -28,21 +28,21 @@ export const useEditActions = (
 
     const createMutation = useCreateCategory({
         onSuccess: () => {
-            navigate(`${currentWorkspaceBaseUrl}/categories`);
+            navigate(routes.categories());
         },
         onError: handleApiError,
     });
 
     const updateMutation = useUpdateCategory({
         onSuccess: () => {
-            navigate(`${currentWorkspaceBaseUrl}/categories`);
+            navigate(routes.categories());
         },
         onError: handleApiError,
     });
 
     const deleteMutation = useDeleteCategory({
         onSuccess: () => {
-            navigate(`${currentWorkspaceBaseUrl}/categories`);
+            navigate(routes.categories());
         },
         onError: () => {
             toast.error(t('message.error.deleted', { entity: t('categories.title') }));

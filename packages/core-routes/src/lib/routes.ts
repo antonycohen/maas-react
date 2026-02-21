@@ -43,11 +43,17 @@ export const SEGMENTS = {
     ROUTING_FILES: 'routing-files',
     DIFFUSION_LISTS: 'diffusion-lists',
 
-    // Checkout
+    // Checkout / Pricing steps
     PRICING: 'pricing',
+    AUTH: 'auth',
+    PAIEMENT: 'paiement',
+    ADRESSE: 'adresse',
     CHECKOUT: 'checkout',
     SUCCESS: 'success',
     CANCEL: 'cancel',
+
+    // Public content - Math
+    MATHEMATICAL_THEMES: 'mathematical-themes',
 
     // PMS (Pricing Management System)
     PMS: 'pms',
@@ -76,10 +82,23 @@ export const PUBLIC_ROUTES = {
     LOGIN_CALLBACK: `/${SEGMENTS.LOGIN}/${SEGMENTS.CALLBACK}`,
     LOGIN_DISPATCHER: `/${SEGMENTS.LOGIN}/${SEGMENTS.DISPATCHER}`,
     LOGOUT: `/${SEGMENTS.LOGOUT}`,
+
+    // Account (public context)
+    ACCOUNT: `/${SEGMENTS.ACCOUNT}`,
+    ACCOUNT_PROFILE: `/${SEGMENTS.ACCOUNT}/${SEGMENTS.PROFILE}`,
+
+    // Content
     MAGAZINES: `/${SEGMENTS.MAGAZINES}`,
     DOSSIERS: `/${SEGMENTS.DOSSIERS}`,
     CATEGORIES: `/${SEGMENTS.CATEGORIES}`,
+    ARTICLES: `/${SEGMENTS.ARTICLES}`,
+    MATHEMATICAL_THEMES: `/${SEGMENTS.MATHEMATICAL_THEMES}`,
+
+    // Pricing flow
     PRICING: `/${SEGMENTS.PRICING}`,
+    PRICING_AUTH: `/${SEGMENTS.PRICING}/${SEGMENTS.AUTH}`,
+    PRICING_PAIEMENT: `/${SEGMENTS.PRICING}/${SEGMENTS.PAIEMENT}`,
+    PRICING_ADRESSE: `/${SEGMENTS.PRICING}/${SEGMENTS.ADRESSE}`,
     CHECKOUT_SUCCESS: `/${SEGMENTS.PRICING}/${SEGMENTS.CHECKOUT}/${SEGMENTS.SUCCESS}`,
     CHECKOUT_CANCEL: `/${SEGMENTS.PRICING}/${SEGMENTS.CHECKOUT}/${SEGMENTS.CANCEL}`,
 } as const;

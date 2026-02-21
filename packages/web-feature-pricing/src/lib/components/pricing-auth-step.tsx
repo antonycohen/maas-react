@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuthorizationUrl } from '@maas/core-api';
 import { useOAuthStore } from '@maas/core-store-oauth';
+import { usePublicRoutes } from '@maas/core-routes';
 
 export function PricingAuthStep() {
     const navigate = useNavigate();
     const accessToken = useOAuthStore((s) => s.accessToken);
+    const publicRoutes = usePublicRoutes();
     const [iframeUrl, setIframeUrl] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const hasInitialized = useRef(false);
@@ -16,7 +18,7 @@ export function PricingAuthStep() {
         hasInitialized.current = true;
 
         if (accessToken) {
-            navigate('/pricing/paiement', { replace: true });
+            navigate(publicRoutes.pricingPaiement, { replace: true });
             return;
         }
 
@@ -33,7 +35,7 @@ export function PricingAuthStep() {
     // Poll for auth token changes (iframe sets cookies, we rehydrate to detect)
     useEffect(() => {
         if (accessToken) {
-            navigate('/pricing/paiement', { replace: true });
+            navigate(publicRoutes.pricingPaiement, { replace: true });
             return;
         }
 
@@ -56,7 +58,7 @@ export function PricingAuthStep() {
                         </p>
                     </div>
                     <button
-                        onClick={() => navigate('/pricing')}
+                        onClick={() => navigate(publicRoutes.pricing)}
                         className="text-text-secondary hover:text-foreground cursor-pointer text-sm font-medium transition-colors"
                     >
                         Retour

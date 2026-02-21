@@ -5,28 +5,30 @@ import { LayoutBreadcrumb, LayoutContent, LayoutHeader } from '@maas/web-layout'
 import { Button } from '@maas/web-components';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons-react';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useArticleTypeOptions, usePublishedStatusOptions } from '../../../hook/use-filter-options';
 import { useTranslation } from '@maas/core-translations';
 
 export function ArticlesListManagerPage() {
     const { t } = useTranslation();
     const columns = useArticlesListColumns();
-    const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const publishedStatusOptions = usePublishedStatusOptions();
     const articleTypeOptions = useArticleTypeOptions();
 
     return (
         <div>
             <header>
-                <LayoutBreadcrumb items={[{ label: t('common.home'), to: '/' }, { label: t('articles.title') }]} />
+                <LayoutBreadcrumb
+                    items={[{ label: t('common.home'), to: routes.root() }, { label: t('articles.title') }]}
+                />
             </header>
             <LayoutContent>
                 <LayoutHeader
                     pageTitle={t('articles.title')}
                     actions={
                         <Button asChild>
-                            <Link to={`${workspaceBaseUrl}/articles/new`}>
+                            <Link to={routes.articleNew()}>
                                 <IconPlus className="mr-2 h-4 w-4" />
                                 {t('articles.new')}
                             </Link>

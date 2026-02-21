@@ -5,7 +5,7 @@ import { LayoutBreadcrumb, LayoutContent, LayoutHeader } from '@maas/web-layout'
 import { Button, ButtonGroup, Input } from '@maas/web-components';
 import { Link, useSearchParams } from 'react-router-dom';
 import { IconLayoutList, IconPlus, IconBinaryTree } from '@tabler/icons-react';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 import { useState, useEffect } from 'react';
 import { CategoryTreeView } from './components/category-tree-view';
@@ -15,7 +15,7 @@ type ViewMode = 'list' | 'tree';
 export function CategoriesListManagerPage() {
     const { t } = useTranslation();
     const columns = useCategoriesListColumns();
-    const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
 
     const [searchParams, setSearchParams] = useSearchParams();
     const viewMode: ViewMode = searchParams.get('view') === 'tree' ? 'tree' : 'list';
@@ -43,10 +43,7 @@ export function CategoriesListManagerPage() {
         <div>
             <header>
                 <LayoutBreadcrumb
-                    items={[
-                        { label: t('common.home'), to: `${currentWorkspaceBaseUrl}` },
-                        { label: t('categories.title') },
-                    ]}
+                    items={[{ label: t('common.home'), to: routes.root() }, { label: t('categories.title') }]}
                 />
             </header>
             <LayoutContent>
@@ -71,7 +68,7 @@ export function CategoriesListManagerPage() {
                                 </Button>
                             </ButtonGroup>
                             <Button asChild>
-                                <Link to={`${currentWorkspaceBaseUrl}/categories/new`}>
+                                <Link to={routes.categoryNew()}>
                                     <IconPlus className="mr-2 h-4 w-4" />
                                     {t('categories.new')}
                                 </Link>

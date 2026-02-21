@@ -27,6 +27,9 @@
             "path": "../core-api/tsconfig.lib.json"
         },
         {
+            "path": "../core-routes/tsconfig.lib.json"
+        },
+        {
             "path": "../core-translations/tsconfig.lib.json"
         },
         {

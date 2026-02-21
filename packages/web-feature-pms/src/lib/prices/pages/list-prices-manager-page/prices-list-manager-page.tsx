@@ -5,25 +5,27 @@ import { LayoutBreadcrumb, LayoutContent, LayoutHeader } from '@maas/web-layout'
 import { Button } from '@maas/web-components';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons-react';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 
 export function PricesListManagerPage() {
     const columns = usePricesListColumns();
-    const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const { t } = useTranslation();
 
     return (
         <div>
             <header>
-                <LayoutBreadcrumb items={[{ label: t('common.home'), to: '/' }, { label: t('prices.title') }]} />
+                <LayoutBreadcrumb
+                    items={[{ label: t('common.home'), to: routes.root() }, { label: t('prices.title') }]}
+                />
             </header>
             <LayoutContent>
                 <LayoutHeader
                     pageTitle={t('prices.title')}
                     actions={
                         <Button asChild>
-                            <Link to={`${currentWorkspaceBaseUrl}/pms/prices/new`}>
+                            <Link to={routes.pmsPriceEdit('new')}>
                                 <IconPlus className="mr-2 h-4 w-4" />
                                 {t('prices.new')}
                             </Link>

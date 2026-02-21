@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { cn } from '@maas/core-utils';
 import { IconMapPin, IconWorld } from '@tabler/icons-react';
 import { useOAuthStore } from '@maas/core-store-oauth';
+import { usePublicRoutes } from '@maas/core-routes';
 import type { BillingInterval, PricingPlan } from '../hooks/use-pricing-data';
 import { usePricingStore } from '../store/pricing-store';
 import { PricingSummary } from './pricing-summary';
@@ -39,6 +40,7 @@ export function PricingConfigurator({ plan }: PricingConfiguratorProps) {
     const setShipping = usePricingStore((s) => s.setShipping);
     const accessToken = useOAuthStore((s) => s.accessToken);
     const navigate = useNavigate();
+    const publicRoutes = usePublicRoutes();
 
     // Auto-select interval when plan changes or if current interval isn't available
     useEffect(() => {
@@ -59,9 +61,9 @@ export function PricingConfigurator({ plan }: PricingConfiguratorProps) {
 
     const handleSubscribe = () => {
         if (accessToken) {
-            navigate('/pricing/paiement');
+            navigate(publicRoutes.pricingPaiement);
         } else {
-            navigate('/pricing/auth');
+            navigate(publicRoutes.pricingAuth);
         }
     };
 

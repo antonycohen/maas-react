@@ -9,14 +9,14 @@ import { createConnectedInputHelpers } from '@maas/web-form';
 import { IconTrash } from '@tabler/icons-react';
 import { useEditBrandForm } from './hooks/use-edit-brand-form';
 import { useEditActions } from './hooks/use-edit-actions';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 
 export function EditBrandManagerPage() {
     const { brandId = '' } = useParams<{ brandId: string }>();
     const { t } = useTranslation();
 
     const { brand, isLoading, form, isCreateMode } = useEditBrandForm(brandId);
-    const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
 
     const { deleteMutation, handleDelete, isSaving, onSubmit } = useEditActions(form, isCreateMode, brandId);
 
@@ -41,8 +41,8 @@ export function EditBrandManagerPage() {
             <header>
                 <LayoutBreadcrumb
                     items={[
-                        { label: 'Home', to: `${workspaceBaseUrl}` },
-                        { label: 'Brands', to: `${workspaceBaseUrl}/brands` },
+                        { label: 'Home', to: routes.root() },
+                        { label: 'Brands', to: routes.brands() },
                         { label: breadcrumbLabel },
                     ]}
                 />

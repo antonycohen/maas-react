@@ -27,10 +27,10 @@
     "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
     "references": [
         {
-            "path": "../web-cms-editor/tsconfig.lib.json"
+            "path": "../core-routes/tsconfig.lib.json"
         },
         {
-            "path": "../core-translations/tsconfig.lib.json"
+            "path": "../web-cms-editor/tsconfig.lib.json"
         },
         {
             "path": "../web-collection/tsconfig.lib.json"
@@ -49,6 +49,9 @@
         },
         {
             "path": "../core-api-models/tsconfig.lib.json"
+        },
+        {
+            "path": "../core-translations/tsconfig.lib.json"
         },
         {
             "path": "../web-components/tsconfig.lib.json"

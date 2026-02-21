@@ -3,6 +3,7 @@ import { User } from '@maas/core-api-models';
 import { Search, UserCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from '@maas/core-translations';
+import { PUBLIC_ROUTES } from '@maas/core-routes';
 
 type LayoutTopbarProps = {
     connectedUser: User | null;
@@ -26,7 +27,7 @@ export function LayoutTopbar({
                 <div className="flex w-full items-center justify-between gap-3 md:justify-center">
                     {/* Left - Logo */}
                     <div className="flex items-start md:flex-1">
-                        <Link to="/" className="h-10 w-[100px] md:h-14 md:w-[150px]">
+                        <Link to={PUBLIC_ROUTES.HOME} className="h-10 w-[100px] md:h-14 md:w-[150px]">
                             <img
                                 src="/logo-tangente-full.png"
                                 alt="Tangente"
@@ -60,7 +61,7 @@ export function LayoutTopbar({
                         {connectedUser ? (
                             /* Connected User - Show Avatar/Profile */
                             <Link
-                                to="/account"
+                                to={PUBLIC_ROUTES.ACCOUNT}
                                 className="flex h-10 items-center justify-center gap-1 rounded border border-[#e0e0e0] bg-white px-2 py-2 transition-colors hover:bg-gray-50 md:px-4"
                             >
                                 <UserCircle className="h-5 w-5 text-black" />

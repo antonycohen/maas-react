@@ -14,7 +14,7 @@ import {
 import { LayoutBreadcrumb, LayoutContent } from '@maas/web-layout';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCreateFeature, useDeleteFeature, useGetFeatureById, useUpdateFeature } from '@maas/core-api';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { CreateFeature, UpdateFeature } from '@maas/core-api-models';
@@ -26,7 +26,7 @@ type FeatureFormValues = CreateFeature | UpdateFeature;
 export function EditFeatureManagerPage() {
     const { featureId = '' } = useParams<{ featureId: string }>();
     const isCreateMode = featureId === 'new';
-    const workspaceUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const navigate = useNavigate();
 
     const { data: feature, isLoading } = useGetFeatureById(
@@ -67,7 +67,7 @@ export function EditFeatureManagerPage() {
 
     const createMutation = useCreateFeature({
         onSuccess: (data) => {
-            navigate(`${workspaceUrl}/pms/features/${data.id}`);
+            navigate(routes.pmsFeatureEdit(data.id));
             toast.success('Feature created successfully');
         },
         onError: () => {
@@ -86,7 +86,7 @@ export function EditFeatureManagerPage() {
 
     const deleteMutation = useDeleteFeature({
         onSuccess: () => {
-            navigate(`${workspaceUrl}/pms/features`);
+            navigate(routes.pmsFeatures());
             toast.success('Feature deleted successfully');
         },
         onError: () => {
@@ -127,8 +127,8 @@ export function EditFeatureManagerPage() {
             <header>
                 <LayoutBreadcrumb
                     items={[
-                        { label: 'Home', to: `${workspaceUrl}/` },
-                        { label: 'Features', to: `${workspaceUrl}/pms/features` },
+                        { label: 'Home', to: routes.root() },
+                        { label: 'Features', to: routes.pmsFeatures() },
                         { label: isCreateMode ? 'New' : (feature?.displayName ?? '') },
                     ]}
                 />

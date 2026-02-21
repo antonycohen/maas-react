@@ -14,6 +14,7 @@ import {
 } from '@maas/web-components';
 import { useConnectedUser } from '@maas/core-store-session';
 import { normalizeString } from '@maas/core-utils';
+import { PUBLIC_ROUTES } from '@maas/core-routes';
 
 export const ArticleContent = ({
     title,
@@ -33,17 +34,16 @@ export const ArticleContent = ({
     const { isUserSubscribed } = useSubscriptionStatus();
     const connectedUser = useConnectedUser();
     const isAdmin = connectedUser?.roles?.includes('ADMIN') ?? false;
-    const isProbleme = type?.name ? normalizeString(type.name) === 'probleme' : false;
+    const isProblem = type?.name ? normalizeString(type.name) === 'probleme' : false;
     const blocks = useRenderBlocks(content);
-    const solutionBlocks = useRenderBlocks(isProbleme ? (customFields?.solution as CMSBlock[] | null) : null);
+    const solutionBlocks = useRenderBlocks(isProblem ? (customFields?.solution as CMSBlock[] | null) : null);
     const { resizedImage } = useResizedImage({ images: featuredImage?.resizedImages, width: 960 });
     const coverUrl = resizedImage?.url ?? featuredImage?.url;
 
     const [showSolution, setShowSolution] = useState(false);
     const [showSubscribeDialog, setShowSubscribeDialog] = useState(false);
 
-    const showOverlayAndCta = !isProbleme && !isUserSubscribed && !isAdmin && visibility !== 'public';
-
+    const showOverlayAndCta = !isProblem && !isUserSubscribed && !isAdmin && visibility !== 'public';
     const handleShowSolution = () => {
         if (isAdmin || isUserSubscribed) {
             setShowSolution(true);
@@ -65,7 +65,7 @@ export const ArticleContent = ({
                 )}
             </div>
             {showOverlayAndCta && <SubscriptionCTA />}
-            {isProbleme &&
+            {isProblem &&
                 (!showSolution ? (
                     <button
                         onClick={handleShowSolution}
@@ -86,7 +86,7 @@ export const ArticleContent = ({
                         <DialogDescription>Devenez membre pour voir la solution, et tout tangente</DialogDescription>
                     </DialogHeader>
                     <Link
-                        to="/pricing"
+                        to={PUBLIC_ROUTES.PRICING}
                         className="font-body flex h-[40px] w-full items-center justify-center rounded-[4px] bg-[#E31B22] px-4 py-2 text-[14px] leading-[20px] font-semibold tracking-[-0.07px] text-white transition-colors hover:bg-[#c4161c]"
                     >
                         S'abonner

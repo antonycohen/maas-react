@@ -1,6 +1,7 @@
 import { useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useOAuthStore } from '@maas/core-store-oauth';
+import { usePublicRoutes } from '@maas/core-routes';
 import { usePricingData } from '../../hooks/use-pricing-data';
 import { usePricingStore } from '../../store/pricing-store';
 import { PricingPaiementStep } from '../../components/pricing-paiement-step';
@@ -8,6 +9,7 @@ import { PricingStepperLayout } from '../../components/pricing-stepper-layout';
 
 export const PricingPaiementPage = () => {
     const navigate = useNavigate();
+    const publicRoutes = usePublicRoutes();
     const selectedPlanId = usePricingStore((s) => s.selectedPlanId);
     const accessToken = useOAuthStore((s) => s.accessToken);
     const { pricingPlans, isLoading } = usePricingData();
@@ -19,13 +21,13 @@ export const PricingPaiementPage = () => {
 
     useEffect(() => {
         if (!isLoading && !selectedPlanId) {
-            navigate('/pricing');
+            navigate(publicRoutes.pricing);
         }
     }, [isLoading, selectedPlanId, navigate]);
 
     useEffect(() => {
         if (!accessToken) {
-            navigate('/pricing/auth');
+            navigate(publicRoutes.pricingAuth);
         }
     }, [accessToken, navigate]);
 

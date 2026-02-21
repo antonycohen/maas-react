@@ -5,11 +5,11 @@ import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collecti
 import { cn } from '@maas/core-utils';
 import { Link } from 'react-router-dom';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 
 export function useEnumsListColumns(): ColumnDef<Enum>[] {
-    const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const { t } = useTranslation();
 
     return [
@@ -45,7 +45,7 @@ export function useEnumsListColumns(): ColumnDef<Enum>[] {
             header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.name')} />,
             cell: ({ row }) => {
                 return (
-                    <Link to={`${workspaceBaseUrl}/enums/${row.original.id}`} className="underline">
+                    <Link to={routes.enumEdit(row.original.id)} className="underline">
                         <LongText className="max-w-48">{row.getValue('name')}</LongText>
                     </Link>
                 );
@@ -71,14 +71,14 @@ export function useEnumsListColumns(): ColumnDef<Enum>[] {
                         {
                             label: t('enums.edit'),
                             icon: IconEdit,
-                            linkTo: (enumItem: Enum) => `${workspaceBaseUrl}/enums/${enumItem.id}`,
+                            linkTo: (enumItem: Enum) => routes.enumEdit(enumItem.id),
                         },
                         {
                             label: t('enums.delete'),
                             icon: IconTrash,
                             group: 'danger',
                             className: 'text-red-500!',
-                            linkTo: (enumItem: Enum) => `${workspaceBaseUrl}/enums/${enumItem.id}`,
+                            linkTo: (enumItem: Enum) => routes.enumEdit(enumItem.id),
                         },
                     ]}
                 />

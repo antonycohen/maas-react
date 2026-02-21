@@ -1,6 +1,7 @@
 import { FolderCard, FolderCardSkeleton, TitleAndDescriptionHero } from '@maas/web-components';
 import { useGetFolders } from '@maas/core-api';
 import { useTranslation } from '@maas/core-translations';
+import { publicUrlBuilders } from '@maas/core-routes';
 
 export const FoldersPage = () => {
     const { t } = useTranslation();
@@ -48,7 +49,11 @@ export const FoldersPage = () => {
                 {!response
                     ? Array.from({ length: 3 }).map((_, i) => <FolderCardSkeleton key={i} />)
                     : response.data?.map((folder) => (
-                          <FolderCard key={`folder-${folder.id}`} folder={folder} link={`/dossiers/${folder.id}`} />
+                          <FolderCard
+                              key={`folder-${folder.id}`}
+                              folder={folder}
+                              link={publicUrlBuilders.folder(folder.id)}
+                          />
                       ))}
             </div>
         </div>

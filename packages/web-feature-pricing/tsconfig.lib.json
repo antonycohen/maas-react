@@ -34,6 +34,9 @@
             "path": "../core-store-oauth/tsconfig.lib.json"
         },
         {
+            "path": "../core-routes/tsconfig.lib.json"
+        },
+        {
             "path": "../core-utils/tsconfig.lib.json"
         },
         {

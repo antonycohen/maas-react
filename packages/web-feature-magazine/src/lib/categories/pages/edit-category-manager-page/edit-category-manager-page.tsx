@@ -18,12 +18,12 @@ import { createConnectedInputHelpers } from '@maas/web-form';
 import { IconTrash } from '@tabler/icons-react';
 import { useEditCategoryForm } from './hooks/use-edit-category-form';
 import { useEditActions } from './hooks/use-edit-actions';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 
 export function EditCategoryManagerPage() {
     const { categoryId = '' } = useParams<{ categoryId: string }>();
     const { t } = useTranslation();
-    const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
 
     const { category, isLoading, form, isCreateMode } = useEditCategoryForm(categoryId);
 
@@ -44,10 +44,10 @@ export function EditCategoryManagerPage() {
             <header>
                 <LayoutBreadcrumb
                     items={[
-                        { label: 'Home', to: `${currentWorkspaceBaseUrl}` },
+                        { label: 'Home', to: routes.root() },
                         {
                             label: 'Categories',
-                            to: `${currentWorkspaceBaseUrl}/categories`,
+                            to: routes.categories(),
                         },
                         { label: breadcrumbLabel },
                     ]}

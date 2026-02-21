@@ -5,10 +5,10 @@ import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collecti
 import { cn } from '@maas/core-utils';
 import { Link } from 'react-router-dom';
 import { IconEdit, IconSparkles, IconTrash } from '@tabler/icons-react';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 
 export function useFeaturesListColumns(): ColumnDef<Feature>[] {
-    const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
 
     return [
         {
@@ -43,10 +43,7 @@ export function useFeaturesListColumns(): ColumnDef<Feature>[] {
             header: ({ column }) => <CollectionColumnHeader column={column} title="Display Name" />,
             cell: ({ row }) => {
                 return (
-                    <Link
-                        to={`${currentWorkspaceBaseUrl}/pms/features/${row.original.id}`}
-                        className="flex items-center gap-3"
-                    >
+                    <Link to={routes.pmsFeatureEdit(row.original.id)} className="flex items-center gap-3">
                         <div className="bg-muted h-10 w-10 shrink-0 overflow-hidden rounded-md">
                             <div className="text-muted-foreground flex h-full w-full items-center justify-center">
                                 <IconSparkles className="h-5 w-5" />
@@ -84,14 +81,14 @@ export function useFeaturesListColumns(): ColumnDef<Feature>[] {
                         {
                             label: 'Edit Feature',
                             icon: IconEdit,
-                            linkTo: (feature: Feature) => `${currentWorkspaceBaseUrl}/pms/features/${feature.id}`,
+                            linkTo: (feature: Feature) => routes.pmsFeatureEdit(feature.id),
                         },
                         {
                             label: 'Delete Feature',
                             icon: IconTrash,
                             group: 'danger',
                             className: 'text-red-500!',
-                            linkTo: (feature: Feature) => `${currentWorkspaceBaseUrl}/pms/features/${feature.id}`,
+                            linkTo: (feature: Feature) => routes.pmsFeatureEdit(feature.id),
                         },
                     ]}
                 />

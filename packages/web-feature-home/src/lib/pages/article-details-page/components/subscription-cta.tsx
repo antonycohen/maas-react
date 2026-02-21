@@ -1,6 +1,7 @@
 import { CheckIcon } from '@radix-ui/react-icons';
 import { useTranslation } from '@maas/core-translations';
 import { Link } from 'react-router-dom';
+import { PUBLIC_ROUTES } from '@maas/core-routes';
 
 export const SubscriptionCTA = () => {
     const { t } = useTranslation();
@@ -25,7 +26,7 @@ export const SubscriptionCTA = () => {
                 ))}
             </div>
             <Link
-                to="/pricing"
+                to={PUBLIC_ROUTES.PRICING}
                 className="font-body flex h-[40px] w-full items-center justify-center rounded-[4px] bg-[#E31B22] px-4 py-2 text-[14px] leading-[20px] font-semibold tracking-[-0.07px] text-white transition-colors hover:bg-[#c4161c]"
             >
                 {t('home.subscribe')}

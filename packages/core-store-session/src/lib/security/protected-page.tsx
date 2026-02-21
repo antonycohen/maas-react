@@ -1,6 +1,7 @@
 import { useOAuthStore } from '@maas/core-store-oauth';
 import { useEffect, useRef } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { PUBLIC_ROUTES } from '@maas/core-routes';
 
 export const ProtectedPage = () => {
     const accessToken = useOAuthStore((state) => state.accessToken);
@@ -13,7 +14,7 @@ export const ProtectedPage = () => {
         if (!accessToken) {
             const { pathname, search } = locationRef.current;
             localStorage.setItem('target-url', `${pathname}${search}`);
-            navigate('/login', { replace: true });
+            navigate(PUBLIC_ROUTES.LOGIN, { replace: true });
         }
     }, [accessToken, navigate]);
 

@@ -2,7 +2,7 @@ import { Button, TabNavLinks } from '@maas/web-components';
 import { LayoutBreadcrumb } from '@maas/web-layout';
 import { Outlet, useParams } from 'react-router-dom';
 import { useGetCustomerById } from '@maas/core-api';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { ReadCustomer } from '@maas/core-api-models';
 import { FormProvider, UseFormReturn } from 'react-hook-form';
 import { CustomerFormValues, useEditCustomerActions, useEditCustomerForm } from './hooks';
@@ -18,7 +18,7 @@ export type EditCustomerOutletContext = {
 
 export function EditCustomerManagerPage() {
     const { customerId = '' } = useParams<{ customerId: string }>();
-    const workspaceUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const { t } = useTranslation();
 
     const { data: customer, isLoading } = useGetCustomerById({
@@ -51,9 +51,9 @@ export function EditCustomerManagerPage() {
 
     const pageTitle = customer?.name ?? '';
 
-    const getTabItems = (baseUrl: string, id: string) => [
-        { title: t('customers.tabs.info'), url: `${baseUrl}/customers/${id}/info` },
-        { title: t('customers.tabs.subscriptions'), url: `${baseUrl}/customers/${id}/subscriptions` },
+    const getTabItems = (id: string) => [
+        { title: t('customers.tabs.info'), url: routes.customerInfo(id) },
+        { title: t('customers.tabs.subscriptions'), url: routes.customerSubscriptions(id) },
     ];
 
     if (isLoading) {
@@ -81,8 +81,8 @@ export function EditCustomerManagerPage() {
                 <header className="shrink-0">
                     <LayoutBreadcrumb
                         items={[
-                            { label: t('common.home'), to: `${workspaceUrl}/` },
-                            { label: t('customers.title'), to: `${workspaceUrl}/customers` },
+                            { label: t('common.home'), to: routes.root() },
+                            { label: t('customers.title'), to: routes.customers() },
                             { label: customer?.name ?? customerId },
                         ]}
                     />
@@ -121,7 +121,7 @@ export function EditCustomerManagerPage() {
                         </Button>
                     </div>
                 </div>
-                <TabNavLinks items={getTabItems(workspaceUrl, customerId)} />
+                <TabNavLinks items={getTabItems(customerId)} />
 
                 <Outlet context={outletContext} />
             </form>

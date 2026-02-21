@@ -2,7 +2,7 @@ import { ApiError, useCreateArticle, useDeleteArticle, useUpdateArticle } from '
 import { UseFormReturn } from 'react-hook-form';
 import { CreateArticle, UpdateArticle } from '@maas/core-api-models';
 import { useNavigate } from 'react-router-dom';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
 
@@ -12,7 +12,7 @@ export const useEditActions = (
     articleId: string
 ) => {
     const { t } = useTranslation();
-    const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const navigate = useNavigate();
 
     const handleApiError = (error: ApiError) => {
@@ -28,7 +28,7 @@ export const useEditActions = (
 
     const createMutation = useCreateArticle({
         onSuccess: () => {
-            navigate(`${workspaceBaseUrl}/articles`);
+            navigate(routes.articles());
             toast.success(t('message.success.created', { entity: t('articles.title') }));
         },
         onError: handleApiError,
@@ -36,7 +36,7 @@ export const useEditActions = (
 
     const updateMutation = useUpdateArticle({
         onSuccess: () => {
-            navigate(`${workspaceBaseUrl}/articles`);
+            navigate(routes.articles());
             toast.success(t('message.success.updated', { entity: t('articles.title') }));
         },
         onError: handleApiError,
@@ -44,7 +44,7 @@ export const useEditActions = (
 
     const deleteMutation = useDeleteArticle({
         onSuccess: () => {
-            navigate(`${workspaceBaseUrl}/articles`);
+            navigate(routes.articles());
             toast.success(t('message.success.deleted', { entity: t('articles.title') }));
         },
         onError: () => {

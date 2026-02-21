@@ -1,5 +1,6 @@
 import { useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { usePublicRoutes } from '@maas/core-routes';
 import { usePricingData } from '../../hooks/use-pricing-data';
 import { usePricingStore } from '../../store/pricing-store';
 import { PricingAddressStep } from '../../components/pricing-address-step';
@@ -8,6 +9,7 @@ import { usePrefillCustomerAddress } from '../../hooks/use-prefill-customer-addr
 
 export const PricingInformationsPage = () => {
     const navigate = useNavigate();
+    const publicRoutes = usePublicRoutes();
     const selectedPlanId = usePricingStore((s) => s.selectedPlanId);
     usePrefillCustomerAddress();
 
@@ -20,7 +22,7 @@ export const PricingInformationsPage = () => {
 
     useEffect(() => {
         if (!isLoading && !selectedPlanId) {
-            navigate('/pricing');
+            navigate(publicRoutes.pricing);
         }
     }, [isLoading, selectedPlanId, navigate]);
 

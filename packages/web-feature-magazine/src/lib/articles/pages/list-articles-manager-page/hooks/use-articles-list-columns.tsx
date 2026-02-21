@@ -5,12 +5,12 @@ import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collecti
 import { cn } from '@maas/core-utils';
 import { Link } from 'react-router-dom';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 import { format } from 'date-fns';
 
 export function useArticlesListColumns(): ColumnDef<Article>[] {
-    const currentWorkspacePrefix = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const { t } = useTranslation();
 
     return [
@@ -61,7 +61,7 @@ export function useArticlesListColumns(): ColumnDef<Article>[] {
             header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.title')} />,
             cell: ({ row }) => {
                 return (
-                    <Link to={`${currentWorkspacePrefix}/articles/${row.original.id}`} className="underline">
+                    <Link to={routes.articleEdit(row.original.id)} className="underline">
                         <LongText className="max-w-48">{row.getValue('title')}</LongText>
                     </Link>
                 );
@@ -125,14 +125,14 @@ export function useArticlesListColumns(): ColumnDef<Article>[] {
                         {
                             label: t('articles.edit'),
                             icon: IconEdit,
-                            linkTo: (article: Article) => `/articles/${article.id}`,
+                            linkTo: (article: Article) => routes.articleEdit(article.id),
                         },
                         {
                             label: t('articles.delete'),
                             icon: IconTrash,
                             group: 'danger',
                             className: 'text-red-500!',
-                            linkTo: (article: Article) => `/articles/${article.id}`,
+                            linkTo: (article: Article) => routes.articleEdit(article.id),
                         },
                     ]}
                 />

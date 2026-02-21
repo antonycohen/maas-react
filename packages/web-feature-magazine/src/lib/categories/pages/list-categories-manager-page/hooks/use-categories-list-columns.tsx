@@ -5,11 +5,11 @@ import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collecti
 import { cn } from '@maas/core-utils';
 import { Link } from 'react-router-dom';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 
 export function useCategoriesListColumns(): ColumnDef<Category>[] {
-    const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const { t } = useTranslation();
 
     return [
@@ -60,7 +60,7 @@ export function useCategoriesListColumns(): ColumnDef<Category>[] {
             header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.name')} />,
             cell: ({ row }) => {
                 return (
-                    <Link to={`${currentWorkspaceBaseUrl}/categories/${row.original.id}`} className={'underline'}>
+                    <Link to={routes.categoryEdit(row.original.id)} className={'underline'}>
                         <LongText className="max-w-48">{row.getValue('name')}</LongText>
                     </Link>
                 );
@@ -79,7 +79,7 @@ export function useCategoriesListColumns(): ColumnDef<Category>[] {
             cell: ({ row }) => {
                 const parent = row.original.parent;
                 return parent ? (
-                    <Link to={`/categories/${parent.id}`} className="underline">
+                    <Link to={routes.categoryEdit(parent.id)} className="underline">
                         <LongText className="max-w-36">{parent.name}</LongText>
                     </Link>
                 ) : (
@@ -103,14 +103,14 @@ export function useCategoriesListColumns(): ColumnDef<Category>[] {
                         {
                             label: t('categories.edit'),
                             icon: IconEdit,
-                            linkTo: (category: Category) => `/categories/${category.id}`,
+                            linkTo: (category: Category) => routes.categoryEdit(category.id),
                         },
                         {
                             label: t('categories.delete'),
                             icon: IconTrash,
                             group: 'danger',
                             className: 'text-red-500!',
-                            linkTo: (category: Category) => `/categories/${category.id}`,
+                            linkTo: (category: Category) => routes.categoryEdit(category.id),
                         },
                     ]}
                 />

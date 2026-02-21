@@ -2,7 +2,8 @@ import { Badge, Button, TabNavLinks } from '@maas/web-components';
 import { LayoutBreadcrumb } from '@maas/web-layout';
 import { Outlet, useParams } from 'react-router-dom';
 import { useGetIssueById } from '@maas/core-api';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
+import { type WorkspaceRoutes } from '@maas/core-routes';
 import { useTranslation } from '@maas/core-translations';
 import { useState } from 'react';
 import { Folder, Issue } from '@maas/core-api-models';
@@ -11,14 +12,14 @@ import { useEditIssueForm, useEditIssueActions, IssueFormValues } from './hooks'
 import { IconDeviceFloppy, IconLoader2, IconTrash } from '@tabler/icons-react';
 import { FormProvider } from 'react-hook-form';
 
-const getTabItems = (baseUrl: string, issueId: string, t: (key: string) => string) => {
+const getTabItems = (routes: WorkspaceRoutes, issueId: string, t: (key: string) => string) => {
     if (issueId === 'new') {
-        return [{ title: t('common.info'), url: `${baseUrl}/issues/new/info` }];
+        return [{ title: t('common.info'), url: routes.issueNewInfo() }];
     }
 
     return [
-        { title: t('common.info'), url: `${baseUrl}/issues/${issueId}/info` },
-        { title: t('issues.organizer'), url: `${baseUrl}/issues/${issueId}/organizer` },
+        { title: t('common.info'), url: routes.issueInfo(issueId) },
+        { title: t('issues.organizer'), url: routes.issueOrganizer(issueId) },
     ];
 };
 
@@ -43,7 +44,7 @@ export type EditIssueOutletContext = {
 export function EditIssueManagerPage() {
     const { issueId = '' } = useParams<{ issueId: string }>();
     const isCreateMode = issueId === 'new';
-    const workspaceUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const { t } = useTranslation();
 
     // Selection state
@@ -145,12 +146,12 @@ export function EditIssueManagerPage() {
                 <header className="shrink-0">
                     <LayoutBreadcrumb
                         items={[
-                            { label: t('common.home'), to: `${workspaceUrl}/` },
-                            { label: t('issues.title'), to: `${workspaceUrl}/issues` },
+                            { label: t('common.home'), to: routes.root() },
+                            { label: t('issues.title'), to: routes.issues() },
                             { label: breadcrumbLabel },
                         ]}
                     />
-                    <TabNavLinks items={getTabItems(workspaceUrl, issueId, t)} />
+                    <TabNavLinks items={getTabItems(routes, issueId, t)} />
                 </header>
 
                 {/* Sticky Action Bar */}

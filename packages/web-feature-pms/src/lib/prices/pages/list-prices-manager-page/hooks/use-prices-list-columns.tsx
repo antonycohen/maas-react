@@ -5,7 +5,7 @@ import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collecti
 import { cn } from '@maas/core-utils';
 import { Link } from 'react-router-dom';
 import { IconEdit, IconCoin, IconTrash } from '@tabler/icons-react';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 
 const numberFormatCache = new Map<string, Intl.NumberFormat>();
@@ -25,7 +25,7 @@ const formatPrice = (price: Price): string => {
 };
 
 export function usePricesListColumns(): ColumnDef<Price>[] {
-    const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const { t } = useTranslation();
 
     return [
@@ -61,10 +61,7 @@ export function usePricesListColumns(): ColumnDef<Price>[] {
             header: ({ column }) => <CollectionColumnHeader column={column} title={t('prices.amount')} />,
             cell: ({ row }) => {
                 return (
-                    <Link
-                        to={`${currentWorkspaceBaseUrl}/pms/prices/${row.original.id}`}
-                        className="flex items-center gap-3"
-                    >
+                    <Link to={routes.pmsPriceEdit(row.original.id)} className="flex items-center gap-3">
                         <div className="bg-muted h-10 w-10 shrink-0 overflow-hidden rounded-md">
                             <div className="text-muted-foreground flex h-full w-full items-center justify-center">
                                 <IconCoin className="h-5 w-5" />
@@ -121,14 +118,14 @@ export function usePricesListColumns(): ColumnDef<Price>[] {
                         {
                             label: t('prices.edit'),
                             icon: IconEdit,
-                            linkTo: (price: Price) => `${currentWorkspaceBaseUrl}/pms/prices/${price.id}`,
+                            linkTo: (price: Price) => routes.pmsPriceEdit(price.id),
                         },
                         {
                             label: t('prices.delete'),
                             icon: IconTrash,
                             group: 'danger',
                             className: 'text-red-500!',
-                            linkTo: (price: Price) => `${currentWorkspaceBaseUrl}/pms/prices/${price.id}`,
+                            linkTo: (price: Price) => routes.pmsPriceEdit(price.id),
                         },
                     ]}
                 />

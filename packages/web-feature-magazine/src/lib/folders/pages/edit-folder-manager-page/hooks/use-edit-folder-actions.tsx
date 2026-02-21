@@ -2,7 +2,7 @@ import { ApiError, useCreateFolder, useDeleteFolder, useUpdateFolder } from '@ma
 import { UseFormReturn } from 'react-hook-form';
 import { CreateFolder, UpdateFolder } from '@maas/core-api-models';
 import { useNavigate } from 'react-router-dom';
-import { useCurrentWorkspaceUrlPrefix, useGetCurrentWorkspaceId } from '@maas/core-workspace';
+import { useRoutes, useGetCurrentWorkspaceId } from '@maas/core-workspace';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
 import { FolderFormValues } from './use-edit-folder-form';
@@ -13,7 +13,7 @@ export const useEditFolderActions = (
     folderId: string
 ) => {
     const { t } = useTranslation();
-    const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const workspaceId = useGetCurrentWorkspaceId();
     const navigate = useNavigate();
 
@@ -30,7 +30,7 @@ export const useEditFolderActions = (
 
     const createMutation = useCreateFolder({
         onSuccess: (data) => {
-            navigate(`${workspaceBaseUrl}/folders/${data.id}/info`);
+            navigate(routes.folderInfo(data.id));
             toast.success(t('message.success.created', { entity: t('folders.title') }));
         },
         onError: handleApiError,
@@ -45,7 +45,7 @@ export const useEditFolderActions = (
 
     const deleteMutation = useDeleteFolder({
         onSuccess: () => {
-            navigate(`${workspaceBaseUrl}/folders`);
+            navigate(routes.folders());
             toast.success(t('message.success.deleted', { entity: t('folders.title') }));
         },
         onError: () => {

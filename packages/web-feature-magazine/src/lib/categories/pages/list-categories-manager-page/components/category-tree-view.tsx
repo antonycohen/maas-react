@@ -1,7 +1,7 @@
 import { Category } from '@maas/core-api-models';
 import { useGetCategories } from '@maas/core-api';
 import { Skeleton } from '@maas/web-components';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 import { useMemo } from 'react';
 import { CategoryTreeNode, CategoryTreeNodeRow } from './category-tree-node';
@@ -71,7 +71,7 @@ function filterTree(nodes: CategoryTreeNode[], term: string): CategoryTreeNode[]
 
 export function CategoryTreeView({ searchTerm }: CategoryTreeViewProps) {
     const { t } = useTranslation();
-    const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
 
     const { data, isLoading } = useGetCategories({
         offset: 0,
@@ -128,7 +128,7 @@ export function CategoryTreeView({ searchTerm }: CategoryTreeViewProps) {
                         key={node.category.id}
                         node={node}
                         depth={0}
-                        workspaceBaseUrl={workspaceBaseUrl}
+                        routes={routes}
                         defaultOpen={!!searchTerm}
                     />
                 ))}

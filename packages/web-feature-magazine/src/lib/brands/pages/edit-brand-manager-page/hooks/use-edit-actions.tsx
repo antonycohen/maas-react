@@ -2,7 +2,7 @@ import { ApiError, useCreateBrand, useDeleteBrand, useUpdateBrand } from '@maas/
 import { UseFormReturn } from 'react-hook-form';
 import { CreateBrand, UpdateBrand } from '@maas/core-api-models';
 import { useNavigate } from 'react-router-dom';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
 
@@ -12,7 +12,7 @@ export const useEditActions = (
     brandId: string
 ) => {
     const { t } = useTranslation();
-    const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const navigate = useNavigate();
 
     const handleApiError = (error: ApiError) => {
@@ -28,7 +28,7 @@ export const useEditActions = (
 
     const createMutation = useCreateBrand({
         onSuccess: () => {
-            navigate(`${workspaceBaseUrl}/brands`);
+            navigate(routes.brands());
             toast.success(t('message.success.created', { entity: t('brands.title') }));
         },
         onError: handleApiError,
@@ -36,7 +36,7 @@ export const useEditActions = (
 
     const updateMutation = useUpdateBrand({
         onSuccess: () => {
-            navigate(`${workspaceBaseUrl}/brands`);
+            navigate(routes.brands());
             toast.success(t('message.success.updated', { entity: t('brands.title') }));
         },
         onError: handleApiError,
@@ -44,7 +44,7 @@ export const useEditActions = (
 
     const deleteMutation = useDeleteBrand({
         onSuccess: () => {
-            navigate(`${workspaceBaseUrl}/brands`);
+            navigate(routes.brands());
             toast.success(t('message.success.deleted', { entity: t('brands.title') }));
         },
         onError: () => {

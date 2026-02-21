@@ -5,11 +5,11 @@ import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collecti
 import { cn } from '@maas/core-utils';
 import { Link } from 'react-router-dom';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 
 export function useArticleTypesListColumns(): ColumnDef<ArticleType>[] {
-    const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const { t } = useTranslation();
 
     return [
@@ -45,7 +45,7 @@ export function useArticleTypesListColumns(): ColumnDef<ArticleType>[] {
             header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.name')} />,
             cell: ({ row }) => {
                 return (
-                    <Link to={`${workspaceBaseUrl}/article-types/${row.original.id}`} className="underline">
+                    <Link to={routes.articleTypeEdit(row.original.id)} className="underline">
                         <LongText className="max-w-48">{row.getValue('name')}</LongText>
                     </Link>
                 );
@@ -84,14 +84,14 @@ export function useArticleTypesListColumns(): ColumnDef<ArticleType>[] {
                         {
                             label: t('articleTypes.edit'),
                             icon: IconEdit,
-                            linkTo: (articleType: ArticleType) => `${workspaceBaseUrl}/article-types/${articleType.id}`,
+                            linkTo: (articleType: ArticleType) => routes.articleTypeEdit(articleType.id),
                         },
                         {
                             label: t('articleTypes.delete'),
                             icon: IconTrash,
                             group: 'danger',
                             className: 'text-red-500!',
-                            linkTo: (articleType: ArticleType) => `${workspaceBaseUrl}/article-types/${articleType.id}`,
+                            linkTo: (articleType: ArticleType) => routes.articleTypeEdit(articleType.id),
                         },
                     ]}
                 />

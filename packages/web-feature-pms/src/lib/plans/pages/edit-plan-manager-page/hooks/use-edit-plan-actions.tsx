@@ -2,14 +2,14 @@ import { ApiError, useCreatePlan, useDeletePlan, useUpdatePlan } from '@maas/cor
 import { UseFormReturn } from 'react-hook-form';
 import { CreatePlan, UpdatePlan } from '@maas/core-api-models';
 import { useNavigate } from 'react-router-dom';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { toast } from 'sonner';
 import { PlanFormValues } from './use-edit-plan-form';
 import { useTranslation } from '@maas/core-translations';
 
 export const useEditPlanActions = (form: UseFormReturn<PlanFormValues>, isCreateMode: boolean, planId: string) => {
     const { t } = useTranslation();
-    const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const navigate = useNavigate();
 
     const handleApiError = (error: ApiError) => {
@@ -25,7 +25,7 @@ export const useEditPlanActions = (form: UseFormReturn<PlanFormValues>, isCreate
 
     const createMutation = useCreatePlan({
         onSuccess: (data) => {
-            navigate(`${workspaceBaseUrl}/pms/plans/${data.id}/info`);
+            navigate(routes.pmsPlanInfo(data.id));
             toast.success(t('plans.createdSuccess'));
         },
         onError: handleApiError,
@@ -40,7 +40,7 @@ export const useEditPlanActions = (form: UseFormReturn<PlanFormValues>, isCreate
 
     const deleteMutation = useDeletePlan({
         onSuccess: () => {
-            navigate(`${workspaceBaseUrl}/pms/plans`);
+            navigate(routes.pmsPlans());
             toast.success(t('plans.deletedSuccess'));
         },
         onError: () => {

@@ -1,18 +1,21 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "outDir": "dist",
-    "types": ["node", "vite/client"],
-    "lib": ["es2022", "dom", "dom.iterable"],
-    "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo"
-  },
-  "include": ["src/**/*.ts"],
-  "references": [
-    {
-      "path": "../core-api-models/tsconfig.lib.json"
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "outDir": "dist",
+        "types": ["node", "vite/client"],
+        "lib": ["es2022", "dom", "dom.iterable"],
+        "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo"
     },
-    {
-      "path": "../core-store-oauth/tsconfig.lib.json"
-    }
-  ]
+    "include": ["src/**/*.ts"],
+    "references": [
+        {
+            "path": "../core-routes/tsconfig.lib.json"
+        },
+        {
+            "path": "../core-api-models/tsconfig.lib.json"
+        },
+        {
+            "path": "../core-store-oauth/tsconfig.lib.json"
+        }
+    ]
 }

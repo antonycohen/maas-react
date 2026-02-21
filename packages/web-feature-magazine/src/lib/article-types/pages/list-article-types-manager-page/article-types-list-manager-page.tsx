@@ -5,25 +5,27 @@ import { LayoutBreadcrumb, LayoutContent, LayoutHeader } from '@maas/web-layout'
 import { Button } from '@maas/web-components';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons-react';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 
 export function ArticleTypesListManagerPage() {
     const { t } = useTranslation();
     const columns = useArticleTypesListColumns();
-    const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
 
     return (
         <div>
             <header>
-                <LayoutBreadcrumb items={[{ label: t('common.home'), to: '/' }, { label: t('articleTypes.title') }]} />
+                <LayoutBreadcrumb
+                    items={[{ label: t('common.home'), to: routes.root() }, { label: t('articleTypes.title') }]}
+                />
             </header>
             <LayoutContent>
                 <LayoutHeader
                     pageTitle={t('articleTypes.title')}
                     actions={
                         <Button asChild>
-                            <Link to={`${workspaceBaseUrl}/article-types/new`}>
+                            <Link to={routes.articleTypeNew()}>
                                 <IconPlus className="mr-2 h-4 w-4" />
                                 {t('articleTypes.new')}
                             </Link>

@@ -2,7 +2,7 @@ import { Price } from '@maas/core-api-models';
 import { Badge } from '@maas/web-components';
 import { IconCoin } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 
 interface PricePreviewProps {
@@ -27,7 +27,7 @@ const formatPrice = (price: Price): string => {
 };
 
 export const PricePreview = ({ price, isLoading }: PricePreviewProps) => {
-    const workspaceUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const { t } = useTranslation();
 
     if (isLoading) {
@@ -98,10 +98,7 @@ export const PricePreview = ({ price, isLoading }: PricePreviewProps) => {
 
                 {/* Actions */}
                 <div className="border-t pt-4">
-                    <Link
-                        to={`${workspaceUrl}/pms/prices/${price.id}`}
-                        className="text-primary text-sm hover:underline"
-                    >
+                    <Link to={routes.pmsPriceEdit(price.id)} className="text-primary text-sm hover:underline">
                         {`${t('products.viewFullPriceDetails')} \u2192`}
                     </Link>
                 </div>

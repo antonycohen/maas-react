@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Footer, GlobalSearch } from '@maas/web-components';
 import { User } from '@maas/core-api-models';
+import { PUBLIC_ROUTES } from '@maas/core-routes';
 import { LayoutHeaderBar, MenuItem } from './layout-header-bar';
 
 type LayoutProps = {
@@ -21,8 +22,8 @@ export function Layout(props: LayoutProps) {
                 connectedUser={connectedUser}
                 menuItems={menuItems}
                 onSearchClick={handleSearchClick}
-                loginHref="/login"
-                subscribeHref="/pricing"
+                loginHref={PUBLIC_ROUTES.LOGIN}
+                subscribeHref={PUBLIC_ROUTES.PRICING}
             />
             <Outlet />
             <Footer />

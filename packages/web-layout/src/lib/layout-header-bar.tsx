@@ -12,6 +12,7 @@ import { ChevronDown, Menu, Search, UserCircle, X } from 'lucide-react';
 import { useState, useEffect, useRef, useMemo, RefObject, ReactNode } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useTranslation } from '@maas/core-translations';
+import { publicUrlBuilders, PUBLIC_ROUTES } from '@maas/core-routes';
 
 // =============================================================================
 // Types
@@ -43,58 +44,64 @@ type MenuItemKeyDef = {
 };
 
 const defaultMenuItemKeys: MenuItemKeyDef[] = [
-    { key: 'nav.public.featured', href: '/' },
+    { key: 'nav.public.featured', href: publicUrlBuilders.home() },
     {
         key: 'nav.public.mathsForAll',
-        href: '/categories/maths-pour-tous',
+        href: publicUrlBuilders.category('maths-pour-tous'),
         children: [
-            { key: 'nav.public.curiosity', href: '/categories/curiosite' },
-            { key: 'nav.public.dailyMath', href: '/categories/maths-du-quotidien' },
-            { key: 'nav.public.mathForEveryone', href: '/categories/maths-tous-publics' },
-            { key: 'nav.public.readersCorrespondence', href: '/categories/courrier-des-lecteurs' },
-            { key: 'nav.public.knowledge', href: '/categories/savoirs' },
+            { key: 'nav.public.curiosity', href: publicUrlBuilders.category('curiosite') },
+            { key: 'nav.public.dailyMath', href: publicUrlBuilders.category('maths-du-quotidien') },
+            { key: 'nav.public.mathForEveryone', href: publicUrlBuilders.category('maths-tous-publics') },
+            { key: 'nav.public.readersCorrespondence', href: publicUrlBuilders.category('courrier-des-lecteurs') },
+            { key: 'nav.public.knowledge', href: publicUrlBuilders.category('savoirs') },
         ],
     },
     {
         key: 'nav.public.historyCulture',
-        href: '/categories/histoire-et-cultures',
+        href: publicUrlBuilders.category('histoire-et-cultures'),
         children: [
-            { key: 'nav.public.interview', href: '/categories/interview' },
-            { key: 'nav.public.famousPersonalities', href: '/categories/personnages-celebres' },
-            { key: 'nav.public.mathAndHistory', href: '/categories/maths-et-histoire' },
-            { key: 'nav.public.mathAndPhilosophy', href: '/categories/maths-et-philosophie' },
-            { key: 'nav.public.mathAndArt', href: '/categories/maths-et-art' },
+            { key: 'nav.public.interview', href: publicUrlBuilders.category('interview') },
+            { key: 'nav.public.famousPersonalities', href: publicUrlBuilders.category('personnages-celebres') },
+            { key: 'nav.public.mathAndHistory', href: publicUrlBuilders.category('maths-et-histoire') },
+            { key: 'nav.public.mathAndPhilosophy', href: publicUrlBuilders.category('maths-et-philosophie') },
+            { key: 'nav.public.mathAndArt', href: publicUrlBuilders.category('maths-et-art') },
         ],
     },
     {
         key: 'nav.public.gamesChallenges',
-        href: '/categories/jeux-et-defi',
+        href: publicUrlBuilders.category('jeux-et-defi'),
         children: [
-            { key: 'nav.public.problems', href: '/categories/problemes' },
-            { key: 'nav.public.shortStory', href: '/categories/nouvelle' },
-            { key: 'nav.public.recremaths', href: '/categories/recremaths' },
-            { key: 'nav.public.myFavoriteProblems', href: '/categories/mes-problemes-preferes' },
-            { key: 'nav.public.amazingMath', href: '/categories/maths-etonnantes' },
-            { key: 'nav.public.logicMatters', href: '/categories/affaires-de-logique' },
+            { key: 'nav.public.problems', href: publicUrlBuilders.category('problemes') },
+            { key: 'nav.public.shortStory', href: publicUrlBuilders.category('nouvelle') },
+            { key: 'nav.public.recremaths', href: publicUrlBuilders.category('recremaths') },
+            { key: 'nav.public.myFavoriteProblems', href: publicUrlBuilders.category('mes-problemes-preferes') },
+            { key: 'nav.public.amazingMath', href: publicUrlBuilders.category('maths-etonnantes') },
+            { key: 'nav.public.logicMatters', href: publicUrlBuilders.category('affaires-de-logique') },
         ],
     },
     {
         key: 'nav.public.mathThemes',
         href: '#',
         children: [
-            { key: 'nav.public.geometry', href: '/mathematical-themes/geometry' },
-            { key: 'nav.public.algebra', href: '/mathematical-themes/algebra' },
-            { key: 'nav.public.analysis', href: '/mathematical-themes/analysis' },
-            { key: 'nav.public.arithmetic', href: '/mathematical-themes/arithmetic' },
-            { key: 'nav.public.numerical', href: '/mathematical-themes/numerical' },
-            { key: 'nav.public.logic', href: '/mathematical-themes/logic' },
-            { key: 'nav.public.combinatoricsAndGames', href: '/mathematical-themes/combinatorics_and_games' },
-            { key: 'nav.public.appliedMathematics', href: '/mathematical-themes/applied_mathematics' },
-            { key: 'nav.public.probabilityAndStatistics', href: '/mathematical-themes/probability_and_statistics' },
+            { key: 'nav.public.geometry', href: publicUrlBuilders.mathematicalTheme('geometry') },
+            { key: 'nav.public.algebra', href: publicUrlBuilders.mathematicalTheme('algebra') },
+            { key: 'nav.public.analysis', href: publicUrlBuilders.mathematicalTheme('analysis') },
+            { key: 'nav.public.arithmetic', href: publicUrlBuilders.mathematicalTheme('arithmetic') },
+            { key: 'nav.public.numerical', href: publicUrlBuilders.mathematicalTheme('numerical') },
+            { key: 'nav.public.logic', href: publicUrlBuilders.mathematicalTheme('logic') },
+            {
+                key: 'nav.public.combinatoricsAndGames',
+                href: publicUrlBuilders.mathematicalTheme('combinatorics_and_games'),
+            },
+            { key: 'nav.public.appliedMathematics', href: publicUrlBuilders.mathematicalTheme('applied_mathematics') },
+            {
+                key: 'nav.public.probabilityAndStatistics',
+                href: publicUrlBuilders.mathematicalTheme('probability_and_statistics'),
+            },
         ],
     },
-    { key: 'nav.public.magazines', href: '/magazines' },
-    { key: 'nav.public.folders', href: '/dossiers' },
+    { key: 'nav.public.magazines', href: publicUrlBuilders.magazines() },
+    { key: 'nav.public.folders', href: publicUrlBuilders.dossiers() },
 ];
 
 function resolveMenuItems(keys: MenuItemKeyDef[], t: (key: string) => string): MenuItem[] {
@@ -192,7 +199,7 @@ function IconButton({
 function SubscribeButton({ href, compact = false }: { href?: string; compact?: boolean }) {
     const { t } = useTranslation();
     return (
-        <Link to={href ?? '/pricing'} className={cn(styles.subscribeButton, compact ? 'px-3' : 'px-4')}>
+        <Link to={href ?? PUBLIC_ROUTES.PRICING} className={cn(styles.subscribeButton, compact ? 'px-3' : 'px-4')}>
             <span className={cn(styles.subscribeText, compact ? 'text-[10px] md:text-[14px]' : 'text-[14px]')}>
                 {t('home.subscribe')}
             </span>
@@ -204,7 +211,7 @@ function Logo({ variant = 'full', className }: { variant?: 'full' | 'icon'; clas
     const src = variant === 'icon' ? '/logo-tangente-icon.png' : '/logo-tangente-full.png';
 
     return (
-        <Link to="/" className={className}>
+        <Link to={PUBLIC_ROUTES.HOME} className={className}>
             <img src={src} alt="Tangente" className="h-full w-full object-contain" />
         </Link>
     );
@@ -251,7 +258,7 @@ function DesktopNavMenu({ items, className }: { items: MenuItem[]; className?: s
                         <RadixNavigationMenuItem key={item.href}>
                             <NavLink
                                 to={item.href}
-                                end={item.href === '/'}
+                                end={item.href === PUBLIC_ROUTES.HOME}
                                 className={({ isActive }) =>
                                     cn(
                                         'flex h-12 items-center justify-center px-3',
@@ -340,7 +347,7 @@ function MobileNavItem({ item, onClick }: { item: MenuItem; onClick?: () => void
     return (
         <NavLink
             to={item.href}
-            end={item.href === '/'}
+            end={item.href === PUBLIC_ROUTES.HOME}
             onClick={onClick}
             className={({ isActive }) =>
                 cn(
@@ -373,7 +380,7 @@ function UserButton({
     if (connectedUser) {
         return (
             <Link
-                to="/account"
+                to={PUBLIC_ROUTES.ACCOUNT}
                 className={cn(
                     'flex h-10 items-center justify-center gap-1 rounded border border-[#e0e0e0] bg-white transition-colors hover:bg-gray-50',
                     showLabel ? 'px-2 md:px-4' : 'w-10',
@@ -393,7 +400,7 @@ function UserButton({
 
     return (
         <Link
-            to={loginHref ?? '/login'}
+            to={loginHref ?? PUBLIC_ROUTES.LOGIN}
             className={cn(
                 'flex h-10 items-center justify-center gap-1 rounded border border-[#e0e0e0] bg-white transition-colors hover:bg-gray-50',
                 showLabel ? 'hidden px-4 sm:flex' : 'w-10',
@@ -527,7 +534,7 @@ export function LayoutHeaderBar({
 
                         {!connectedUser && (
                             <Link
-                                to={loginHref ?? '/login'}
+                                to={loginHref ?? PUBLIC_ROUTES.LOGIN}
                                 onClick={closeMobileMenu}
                                 className="mx-4 mt-3 flex h-10 items-center justify-center gap-2 rounded border border-[#e0e0e0] bg-white px-4 py-2 transition-colors hover:bg-gray-50"
                             >

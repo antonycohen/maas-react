@@ -5,7 +5,7 @@ import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collecti
 import { cn } from '@maas/core-utils';
 import { Link } from 'react-router-dom';
 import { IconEye, IconCreditCard } from '@tabler/icons-react';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 
 const getStatusColor = (status: SubscriptionStatus | null): 'default' | 'secondary' | 'destructive' | 'outline' => {
     switch (status) {
@@ -26,7 +26,7 @@ const getStatusColor = (status: SubscriptionStatus | null): 'default' | 'seconda
 };
 
 export function useSubscriptionsListColumns(): ColumnDef<Subscription>[] {
-    const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
 
     return [
         {
@@ -61,10 +61,7 @@ export function useSubscriptionsListColumns(): ColumnDef<Subscription>[] {
             header: ({ column }) => <CollectionColumnHeader column={column} title="Subscription" />,
             cell: ({ row }) => {
                 return (
-                    <Link
-                        to={`${currentWorkspaceBaseUrl}/pms/subscriptions/${row.original.id}`}
-                        className="flex items-center gap-3"
-                    >
+                    <Link to={routes.pmsSubscriptionView(row.original.id)} className="flex items-center gap-3">
                         <div className="bg-muted h-10 w-10 shrink-0 overflow-hidden rounded-md">
                             <div className="text-muted-foreground flex h-full w-full items-center justify-center">
                                 <IconCreditCard className="h-5 w-5" />
@@ -128,8 +125,7 @@ export function useSubscriptionsListColumns(): ColumnDef<Subscription>[] {
                         {
                             label: 'View Subscription',
                             icon: IconEye,
-                            linkTo: (subscription: Subscription) =>
-                                `${currentWorkspaceBaseUrl}/pms/subscriptions/${subscription.id}`,
+                            linkTo: (subscription: Subscription) => routes.pmsSubscriptionView(subscription.id),
                         },
                     ]}
                 />

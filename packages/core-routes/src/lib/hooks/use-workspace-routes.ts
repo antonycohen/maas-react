@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { buildWorkspaceBaseUrl, adminUrlBuilders } from '../route-builders';
+import { PUBLIC_ROUTES } from '../routes';
 
 /**
  * Hook that provides type-safe workspace route builders
@@ -21,7 +22,7 @@ export const useWorkspaceRoutes = (workspaceId: string | null) => {
             /** The workspace base URL (e.g., /admin/w/org-123) */
             base: baseUrl,
 
-            login: () => '/login',
+            login: () => PUBLIC_ROUTES.LOGIN,
 
             // Dashboard
             /** Dashboard/root URL */

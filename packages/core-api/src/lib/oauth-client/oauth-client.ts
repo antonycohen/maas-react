@@ -1,5 +1,6 @@
 import { generateCodeVerifier, OAuth2Client } from '@badgateway/oauth2-client';
 import { AuthenticationError } from '../api-client/authentication-error';
+import { PUBLIC_ROUTES } from '@maas/core-routes';
 
 export const VERIFIER_STORAGE = 'auth-store';
 
@@ -14,7 +15,7 @@ const getAuthorizationUrl = async () => {
     const codeVerifier = await generateCodeVerifier();
     localStorage.setItem(VERIFIER_STORAGE, codeVerifier);
     return oauthClient.authorizationCode.getAuthorizeUri({
-        redirectUri: `${window.location.origin}/login/callback`,
+        redirectUri: `${window.location.origin}${PUBLIC_ROUTES.LOGIN_CALLBACK}`,
         codeVerifier,
         state: 'state',
         scope: [''],
@@ -30,7 +31,7 @@ const getTokensFromCodeRedirect = async (url: string) => {
     }
 
     return oauthClient.authorizationCode.getTokenFromCodeRedirect(url, {
-        redirectUri: `${window.location.origin}/login/callback`,
+        redirectUri: `${window.location.origin}${PUBLIC_ROUTES.LOGIN_CALLBACK}`,
         codeVerifier,
     });
 };

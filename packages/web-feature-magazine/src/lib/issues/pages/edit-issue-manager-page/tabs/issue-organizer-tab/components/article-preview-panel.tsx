@@ -1,7 +1,7 @@
 import { Article, ArticleTypeField } from '@maas/core-api-models';
 import { useTranslation } from '@maas/core-translations';
 import { Badge, Button, ScrollArea, Separator, Skeleton } from '@maas/web-components';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import {
     IconCalendar,
     IconEdit,
@@ -91,7 +91,7 @@ function CustomFieldValue({ field, value }: CustomFieldValueProps) {
 
 export function ArticlePreviewPanel({ article, isLoading }: ArticlePreviewPanelProps) {
     const { t } = useTranslation();
-    const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
 
     const articleTypeData = article?.type;
 
@@ -134,7 +134,7 @@ export function ArticlePreviewPanel({ article, isLoading }: ArticlePreviewPanelP
                     <span className="text-sm font-semibold">{t('common.preview')}</span>
                 </div>
                 <Button asChild size="sm" variant="outline">
-                    <Link to={`${workspaceBaseUrl}/articles/${article?.id}`}>
+                    <Link to={routes.articleEdit(article?.id ?? '')}>
                         <IconEdit className="mr-1.5 h-4 w-4" />
                         {t('common.edit')}
                     </Link>

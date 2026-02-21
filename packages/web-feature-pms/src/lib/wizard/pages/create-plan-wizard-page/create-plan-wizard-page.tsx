@@ -18,7 +18,7 @@ import {
     SelectValue,
 } from '@maas/web-components';
 import { LayoutBreadcrumb, LayoutContent } from '@maas/web-layout';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useCreatePlan, useCreateProduct, useCreatePrice } from '@maas/core-api';
 import { PriceInterval } from '@maas/core-api-models';
 import {
@@ -67,7 +67,7 @@ const STEPS: { key: WizardStep; title: string; icon: React.ReactNode }[] = [
 ];
 
 export function CreatePlanWizardPage() {
-    const workspaceUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const navigate = useNavigate();
 
     const [currentStep, setCurrentStep] = useState<WizardStep>('plan');
@@ -186,7 +186,7 @@ export function CreatePlanWizardPage() {
             }
 
             toast.success('Plan created successfully!');
-            navigate(`${workspaceUrl}/pms/plans/${plan.id}/info`);
+            navigate(routes.pmsPlanInfo(plan.id));
         } catch {
             toast.error('Failed to create plan. Please try again.');
         } finally {
@@ -214,8 +214,8 @@ export function CreatePlanWizardPage() {
             <header>
                 <LayoutBreadcrumb
                     items={[
-                        { label: 'Home', to: `${workspaceUrl}/` },
-                        { label: 'Subscription Plans', to: `${workspaceUrl}/pms/plans` },
+                        { label: 'Home', to: routes.root() },
+                        { label: 'Subscription Plans', to: routes.pmsPlans() },
                         { label: 'Create Plan Wizard' },
                     ]}
                 />

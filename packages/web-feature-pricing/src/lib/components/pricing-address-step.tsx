@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '@maas/core-utils';
 import { Input, Checkbox } from '@maas/web-components';
 import { useCreateCheckoutSession, AuthenticationError, type CheckoutSession } from '@maas/core-api';
+import { usePublicRoutes } from '@maas/core-routes';
 import type { PricingPlan } from '../hooks/use-pricing-data';
 import { usePricingStore, type AddressFormData } from '../store/pricing-store';
 
@@ -125,6 +126,7 @@ export function PricingAddressStep({ plan }: PricingAddressStepProps) {
 
     const navigate = useNavigate();
     const location = useLocation();
+    const publicRoutes = usePublicRoutes();
     const checkoutMutation = useCreateCheckoutSession();
 
     const [errors, setErrors] = useState<{
@@ -176,8 +178,8 @@ export function PricingAddressStep({ plan }: PricingAddressStepProps) {
             checkoutMutation.mutate(
                 {
                     priceIds: selectedPriceIds,
-                    successUrl: `${origin}/pricing/checkout/success`,
-                    cancelUrl: `${origin}/pricing/checkout/cancel`,
+                    successUrl: `${origin}${publicRoutes.checkoutSuccess}`,
+                    cancelUrl: `${origin}${publicRoutes.checkoutCancel}`,
                     shippingAddress: deliveryAddress,
                     billingAddress: useDifferentBillingAddress ? billingAddress : undefined,
                 },
@@ -188,7 +190,7 @@ export function PricingAddressStep({ plan }: PricingAddressStepProps) {
                     onError: (error) => {
                         if (error instanceof AuthenticationError) {
                             localStorage.setItem('target-url', `${location.pathname}${location.search}`);
-                            navigate('/login');
+                            navigate(publicRoutes.login);
                         }
                     },
                 }
@@ -222,7 +224,7 @@ export function PricingAddressStep({ plan }: PricingAddressStepProps) {
                         <h3 className="font-heading text-foreground text-xl font-semibold">{planName}</h3>
                     </div>
                     <button
-                        onClick={() => navigate('/pricing')}
+                        onClick={() => navigate(publicRoutes.pricing)}
                         className="text-text-secondary hover:text-foreground cursor-pointer text-sm font-medium transition-colors"
                     >
                         Retour

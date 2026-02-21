@@ -12,7 +12,7 @@ import {
 import { LayoutBreadcrumb, LayoutContent } from '@maas/web-layout';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDeletePrice, useGetPriceById, useUpdatePrice } from '@maas/core-api';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { UpdatePrice } from '@maas/core-api-models';
@@ -37,7 +37,7 @@ const formatPrice = (amount: number, currency: string): string => {
 export function EditPriceManagerPage() {
     const { priceId = '' } = useParams<{ priceId: string }>();
     const isCreateMode = priceId === 'new';
-    const workspaceUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const navigate = useNavigate();
     const { t } = useTranslation();
 
@@ -87,7 +87,7 @@ export function EditPriceManagerPage() {
 
     const deleteMutation = useDeletePrice({
         onSuccess: () => {
-            navigate(`${workspaceUrl}/pms/prices`);
+            navigate(routes.pmsPrices());
             toast.success(t('prices.deletedSuccess'));
         },
         onError: () => {
@@ -121,8 +121,8 @@ export function EditPriceManagerPage() {
             <header>
                 <LayoutBreadcrumb
                     items={[
-                        { label: t('common.home'), to: `${workspaceUrl}/` },
-                        { label: t('prices.title'), to: `${workspaceUrl}/pms/prices` },
+                        { label: t('common.home'), to: routes.root() },
+                        { label: t('prices.title'), to: routes.pmsPrices() },
                         { label: formatPrice(price.unitAmountInCents ?? 0, price.currency ?? 'usd') },
                     ]}
                 />

@@ -5,11 +5,11 @@ import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collecti
 import { cn } from '@maas/core-utils';
 import { Link } from 'react-router-dom';
 import { IconEdit, IconFolder, IconTrash } from '@tabler/icons-react';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 
 export function useFoldersListColumns(): ColumnDef<Folder>[] {
-    const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const { t } = useTranslation();
 
     return [
@@ -46,10 +46,7 @@ export function useFoldersListColumns(): ColumnDef<Folder>[] {
             cell: ({ row }) => {
                 const cover = row.original.cover;
                 return (
-                    <Link
-                        to={`${currentWorkspaceBaseUrl}/folders/${row.original.id}/info`}
-                        className="flex items-center gap-3"
-                    >
+                    <Link to={routes.folderInfo(row.original.id)} className="flex items-center gap-3">
                         <div className="bg-muted h-10 w-10 shrink-0 overflow-hidden rounded-md">
                             {cover?.url ? (
                                 <img src={cover.url} alt="" className="h-full w-full object-cover" />
@@ -99,14 +96,14 @@ export function useFoldersListColumns(): ColumnDef<Folder>[] {
                         {
                             label: t('folders.edit'),
                             icon: IconEdit,
-                            linkTo: (folder: Folder) => `${currentWorkspaceBaseUrl}/folders/${folder.id}/info`,
+                            linkTo: (folder: Folder) => routes.folderInfo(folder.id),
                         },
                         {
                             label: t('folders.delete'),
                             icon: IconTrash,
                             group: 'danger',
                             className: 'text-red-500!',
-                            linkTo: (folder: Folder) => `${currentWorkspaceBaseUrl}/folders/${folder.id}/info`,
+                            linkTo: (folder: Folder) => routes.folderInfo(folder.id),
                         },
                     ]}
                 />
