@@ -1,4 +1,5 @@
 import React from 'react';
+import { SEO } from '@maas/core-seo';
 import {
     mapIssueToFeedArticle,
     FeedArticleItem,
@@ -141,6 +142,7 @@ export const MathThemesPage = () => {
 
     return (
         <div className="flex flex-col gap-[40px] px-5 pb-[40px]">
+            <SEO title={t('nav.public.mathThemes')} description={t('home.mathThemesDescription')} />
             <div className="mx-auto w-full max-w-[1220px]">
                 <TitleAndDescriptionHero
                     title={t('nav.public.mathThemes')}

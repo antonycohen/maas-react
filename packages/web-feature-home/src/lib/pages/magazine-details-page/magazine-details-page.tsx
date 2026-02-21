@@ -8,6 +8,7 @@ import {
 } from '@maas/web-components';
 import { ApiError, useGetIssueById } from '@maas/core-api';
 import { useParams } from 'react-router-dom';
+import { SEO } from '@maas/core-seo';
 import { useMemo } from 'react';
 import { publicUrlBuilders } from '@maas/core-routes';
 
@@ -79,6 +80,13 @@ export const MagazineDetailsPage = () => {
 
     return (
         <div className="gap-tg-xl flex flex-col">
+            {magazines && (
+                <SEO
+                    title={magazines.title}
+                    description={magazines.description ?? undefined}
+                    image={magazines.cover?.url ?? undefined}
+                />
+            )}
             {/* Magazine Hero Section */}
             <div
                 className="bg-brand-primary"

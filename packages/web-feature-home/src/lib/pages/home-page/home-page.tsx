@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { SEO } from '@maas/core-seo';
 import {
     ArticlesHighlight,
     CategoryArticles,
@@ -214,6 +215,7 @@ export const HomePage = () => {
 
     return (
         <div className="flex flex-col">
+            <SEO description={t('home.magazineDescription')} />
             {/* Articles Highlight Section */}
             <div className="container mx-auto">
                 {isPending ? <HighlightSkeleton /> : <ArticlesHighlight articles={highlightArticles} />}

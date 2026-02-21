@@ -50,13 +50,16 @@
             "path": "../../packages/core-api/tsconfig.lib.json"
         },
         {
-            "path": "../../packages/web-feature-pricing/tsconfig.lib.json"
-        },
-        {
             "path": "../../packages/web-feature-users/tsconfig.lib.json"
         },
         {
+            "path": "../../packages/web-feature-pricing/tsconfig.lib.json"
+        },
+        {
             "path": "../../packages/web-feature-home/tsconfig.lib.json"
+        },
+        {
+            "path": "../../packages/core-seo/tsconfig.lib.json"
         },
         {
             "path": "../../packages/core-routes/tsconfig.lib.json"

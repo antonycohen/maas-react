@@ -1,4 +1,5 @@
 import React from 'react';
+import { SEO } from '@maas/core-seo';
 import {
     mapIssueToFeedArticle,
     FeedArticleItem,
@@ -138,6 +139,7 @@ export const CategoryPage = () => {
 
     return (
         <div className="flex flex-col gap-[40px] px-5 pb-[40px]">
+            {category && <SEO title={category.name ?? undefined} description={category.description ?? undefined} />}
             <div className="mx-auto w-full max-w-[1220px]">
                 {!category ? (
                     <div className="flex flex-col items-center gap-3 py-10">

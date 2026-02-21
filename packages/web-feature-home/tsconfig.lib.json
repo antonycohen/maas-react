@@ -39,6 +39,9 @@
             "path": "../web-cms-editor/tsconfig.lib.json"
         },
         {
+            "path": "../core-seo/tsconfig.lib.json"
+        },
+        {
             "path": "../core-api/tsconfig.lib.json"
         },
         {

@@ -28,6 +28,9 @@
     "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
     "references": [
         {
+            "path": "../core-seo/tsconfig.lib.json"
+        },
+        {
             "path": "../core-api-models/tsconfig.lib.json"
         },
         {
