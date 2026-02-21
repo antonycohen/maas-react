@@ -41,7 +41,6 @@ export function EnumsListManagerPage() {
                     queryFields={{
                         id: null,
                         name: null,
-                        key: null,
                         values: null,
                     }}
                 />

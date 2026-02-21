@@ -21,7 +21,7 @@ export const ManagementActionsSection = () => {
 
     const paymentMethodUpdateMutation = useCreatePaymentMethodUpdateSession({
         onSuccess: (data) => {
-            window.location.href = data.portalSession.portalUrl;
+            window.location.href = data.portalSession.url;
         },
         onError: () => {
             setIsRedirecting(null);
