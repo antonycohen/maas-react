@@ -9,7 +9,7 @@ import { SEO, extractArticleSeo } from '@maas/core-seo';
 const ArticleDetailsSkeleton = () => (
     <section className="container mx-auto space-y-10 px-5 py-20">
         <div className="flex flex-col items-start gap-5 gap-y-16 lg:flex-row">
-            <aside className="order-last flex w-full shrink-0 flex-col gap-6 pr-5 md:w-[290px] lg:order-first">
+            <aside className="order-last flex w-full shrink-0 flex-col gap-6 pr-5 md:w-72.5 lg:order-first">
                 <div className="flex flex-col gap-3">
                     <Skeleton className="h-16 w-16 rounded-full" />
                     <Skeleton className="h-5 w-32" />
@@ -21,8 +21,8 @@ const ArticleDetailsSkeleton = () => (
                     <Skeleton className="h-6 w-28 rounded-full" />
                 </div>
             </aside>
-            <main className="lg:justify-left flex w-full shrink-0 flex-row justify-center lg:w-[600px]">
-                <div className="flex w-full flex-col gap-5 lg:max-w-[600px]">
+            <main className="lg:justify-left flex w-full shrink-0 flex-row justify-center lg:w-150">
+                <div className="flex w-full flex-col gap-5 lg:max-w-150">
                     <Skeleton className="h-8 w-3/4" />
                     <Skeleton className="h-4 w-full" />
                     <Skeleton className="h-4 w-full" />
@@ -107,7 +107,7 @@ const ArticleDetailsPage = () => {
             <SEO {...extractArticleSeo(article)} />
             <div className={'flex flex-col items-start gap-5 gap-y-16 lg:flex-row'}>
                 <ArticleSidebar categories={article?.categories} author={article?.author} />
-                <main className={'lg:justify-left flex w-full shrink-0 flex-row justify-center lg:w-[600px]'}>
+                <main className={'lg:justify-left flex w-full shrink-0 flex-row justify-center lg:w-150'}>
                     <div className="flex flex-col">
                         <ArticleContent
                             title={article?.title}

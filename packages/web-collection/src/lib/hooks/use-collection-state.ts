@@ -64,7 +64,6 @@ export function useCollectionState({
         setGlobalFilter('');
         setColumnFilters([]);
         setSorting([]);
-         
     }, [pathname]);
 
     // Sync state to URL

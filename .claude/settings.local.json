@@ -32,7 +32,8 @@
             "Bash(tail:*)",
             "Bash(curl:*)",
             "Bash(grep Failed tasks::*)",
-            "Bash(sed:*)"
+            "Bash(sed:*)",
+            "Bash(python3:*)"
         ],
         "deny": []
     }

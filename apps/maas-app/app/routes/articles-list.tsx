@@ -1,3 +1,4 @@
+import { ArticlesPage } from '@maas/web-feature-home';
 import { buildPageMeta } from '@maas/core-seo';
 
 export function meta() {
@@ -8,5 +9,5 @@ export function meta() {
 }
 
 export default function ArticlesList() {
-    return null;
+    return <ArticlesPage />;
 }

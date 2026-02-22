@@ -3,6 +3,7 @@ export * from './lib/pages/magazine-details-page/magazine-details-page';
 export * from './lib/pages/magazines-page/magazines-page';
 export * from './lib/pages/folders-page/folders-page';
 export * from './lib/pages/folder-details-page/folder-details-page';
+export * from './lib/pages/articles-page/articles-page';
 export * from './lib/pages/category-page/category-page';
 export * from './lib/pages/math-themes-page/math-themes-page';
 export { default as ArticleDetailsPage } from './lib/pages/article-details-page/article-details-page';

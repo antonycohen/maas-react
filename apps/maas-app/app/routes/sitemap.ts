@@ -4,52 +4,26 @@ export async function loader() {
     const siteUrl = process.env.VITE_SITE_URL || 'https://tangente-mag.com';
 
     // Static routes
-    const staticRoutes = ['/', '/magazines', '/dossiers', '/pricing', '/mathematical-themes'];
+    const staticRoutes = ['/', '/magazines', '/dossiers', '/articles', '/pricing', '/mathematical-themes'];
 
-    // Dynamic routes — fetch published content
-    let articleUrls: string[] = [];
-    let issueUrls: string[] = [];
-    let folderUrls: string[] = [];
-    let categoryUrls: string[] = [];
+    // Dynamic routes — fetched from backend (Redis-cached)
+    let dynamicUrls: string[] = [];
 
     try {
-        const [articles, issues, folders, categories] = await Promise.all([
-            maasApi.articles.getArticles({
-                offset: 0,
-                limit: 1000,
-                filters: { isPublished: true },
-                fields: { id: null } as never,
-            }),
-            maasApi.issues.getIssues({
-                offset: 0,
-                limit: 500,
-                filters: { isPublished: true },
-                fields: { id: null } as never,
-            }),
-            maasApi.folders.getFolders({
-                offset: 0,
-                limit: 500,
-                filters: { isPublished: true },
-                fields: { id: null } as never,
-            }),
-            maasApi.categories.getCategories({
-                offset: 0,
-                limit: 200,
-                fields: { slug: null } as never,
-            }),
-        ]);
+        const sitemap = await maasApi.sitemap.getSitemap();
 
-        articleUrls = articles.data.map((a) => `/articles/${a.id}`);
-        issueUrls = issues.data.map((i) => `/magazines/${i.id}`);
-        folderUrls = folders.data.map((f) => `/dossiers/${f.id}`);
-        categoryUrls = categories.data
-            .filter((c) => (c as { slug?: string }).slug)
-            .map((c) => `/categories/${(c as { slug: string }).slug}`);
+        const articleUrls = sitemap.articles.map((id) => `/articles/${id}`);
+        const issueUrls = sitemap.issues.map((id) => `/magazines/${id}`);
+        const folderUrls = sitemap.folders.map((id) => `/dossiers/${id}`);
+        const categoryUrls = sitemap.categories.filter((c) => c.slug).map((c) => `/categories/${c.slug}`);
+        const themeUrls = sitemap.themes.map((theme) => `/mathematical-themes/${theme}`);
+
+        dynamicUrls = [...articleUrls, ...issueUrls, ...folderUrls, ...categoryUrls, ...themeUrls];
     } catch {
         // If API is unreachable, generate sitemap with static routes only
     }
 
-    const allUrls = [...staticRoutes, ...articleUrls, ...issueUrls, ...folderUrls, ...categoryUrls];
+    const allUrls = [...staticRoutes, ...dynamicUrls];
     const now = new Date().toISOString().split('T')[0];
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
