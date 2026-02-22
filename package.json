@@ -3,7 +3,12 @@
     "version": "0.0.0",
     "license": "MIT",
     "scripts": {
-        "prepare": "husky"
+        "prepare": "husky",
+        "dev": "npx nx dev @maas/maas-app",
+        "build": "npx nx build @maas/maas-app",
+        "lint": "npx nx run-many --target=lint",
+        "typecheck": "npx nx run-many --target=typecheck",
+        "analyze": "ANALYZE=true npx nx build @maas/maas-app"
     },
     "private": true,
     "dependencies": {
@@ -122,6 +127,7 @@
         "nx": "22.3.3",
         "prettier": "^3.8.1",
         "prettier-plugin-tailwindcss": "^0.7.2",
+        "rollup-plugin-visualizer": "^7.0.0",
         "tslib": "^2.8.1",
         "typescript": "~5.9.3",
         "typescript-eslint": "^8.50.1",

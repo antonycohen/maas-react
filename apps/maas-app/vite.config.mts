@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 import { reactRouter } from '@react-router/dev/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig(() => ({
     root: __dirname,
@@ -19,6 +20,12 @@ export default defineConfig(() => ({
         reactRouter(),
         nxViteTsPaths(),
         tailwindcss(),
+        process.env.ANALYZE === 'true' &&
+            visualizer({
+                open: true,
+                filename: 'dist/stats.html',
+                gzipSize: true,
+            }),
     ],
     ssr: {
         noExternal: ['axios-case-converter'],

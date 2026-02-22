@@ -1,3 +1,4 @@
+import './env'; // Validate environment variables on boot
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
 import { SessionProvider } from '@maas/core-store-session';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
