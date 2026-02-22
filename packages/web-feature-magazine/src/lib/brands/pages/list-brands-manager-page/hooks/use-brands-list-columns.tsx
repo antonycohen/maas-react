@@ -3,13 +3,13 @@ import { Brand } from '@maas/core-api-models';
 import { Badge, Checkbox, LongText } from '@maas/web-components';
 import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collection';
 import { cn } from '@maas/core-utils';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 
 export function useBrandsListColumns(): ColumnDef<Brand>[] {
-    const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const { t } = useTranslation();
 
     return [
@@ -60,7 +60,7 @@ export function useBrandsListColumns(): ColumnDef<Brand>[] {
             header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.name')} />,
             cell: ({ row }) => {
                 return (
-                    <Link to={`${workspaceBaseUrl}/brands/${row.original.id}`} className="underline">
+                    <Link to={routes.brandEdit(row.original.id)} className="underline">
                         <LongText className="max-w-48">{row.getValue('name')}</LongText>
                     </Link>
                 );
@@ -101,14 +101,14 @@ export function useBrandsListColumns(): ColumnDef<Brand>[] {
                         {
                             label: t('brands.edit'),
                             icon: IconEdit,
-                            linkTo: (brand: Brand) => `/brands/${brand.id}`,
+                            linkTo: (brand: Brand) => routes.brandEdit(brand.id),
                         },
                         {
                             label: t('brands.delete'),
                             icon: IconTrash,
                             group: 'danger',
                             className: 'text-red-500!',
-                            linkTo: (brand: Brand) => `/brands/${brand.id}`,
+                            linkTo: (brand: Brand) => routes.brandEdit(brand.id),
                         },
                     ]}
                 />

@@ -1,4 +1,4 @@
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext } from 'react-router';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@maas/web-components';
 import { createConnectedInputHelpers } from '@maas/web-form';
 import { LayoutContent } from '@maas/web-layout';

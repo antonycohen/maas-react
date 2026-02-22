@@ -6,7 +6,7 @@ import {
     useDeleteDiffusionList,
     maasApi,
 } from '@maas/core-api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useRoutes } from '@maas/core-workspace';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';

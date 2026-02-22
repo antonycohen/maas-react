@@ -1,8 +1,8 @@
 import { ApiError, useCreateProduct, useDeleteProduct, useUpdateProduct } from '@maas/core-api';
 import { UseFormReturn } from 'react-hook-form';
 import { CreateProduct, UpdateProduct } from '@maas/core-api-models';
-import { useNavigate } from 'react-router-dom';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useNavigate } from 'react-router';
+import { useRoutes } from '@maas/core-workspace';
 import { toast } from 'sonner';
 import { ProductFormValues } from './use-edit-product-form';
 import { useTranslation } from '@maas/core-translations';
@@ -12,7 +12,7 @@ export const useEditProductActions = (
     isCreateMode: boolean,
     productId: string
 ) => {
-    const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const navigate = useNavigate();
     const { t } = useTranslation();
 
@@ -29,7 +29,7 @@ export const useEditProductActions = (
 
     const createMutation = useCreateProduct({
         onSuccess: (data) => {
-            navigate(`${workspaceBaseUrl}/pms/products/${data.id}/info`);
+            navigate(routes.pmsProductInfo(data.id));
             toast.success(t('products.createdSuccess'));
         },
         onError: handleApiError,
@@ -44,7 +44,7 @@ export const useEditProductActions = (
 
     const deleteMutation = useDeleteProduct({
         onSuccess: () => {
-            navigate(`${workspaceBaseUrl}/pms/products`);
+            navigate(routes.pmsProducts());
             toast.success(t('products.deletedSuccess'));
         },
         onError: () => {

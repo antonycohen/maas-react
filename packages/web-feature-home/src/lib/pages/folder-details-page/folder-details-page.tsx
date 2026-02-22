@@ -1,4 +1,5 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
+import { SEO } from '@maas/core-seo';
 
 import {
     ContentFeed,
@@ -81,6 +82,11 @@ export const FolderDetailsPages = () => {
 
     return (
         <div className="gap-tg-xl flex flex-col">
+            <SEO
+                title={currentFolders.name}
+                description={currentFolders.description || undefined}
+                image={bgImageUrl?.url || currentFolders.cover?.url || undefined}
+            />
             <div
                 className={cn(
                     'relative flex min-h-[530px] w-full items-center justify-center bg-cover bg-center bg-repeat',

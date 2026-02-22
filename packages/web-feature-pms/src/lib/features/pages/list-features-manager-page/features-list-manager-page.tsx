@@ -3,25 +3,25 @@ import { useFeaturesListColumns } from './hooks/use-features-list-columns';
 import { useGetFeatures } from '@maas/core-api';
 import { LayoutBreadcrumb, LayoutContent, LayoutHeader } from '@maas/web-layout';
 import { Button } from '@maas/web-components';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { IconPlus } from '@tabler/icons-react';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 
 export function FeaturesListManagerPage() {
     const columns = useFeaturesListColumns();
-    const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
 
     return (
         <div>
             <header>
-                <LayoutBreadcrumb items={[{ label: 'Home', to: '/' }, { label: 'Features' }]} />
+                <LayoutBreadcrumb items={[{ label: 'Home', to: routes.root() }, { label: 'Features' }]} />
             </header>
             <LayoutContent>
                 <LayoutHeader
                     pageTitle="Features"
                     actions={
                         <Button asChild>
-                            <Link to={`${currentWorkspaceBaseUrl}/pms/features/new`}>
+                            <Link to={routes.pmsFeatureEdit('new')}>
                                 <IconPlus className="mr-2 h-4 w-4" />
                                 New Feature
                             </Link>

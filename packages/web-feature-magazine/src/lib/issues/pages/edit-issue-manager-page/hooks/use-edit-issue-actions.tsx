@@ -1,15 +1,15 @@
 import { ApiError, useCreateIssue, useDeleteIssue, useUpdateIssue } from '@maas/core-api';
 import { UseFormReturn } from 'react-hook-form';
 import { CreateIssue, UpdateIssue } from '@maas/core-api-models';
-import { useNavigate } from 'react-router-dom';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useNavigate } from 'react-router';
+import { useRoutes } from '@maas/core-workspace';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
 import { IssueFormValues } from './use-edit-issue-form';
 
 export const useEditIssueActions = (form: UseFormReturn<IssueFormValues>, isCreateMode: boolean, issueId: string) => {
     const { t } = useTranslation();
-    const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const navigate = useNavigate();
 
     const handleApiError = (error: ApiError) => {
@@ -25,7 +25,7 @@ export const useEditIssueActions = (form: UseFormReturn<IssueFormValues>, isCrea
 
     const createMutation = useCreateIssue({
         onSuccess: (data) => {
-            navigate(`${workspaceBaseUrl}/issues/${data.id}/info`);
+            navigate(routes.issueInfo(data.id));
             toast.success(t('message.success.created', { entity: t('issues.title') }));
         },
         onError: handleApiError,
@@ -40,7 +40,7 @@ export const useEditIssueActions = (form: UseFormReturn<IssueFormValues>, isCrea
 
     const deleteMutation = useDeleteIssue({
         onSuccess: () => {
-            navigate(`${workspaceBaseUrl}/issues`);
+            navigate(routes.issues());
             toast.success(t('message.success.deleted', { entity: t('issues.title') }));
         },
         onError: () => {
@@ -50,7 +50,7 @@ export const useEditIssueActions = (form: UseFormReturn<IssueFormValues>, isCrea
 
     function onSubmit(data: IssueFormValues) {
         if (isCreateMode) {
-            const { folders, ...createData } = data as CreateIssue & { folders?: unknown };
+            const { folders: _folders, ...createData } = data as CreateIssue & { folders?: unknown };
             createMutation.mutate(createData as CreateIssue);
         } else {
             const updateData = data as UpdateIssue;

@@ -1,4 +1,4 @@
-import { SEGMENTS, ADMIN_ROUTES } from './routes';
+import { SEGMENTS, ADMIN_ROUTES, PUBLIC_ROUTES } from './routes';
 
 /**
  * Build a path by replacing parameter placeholders with actual values
@@ -142,3 +142,39 @@ export const adminUrlBuilders = {
 };
 
 export type AdminUrlBuilders = typeof adminUrlBuilders;
+
+/**
+ * Public URL builders - for use in non-React contexts (constant arrays, plain functions)
+ * For React components, prefer the usePublicRoutes() hook instead
+ */
+export const publicUrlBuilders = {
+    home: () => PUBLIC_ROUTES.HOME,
+    login: () => PUBLIC_ROUTES.LOGIN,
+    loginCallback: () => PUBLIC_ROUTES.LOGIN_CALLBACK,
+    loginDispatcher: () => PUBLIC_ROUTES.LOGIN_DISPATCHER,
+    logout: () => PUBLIC_ROUTES.LOGOUT,
+
+    account: () => PUBLIC_ROUTES.ACCOUNT,
+    accountProfile: () => PUBLIC_ROUTES.ACCOUNT_PROFILE,
+
+    magazines: () => PUBLIC_ROUTES.MAGAZINES,
+    magazine: (magazineId: string) => `${PUBLIC_ROUTES.MAGAZINES}/${magazineId}`,
+    dossiers: () => PUBLIC_ROUTES.DOSSIERS,
+    folder: (folderId: string) => `${PUBLIC_ROUTES.DOSSIERS}/${folderId}`,
+    categories: () => PUBLIC_ROUTES.CATEGORIES,
+    category: (categorySlug: string) => `${PUBLIC_ROUTES.CATEGORIES}/${categorySlug}`,
+    articles: () => PUBLIC_ROUTES.ARTICLES,
+    article: (articleId: string) => `${PUBLIC_ROUTES.ARTICLES}/${articleId}`,
+
+    mathematicalThemes: () => PUBLIC_ROUTES.MATHEMATICAL_THEMES,
+    mathematicalTheme: (theme: string) => `${PUBLIC_ROUTES.MATHEMATICAL_THEMES}/${theme}`,
+
+    pricing: () => PUBLIC_ROUTES.PRICING,
+    pricingAuth: () => PUBLIC_ROUTES.PRICING_AUTH,
+    pricingPaiement: () => PUBLIC_ROUTES.PRICING_PAIEMENT,
+    pricingAdresse: () => PUBLIC_ROUTES.PRICING_ADRESSE,
+    checkoutSuccess: () => PUBLIC_ROUTES.CHECKOUT_SUCCESS,
+    checkoutCancel: () => PUBLIC_ROUTES.CHECKOUT_CANCEL,
+};
+
+export type PublicUrlBuilders = typeof publicUrlBuilders;

@@ -1,7 +1,7 @@
 import { useDeletePrice, useGetPriceById, useGetPrices } from '@maas/core-api';
 import { Button } from '@maas/web-components';
 import { IconPlus } from '@tabler/icons-react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext } from 'react-router';
 import { PricePreview, PricesList } from './components';
 import { CreatePriceModal } from './modals';
 import { EditProductOutletContext } from '../../edit-product-manager-page';

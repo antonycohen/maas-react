@@ -1,8 +1,9 @@
 import { Folder, Article } from '@maas/core-api-models';
 import { ChevronRight, FileText } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useResizedImage } from '../hooks';
 import { Skeleton } from '../ui/skeleton';
+import { publicUrlBuilders } from '@maas/core-routes';
 
 interface FolderCardProps {
     folder: Folder;
@@ -10,16 +11,6 @@ interface FolderCardProps {
     viewAllLabel?: string;
     maxArticles?: number;
 }
-
-const FolderTag = ({ label }: { label: string }) => {
-    return (
-        <div className="flex h-6 items-center justify-center rounded border border-[#e0e0e0] bg-white px-2">
-            <span className="font-body text-[11px] leading-4 font-semibold tracking-[0.33px] text-black uppercase">
-                {label}
-            </span>
-        </div>
-    );
-};
 
 interface ArticleItemProps {
     article: Article;
@@ -180,7 +171,11 @@ export const FolderCard = ({
 
                         {/* Article list */}
                         {displayedArticles.map((article) => (
-                            <ArticleItem key={article.id} article={article} link={`/articles/${article.id}`} />
+                            <ArticleItem
+                                key={article.id}
+                                article={article}
+                                link={publicUrlBuilders.article(article.id)}
+                            />
                         ))}
                     </div>
 

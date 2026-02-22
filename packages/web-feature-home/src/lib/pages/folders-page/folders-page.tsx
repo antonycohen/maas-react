@@ -1,6 +1,8 @@
 import { FolderCard, FolderCardSkeleton, TitleAndDescriptionHero } from '@maas/web-components';
 import { useGetFolders } from '@maas/core-api';
 import { useTranslation } from '@maas/core-translations';
+import { publicUrlBuilders } from '@maas/core-routes';
+import { SEO } from '@maas/core-seo';
 
 export const FoldersPage = () => {
     const { t } = useTranslation();
@@ -41,6 +43,7 @@ export const FoldersPage = () => {
 
     return (
         <div className="gap-tg-xl flex flex-col px-5 xl:px-0">
+            <SEO title={t('home.foldersTitle')} description={t('home.foldersDescription')} />
             <div className="container mx-auto">
                 <TitleAndDescriptionHero title={t('home.foldersTitle')} description={t('home.foldersDescription')} />
             </div>
@@ -48,7 +51,11 @@ export const FoldersPage = () => {
                 {!response
                     ? Array.from({ length: 3 }).map((_, i) => <FolderCardSkeleton key={i} />)
                     : response.data?.map((folder) => (
-                          <FolderCard key={`folder-${folder.id}`} folder={folder} link={`/dossiers/${folder.id}`} />
+                          <FolderCard
+                              key={`folder-${folder.id}`}
+                              folder={folder}
+                              link={publicUrlBuilders.folder(folder.id)}
+                          />
                       ))}
             </div>
         </div>

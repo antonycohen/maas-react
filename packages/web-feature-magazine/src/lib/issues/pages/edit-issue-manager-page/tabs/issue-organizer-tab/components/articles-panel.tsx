@@ -160,17 +160,15 @@ export function ArticlesPanel({
                 </div>
                 <div className="flex shrink-0 items-center gap-1">
                     {folder && (
-                        <>
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                onClick={onDeleteFolder}
-                                className="text-destructive hover:text-destructive h-7 w-7 p-0"
-                            >
-                                <IconTrash className="h-4 w-4" />
-                            </Button>
-                        </>
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={onDeleteFolder}
+                            className="text-destructive hover:text-destructive h-7 w-7 p-0"
+                        >
+                            <IconTrash className="h-4 w-4" />
+                        </Button>
                     )}
                     <Button
                         type="button"
@@ -196,44 +194,27 @@ export function ArticlesPanel({
                             <Skeleton className="h-14 w-full" />
                             <Skeleton className="h-14 w-full" />
                         </>
+                    ) : articles.length > 0 ? (
+                        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                            <SortableContext items={articles.map((a) => a.id)} strategy={verticalListSortingStrategy}>
+                                {articles.map((article) => (
+                                    <SortableArticleItem
+                                        key={article.id}
+                                        article={article}
+                                        isSelected={selectedArticleId === article.id}
+                                        onSelect={() => onSelectArticle(article.id)}
+                                        onRemove={() => onDeleteArticle(article.id)}
+                                    />
+                                ))}
+                            </SortableContext>
+                        </DndContext>
                     ) : (
-                        <>
-                            {articles.length > 0 ? (
-                                <DndContext
-                                    sensors={sensors}
-                                    collisionDetection={closestCenter}
-                                    onDragEnd={handleDragEnd}
-                                >
-                                    <SortableContext
-                                        items={articles.map((a) => a.id)}
-                                        strategy={verticalListSortingStrategy}
-                                    >
-                                        {articles.map((article) => (
-                                            <SortableArticleItem
-                                                key={article.id}
-                                                article={article}
-                                                isSelected={selectedArticleId === article.id}
-                                                onSelect={() => onSelectArticle(article.id)}
-                                                onRemove={() => onDeleteArticle(article.id)}
-                                            />
-                                        ))}
-                                    </SortableContext>
-                                </DndContext>
-                            ) : (
-                                <div className="text-muted-foreground py-8 text-center text-sm">
-                                    <p>{t('folders.noArticles')}</p>
-                                    <Button
-                                        type="button"
-                                        variant="link"
-                                        size="sm"
-                                        onClick={onAddArticle}
-                                        className="mt-1"
-                                    >
-                                        {t('folders.addOne')}
-                                    </Button>
-                                </div>
-                            )}
-                        </>
+                        <div className="text-muted-foreground py-8 text-center text-sm">
+                            <p>{t('folders.noArticles')}</p>
+                            <Button type="button" variant="link" size="sm" onClick={onAddArticle} className="mt-1">
+                                {t('folders.addOne')}
+                            </Button>
+                        </div>
                     )}
                 </div>
             </ScrollArea>

@@ -1,25 +1,27 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useOAuthStore } from '@maas/core-store-oauth';
+import { usePublicRoutes } from '@maas/core-routes';
 import { usePricingStore } from '../../store/pricing-store';
 import { PricingAuthStep } from '../../components/pricing-auth-step';
 import { PricingStepperLayout } from '../../components/pricing-stepper-layout';
 
 export const PricingAuthPage = () => {
     const navigate = useNavigate();
+    const publicRoutes = usePublicRoutes();
     const selectedPlanId = usePricingStore((s) => s.selectedPlanId);
     const accessToken = useOAuthStore((s) => s.accessToken);
 
     useEffect(() => {
         if (!selectedPlanId) {
-            navigate('/pricing');
+            navigate(publicRoutes.pricing);
         }
     }, [selectedPlanId, navigate]);
 
     // If already logged in, skip to paiement
     useEffect(() => {
         if (accessToken) {
-            navigate('/pricing/paiement', { replace: true });
+            navigate(publicRoutes.pricingPaiement, { replace: true });
         }
     }, [accessToken, navigate]);
 

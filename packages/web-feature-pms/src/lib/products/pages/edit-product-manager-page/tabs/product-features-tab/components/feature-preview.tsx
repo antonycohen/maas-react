@@ -1,8 +1,8 @@
 import { Feature } from '@maas/core-api-models';
 import { Badge } from '@maas/web-components';
 import { IconSparkles } from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { Link } from 'react-router';
+import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 
 interface FeaturePreviewProps {
@@ -11,7 +11,7 @@ interface FeaturePreviewProps {
 }
 
 export const FeaturePreview = ({ feature, isLoading }: FeaturePreviewProps) => {
-    const workspaceUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const { t } = useTranslation();
 
     if (isLoading) {
@@ -55,10 +55,7 @@ export const FeaturePreview = ({ feature, isLoading }: FeaturePreviewProps) => {
 
                 {/* Actions */}
                 <div className="border-t pt-4">
-                    <Link
-                        to={`${workspaceUrl}/pms/features/${feature.id}`}
-                        className="text-primary text-sm hover:underline"
-                    >
+                    <Link to={routes.pmsFeatureEdit(feature.id)} className="text-primary text-sm hover:underline">
                         {`${t('products.viewFullFeatureDetails')} \u2192`}
                     </Link>
                 </div>

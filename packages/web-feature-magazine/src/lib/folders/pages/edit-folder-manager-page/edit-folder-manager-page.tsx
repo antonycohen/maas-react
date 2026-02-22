@@ -1,19 +1,20 @@
 import { Badge, Button, TabNavLinks } from '@maas/web-components';
 import { useTranslation } from '@maas/core-translations';
 import { LayoutBreadcrumb } from '@maas/web-layout';
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router';
 import { useGetFolderById } from '@maas/core-api';
-import { useCurrentWorkspaceUrlPrefix, useGetCurrentWorkspaceId } from '@maas/core-workspace';
+import { useRoutes, useGetCurrentWorkspaceId } from '@maas/core-workspace';
+import { type WorkspaceRoutes } from '@maas/core-routes';
 import { useState } from 'react';
 import { Folder } from '@maas/core-api-models';
 import { FormProvider, UseFormReturn } from 'react-hook-form';
 import { FolderFormValues, useEditFolderActions, useEditFolderForm } from './hooks';
 import { IconDeviceFloppy, IconLoader2, IconTrash } from '@tabler/icons-react';
 
-const getTabItems = (baseUrl: string, folderId: string, t: (key: string) => string) => {
+const getTabItems = (routes: WorkspaceRoutes, folderId: string, t: (key: string) => string) => {
     return [
-        { title: t('common.info'), url: `${baseUrl}/folders/${folderId}/info` },
-        { title: t('articles.title'), url: `${baseUrl}/folders/${folderId}/articles` },
+        { title: t('common.info'), url: routes.folderInfo(folderId) },
+        { title: t('articles.title'), url: routes.folderArticles(folderId) },
     ];
 };
 
@@ -36,7 +37,7 @@ export type EditFolderOutletContext = {
 export function EditFolderManagerPage() {
     const { folderId = '' } = useParams<{ folderId: string }>();
     const isCreateMode = folderId === 'new';
-    const workspaceUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const { t } = useTranslation();
     const workspaceId = useGetCurrentWorkspaceId();
 
@@ -127,8 +128,8 @@ export function EditFolderManagerPage() {
                 <header className="shrink-0">
                     <LayoutBreadcrumb
                         items={[
-                            { label: t('common.home'), to: `${workspaceUrl}/` },
-                            { label: t('folders.title'), to: `${workspaceUrl}/folders` },
+                            { label: t('common.home'), to: routes.root() },
+                            { label: t('folders.title'), to: routes.folders() },
                             { label: breadcrumbLabel },
                         ]}
                     />
@@ -185,7 +186,7 @@ export function EditFolderManagerPage() {
                         </Button>
                     </div>
                 </div>
-                <TabNavLinks items={getTabItems(workspaceUrl, folderId, t)} />
+                <TabNavLinks items={getTabItems(routes, folderId, t)} />
 
                 <Outlet context={outletContext} />
             </form>

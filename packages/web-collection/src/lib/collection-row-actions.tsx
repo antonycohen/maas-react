@@ -16,7 +16,7 @@ import { cn, useDialogState } from '@maas/core-utils';
 import { useTranslation } from '@maas/core-translations';
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { ComponentType } from 'react';
 
 interface CommonAction {
@@ -68,7 +68,7 @@ export function CollectionRowActions<T>({ row, actions }: Props<T>) {
     const { t } = useTranslation();
     const [open, setOpen] = useDialogState<string>(null);
 
-    const renderDialogActionMenuItem = (action: DialogAction<T>, index: number) => {
+    const renderDialogActionMenuItem = (action: DialogAction<T>, _index: number) => {
         const Icon = action.icon;
         return (
             <DropdownMenuItem
@@ -82,7 +82,7 @@ export function CollectionRowActions<T>({ row, actions }: Props<T>) {
         );
     };
 
-    const renderLinkActionMenuItem = (action: LinkAction<T>, index: number) => {
+    const renderLinkActionMenuItem = (action: LinkAction<T>, _index: number) => {
         const Icon = action.icon;
         return (
             <DropdownMenuItem className={action.className} key={action.label} asChild>
@@ -94,7 +94,7 @@ export function CollectionRowActions<T>({ row, actions }: Props<T>) {
         );
     };
 
-    const renderOnClickActionMenuItem = (action: OnClickAction<T>, index: number) => {
+    const renderOnClickActionMenuItem = (action: OnClickAction<T>, _index: number) => {
         const Icon = action.icon;
         return (
             <DropdownMenuItem

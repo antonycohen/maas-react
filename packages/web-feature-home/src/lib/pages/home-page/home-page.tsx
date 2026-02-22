@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { SEO } from '@maas/core-seo';
 import {
     ArticlesHighlight,
     CategoryArticles,
@@ -14,6 +15,7 @@ import {
 import { useTranslation } from '@maas/core-translations';
 import { useGetHomepage } from '@maas/core-api';
 import { HomepageArticle, HomepageNewsItem, ReadResizedImage } from '@maas/core-api-models';
+import { publicUrlBuilders } from '@maas/core-routes';
 
 function getResizedImageUrl(images: ReadResizedImage[] | null | undefined, width = 640): string {
     const resized = images?.find((i) => i.width === width);
@@ -25,7 +27,7 @@ function mapFeaturedToHighlight(article: HomepageArticle) {
         image: getResizedImageUrl(article.cover?.resizedImages) || article.cover?.url || '',
         title: article.title,
         category: article.categories?.[0]?.name || '',
-        link: `/articles/${article.id}`,
+        link: publicUrlBuilders.article(article.id),
     };
 }
 
@@ -53,7 +55,7 @@ function mapNewsItemToFeedItem(item: HomepageNewsItem): FeedContentItemData | nu
                 category: article.categories?.[0]?.name || '',
                 author: `${article.author?.firstName || ''} ${article.author?.lastName || ''}`.trim(),
                 date: formatDate(article.publishedAt),
-                link: `/articles/${article.id}`,
+                link: publicUrlBuilders.article(article.id),
             } satisfies FeedArticleData;
         }
         case 'issue': {
@@ -70,7 +72,7 @@ function mapNewsItemToFeedItem(item: HomepageNewsItem): FeedContentItemData | nu
                 edition: issue.title,
                 issueNumber: issue.issueNumber,
                 date: formatDate(issue.publishedAt),
-                link: `/magazines/${issue.id}`,
+                link: publicUrlBuilders.magazine(issue.id),
             } satisfies FeedMagazineData;
         }
         case 'folder': {
@@ -83,7 +85,7 @@ function mapNewsItemToFeedItem(item: HomepageNewsItem): FeedContentItemData | nu
                 category: 'Dossier',
                 articleCount: folder.articleCount ?? 0,
                 date: '',
-                link: `/dossiers/${folder.id}`,
+                link: publicUrlBuilders.folder(folder.id),
             } satisfies FeedFolderData;
         }
         default:
@@ -103,7 +105,7 @@ function mapArticleToCategoryArticle(article: HomepageArticle): CategoryArticle 
         category: article.categories?.[0]?.name || '',
         author: `${article.author?.firstName || ''} ${article.author?.lastName || ''}`.trim(),
         date: formatDate(article.publishedAt),
-        link: `/articles/${article.id}`,
+        link: publicUrlBuilders.article(article.id),
     };
 }
 
@@ -183,7 +185,7 @@ export const HomePage = () => {
                 image: issueCover?.url || homepage.latestIssue.cover?.url || '',
                 title: homepage.latestIssue.title,
                 category: 'Magazine',
-                link: `/magazines/${homepage.latestIssue.id}`,
+                link: publicUrlBuilders.magazine(homepage.latestIssue.id),
             });
         }
 
@@ -213,6 +215,7 @@ export const HomePage = () => {
 
     return (
         <div className="flex flex-col">
+            <SEO description={t('home.magazineDescription')} />
             {/* Articles Highlight Section */}
             <div className="container mx-auto">
                 {isPending ? <HighlightSkeleton /> : <ArticlesHighlight articles={highlightArticles} />}
@@ -240,7 +243,7 @@ export const HomePage = () => {
                         <CategoryArticles
                             articles={jeuxDefiItems}
                             viewAllLabel={t('home.viewAllGamesChallenges')}
-                            viewAllLink="/categories/jeux-et-defi"
+                            viewAllLink={publicUrlBuilders.category('jeux-et-defi')}
                         />
                     )}
                 </div>

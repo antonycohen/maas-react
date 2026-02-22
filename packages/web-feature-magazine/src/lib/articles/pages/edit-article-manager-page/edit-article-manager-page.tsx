@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { LayoutBreadcrumb } from '@maas/web-layout';
 import { useTranslation } from '@maas/core-translations';
 import {
@@ -29,7 +29,7 @@ import {
 } from '@tabler/icons-react';
 import { useEditArticleForm } from './hooks/use-edit-article-form';
 import { useEditActions } from './hooks/use-edit-actions';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { DynamicCustomFields } from './components/dynamic-custom-fields';
 import {
     CardEventPlugin,
@@ -106,7 +106,7 @@ export function EditArticleManagerPage() {
     const VISIBILITY_OPTIONS = useVisibilityOptions();
 
     const { article, isLoading, form, isCreateMode } = useEditArticleForm(articleId);
-    const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
 
     const { deleteMutation, handleDelete, isSaving, onSubmit } = useEditActions(form, isCreateMode, articleId);
 
@@ -134,8 +134,8 @@ export function EditArticleManagerPage() {
                 <header className="bg-background sticky top-0 z-10 border-b">
                     <LayoutBreadcrumb
                         items={[
-                            { label: t('common.home'), to: `${workspaceBaseUrl}` },
-                            { label: t('articles.title'), to: `${workspaceBaseUrl}/articles` },
+                            { label: t('common.home'), to: routes.root() },
+                            { label: t('articles.title'), to: routes.articles() },
                             { label: t('common.loading') },
                         ]}
                     />
@@ -153,15 +153,15 @@ export function EditArticleManagerPage() {
                 <header className="bg-background sticky top-0 z-10 border-b">
                     <LayoutBreadcrumb
                         items={[
-                            { label: t('common.home'), to: `${workspaceBaseUrl}` },
-                            { label: t('articles.title'), to: `${workspaceBaseUrl}/articles` },
+                            { label: t('common.home'), to: routes.root() },
+                            { label: t('articles.title'), to: routes.articles() },
                             { label: t('articles.notFound') },
                         ]}
                     />
                 </header>
                 <div className="flex h-[50vh] flex-col items-center justify-center gap-4">
                     <p className="text-muted-foreground text-lg">{t('articles.articleNotFound')}</p>
-                    <Button variant="outline" onClick={() => (window.location.href = `${workspaceBaseUrl}/articles`)}>
+                    <Button variant="outline" onClick={() => (window.location.href = routes.articles())}>
                         {t('articles.backToArticles')}
                     </Button>
                 </div>
@@ -175,8 +175,8 @@ export function EditArticleManagerPage() {
             <header className="shrink-0">
                 <LayoutBreadcrumb
                     items={[
-                        { label: t('common.home'), to: `${workspaceBaseUrl}` },
-                        { label: t('articles.title'), to: `${workspaceBaseUrl}/articles` },
+                        { label: t('common.home'), to: routes.root() },
+                        { label: t('articles.title'), to: routes.articles() },
                         { label: breadcrumbLabel },
                     ]}
                 />

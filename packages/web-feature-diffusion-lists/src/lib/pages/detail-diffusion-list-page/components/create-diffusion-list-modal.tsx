@@ -18,7 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateDiffusionList, createDiffusionListSchema } from '@maas/core-api-models';
 import { useCreateDiffusionList, useGetFeatures } from '@maas/core-api';
 import { useGetCurrentWorkspaceId, useRoutes } from '@maas/core-workspace';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
 import { IconLoader2 } from '@tabler/icons-react';

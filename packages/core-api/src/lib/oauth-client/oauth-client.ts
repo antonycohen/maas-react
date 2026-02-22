@@ -1,5 +1,6 @@
 import { generateCodeVerifier, OAuth2Client } from '@badgateway/oauth2-client';
 import { AuthenticationError } from '../api-client/authentication-error';
+import { PUBLIC_ROUTES } from '@maas/core-routes';
 
 export const VERIFIER_STORAGE = 'auth-store';
 
@@ -11,10 +12,11 @@ const oauthClient = new OAuth2Client({
 });
 
 const getAuthorizationUrl = async () => {
+    if (typeof window === 'undefined') throw new Error('getAuthorizationUrl is client-only');
     const codeVerifier = await generateCodeVerifier();
     localStorage.setItem(VERIFIER_STORAGE, codeVerifier);
     return oauthClient.authorizationCode.getAuthorizeUri({
-        redirectUri: `${window.location.origin}/login/callback`,
+        redirectUri: `${window.location.origin}${PUBLIC_ROUTES.LOGIN_CALLBACK}`,
         codeVerifier,
         state: 'state',
         scope: [''],
@@ -22,6 +24,7 @@ const getAuthorizationUrl = async () => {
 };
 
 const getTokensFromCodeRedirect = async (url: string) => {
+    if (typeof window === 'undefined') throw new Error('getTokensFromCodeRedirect is client-only');
     const codeVerifier = localStorage.getItem(VERIFIER_STORAGE);
     if (!codeVerifier) {
         throw new AuthenticationError(
@@ -30,7 +33,7 @@ const getTokensFromCodeRedirect = async (url: string) => {
     }
 
     return oauthClient.authorizationCode.getTokenFromCodeRedirect(url, {
-        redirectUri: `${window.location.origin}/login/callback`,
+        redirectUri: `${window.location.origin}${PUBLIC_ROUTES.LOGIN_CALLBACK}`,
         codeVerifier,
     });
 };

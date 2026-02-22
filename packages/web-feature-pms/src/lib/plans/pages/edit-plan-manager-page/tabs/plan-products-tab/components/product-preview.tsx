@@ -1,8 +1,8 @@
 import { Product } from '@maas/core-api-models';
 import { Badge } from '@maas/web-components';
 import { IconPackage } from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { Link } from 'react-router';
+import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 
 interface ProductPreviewProps {
@@ -12,7 +12,7 @@ interface ProductPreviewProps {
 
 export const ProductPreview = ({ product, isLoading }: ProductPreviewProps) => {
     const { t } = useTranslation();
-    const workspaceUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
 
     if (isLoading) {
         return (
@@ -63,10 +63,7 @@ export const ProductPreview = ({ product, isLoading }: ProductPreviewProps) => {
 
                 {/* Actions */}
                 <div className="border-t pt-4">
-                    <Link
-                        to={`${workspaceUrl}/pms/products/${product.id}/info`}
-                        className="text-primary text-sm hover:underline"
-                    >
+                    <Link to={routes.pmsProductInfo(product.id)} className="text-primary text-sm hover:underline">
                         {t('plans.viewFullProductDetails')} →
                     </Link>
                 </div>

@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import { LayoutContent } from '@maas/web-layout';
 import { useGetUserForAccountSettingsPage } from './hooks/use-get-user-for-account-settings-page';
 import { useConnectedUser } from '@maas/core-store-session';

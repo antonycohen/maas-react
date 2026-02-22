@@ -1,8 +1,8 @@
 import { Badge, Button, TabNavLinks } from '@maas/web-components';
 import { LayoutBreadcrumb } from '@maas/web-layout';
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router';
 import { useGetPlanById } from '@maas/core-api';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useState } from 'react';
 import { Plan } from '@maas/core-api-models';
 import { FormProvider, UseFormReturn } from 'react-hook-form';
@@ -30,12 +30,12 @@ export function EditPlanManagerPage() {
     const { t } = useTranslation();
     const { planId = '' } = useParams<{ planId: string }>();
     const isCreateMode = planId === 'new';
-    const workspaceUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
 
-    const getTabItems = (baseUrl: string, id: string) => {
+    const getTabItems = (id: string) => {
         return [
-            { title: t('plans.tabs.info'), url: `${baseUrl}/pms/plans/${id}/info` },
-            { title: t('plans.tabs.products'), url: `${baseUrl}/pms/plans/${id}/products` },
+            { title: t('plans.tabs.info'), url: routes.pmsPlanInfo(id) },
+            { title: t('plans.tabs.products'), url: routes.pmsPlanProducts(id) },
         ];
     };
 
@@ -106,8 +106,8 @@ export function EditPlanManagerPage() {
                 <header className="shrink-0">
                     <LayoutBreadcrumb
                         items={[
-                            { label: t('common.home'), to: `${workspaceUrl}/` },
-                            { label: t('plans.title'), to: `${workspaceUrl}/pms/plans` },
+                            { label: t('common.home'), to: routes.root() },
+                            { label: t('plans.title'), to: routes.pmsPlans() },
                             { label: breadcrumbLabel },
                         ]}
                     />
@@ -164,7 +164,7 @@ export function EditPlanManagerPage() {
                         </Button>
                     </div>
                 </div>
-                <TabNavLinks items={getTabItems(workspaceUrl, planId)} />
+                <TabNavLinks items={getTabItems(planId)} />
 
                 <Outlet context={outletContext} />
             </form>

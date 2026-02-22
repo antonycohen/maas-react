@@ -26,7 +26,18 @@
             "Bash(npx eslint:*)",
             "Bash(npx nx lint:*)",
             "mcp__sequential-thinking__sequentialthinking",
-            "WebFetch(domain:localhost)"
+            "WebFetch(domain:localhost)",
+            "Bash(head:*)",
+            "Bash(find packages:*)",
+            "Bash(tail:*)",
+            "Bash(curl:*)",
+            "Bash(grep Failed tasks::*)",
+            "Bash(sed:*)",
+            "Bash(python3:*)",
+            "Bash(pnpm:*)",
+            "Bash(grep ✖:*)",
+            "Bash(git:*)",
+            "Bash(cd /home/jacky/developments/poleditions/maas-app/maas-react/apps/maas-app && npx react-router typegen --help 2>&1)"
         ],
         "deny": []
     }

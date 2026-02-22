@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { cn } from '@maas/core-utils';
 import { Checkbox } from '@maas/web-components';
 import { useUpdateMyCustomer } from '@maas/core-api';
+import { usePublicRoutes } from '@maas/core-routes';
 import { usePricingStore, type AddressFormData } from '../store/pricing-store';
 import { AddressForm, validateAddress } from './address-form';
 
@@ -15,6 +16,7 @@ export function PricingAdresseStep() {
     const setUseDifferentBillingAddress = usePricingStore((s) => s.setUseDifferentBillingAddress);
     const reset = usePricingStore((s) => s.reset);
     const navigate = useNavigate();
+    const publicRoutes = usePublicRoutes();
 
     const updateCustomerMutation = useUpdateMyCustomer();
 
@@ -64,7 +66,7 @@ export function PricingAdresseStep() {
             {
                 onSuccess: () => {
                     reset();
-                    navigate('/pricing/checkout/success');
+                    navigate(publicRoutes.checkoutSuccess);
                 },
             }
         );

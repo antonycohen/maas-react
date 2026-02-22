@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
+import { PUBLIC_ROUTES } from '@maas/core-routes';
 
 interface FooterLink {
     text: string;
@@ -24,7 +25,7 @@ const Footer = ({
     },
     tagline = 'www.tangente-mag.com est le site du magazine Tangente, consacré à la vulgarisation des mathématiques sous une forme ludique et culturelle.',
     subscribeLabel = "Je m'abonne",
-    subscribeUrl = '/pricing',
+    subscribeUrl = PUBLIC_ROUTES.PRICING,
     recentArticles = [
         { text: 'Voyage au cœur des mathématiques avec Michel Jardonnet', url: '#' },
         { text: "L'architecture : une perspective sur les maths", url: '#' },

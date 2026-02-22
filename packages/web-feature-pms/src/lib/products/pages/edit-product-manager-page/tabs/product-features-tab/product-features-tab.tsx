@@ -6,7 +6,7 @@ import {
 } from '@maas/core-api';
 import { Button } from '@maas/web-components';
 import { IconPlus } from '@tabler/icons-react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext } from 'react-router';
 import { FeaturePreview, FeaturesList } from './components';
 import { AttachFeatureModal } from './modals';
 import { EditProductOutletContext } from '../../edit-product-manager-page';

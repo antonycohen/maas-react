@@ -3,14 +3,14 @@ import { Issue } from '@maas/core-api-models';
 import { Checkbox, LongText } from '@maas/web-components';
 import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collection';
 import { cn } from '@maas/core-utils';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 import { format } from 'date-fns';
 
 export function useIssuesListColumns(): ColumnDef<Issue>[] {
-    const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const { t } = useTranslation();
 
     return [
@@ -61,7 +61,7 @@ export function useIssuesListColumns(): ColumnDef<Issue>[] {
             header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.title')} />,
             cell: ({ row }) => {
                 return (
-                    <Link to={`${workspaceBaseUrl}/issues/${row.original.id}/info`} className={'underline'}>
+                    <Link to={routes.issueInfo(row.original.id)} className={'underline'}>
                         <LongText className="max-w-48">{row.getValue('title')}</LongText>
                     </Link>
                 );
@@ -81,7 +81,7 @@ export function useIssuesListColumns(): ColumnDef<Issue>[] {
             cell: ({ row }) => {
                 const brand = row.original.brand;
                 return brand ? (
-                    <Link to={`${workspaceBaseUrl}/brands/${brand.id}`} className="underline">
+                    <Link to={routes.brandEdit(brand.id)} className="underline">
                         <LongText className="max-w-36">{brand.name}</LongText>
                     </Link>
                 ) : (
@@ -136,14 +136,14 @@ export function useIssuesListColumns(): ColumnDef<Issue>[] {
                         {
                             label: t('issues.edit'),
                             icon: IconEdit,
-                            linkTo: (issue: Issue) => `/issues/${issue.id}/info`,
+                            linkTo: (issue: Issue) => routes.issueInfo(issue.id),
                         },
                         {
                             label: t('issues.delete'),
                             icon: IconTrash,
                             group: 'danger',
                             className: 'text-red-500!',
-                            linkTo: (issue: Issue) => `/issues/${issue.id}/info`,
+                            linkTo: (issue: Issue) => routes.issueInfo(issue.id),
                         },
                     ]}
                 />

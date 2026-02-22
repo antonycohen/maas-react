@@ -2,6 +2,7 @@
 
 # compiled output
 dist
+build
 tmp
 out-tsc
 
@@ -43,6 +44,7 @@ Thumbs.db
 
 .nx/cache
 .nx/workspace-data
+.react-router
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md
 

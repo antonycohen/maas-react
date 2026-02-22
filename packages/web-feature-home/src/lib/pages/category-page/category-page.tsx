@@ -1,7 +1,9 @@
 import React from 'react';
+import { SEO } from '@maas/core-seo';
 import {
     mapIssueToFeedArticle,
     FeedArticleItem,
+    NotFoundPage,
     Skeleton,
     TitleAndDescriptionHero,
     Pagination,
@@ -15,7 +17,7 @@ import { Collection, CollectionRenderProps } from '@maas/web-collection';
 import { useGetArticles, useGetCategories } from '@maas/core-api';
 import { Article } from '@maas/core-api-models';
 import { ColumnDef } from '@tanstack/react-table';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useTranslation } from '@maas/core-translations';
 
 // Column definitions for sorting
@@ -42,7 +44,10 @@ export const CategoryPage = () => {
     );
 
     const category = categoriesData?.data?.[0];
-    console.log(category);
+    const categoryNotFound = categoriesData && !category;
+
+    if (categoryNotFound) return <NotFoundPage />;
+
     const renderContent = ({ items }: CollectionRenderProps<Article>) => {
         if (items.length === 0) {
             return (
@@ -138,6 +143,7 @@ export const CategoryPage = () => {
 
     return (
         <div className="flex flex-col gap-[40px] px-5 pb-[40px]">
+            {category && <SEO title={category.name ?? undefined} description={category.description ?? undefined} />}
             <div className="mx-auto w-full max-w-[1220px]">
                 {!category ? (
                     <div className="flex flex-col items-center gap-3 py-10">

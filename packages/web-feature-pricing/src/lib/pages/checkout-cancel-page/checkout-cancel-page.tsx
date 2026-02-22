@@ -1,8 +1,11 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { XCircle } from 'lucide-react';
 import { Button } from '@maas/web-components';
+import { usePublicRoutes } from '@maas/core-routes';
 
 export function CheckoutCancelPage() {
+    const publicRoutes = usePublicRoutes();
+
     return (
         <div className="flex w-full justify-center px-5 py-16 md:min-h-[650px] md:py-24">
             <div className="flex w-full max-w-lg flex-col items-center gap-8 text-center">
@@ -22,10 +25,10 @@ export function CheckoutCancelPage() {
 
                 <div className="flex flex-col gap-3 sm:flex-row">
                     <Button asChild size="lg">
-                        <Link to="/pricing/paiement">Réessayer le paiement</Link>
+                        <Link to={publicRoutes.pricingPaiement}>Réessayer le paiement</Link>
                     </Button>
                     <Button asChild variant="outline" size="lg">
-                        <Link to="/">Retour à l'accueil</Link>
+                        <Link to={publicRoutes.home}>Retour à l'accueil</Link>
                     </Button>
                 </div>
             </div>

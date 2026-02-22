@@ -1,5 +1,5 @@
 import { lazy, Suspense, useMemo } from 'react';
-import { Navigate, Route, Routes, useParams } from 'react-router-dom';
+import { Navigate, Route, Routes, useParams } from 'react-router';
 import { AdminLayout } from '@maas/web-layout';
 import { useConnectedUser } from '@maas/core-store-session';
 import { useGetUserOrganizations } from '@maas/core-api';

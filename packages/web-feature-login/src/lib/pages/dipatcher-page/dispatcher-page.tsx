@@ -1,8 +1,9 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useEffect } from 'react';
 import { useConnectedUser } from '@maas/core-store-session';
 import { useOAuthStore } from '@maas/core-store-oauth';
 import { useTranslation } from '@maas/core-translations';
+import { PUBLIC_ROUTES } from '@maas/core-routes';
 
 export const DispatcherPage = () => {
     const { t } = useTranslation();
@@ -12,7 +13,7 @@ export const DispatcherPage = () => {
 
     useEffect(() => {
         if (!connectedUser && !accessToken) {
-            navigate('/login', { replace: true });
+            navigate(PUBLIC_ROUTES.LOGIN, { replace: true });
             return;
         }
 
@@ -27,7 +28,7 @@ export const DispatcherPage = () => {
             return;
         }
 
-        navigate('/', { replace: true });
+        navigate(PUBLIC_ROUTES.HOME, { replace: true });
     }, [accessToken, connectedUser, navigate]);
 
     return (

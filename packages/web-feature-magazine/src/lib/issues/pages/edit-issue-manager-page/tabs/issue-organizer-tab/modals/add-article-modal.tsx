@@ -15,7 +15,7 @@ import {
 } from '@maas/web-components';
 import { ControlledArticleInput, createConnectedInputHelpers } from '@maas/web-form';
 import { IconFileText, IconPlus, IconSearch } from '@tabler/icons-react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 
 // Modal-specific schema (organization is added by the hook, not the form)
 const createArticleModalSchema = z.object({
@@ -91,7 +91,7 @@ export function AddArticleModal({ open, onOpenChange, onSelectExisting, onCreate
         handleClose();
     };
 
-    const selectedArticle = searchForm.watch('article');
+    const selectedArticle = useWatch({ control: searchForm.control, name: 'article' });
 
     return (
         <Dialog open={open} onOpenChange={handleClose}>

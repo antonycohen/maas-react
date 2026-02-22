@@ -3,14 +3,14 @@ import { Plan } from '@maas/core-api-models';
 import { Badge, Checkbox, LongText } from '@maas/web-components';
 import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collection';
 import { cn } from '@maas/core-utils';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { IconEdit, IconLayoutGrid, IconTrash } from '@tabler/icons-react';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 
 export function usePlansListColumns(): ColumnDef<Plan>[] {
     const { t } = useTranslation();
-    const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
 
     return [
         {
@@ -45,10 +45,7 @@ export function usePlansListColumns(): ColumnDef<Plan>[] {
             header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.name')} />,
             cell: ({ row }) => {
                 return (
-                    <Link
-                        to={`${currentWorkspaceBaseUrl}/pms/plans/${row.original.id}/info`}
-                        className="flex items-center gap-3"
-                    >
+                    <Link to={routes.pmsPlanInfo(row.original.id)} className="flex items-center gap-3">
                         <div className="bg-muted h-10 w-10 shrink-0 overflow-hidden rounded-md">
                             <div className="text-muted-foreground flex h-full w-full items-center justify-center">
                                 <IconLayoutGrid className="h-5 w-5" />
@@ -88,14 +85,14 @@ export function usePlansListColumns(): ColumnDef<Plan>[] {
                         {
                             label: t('plans.edit'),
                             icon: IconEdit,
-                            linkTo: (plan: Plan) => `${currentWorkspaceBaseUrl}/pms/plans/${plan.id}/info`,
+                            linkTo: (plan: Plan) => routes.pmsPlanInfo(plan.id),
                         },
                         {
                             label: t('plans.delete'),
                             icon: IconTrash,
                             group: 'danger',
                             className: 'text-red-500!',
-                            linkTo: (plan: Plan) => `${currentWorkspaceBaseUrl}/pms/plans/${plan.id}/info`,
+                            linkTo: (plan: Plan) => routes.pmsPlanInfo(plan.id),
                         },
                     ]}
                 />

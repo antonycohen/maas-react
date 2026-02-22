@@ -7,13 +7,13 @@ import {
     NotFoundPage,
 } from '@maas/web-components';
 import { ApiError, useGetIssueById } from '@maas/core-api';
-import { useParams } from 'react-router-dom';
-import { useTranslation } from '@maas/core-translations';
+import { useParams } from 'react-router';
+import { SEO } from '@maas/core-seo';
 import { useMemo } from 'react';
+import { publicUrlBuilders } from '@maas/core-routes';
 
 export const MagazineDetailsPage = () => {
     const issueId = useParams<{ id: string }>().id;
-    const { t } = useTranslation();
     const { data: magazines, error } = useGetIssueById(
         {
             id: issueId as string,
@@ -80,6 +80,13 @@ export const MagazineDetailsPage = () => {
 
     return (
         <div className="gap-tg-xl flex flex-col">
+            {magazines && (
+                <SEO
+                    title={magazines.title}
+                    description={magazines.description ?? undefined}
+                    image={magazines.cover?.url ?? undefined}
+                />
+            )}
             {/* Magazine Hero Section */}
             <div
                 className="bg-brand-primary"
@@ -88,7 +95,10 @@ export const MagazineDetailsPage = () => {
                 }}
             >
                 <div className="container mx-auto">
-                    <MagazineHighlightsHero issue={magazines} link={`/magazines/${magazines?.id}`} />
+                    <MagazineHighlightsHero
+                        issue={magazines}
+                        link={magazines?.id ? publicUrlBuilders.magazine(magazines.id) : ''}
+                    />
                 </div>
             </div>
             <div className="gap-tg-lg container mx-auto flex flex-col p-5">
@@ -99,7 +109,7 @@ export const MagazineDetailsPage = () => {
                 {!magazines
                     ? Array.from({ length: 3 }).map((_, i) => <FolderCardSkeleton key={i} />)
                     : issuesFolders?.map((folder) => (
-                          <FolderCard key={folder.id} folder={folder} link={`/dossiers/${folder.id}`} />
+                          <FolderCard key={folder.id} folder={folder} link={publicUrlBuilders.folder(folder.id)} />
                       ))}
             </div>
             <div className="gap-tg-lg container mx-auto flex flex-col p-5 pb-10">

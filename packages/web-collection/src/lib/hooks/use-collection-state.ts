@@ -1,6 +1,6 @@
 import { ColumnFiltersState, PaginationState, SortingState, VisibilityState } from '@tanstack/react-table';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router';
 
 interface UseCollectionStateProps {
     useLocationAsState?: boolean;
@@ -14,6 +14,7 @@ export function useCollectionState({
     defaultPageSize = 10,
 }: UseCollectionStateProps = {}) {
     const [searchParams, setSearchParams] = useSearchParams();
+    const { pathname } = useLocation();
 
     const [globalFilter, setGlobalFilter] = useState(() =>
         useLocationAsState ? searchParams.get('search') || '' : ''
@@ -56,6 +57,15 @@ export function useCollectionState({
         };
     });
 
+    // Reset collection state when the pathname changes (e.g. switching categories)
+    useEffect(() => {
+        if (!useLocationAsState) return;
+        setPagination({ pageIndex: 0, pageSize: defaultPageSize });
+        setGlobalFilter('');
+        setColumnFilters([]);
+        setSorting([]);
+    }, [pathname, useLocationAsState, defaultPageSize]);
+
     // Sync state to URL
     useEffect(() => {
         if (!useLocationAsState) return;
@@ -72,6 +82,7 @@ export function useCollectionState({
         setSearchParams(params, { replace: true });
     }, [
         useLocationAsState,
+        defaultPageSize,
         debouncedGlobalFilter,
         pagination,
         columnFilters,

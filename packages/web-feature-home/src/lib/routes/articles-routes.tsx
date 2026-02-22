@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 import { NotFoundPage } from '@maas/web-components';
 import ArticleDetailsPage from '../pages/article-details-page/article-details-page';
 

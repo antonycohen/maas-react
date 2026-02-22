@@ -28,10 +28,16 @@
     "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
     "references": [
         {
+            "path": "../core-seo/tsconfig.lib.json"
+        },
+        {
             "path": "../core-api-models/tsconfig.lib.json"
         },
         {
             "path": "../core-store-oauth/tsconfig.lib.json"
+        },
+        {
+            "path": "../core-routes/tsconfig.lib.json"
         },
         {
             "path": "../core-utils/tsconfig.lib.json"

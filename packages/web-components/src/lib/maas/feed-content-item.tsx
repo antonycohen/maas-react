@@ -1,6 +1,7 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { FileText } from 'lucide-react';
 import { Article } from '@maas/core-api-models';
+import { publicUrlBuilders } from '@maas/core-routes';
 
 export interface FeedArticleData {
     type: 'article';
@@ -97,7 +98,7 @@ export function mapIssueToFeedArticle(article: Article): FeedArticleData {
                   year: 'numeric',
               })
             : '',
-        link: `/articles/${article.id}`,
+        link: publicUrlBuilders.article(article.id),
         articleType: article?.type?.name,
     };
 }

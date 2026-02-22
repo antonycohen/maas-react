@@ -3,13 +3,13 @@ import { Product } from '@maas/core-api-models';
 import { Badge, Checkbox, LongText } from '@maas/web-components';
 import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collection';
 import { cn } from '@maas/core-utils';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { IconEdit, IconPackage, IconTrash } from '@tabler/icons-react';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 
 export function useProductsListColumns(): ColumnDef<Product>[] {
-    const currentWorkspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const { t } = useTranslation();
 
     return [
@@ -45,10 +45,7 @@ export function useProductsListColumns(): ColumnDef<Product>[] {
             header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.name')} />,
             cell: ({ row }) => {
                 return (
-                    <Link
-                        to={`${currentWorkspaceBaseUrl}/pms/products/${row.original.id}/info`}
-                        className="flex items-center gap-3"
-                    >
+                    <Link to={routes.pmsProductInfo(row.original.id)} className="flex items-center gap-3">
                         <div className="bg-muted h-10 w-10 shrink-0 overflow-hidden rounded-md">
                             <div className="text-muted-foreground flex h-full w-full items-center justify-center">
                                 <IconPackage className="h-5 w-5" />
@@ -94,14 +91,14 @@ export function useProductsListColumns(): ColumnDef<Product>[] {
                         {
                             label: t('products.edit'),
                             icon: IconEdit,
-                            linkTo: (product: Product) => `${currentWorkspaceBaseUrl}/pms/products/${product.id}/info`,
+                            linkTo: (product: Product) => routes.pmsProductInfo(product.id),
                         },
                         {
                             label: t('products.delete'),
                             icon: IconTrash,
                             group: 'danger',
                             className: 'text-red-500!',
-                            linkTo: (product: Product) => `${currentWorkspaceBaseUrl}/pms/products/${product.id}/info`,
+                            linkTo: (product: Product) => routes.pmsProductInfo(product.id),
                         },
                     ]}
                 />

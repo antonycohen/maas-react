@@ -1,4 +1,4 @@
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext } from 'react-router';
 import { useGetSubscriptions, useGetInvoices, useGetCustomerQuotas } from '@maas/core-api';
 import { Invoice, Subscription } from '@maas/core-api-models';
 import {

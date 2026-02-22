@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useTranslation } from '@maas/core-translations';
 import { LayoutBreadcrumb, LayoutContent, LayoutHeader } from '@maas/web-layout';
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, FieldGroup } from '@maas/web-components';
@@ -10,7 +10,7 @@ import { IconTrash } from '@tabler/icons-react';
 import { useEditArticleTypeForm } from './hooks/use-edit-article-type-form';
 import { useEditActions } from './hooks/use-edit-actions';
 import { FieldsList } from './components';
-import { useCurrentWorkspaceUrlPrefix, useGetCurrentWorkspaceId } from '@maas/core-workspace';
+import { useRoutes, useGetCurrentWorkspaceId } from '@maas/core-workspace';
 
 export function EditArticleTypeManagerPage() {
     const { articleTypeId = '' } = useParams<{ articleTypeId: string }>();
@@ -18,7 +18,7 @@ export function EditArticleTypeManagerPage() {
     const workspaceId = useGetCurrentWorkspaceId() as string;
 
     const { articleTypeData, isLoading, form, isCreateMode } = useEditArticleTypeForm(articleTypeId, workspaceId);
-    const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
 
     const { deleteMutation, handleDelete, isSaving, onSubmit } = useEditActions(form, isCreateMode, articleTypeId);
 
@@ -36,8 +36,8 @@ export function EditArticleTypeManagerPage() {
             <header>
                 <LayoutBreadcrumb
                     items={[
-                        { label: 'Home', to: `${workspaceBaseUrl}` },
-                        { label: 'Article Types', to: `${workspaceBaseUrl}/article-types` },
+                        { label: 'Home', to: routes.root() },
+                        { label: 'Article Types', to: routes.articleTypes() },
                         { label: breadcrumbLabel },
                     ]}
                 />

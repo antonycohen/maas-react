@@ -1,5 +1,4 @@
 import {
-    Bell,
     BookCopy,
     CircleDollarSignIcon,
     CreditCard,
@@ -8,12 +7,10 @@ import {
     FolderTree,
     LayoutDashboard,
     List,
-    ListChecks,
     Newspaper,
     Route,
     ShieldCheck,
     ShoppingCartIcon,
-    SlidersHorizontal,
     Tags,
     UserRoundSearch,
 } from 'lucide-react';

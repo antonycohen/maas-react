@@ -1,4 +1,5 @@
 import React from 'react';
+import { SEO } from '@maas/core-seo';
 import { Collection, CollectionRenderProps } from '@maas/web-collection';
 import { TitleAndDescriptionHero, Pagination } from '@maas/web-components';
 import { useGetIssues } from '@maas/core-api';
@@ -73,6 +74,7 @@ export const MagazinesPage = () => {
     );
     return (
         <div className="flex flex-col gap-[40px] px-5 pb-[40px]">
+            <SEO title={t('home.magazine')} description={t('home.magazineDescription')} />
             <div className="mx-auto w-full max-w-[1220px]">
                 <TitleAndDescriptionHero title={t('home.magazine')} description={t('home.magazineDescription')} />
             </div>

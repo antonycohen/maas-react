@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 import { FeaturesListManagerPage } from '../pages/list-features-manager-page/features-list-manager-page';
 import { EditFeatureManagerPage } from '../pages/edit-feature-manager-page/edit-feature-manager-page';
 

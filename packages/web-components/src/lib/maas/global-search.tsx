@@ -4,6 +4,7 @@ import { cn } from '@maas/core-utils';
 import { useTranslation } from '@maas/core-translations';
 import { useSearch } from '@maas/core-api';
 import { SearchResult } from '@maas/core-api-models';
+import { publicUrlBuilders } from '@maas/core-routes';
 import { Dialog, DialogContent, DialogTitle } from '../ui/dialog';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { FeedContentItem, FeedContentItemData } from './feed-content-item';
@@ -32,7 +33,7 @@ function mapSearchResultToFeedItem(result: SearchResult): FeedContentItemData {
                 subcategory: result.categoryNames?.[1],
                 author: result.authorName || 'Tangente',
                 date: formatDate(result.publishedAt),
-                link: `/articles/${result.id}`,
+                link: publicUrlBuilders.article(result.id),
             };
         case 'folder':
             return {
@@ -44,7 +45,7 @@ function mapSearchResultToFeedItem(result: SearchResult): FeedContentItemData {
                 category: 'Dossier',
                 articleCount: result.articleCount || 0,
                 date: formatDate(result.updatedAt),
-                link: `/dossiers/${result.id}`,
+                link: publicUrlBuilders.folder(result.id),
             };
         case 'issue':
             return {
@@ -56,7 +57,7 @@ function mapSearchResultToFeedItem(result: SearchResult): FeedContentItemData {
                 category: result.brandName || 'Tangente',
                 edition: result.issueNumber ? `N°${result.issueNumber}` : '',
                 date: formatDate(result.publishedAt),
-                link: `/magazines/${result.id}`,
+                link: publicUrlBuilders.magazine(result.id),
             };
     }
 }

@@ -1,8 +1,8 @@
 import { Badge, Button, TabNavLinks } from '@maas/web-components';
 import { LayoutBreadcrumb } from '@maas/web-layout';
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router';
 import { useGetProductById } from '@maas/core-api';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useRoutes } from '@maas/core-workspace';
 import { useState } from 'react';
 import { Product } from '@maas/core-api-models';
 import { FormProvider, UseFormReturn } from 'react-hook-form';
@@ -34,14 +34,14 @@ export type EditProductOutletContext = {
 export function EditProductManagerPage() {
     const { productId = '' } = useParams<{ productId: string }>();
     const isCreateMode = productId === 'new';
-    const workspaceUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const { t } = useTranslation();
 
-    const getTabItems = (baseUrl: string, id: string) => {
+    const getTabItems = (id: string) => {
         return [
-            { title: t('products.tabs.info'), url: `${baseUrl}/pms/products/${id}/info` },
-            { title: t('products.tabs.prices'), url: `${baseUrl}/pms/products/${id}/prices` },
-            { title: t('products.tabs.features'), url: `${baseUrl}/pms/products/${id}/features` },
+            { title: t('products.tabs.info'), url: routes.pmsProductInfo(id) },
+            { title: t('products.tabs.prices'), url: routes.pmsProductPrices(id) },
+            { title: t('products.tabs.features'), url: routes.pmsProductFeatures(id) },
         ];
     };
 
@@ -124,8 +124,8 @@ export function EditProductManagerPage() {
                 <header className="shrink-0">
                     <LayoutBreadcrumb
                         items={[
-                            { label: t('common.home'), to: `${workspaceUrl}/` },
-                            { label: t('products.title'), to: `${workspaceUrl}/pms/products` },
+                            { label: t('common.home'), to: routes.root() },
+                            { label: t('products.title'), to: routes.pmsProducts() },
                             { label: breadcrumbLabel },
                         ]}
                     />
@@ -184,7 +184,7 @@ export function EditProductManagerPage() {
                         </Button>
                     </div>
                 </div>
-                <TabNavLinks items={getTabItems(workspaceUrl, productId)} />
+                <TabNavLinks items={getTabItems(productId)} />
 
                 <Outlet context={outletContext} />
             </form>

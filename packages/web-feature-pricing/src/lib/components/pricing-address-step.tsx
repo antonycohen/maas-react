@@ -1,8 +1,9 @@
-import { useState, useCallback, useMemo } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useState, useMemo } from 'react';
+import { useNavigate, useLocation } from 'react-router';
 import { cn } from '@maas/core-utils';
 import { Input, Checkbox } from '@maas/web-components';
 import { useCreateCheckoutSession, AuthenticationError, type CheckoutSession } from '@maas/core-api';
+import { usePublicRoutes } from '@maas/core-routes';
 import type { PricingPlan } from '../hooks/use-pricing-data';
 import { usePricingStore, type AddressFormData } from '../store/pricing-store';
 
@@ -125,6 +126,7 @@ export function PricingAddressStep({ plan }: PricingAddressStepProps) {
 
     const navigate = useNavigate();
     const location = useLocation();
+    const publicRoutes = usePublicRoutes();
     const checkoutMutation = useCreateCheckoutSession();
 
     const [errors, setErrors] = useState<{
@@ -157,54 +159,42 @@ export function PricingAddressStep({ plan }: PricingAddressStepProps) {
         return priceIds;
     }, [plan, selectedInterval, addonToggles, shippingSelections]);
 
-    const handleSubmit = useCallback(
-        (e: React.FormEvent) => {
-            e.preventDefault();
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
 
-            const deliveryErrors = validateAddress(deliveryAddress);
-            const billingErrors = useDifferentBillingAddress ? validateAddress(billingAddress) : {};
+        const deliveryErrors = validateAddress(deliveryAddress);
+        const billingErrors = useDifferentBillingAddress ? validateAddress(billingAddress) : {};
 
-            if (Object.keys(deliveryErrors).length > 0 || Object.keys(billingErrors).length > 0) {
-                setErrors({ deliveryAddress: deliveryErrors, billingAddress: billingErrors });
-                return;
-            }
+        if (Object.keys(deliveryErrors).length > 0 || Object.keys(billingErrors).length > 0) {
+            setErrors({ deliveryAddress: deliveryErrors, billingAddress: billingErrors });
+            return;
+        }
 
-            setErrors({ deliveryAddress: {}, billingAddress: {} });
+        setErrors({ deliveryAddress: {}, billingAddress: {} });
 
-            const origin = window.location.origin;
+        const origin = window.location.origin;
 
-            checkoutMutation.mutate(
-                {
-                    priceIds: selectedPriceIds,
-                    successUrl: `${origin}/pricing/checkout/success`,
-                    cancelUrl: `${origin}/pricing/checkout/cancel`,
-                    shippingAddress: deliveryAddress,
-                    billingAddress: useDifferentBillingAddress ? billingAddress : undefined,
+        checkoutMutation.mutate(
+            {
+                priceIds: selectedPriceIds,
+                successUrl: `${origin}${publicRoutes.checkoutSuccess}`,
+                cancelUrl: `${origin}${publicRoutes.checkoutCancel}`,
+                shippingAddress: deliveryAddress,
+                billingAddress: useDifferentBillingAddress ? billingAddress : undefined,
+            },
+            {
+                onSuccess: (data: CheckoutSession) => {
+                    window.location.href = data.checkoutSession.checkoutUrl;
                 },
-                {
-                    onSuccess: (data: CheckoutSession) => {
-                        window.location.href = data.checkoutSession.checkoutUrl;
-                    },
-                    onError: (error) => {
-                        if (error instanceof AuthenticationError) {
-                            localStorage.setItem('target-url', `${location.pathname}${location.search}`);
-                            navigate('/login');
-                        }
-                    },
-                }
-            );
-        },
-        [
-            deliveryAddress,
-            billingAddress,
-            useDifferentBillingAddress,
-            selectedPriceIds,
-            checkoutMutation,
-            location.pathname,
-            location.search,
-            navigate,
-        ]
-    );
+                onError: (error) => {
+                    if (error instanceof AuthenticationError) {
+                        localStorage.setItem('target-url', `${location.pathname}${location.search}`);
+                        navigate(publicRoutes.login);
+                    }
+                },
+            }
+        );
+    };
 
     const planName = plan.metadata?.titleSuffix
         ? `${(plan.metadata.titlePrefix as string) ?? 'Tangente'} ${plan.metadata.titleSuffix as string}`
@@ -222,7 +212,7 @@ export function PricingAddressStep({ plan }: PricingAddressStepProps) {
                         <h3 className="font-heading text-foreground text-xl font-semibold">{planName}</h3>
                     </div>
                     <button
-                        onClick={() => navigate('/pricing')}
+                        onClick={() => navigate(publicRoutes.pricing)}
                         className="text-text-secondary hover:text-foreground cursor-pointer text-sm font-medium transition-colors"
                     >
                         Retour

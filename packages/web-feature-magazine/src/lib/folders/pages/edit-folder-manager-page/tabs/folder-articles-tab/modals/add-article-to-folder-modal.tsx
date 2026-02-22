@@ -11,7 +11,7 @@ import {
 } from '@maas/web-components';
 import { ControlledArticleInput } from '@maas/web-form';
 import { IconFileText } from '@tabler/icons-react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 
 type AddArticleToFolderModalProps = {
     open: boolean;
@@ -51,7 +51,7 @@ export function AddArticleToFolderModal({
         }
     };
 
-    const selectedArticle = searchForm.watch('article');
+    const selectedArticle = useWatch({ control: searchForm.control, name: 'article' });
     const isAlreadyAdded = selectedArticle && existingArticleIds.includes(selectedArticle.id);
 
     return (

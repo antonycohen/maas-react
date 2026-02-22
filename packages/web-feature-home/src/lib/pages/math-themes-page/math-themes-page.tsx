@@ -1,4 +1,5 @@
 import React from 'react';
+import { SEO } from '@maas/core-seo';
 import {
     mapIssueToFeedArticle,
     FeedArticleItem,
@@ -15,7 +16,7 @@ import { Collection, CollectionRenderProps } from '@maas/web-collection';
 import { useGetArticles } from '@maas/core-api';
 import { Article } from '@maas/core-api-models';
 import { ColumnDef } from '@tanstack/react-table';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useTranslation } from '@maas/core-translations';
 
 const VALID_THEMES = [
@@ -141,6 +142,7 @@ export const MathThemesPage = () => {
 
     return (
         <div className="flex flex-col gap-[40px] px-5 pb-[40px]">
+            <SEO title={t('nav.public.mathThemes')} description={t('home.mathThemesDescription')} />
             <div className="mx-auto w-full max-w-[1220px]">
                 <TitleAndDescriptionHero
                     title={t('nav.public.mathThemes')}

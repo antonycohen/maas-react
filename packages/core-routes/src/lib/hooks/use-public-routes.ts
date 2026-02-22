@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { PUBLIC_ROUTES, SEGMENTS } from '../routes';
+import { PUBLIC_ROUTES } from '../routes';
 
 /**
  * Hook that provides type-safe public route URLs
@@ -44,10 +44,40 @@ export const usePublicRoutes = () => {
             magazine: (magazineId: string) => `${PUBLIC_ROUTES.MAGAZINES}/${magazineId}`,
 
             /** Article detail URL (public facing) */
-            article: (articleId: string) => `/${SEGMENTS.ARTICLES}/${articleId}`,
+            article: (articleId: string) => `${PUBLIC_ROUTES.ARTICLES}/${articleId}`,
 
             /** Folder/dossier detail URL */
             folder: (folderId: string) => `${PUBLIC_ROUTES.DOSSIERS}/${folderId}`,
+
+            /** Account page URL */
+            account: PUBLIC_ROUTES.ACCOUNT,
+
+            /** Account profile URL */
+            accountProfile: PUBLIC_ROUTES.ACCOUNT_PROFILE,
+
+            /** Mathematical themes list URL */
+            mathematicalThemes: PUBLIC_ROUTES.MATHEMATICAL_THEMES,
+
+            /** Mathematical theme detail URL */
+            mathematicalTheme: (theme: string) => `${PUBLIC_ROUTES.MATHEMATICAL_THEMES}/${theme}`,
+
+            /** Pricing page URL */
+            pricing: PUBLIC_ROUTES.PRICING,
+
+            /** Pricing auth step URL */
+            pricingAuth: PUBLIC_ROUTES.PRICING_AUTH,
+
+            /** Pricing payment step URL */
+            pricingPaiement: PUBLIC_ROUTES.PRICING_PAIEMENT,
+
+            /** Pricing address step URL */
+            pricingAdresse: PUBLIC_ROUTES.PRICING_ADRESSE,
+
+            /** Checkout success URL */
+            checkoutSuccess: PUBLIC_ROUTES.CHECKOUT_SUCCESS,
+
+            /** Checkout cancel URL */
+            checkoutCancel: PUBLIC_ROUTES.CHECKOUT_CANCEL,
         }),
         []
     );

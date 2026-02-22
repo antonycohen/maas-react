@@ -2,7 +2,8 @@ import { Category } from '@maas/core-api-models';
 import { Button, Collapsible, CollapsibleContent, CollapsibleTrigger, LongText, Badge } from '@maas/web-components';
 import { IconChevronDown } from '@tabler/icons-react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
+import { type WorkspaceRoutes } from '@maas/core-routes';
 
 export type CategoryTreeNode = {
     category: Category;
@@ -12,11 +13,11 @@ export type CategoryTreeNode = {
 type CategoryTreeNodeRowProps = {
     node: CategoryTreeNode;
     depth: number;
-    workspaceBaseUrl: string;
+    routes: WorkspaceRoutes;
     defaultOpen?: boolean;
 };
 
-export function CategoryTreeNodeRow({ node, depth, workspaceBaseUrl, defaultOpen = true }: CategoryTreeNodeRowProps) {
+export function CategoryTreeNodeRow({ node, depth, routes, defaultOpen = true }: CategoryTreeNodeRowProps) {
     const { category, children } = node;
     const hasChildren = children.length > 0;
     const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -43,7 +44,7 @@ export function CategoryTreeNodeRow({ node, depth, workspaceBaseUrl, defaultOpen
             )}
 
             <Link
-                to={`${workspaceBaseUrl}/categories/${category.id}`}
+                to={routes.categoryEdit(category.id)}
                 className="min-w-0 font-medium underline-offset-4 hover:underline"
             >
                 <LongText className="max-w-64">{category.name}</LongText>
@@ -75,7 +76,7 @@ export function CategoryTreeNodeRow({ node, depth, workspaceBaseUrl, defaultOpen
                             key={child.category.id}
                             node={child}
                             depth={depth + 1}
-                            workspaceBaseUrl={workspaceBaseUrl}
+                            routes={routes}
                             defaultOpen={defaultOpen}
                         />
                     ))}

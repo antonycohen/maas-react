@@ -1,8 +1,8 @@
 import { ApiError, useCreateArticleType, useDeleteArticleType, useUpdateArticleType } from '@maas/core-api';
 import { UseFormReturn } from 'react-hook-form';
 import { CreateArticleType, UpdateArticleType } from '@maas/core-api-models';
-import { useNavigate } from 'react-router-dom';
-import { useCurrentWorkspaceUrlPrefix } from '@maas/core-workspace';
+import { useNavigate } from 'react-router';
+import { useRoutes } from '@maas/core-workspace';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
 
@@ -12,7 +12,7 @@ export const useEditActions = (
     articleTypeId: string
 ) => {
     const { t } = useTranslation();
-    const workspaceBaseUrl = useCurrentWorkspaceUrlPrefix();
+    const routes = useRoutes();
     const navigate = useNavigate();
 
     const handleApiError = (error: ApiError) => {
@@ -28,7 +28,7 @@ export const useEditActions = (
 
     const createMutation = useCreateArticleType({
         onSuccess: () => {
-            navigate(`${workspaceBaseUrl}/article-types`);
+            navigate(routes.articleTypes());
             toast.success(t('message.success.created', { entity: t('articleTypes.title') }));
         },
         onError: handleApiError,
@@ -36,7 +36,7 @@ export const useEditActions = (
 
     const updateMutation = useUpdateArticleType({
         onSuccess: () => {
-            navigate(`${workspaceBaseUrl}/article-types`);
+            navigate(routes.articleTypes());
             toast.success(t('message.success.updated', { entity: t('articleTypes.title') }));
         },
         onError: handleApiError,
@@ -44,7 +44,7 @@ export const useEditActions = (
 
     const deleteMutation = useDeleteArticleType({
         onSuccess: () => {
-            navigate(`${workspaceBaseUrl}/article-types`);
+            navigate(routes.articleTypes());
             toast.success(t('message.success.deleted', { entity: t('articleTypes.title') }));
         },
         onError: () => {

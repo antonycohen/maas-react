@@ -83,6 +83,9 @@
         },
         {
             "path": "./packages/web-feature-diffusion-lists"
+        },
+        {
+            "path": "./packages/core-seo"
         }
     ]
 }

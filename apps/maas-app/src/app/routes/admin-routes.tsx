@@ -1,8 +1,9 @@
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router';
 import { useConnectedUser } from '@maas/core-store-session';
 import { WorkspaceRoutes } from './workspace-routes';
 import { useRoutes } from '@maas/core-workspace';
 import { useEffect } from 'react';
+import { SEO } from '@maas/core-seo';
 
 export const AdminRoutes = () => {
     const connectedUser = useConnectedUser();
@@ -20,9 +21,12 @@ export const AdminRoutes = () => {
     }
 
     return (
-        <Routes>
-            <Route path={'w/:organizationId?/*'} element={<WorkspaceRoutes />} />
-            <Route path={'*'} element={<Navigate to={'/admin/w/'} replace />} />
-        </Routes>
+        <>
+            <SEO title="Admin" noindex />
+            <Routes>
+                <Route path={'w/:organizationId?/*'} element={<WorkspaceRoutes />} />
+                <Route path={'*'} element={<Navigate to={'/admin/w/'} replace />} />
+            </Routes>
+        </>
     );
 };

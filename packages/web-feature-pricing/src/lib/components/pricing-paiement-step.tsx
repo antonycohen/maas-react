@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { cn } from '@maas/core-utils';
 import { useCreateCheckoutSession, AuthenticationError, type CheckoutSession } from '@maas/core-api';
+import { usePublicRoutes } from '@maas/core-routes';
 import type { PricingPlan } from '../hooks/use-pricing-data';
 import { usePricingStore } from '../store/pricing-store';
 import { PricingSummary } from './pricing-summary';
@@ -17,6 +18,7 @@ export function PricingPaiementStep({ plan }: PricingPaiementStepProps) {
     const addonToggles = usePricingStore((s) => s.addonToggles);
     const shippingSelections = usePricingStore((s) => s.shippingSelections);
     const navigate = useNavigate();
+    const publicRoutes = usePublicRoutes();
     const checkoutMutation = useCreateCheckoutSession();
 
     const selectedPriceIds = useMemo(() => {
@@ -47,8 +49,8 @@ export function PricingPaiementStep({ plan }: PricingPaiementStepProps) {
         checkoutMutation.mutate(
             {
                 priceIds: selectedPriceIds,
-                successUrl: `${origin}/pricing/adresse`,
-                cancelUrl: `${origin}/pricing/checkout/cancel`,
+                successUrl: `${origin}${publicRoutes.pricingAdresse}`,
+                cancelUrl: `${origin}${publicRoutes.checkoutCancel}`,
             },
             {
                 onSuccess: (data: CheckoutSession) => {
@@ -56,8 +58,8 @@ export function PricingPaiementStep({ plan }: PricingPaiementStepProps) {
                 },
                 onError: (error) => {
                     if (error instanceof AuthenticationError) {
-                        localStorage.setItem('target-url', '/pricing/paiement');
-                        navigate('/pricing/auth');
+                        localStorage.setItem('target-url', publicRoutes.pricingPaiement);
+                        navigate(publicRoutes.pricingAuth);
                     }
                 },
             }
@@ -80,7 +82,7 @@ export function PricingPaiementStep({ plan }: PricingPaiementStepProps) {
                         <h3 className="font-heading text-foreground text-xl font-semibold">{planName}</h3>
                     </div>
                     <button
-                        onClick={() => navigate('/pricing')}
+                        onClick={() => navigate(publicRoutes.pricing)}
                         className="text-text-secondary hover:text-foreground cursor-pointer text-sm font-medium transition-colors"
                     >
                         Retour
