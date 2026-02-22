@@ -1,6 +1,6 @@
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { MagazineDetailsPage } from '@maas/web-feature-home';
- 
+import { NotFoundPage } from '@maas/web-components';
+
 import { maasApi, ApiError } from '@maas/core-api';
 import { buildPageMeta } from '@maas/core-seo';
 import type { Route } from './+types/magazines-detail';
@@ -9,7 +9,7 @@ import type { Route } from './+types/magazines-detail';
 export async function loader({ params }: Route.LoaderArgs) {
     try {
         const issue = await maasApi.issues.getIssue({
-            id: params.id!,
+            id: params.id ?? '',
             fields: {
                 title: null,
                 description: null,
@@ -45,6 +45,10 @@ export function meta({ data }: Route.MetaArgs) {
             publishedTime: data.issue.publishedAt ?? undefined,
         },
     });
+}
+
+export function ErrorBoundary() {
+    return <NotFoundPage />;
 }
 
 export default function MagazinesDetail() {

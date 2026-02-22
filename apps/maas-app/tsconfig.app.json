@@ -56,12 +56,6 @@
             "path": "../../packages/core-api-models/tsconfig.lib.json"
         },
         {
-            "path": "../../packages/core-api/tsconfig.lib.json"
-        },
-        {
-            "path": "../../packages/core-seo/tsconfig.lib.json"
-        },
-        {
             "path": "../../packages/core-workspace/tsconfig.lib.json"
         },
         {
@@ -77,13 +71,22 @@
             "path": "../../packages/web-feature-pricing/tsconfig.lib.json"
         },
         {
-            "path": "../../packages/web-components/tsconfig.lib.json"
-        },
-        {
             "path": "../../packages/web-feature-login/tsconfig.lib.json"
         },
         {
+            "path": "../../packages/core-seo/tsconfig.lib.json"
+        },
+        {
+            "path": "../../packages/core-api/tsconfig.lib.json"
+        },
+        {
+            "path": "../../packages/web-components/tsconfig.lib.json"
+        },
+        {
             "path": "../../packages/web-feature-home/tsconfig.lib.json"
+        },
+        {
+            "path": "../../packages/core-utils/tsconfig.lib.json"
         },
         {
             "path": "../../packages/web-feature-users/tsconfig.lib.json"

@@ -3,6 +3,7 @@ import { SEO } from '@maas/core-seo';
 import {
     mapIssueToFeedArticle,
     FeedArticleItem,
+    NotFoundPage,
     Skeleton,
     TitleAndDescriptionHero,
     Pagination,
@@ -43,7 +44,10 @@ export const CategoryPage = () => {
     );
 
     const category = categoriesData?.data?.[0];
-    console.log(category);
+    const categoryNotFound = categoriesData && !category;
+
+    if (categoryNotFound) return <NotFoundPage />;
+
     const renderContent = ({ items }: CollectionRenderProps<Article>) => {
         if (items.length === 0) {
             return (

@@ -31,7 +31,8 @@
             "Bash(find packages:*)",
             "Bash(tail:*)",
             "Bash(curl:*)",
-            "Bash(grep Failed tasks::*)"
+            "Bash(grep Failed tasks::*)",
+            "Bash(sed:*)"
         ],
         "deny": []
     }

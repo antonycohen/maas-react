@@ -1,4 +1,3 @@
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { PricingRoutes } from '@maas/web-feature-pricing';
 import { buildPageMeta } from '@maas/core-seo';
 

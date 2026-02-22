@@ -1,4 +1,3 @@
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { MagazinesPage } from '@maas/web-feature-home';
 import { buildPageMeta } from '@maas/core-seo';
 

@@ -25,6 +25,7 @@ export function useSetupSessionUser() {
         data: userResponse,
         error: userError,
         isLoading,
+        isFetched,
         ...userQuery
     } = useGetUserById(
         {
@@ -44,10 +45,11 @@ export function useSetupSessionUser() {
             setConnectedUser(userResponse);
         }
 
-        if (!userResponse && !isLoading) {
+        // Only reset when the query was enabled and actually completed with no result
+        if (!userResponse && !isLoading && isFetched) {
             reset();
         }
-    }, [userError, userResponse, setError, setConnectedUser, accessToken, reset, isLoading, userId]);
+    }, [userError, userResponse, setError, setConnectedUser, accessToken, reset, isLoading, isFetched, userId]);
 
     return { userResponse, userError, isLoading, ...userQuery };
 }

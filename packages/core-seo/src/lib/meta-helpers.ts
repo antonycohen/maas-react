@@ -110,7 +110,7 @@ export function buildArticleMeta(article: {
         title: (cf['seoTitle'] as string) || article.title || undefined,
         description: (cf['seoDescription'] as string) || article.description || undefined,
         keywords,
-        image: (cf['seoOgImage'] as string) || article.featuredImage?.url || article.cover?.url || undefined,
+        image: (cf['seoOgImage'] as string) || article.cover?.url || article.featuredImage?.url || undefined,
         url: (cf['seoCanonicalUrl'] as string) || undefined,
         noindex: (cf['seoNoIndex'] as boolean) ?? false,
         type: 'article',

@@ -1,4 +1,3 @@
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { MathThemesPage } from '@maas/web-feature-home';
 import { buildPageMeta } from '@maas/core-seo';
 import type { Route } from './+types/math-themes';

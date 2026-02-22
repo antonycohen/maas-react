@@ -1,6 +1,6 @@
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { CategoryPage } from '@maas/web-feature-home';
- 
+import { NotFoundPage } from '@maas/web-components';
+
 import { maasApi } from '@maas/core-api';
 import { buildPageMeta } from '@maas/core-seo';
 import type { Route } from './+types/category';
@@ -14,9 +14,13 @@ export async function loader({ params }: Route.LoaderArgs) {
             filters: { slug: params.slug },
             fields: { id: null, name: null, description: null },
         });
-        const category = response.data?.[0] ?? null;
+        const category = response.data?.[0];
+        if (!category) {
+            throw new Response(null, { status: 404 });
+        }
         return { category };
-    } catch {
+    } catch (error) {
+        if (error instanceof Response) throw error;
         return { category: null };
     }
 }
@@ -38,6 +42,10 @@ export function meta({ data }: Route.MetaArgs) {
         title: data.category.name ?? undefined,
         description: data.category.description ?? `Articles dans la catégorie ${data.category.name}.`,
     });
+}
+
+export function ErrorBoundary() {
+    return <NotFoundPage />;
 }
 
 export default function Category() {

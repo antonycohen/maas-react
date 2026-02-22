@@ -1,6 +1,6 @@
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { FolderDetailsPages } from '@maas/web-feature-home';
- 
+import { NotFoundPage } from '@maas/web-components';
+
 import { maasApi, ApiError } from '@maas/core-api';
 import { buildPageMeta } from '@maas/core-seo';
 import type { Route } from './+types/folders-detail';
@@ -9,7 +9,7 @@ import type { Route } from './+types/folders-detail';
 export async function loader({ params }: Route.LoaderArgs) {
     try {
         const folder = await maasApi.folders.getFolder({
-            id: params.id!,
+            id: params.id ?? '',
             fields: {
                 name: null,
                 description: null,
@@ -40,6 +40,10 @@ export function meta({ data }: Route.MetaArgs) {
         description: data.folder.description ?? undefined,
         image: data.folder.cover?.url ?? undefined,
     });
+}
+
+export function ErrorBoundary() {
+    return <NotFoundPage />;
 }
 
 export default function FoldersDetail() {
