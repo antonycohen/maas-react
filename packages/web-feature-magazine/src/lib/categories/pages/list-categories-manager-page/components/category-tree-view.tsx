@@ -86,10 +86,11 @@ export function CategoryTreeView({ searchTerm }: CategoryTreeViewProps) {
         },
     });
 
+    const categories = data?.data;
     const tree = useMemo(() => {
-        if (!data?.data) return [];
-        return buildTree(data.data);
-    }, [data?.data]);
+        if (!categories) return [];
+        return buildTree(categories);
+    }, [categories]);
 
     const filteredTree = useMemo(() => {
         if (!searchTerm.trim()) return tree;

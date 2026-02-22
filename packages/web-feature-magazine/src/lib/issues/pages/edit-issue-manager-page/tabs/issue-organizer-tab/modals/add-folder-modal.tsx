@@ -13,7 +13,7 @@ import {
 } from '@maas/web-components';
 import { ControlledMagazineFolderInput, createConnectedInputHelpers } from '@maas/web-form';
 import { IconFolder, IconPlus, IconSearch } from '@tabler/icons-react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 
 type AddFolderModalProps = {
     open: boolean;
@@ -93,7 +93,7 @@ export function AddFolderModal({
         }
     };
 
-    const selectedFolder = searchForm.watch('folder');
+    const selectedFolder = useWatch({ control: searchForm.control, name: 'folder' });
     const isAlreadyAdded = selectedFolder ? existingFolderIds.includes(selectedFolder.id) : false;
 
     return (

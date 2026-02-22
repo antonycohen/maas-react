@@ -132,44 +132,27 @@ export function FoldersPanel({
                             <Skeleton className="h-8 w-full" />
                             <Skeleton className="h-8 w-full" />
                         </>
+                    ) : folders.length > 0 ? (
+                        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                            <SortableContext items={folders.map((f) => f.id)} strategy={verticalListSortingStrategy}>
+                                {folders.map((folder) => (
+                                    <SortableFolderItem
+                                        key={folder.id}
+                                        folder={folder}
+                                        isSelected={selectedFolderId === folder.id}
+                                        onSelect={() => onSelectFolder(folder.id)}
+                                    />
+                                ))}
+                            </SortableContext>
+                        </DndContext>
                     ) : (
-                        <>
-                            {folders.length > 0 ? (
-                                <DndContext
-                                    sensors={sensors}
-                                    collisionDetection={closestCenter}
-                                    onDragEnd={handleDragEnd}
-                                >
-                                    <SortableContext
-                                        items={folders.map((f) => f.id)}
-                                        strategy={verticalListSortingStrategy}
-                                    >
-                                        {folders.map((folder) => (
-                                            <SortableFolderItem
-                                                key={folder.id}
-                                                folder={folder}
-                                                isSelected={selectedFolderId === folder.id}
-                                                onSelect={() => onSelectFolder(folder.id)}
-                                            />
-                                        ))}
-                                    </SortableContext>
-                                </DndContext>
-                            ) : (
-                                <div className="text-muted-foreground py-8 text-center text-sm">
-                                    <IconFolderPlus className="mx-auto mb-2 h-8 w-8 opacity-50" />
-                                    <p>{t('folders.noFoldersYet')}</p>
-                                    <Button
-                                        type="button"
-                                        variant="link"
-                                        size="sm"
-                                        onClick={onAddFolder}
-                                        className="mt-1"
-                                    >
-                                        {t('folders.createOne')}
-                                    </Button>
-                                </div>
-                            )}
-                        </>
+                        <div className="text-muted-foreground py-8 text-center text-sm">
+                            <IconFolderPlus className="mx-auto mb-2 h-8 w-8 opacity-50" />
+                            <p>{t('folders.noFoldersYet')}</p>
+                            <Button type="button" variant="link" size="sm" onClick={onAddFolder} className="mt-1">
+                                {t('folders.createOne')}
+                            </Button>
+                        </div>
                     )}
                 </div>
             </ScrollArea>

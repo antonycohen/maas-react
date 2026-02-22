@@ -60,11 +60,12 @@ export function useCollectionState({
     // Reset collection state when the pathname changes (e.g. switching categories)
     useEffect(() => {
         if (!useLocationAsState) return;
+         
         setPagination({ pageIndex: 0, pageSize: defaultPageSize });
         setGlobalFilter('');
         setColumnFilters([]);
         setSorting([]);
-    }, [pathname]);
+    }, [pathname, useLocationAsState, defaultPageSize]);
 
     // Sync state to URL
     useEffect(() => {
@@ -82,6 +83,7 @@ export function useCollectionState({
         setSearchParams(params, { replace: true });
     }, [
         useLocationAsState,
+        defaultPageSize,
         debouncedGlobalFilter,
         pagination,
         columnFilters,

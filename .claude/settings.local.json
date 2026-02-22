@@ -34,7 +34,8 @@
             "Bash(grep Failed tasks::*)",
             "Bash(sed:*)",
             "Bash(python3:*)",
-            "Bash(pnpm:*)"
+            "Bash(pnpm:*)",
+            "Bash(grep ✖:*)"
         ],
         "deny": []
     }
