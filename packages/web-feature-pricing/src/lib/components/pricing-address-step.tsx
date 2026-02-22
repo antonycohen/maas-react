@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router';
 import { cn } from '@maas/core-utils';
 import { Input, Checkbox } from '@maas/web-components';
@@ -159,54 +159,42 @@ export function PricingAddressStep({ plan }: PricingAddressStepProps) {
         return priceIds;
     }, [plan, selectedInterval, addonToggles, shippingSelections]);
 
-    const handleSubmit = useCallback(
-        (e: React.FormEvent) => {
-            e.preventDefault();
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
 
-            const deliveryErrors = validateAddress(deliveryAddress);
-            const billingErrors = useDifferentBillingAddress ? validateAddress(billingAddress) : {};
+        const deliveryErrors = validateAddress(deliveryAddress);
+        const billingErrors = useDifferentBillingAddress ? validateAddress(billingAddress) : {};
 
-            if (Object.keys(deliveryErrors).length > 0 || Object.keys(billingErrors).length > 0) {
-                setErrors({ deliveryAddress: deliveryErrors, billingAddress: billingErrors });
-                return;
-            }
+        if (Object.keys(deliveryErrors).length > 0 || Object.keys(billingErrors).length > 0) {
+            setErrors({ deliveryAddress: deliveryErrors, billingAddress: billingErrors });
+            return;
+        }
 
-            setErrors({ deliveryAddress: {}, billingAddress: {} });
+        setErrors({ deliveryAddress: {}, billingAddress: {} });
 
-            const origin = window.location.origin;
+        const origin = window.location.origin;
 
-            checkoutMutation.mutate(
-                {
-                    priceIds: selectedPriceIds,
-                    successUrl: `${origin}${publicRoutes.checkoutSuccess}`,
-                    cancelUrl: `${origin}${publicRoutes.checkoutCancel}`,
-                    shippingAddress: deliveryAddress,
-                    billingAddress: useDifferentBillingAddress ? billingAddress : undefined,
+        checkoutMutation.mutate(
+            {
+                priceIds: selectedPriceIds,
+                successUrl: `${origin}${publicRoutes.checkoutSuccess}`,
+                cancelUrl: `${origin}${publicRoutes.checkoutCancel}`,
+                shippingAddress: deliveryAddress,
+                billingAddress: useDifferentBillingAddress ? billingAddress : undefined,
+            },
+            {
+                onSuccess: (data: CheckoutSession) => {
+                    window.location.href = data.checkoutSession.checkoutUrl;
                 },
-                {
-                    onSuccess: (data: CheckoutSession) => {
-                        window.location.href = data.checkoutSession.checkoutUrl;
-                    },
-                    onError: (error) => {
-                        if (error instanceof AuthenticationError) {
-                            localStorage.setItem('target-url', `${location.pathname}${location.search}`);
-                            navigate(publicRoutes.login);
-                        }
-                    },
-                }
-            );
-        },
-        [
-            deliveryAddress,
-            billingAddress,
-            useDifferentBillingAddress,
-            selectedPriceIds,
-            checkoutMutation,
-            location.pathname,
-            location.search,
-            navigate,
-        ]
-    );
+                onError: (error) => {
+                    if (error instanceof AuthenticationError) {
+                        localStorage.setItem('target-url', `${location.pathname}${location.search}`);
+                        navigate(publicRoutes.login);
+                    }
+                },
+            }
+        );
+    };
 
     const planName = plan.metadata?.titleSuffix
         ? `${(plan.metadata.titlePrefix as string) ?? 'Tangente'} ${plan.metadata.titleSuffix as string}`
