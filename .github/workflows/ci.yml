@@ -51,6 +51,9 @@ jobs:
 
       - uses: nrwl/nx-set-shas@v4
 
+      - name: Generate React Router types
+        run: npx react-router typegen --cwd apps/maas-app
+
       - run: npx nx affected --target=typecheck
 
   build:
