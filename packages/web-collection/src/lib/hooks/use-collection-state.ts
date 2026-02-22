@@ -60,7 +60,6 @@ export function useCollectionState({
     // Reset collection state when the pathname changes (e.g. switching categories)
     useEffect(() => {
         if (!useLocationAsState) return;
-         
         setPagination({ pageIndex: 0, pageSize: defaultPageSize });
         setGlobalFilter('');
         setColumnFilters([]);

@@ -382,8 +382,6 @@ importers:
         specifier: workspace:*
         version: link:../../packages/web-layout
 
-  apps/maas-bo-app: {}
-
   packages/core-api: {}
 
   packages/core-api-models: {}

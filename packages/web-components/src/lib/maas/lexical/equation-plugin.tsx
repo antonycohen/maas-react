@@ -344,7 +344,6 @@ export function EquationDialog({ open, onOpenChange }: EquationDialogProps) {
 
     // Reset selected index when autocomplete query changes
     useEffect(() => {
-         
         setSelectedIndex(0);
     }, [autocompleteQuery]);
 
