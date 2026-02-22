@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useTranslation } from '@maas/core-translations';
 import { LayoutBreadcrumb, LayoutContent, LayoutHeader } from '@maas/web-layout';
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, FieldGroup } from '@maas/web-components';

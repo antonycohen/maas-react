@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 import { CreatePlanWizardPage } from '../pages/create-plan-wizard-page/create-plan-wizard-page';
 
 export const WizardRoutes = () => {

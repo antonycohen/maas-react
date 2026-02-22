@@ -1,6 +1,7 @@
 import { createJSONStorage } from 'zustand/middleware';
 
 const getDomainNameWithoutSubdomain = (): string => {
+    if (typeof window === 'undefined') return '';
     const hostname = window.location.hostname;
     const parts = hostname.split('.');
     if (parts.length > 2) {
@@ -10,8 +11,18 @@ const getDomainNameWithoutSubdomain = (): string => {
     return hostname; // No subdomain, return as is
 };
 
+const noopStorage = {
+    getItem: () => null,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    setItem: () => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    removeItem: () => {},
+};
+
 export const createCookieStorage = <T>(localStorageSyncKey?: string) =>
     createJSONStorage<T>(() => {
+        if (typeof document === 'undefined') return noopStorage;
+
         const cookies = document.cookie.split('; ').reduce(
             (acc, cookie) => {
                 const [key, value] = cookie.split('=');

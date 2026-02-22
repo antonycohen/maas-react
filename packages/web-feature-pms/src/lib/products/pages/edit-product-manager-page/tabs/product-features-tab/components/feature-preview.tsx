@@ -1,7 +1,7 @@
 import { Feature } from '@maas/core-api-models';
 import { Badge } from '@maas/web-components';
 import { IconSparkles } from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 

@@ -1,7 +1,7 @@
 import { getTokensFromCodeRedirect } from '@maas/core-api';
 import { useOAuthStore } from '@maas/core-store-oauth';
 import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useTranslation } from '@maas/core-translations';
 import { PUBLIC_ROUTES } from '@maas/core-routes';
 

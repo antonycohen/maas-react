@@ -1,6 +1,6 @@
 import { Badge, Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@maas/web-components';
 import { LayoutBreadcrumb, LayoutContent } from '@maas/web-layout';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import {
     useGetSubscriptionById,
     useCancelSubscriptionAtPeriodEnd,

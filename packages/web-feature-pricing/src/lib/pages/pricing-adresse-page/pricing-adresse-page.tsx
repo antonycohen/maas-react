@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useOAuthStore } from '@maas/core-store-oauth';
 import { usePublicRoutes } from '@maas/core-routes';
 import { usePrefillCustomerAddress } from '../../hooks/use-prefill-customer-address';

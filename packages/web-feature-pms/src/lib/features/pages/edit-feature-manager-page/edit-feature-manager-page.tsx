@@ -12,7 +12,7 @@ import {
     Textarea,
 } from '@maas/web-components';
 import { LayoutBreadcrumb, LayoutContent } from '@maas/web-layout';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { useCreateFeature, useDeleteFeature, useGetFeatureById, useUpdateFeature } from '@maas/core-api';
 import { useRoutes } from '@maas/core-workspace';
 import { useEffect } from 'react';

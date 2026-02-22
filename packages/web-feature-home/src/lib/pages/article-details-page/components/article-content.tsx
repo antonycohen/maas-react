@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { SubscriptionCTA } from './subscription-cta';
 import { useRenderBlocks } from '@maas/web-cms-editor';
 import { Article, CMSBlock } from '@maas/core-api-models';

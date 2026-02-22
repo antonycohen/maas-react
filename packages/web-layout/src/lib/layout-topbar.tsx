@@ -1,7 +1,7 @@
 import { cn } from '@maas/core-utils';
 import { User } from '@maas/core-api-models';
 import { Search, UserCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useTranslation } from '@maas/core-translations';
 import { PUBLIC_ROUTES } from '@maas/core-routes';
 

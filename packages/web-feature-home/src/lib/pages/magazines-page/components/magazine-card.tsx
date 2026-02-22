@@ -1,6 +1,6 @@
 import { Issue } from '@maas/core-api-models';
 import { useResizedImage } from '@maas/web-components';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { publicUrlBuilders } from '@maas/core-routes';
 
 interface MagazineCardProps {

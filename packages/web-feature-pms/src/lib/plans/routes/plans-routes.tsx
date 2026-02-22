@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 import { PlansListManagerPage } from '../pages/list-plans-manager-page/plans-list-manager-page';
 import { EditPlanManagerPage } from '../pages/edit-plan-manager-page/edit-plan-manager-page';
 import { PlanInfoTab } from '../pages/edit-plan-manager-page/tabs/plan-info-tab';

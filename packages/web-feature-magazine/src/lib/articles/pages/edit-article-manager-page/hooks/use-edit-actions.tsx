@@ -1,7 +1,7 @@
 import { ApiError, useCreateArticle, useDeleteArticle, useUpdateArticle } from '@maas/core-api';
 import { UseFormReturn } from 'react-hook-form';
 import { CreateArticle, UpdateArticle } from '@maas/core-api-models';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useRoutes } from '@maas/core-workspace';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';

@@ -1,6 +1,6 @@
 import { Button, TabNavLinks } from '@maas/web-components';
 import { LayoutBreadcrumb } from '@maas/web-layout';
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router';
 import { useGetCustomerById } from '@maas/core-api';
 import { useRoutes } from '@maas/core-workspace';
 import { ReadCustomer } from '@maas/core-api-models';

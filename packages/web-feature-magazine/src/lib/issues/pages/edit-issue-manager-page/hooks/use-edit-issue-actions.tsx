@@ -1,7 +1,7 @@
 import { ApiError, useCreateIssue, useDeleteIssue, useUpdateIssue } from '@maas/core-api';
 import { UseFormReturn } from 'react-hook-form';
 import { CreateIssue, UpdateIssue } from '@maas/core-api-models';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useRoutes } from '@maas/core-workspace';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
@@ -50,7 +50,7 @@ export const useEditIssueActions = (form: UseFormReturn<IssueFormValues>, isCrea
 
     function onSubmit(data: IssueFormValues) {
         if (isCreateMode) {
-            const { folders, ...createData } = data as CreateIssue & { folders?: unknown };
+            const { folders: _folders, ...createData } = data as CreateIssue & { folders?: unknown };
             createMutation.mutate(createData as CreateIssue);
         } else {
             const updateData = data as UpdateIssue;

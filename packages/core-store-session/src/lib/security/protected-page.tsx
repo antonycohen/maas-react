@@ -1,6 +1,6 @@
 import { useOAuthStore } from '@maas/core-store-oauth';
 import { useEffect } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router';
 import { PUBLIC_ROUTES } from '@maas/core-routes';
 import { useSessionStore } from '../store/session-store';
 

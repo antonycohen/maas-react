@@ -3,7 +3,7 @@ import { Article } from '@maas/core-api-models';
 import { Badge, Checkbox, LongText } from '@maas/web-components';
 import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collection';
 import { cn } from '@maas/core-utils';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';

@@ -1,5 +1,5 @@
 import { useOAuthStore } from '@maas/core-store-oauth';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import { useEffect } from 'react';
 import { useSessionStore } from '../store/session-store';
 

@@ -1,7 +1,7 @@
 import { Badge, Button, TabNavLinks } from '@maas/web-components';
 import { useTranslation } from '@maas/core-translations';
 import { LayoutBreadcrumb } from '@maas/web-layout';
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router';
 import { useGetFolderById } from '@maas/core-api';
 import { useRoutes, useGetCurrentWorkspaceId } from '@maas/core-workspace';
 import { type WorkspaceRoutes } from '@maas/core-routes';

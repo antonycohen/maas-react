@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router';
 import { cn } from '@maas/core-utils';
 import { Input, Checkbox } from '@maas/web-components';
 import { useCreateCheckoutSession, AuthenticationError, type CheckoutSession } from '@maas/core-api';

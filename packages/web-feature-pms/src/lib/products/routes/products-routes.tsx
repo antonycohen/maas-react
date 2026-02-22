@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 import { ProductsListManagerPage } from '../pages/list-products-manager-page/products-list-manager-page';
 import { EditProductManagerPage } from '../pages/edit-product-manager-page/edit-product-manager-page';
 import { ProductInfoTab } from '../pages/edit-product-manager-page/tabs/product-info-tab';

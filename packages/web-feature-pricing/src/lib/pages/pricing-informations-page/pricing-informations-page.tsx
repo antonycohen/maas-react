@@ -1,5 +1,5 @@
 import { useMemo, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { usePublicRoutes } from '@maas/core-routes';
 import { usePricingData } from '../../hooks/use-pricing-data';
 import { usePricingStore } from '../../store/pricing-store';

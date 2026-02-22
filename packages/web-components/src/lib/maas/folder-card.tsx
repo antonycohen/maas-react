@@ -1,6 +1,6 @@
 import { Folder, Article } from '@maas/core-api-models';
 import { ChevronRight, FileText } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useResizedImage } from '../hooks';
 import { Skeleton } from '../ui/skeleton';
 import { publicUrlBuilders } from '@maas/core-routes';

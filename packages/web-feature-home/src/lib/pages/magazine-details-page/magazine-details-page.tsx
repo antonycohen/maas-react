@@ -7,7 +7,7 @@ import {
     NotFoundPage,
 } from '@maas/web-components';
 import { ApiError, useGetIssueById } from '@maas/core-api';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { SEO } from '@maas/core-seo';
 import { useMemo } from 'react';
 import { publicUrlBuilders } from '@maas/core-routes';

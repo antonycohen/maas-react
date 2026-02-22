@@ -26,7 +26,12 @@
             "Bash(npx eslint:*)",
             "Bash(npx nx lint:*)",
             "mcp__sequential-thinking__sequentialthinking",
-            "WebFetch(domain:localhost)"
+            "WebFetch(domain:localhost)",
+            "Bash(head:*)",
+            "Bash(find packages:*)",
+            "Bash(tail:*)",
+            "Bash(curl:*)",
+            "Bash(grep Failed tasks::*)"
         ],
         "deny": []
     }

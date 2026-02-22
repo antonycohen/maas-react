@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router';
 import { AccountSettingsPage } from '../pages/account-settings-page/account-settings-page';
 import { AccountProfileTab } from '../pages/account-settings-page/tabs/account-profile-tab/account-profile-tab';
 import { AccountConnexionTab } from '../pages/account-settings-page/tabs/account-connexion-tab/account-connexion-tab';

@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { cn } from '@maas/core-utils';
 import { IconMapPin, IconWorld } from '@tabler/icons-react';
 import { useOAuthStore } from '@maas/core-store-oauth';

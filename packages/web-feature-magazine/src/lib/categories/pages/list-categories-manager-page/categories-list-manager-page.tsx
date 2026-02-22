@@ -3,7 +3,7 @@ import { useCategoriesListColumns } from './hooks/use-categories-list-columns';
 import { useGetCategories } from '@maas/core-api';
 import { LayoutBreadcrumb, LayoutContent, LayoutHeader } from '@maas/web-layout';
 import { Button, ButtonGroup, Input } from '@maas/web-components';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router';
 import { IconLayoutList, IconPlus, IconBinaryTree } from '@tabler/icons-react';
 import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';

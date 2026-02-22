@@ -14,7 +14,7 @@ import {
     IconUser,
     IconVideo,
 } from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { camelCase } from 'change-case';
 
 type ArticlePreviewPanelProps = {

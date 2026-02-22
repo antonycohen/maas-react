@@ -2,7 +2,7 @@ import { Category } from '@maas/core-api-models';
 import { Button, Collapsible, CollapsibleContent, CollapsibleTrigger, LongText, Badge } from '@maas/web-components';
 import { IconChevronDown } from '@tabler/icons-react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { type WorkspaceRoutes } from '@maas/core-routes';
 
 export type CategoryTreeNode = {

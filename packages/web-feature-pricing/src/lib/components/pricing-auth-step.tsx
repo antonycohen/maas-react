@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { getAuthorizationUrl } from '@maas/core-api';
 import { useOAuthStore } from '@maas/core-store-oauth';
 import { usePublicRoutes } from '@maas/core-routes';

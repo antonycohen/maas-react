@@ -1,9 +1,9 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 
 export const SettingsRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/" element={<div>Hello</div>} />
-    </Routes>
-  );
+    return (
+        <Routes>
+            <Route path="/" element={<div>Hello</div>} />
+        </Routes>
+    );
 };

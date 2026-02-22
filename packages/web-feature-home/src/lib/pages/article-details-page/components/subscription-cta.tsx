@@ -1,6 +1,6 @@
 import { CheckIcon } from '@radix-ui/react-icons';
 import { useTranslation } from '@maas/core-translations';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { PUBLIC_ROUTES } from '@maas/core-routes';
 
 export const SubscriptionCTA = () => {

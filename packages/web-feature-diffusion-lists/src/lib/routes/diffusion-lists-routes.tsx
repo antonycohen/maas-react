@@ -1,5 +1,5 @@
 import React, { Component, Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 
 const DiffusionListsListPage = React.lazy(() => import('../pages/list-diffusion-lists-page/diffusion-lists-list-page'));
 const DetailDiffusionListPage = React.lazy(

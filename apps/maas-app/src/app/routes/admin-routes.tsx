@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router';
 import { useConnectedUser } from '@maas/core-store-session';
 import { WorkspaceRoutes } from './workspace-routes';
 import { useRoutes } from '@maas/core-workspace';

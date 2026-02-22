@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Carousel, CarouselContent, CarouselItem } from '../ui/carousel';
 
 export interface CategoryArticle {

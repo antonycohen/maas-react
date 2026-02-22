@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { PUBLIC_ROUTES } from '@maas/core-routes';
 
 interface FooterLink {

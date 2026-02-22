@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import { Footer, GlobalSearch } from '@maas/web-components';
 import { User } from '@maas/core-api-models';
 import { PUBLIC_ROUTES } from '@maas/core-routes';

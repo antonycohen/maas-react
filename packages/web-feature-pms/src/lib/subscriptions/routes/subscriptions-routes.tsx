@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 import { SubscriptionsListManagerPage } from '../pages/list-subscriptions-manager-page/subscriptions-list-manager-page';
 import { ViewSubscriptionManagerPage } from '../pages/view-subscription-manager-page/view-subscription-manager-page';
 

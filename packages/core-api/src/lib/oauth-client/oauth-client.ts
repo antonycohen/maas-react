@@ -12,6 +12,7 @@ const oauthClient = new OAuth2Client({
 });
 
 const getAuthorizationUrl = async () => {
+    if (typeof window === 'undefined') throw new Error('getAuthorizationUrl is client-only');
     const codeVerifier = await generateCodeVerifier();
     localStorage.setItem(VERIFIER_STORAGE, codeVerifier);
     return oauthClient.authorizationCode.getAuthorizeUri({
@@ -23,6 +24,7 @@ const getAuthorizationUrl = async () => {
 };
 
 const getTokensFromCodeRedirect = async (url: string) => {
+    if (typeof window === 'undefined') throw new Error('getTokensFromCodeRedirect is client-only');
     const codeVerifier = localStorage.getItem(VERIFIER_STORAGE);
     if (!codeVerifier) {
         throw new AuthenticationError(

@@ -1,7 +1,7 @@
 import { useGetProductById, useGetProducts } from '@maas/core-api';
 import { Button } from '@maas/web-components';
 import { IconPlus } from '@tabler/icons-react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext } from 'react-router';
 import { ProductPreview, ProductsList } from './components';
 import { AddProductToPlanModal } from './modals';
 import { EditPlanOutletContext } from '../../edit-plan-manager-page';

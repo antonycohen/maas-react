@@ -3,7 +3,7 @@ import { usePlansListColumns } from './hooks/use-plans-list-columns';
 import { useGetPlans } from '@maas/core-api';
 import { LayoutBreadcrumb, LayoutContent, LayoutHeader } from '@maas/web-layout';
 import { Button } from '@maas/web-components';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { IconPlus, IconWand } from '@tabler/icons-react';
 import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';

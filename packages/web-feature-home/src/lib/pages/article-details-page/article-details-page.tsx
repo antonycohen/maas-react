@@ -3,7 +3,7 @@ import { ContentFeed, mapIssueToFeedArticle, NotFoundPage, Skeleton } from '@maa
 import { useTranslation } from '@maas/core-translations';
 import { ArticleContent, ArticleSidebar } from './components';
 import { ApiError, useGetArticleById, useGetSimilarArticles } from '@maas/core-api';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { SEO, extractArticleSeo } from '@maas/core-seo';
 
 const ArticleDetailsSkeleton = () => (

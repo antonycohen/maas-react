@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { LayoutBreadcrumb } from '@maas/web-layout';
 import { useTranslation } from '@maas/core-translations';
 import {

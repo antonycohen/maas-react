@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { XCircle } from 'lucide-react';
 import { Button } from '@maas/web-components';
 import { usePublicRoutes } from '@maas/core-routes';

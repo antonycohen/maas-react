@@ -3,7 +3,7 @@ import { useArticleTypesListColumns } from './hooks/use-article-types-list-colum
 import { useGetArticleTypes } from '@maas/core-api';
 import { LayoutBreadcrumb, LayoutContent, LayoutHeader } from '@maas/web-layout';
 import { Button } from '@maas/web-components';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { IconPlus } from '@tabler/icons-react';
 import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';

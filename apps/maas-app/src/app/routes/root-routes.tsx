@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 import { AdminRoutes } from './admin-routes';
 import { ProtectedPage, useConnectedUser } from '@maas/core-store-session';
 import { Layout } from '@maas/web-layout';

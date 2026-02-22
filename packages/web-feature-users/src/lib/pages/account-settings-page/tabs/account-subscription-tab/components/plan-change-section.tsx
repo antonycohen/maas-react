@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, Button } fro
 import { IconArrowRight } from '@tabler/icons-react';
 import type { Subscription } from '@maas/core-api-models';
 import { useTranslation } from '@maas/core-translations';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 type Props = {
     subscription: Subscription | undefined;

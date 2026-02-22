@@ -2,7 +2,7 @@ import { useGetArticleById, useGetArticles } from '@maas/core-api';
 import { useTranslation } from '@maas/core-translations';
 import { Button } from '@maas/web-components';
 import { IconPlus } from '@tabler/icons-react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext } from 'react-router';
 import { ArticlePreview, ArticlesList } from './components';
 import { AddArticleToFolderModal } from './modals';
 import { EditFolderOutletContext } from '../../edit-folder-manager-page';

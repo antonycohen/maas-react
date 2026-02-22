@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useGetDiffusionListById } from '@maas/core-api';
 import { LayoutBreadcrumb, LayoutContent } from '@maas/web-layout';
 import { useRoutes } from '@maas/core-workspace';

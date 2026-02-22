@@ -10,7 +10,7 @@ import {
 } from '@maas/web-components';
 import { ChevronDown, Menu, Search, UserCircle, X } from 'lucide-react';
 import { useState, useEffect, useRef, useMemo, RefObject, ReactNode } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router';
 import { useTranslation } from '@maas/core-translations';
 import { publicUrlBuilders, PUBLIC_ROUTES } from '@maas/core-routes';
 

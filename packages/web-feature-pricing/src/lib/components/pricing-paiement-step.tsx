@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { cn } from '@maas/core-utils';
 import { useCreateCheckoutSession, AuthenticationError, type CheckoutSession } from '@maas/core-api';
 import { usePublicRoutes } from '@maas/core-routes';

@@ -1,7 +1,7 @@
 import { ApiError, useCreateFolder, useDeleteFolder, useUpdateFolder } from '@maas/core-api';
 import { UseFormReturn } from 'react-hook-form';
 import { CreateFolder, UpdateFolder } from '@maas/core-api-models';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useRoutes, useGetCurrentWorkspaceId } from '@maas/core-workspace';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
@@ -57,14 +57,14 @@ export const useEditFolderActions = (
         const articlesRefs = data.articles?.map((a) => ({ id: a.id })) ?? null;
 
         if (isCreateMode) {
-            const { articles, ...createData } = data;
+            const { articles: _articles, ...createData } = data;
             createMutation.mutate({
                 organization: { id: workspaceId as string },
                 articles: articlesRefs,
                 ...createData,
             } as CreateFolder);
         } else {
-            const { articles, ...updateData } = data;
+            const { articles: _updateArticles, ...updateData } = data;
             updateMutation.mutate({
                 folderId,
                 data: {

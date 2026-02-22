@@ -16,7 +16,7 @@ import { Collection, CollectionRenderProps } from '@maas/web-collection';
 import { useGetArticles } from '@maas/core-api';
 import { Article } from '@maas/core-api-models';
 import { ColumnDef } from '@tanstack/react-table';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useTranslation } from '@maas/core-translations';
 
 const VALID_THEMES = [
