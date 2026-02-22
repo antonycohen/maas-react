@@ -1,5 +1,3 @@
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { ArticlesRoutes } from '@maas/web-feature-home';
 import { buildPageMeta } from '@maas/core-seo';
 
 export function meta() {
@@ -9,6 +7,6 @@ export function meta() {
     });
 }
 
-export default function Articles() {
-    return <ArticlesRoutes />;
+export default function ArticlesList() {
+    return null;
 }

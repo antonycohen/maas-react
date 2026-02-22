@@ -1,5 +1,5 @@
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { FolderRoutes } from '@maas/web-feature-home';
+import { FoldersPage } from '@maas/web-feature-home';
 import { buildPageMeta } from '@maas/core-seo';
 
 export function meta() {
@@ -9,6 +9,6 @@ export function meta() {
     });
 }
 
-export default function Folders() {
-    return <FolderRoutes />;
+export default function FoldersList() {
+    return <FoldersPage />;
 }

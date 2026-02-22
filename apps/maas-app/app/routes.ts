@@ -15,11 +15,16 @@ export default [
     // Public routes — wrapped in Layout
     layout('routes/public-layout.tsx', [
         route('/', 'routes/home.tsx', { index: true }),
-        route('magazines/*', 'routes/magazines.tsx'),
-        route('dossiers/*', 'routes/folders.tsx'),
+        // Split: listing + detail (for per-entity SSR SEO)
+        route('magazines', 'routes/magazines-list.tsx'),
+        route('magazines/:id', 'routes/magazines-detail.tsx'),
+        route('dossiers', 'routes/folders-list.tsx'),
+        route('dossiers/:id', 'routes/folders-detail.tsx'),
+        route('articles', 'routes/articles-list.tsx'),
+        route('articles/:id', 'routes/articles-detail.tsx'),
+        // Unchanged
         route('categories/:slug', 'routes/category.tsx'),
         route('mathematical-themes/:theme?', 'routes/math-themes.tsx'),
-        route('articles/*', 'routes/articles.tsx'),
         route('pricing/*', 'routes/pricing.tsx'),
         route('account/*', 'routes/account.tsx'),
         route('*', 'routes/not-found.tsx'),
