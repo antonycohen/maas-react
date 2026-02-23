@@ -57,7 +57,7 @@ export function EditArticleTypeManagerPage() {
                     pageTitle={pageTitle}
                     actions={
                         !isCreateMode && (
-                            <Button variant="destructive" onClick={handleDelete} disabled={deleteMutation.isPending}>
+                            <Button variant="destructive" onClick={handleDelete} disabled>
                                 <IconTrash className="mr-2 h-4 w-4" />
                                 Delete
                             </Button>
@@ -86,7 +86,7 @@ export function EditArticleTypeManagerPage() {
                         </div>
 
                         <div className="flex gap-3">
-                            <Button type="button" variant="outline" onClick={() => form.reset()} disabled={isLoading}>
+                            <Button type="button" variant="outline" onClick={() => form.reset()} disabled>
                                 {t('common.reset')}
                             </Button>
                             <Button type="submit" disabled={isSaving || isLoading}>

@@ -23,7 +23,7 @@ type ControlledTextInputProps<T extends FieldValues> = {
 };
 
 export function ControlledTextInput<T extends FieldValues>(props: ControlledTextInputProps<T>) {
-    const { name, label, placeholder, direction = 'vertical', className, readOnly, inputPrefix } = props;
+    const { name, label, placeholder, direction = 'vertical', className, disabled, readOnly, inputPrefix } = props;
     const form = useFormContext();
     const { control } = form;
     const { field, fieldState } = useController({
@@ -43,6 +43,7 @@ export function ControlledTextInput<T extends FieldValues>(props: ControlledText
                 autoComplete="off"
                 placeholder={placeholder}
                 readOnly={readOnly}
+                disabled={disabled}
                 id={id}
             />
         </InputGroup>
@@ -53,6 +54,7 @@ export function ControlledTextInput<T extends FieldValues>(props: ControlledText
             autoComplete="off"
             placeholder={placeholder}
             readOnly={readOnly}
+            disabled={disabled}
             id={id}
         />
     );

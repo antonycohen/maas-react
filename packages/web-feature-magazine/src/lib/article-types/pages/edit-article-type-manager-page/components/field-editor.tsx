@@ -33,9 +33,10 @@ type FieldEditorProps = {
     onMoveDown?: () => void;
     isFirst: boolean;
     isLast: boolean;
+    readonly?: boolean;
 };
 
-export function FieldEditor({ index, onRemove, onMoveUp, onMoveDown, isFirst, isLast }: FieldEditorProps) {
+export function FieldEditor({ index, onRemove, onMoveUp, onMoveDown, isFirst, isLast, readonly }: FieldEditorProps) {
     const { t } = useTranslation();
     const FIELD_TYPE_OPTIONS = useFieldTypeOptions();
     const { control } = useFormContext();
@@ -52,37 +53,39 @@ export function FieldEditor({ index, onRemove, onMoveUp, onMoveDown, isFirst, is
                 <span className="text-muted-foreground text-sm font-medium">
                     {t('articleTypes.fieldLabel', { index: index + 1 })}
                 </span>
-                <div className="flex items-center gap-1">
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={onMoveUp}
-                        disabled={isFirst}
-                        className="h-8 w-8 p-0"
-                    >
-                        <IconChevronUp className="h-4 w-4" />
-                    </Button>
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={onMoveDown}
-                        disabled={isLast}
-                        className="h-8 w-8 p-0"
-                    >
-                        <IconChevronDown className="h-4 w-4" />
-                    </Button>
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={onRemove}
-                        className="text-destructive hover:text-destructive hover:bg-destructive/10 h-8 w-8 p-0"
-                    >
-                        <IconTrash className="h-4 w-4" />
-                    </Button>
-                </div>
+                {!readonly && (
+                    <div className="flex items-center gap-1">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={onMoveUp}
+                            disabled={isFirst}
+                            className="h-8 w-8 p-0"
+                        >
+                            <IconChevronUp className="h-4 w-4" />
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={onMoveDown}
+                            disabled={isLast}
+                            className="h-8 w-8 p-0"
+                        >
+                            <IconChevronDown className="h-4 w-4" />
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={onRemove}
+                            className="text-destructive hover:text-destructive hover:bg-destructive/10 h-8 w-8 p-0"
+                        >
+                            <IconTrash className="h-4 w-4" />
+                        </Button>
+                    </div>
+                )}
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -96,6 +99,7 @@ export function FieldEditor({ index, onRemove, onMoveUp, onMoveDown, isFirst, is
                     label={t('field.key')}
                     placeholder={t('field.placeholder.fieldKey')}
                     className="[&_input]:font-mono [&_input]:text-sm"
+                    disabled={readonly}
                 />
             </div>
 
@@ -105,6 +109,7 @@ export function FieldEditor({ index, onRemove, onMoveUp, onMoveDown, isFirst, is
                     label={t('field.type')}
                     options={FIELD_TYPE_OPTIONS}
                     placeholder={t('field.placeholder.selectType')}
+                    disabled={readonly}
                 />
 
                 {fieldType === 'enum' && (
@@ -112,6 +117,7 @@ export function FieldEditor({ index, onRemove, onMoveUp, onMoveDown, isFirst, is
                         name={`fields.${index}.enum`}
                         label={t('fieldType.enum')}
                         placeholder={t('field.placeholder.selectEnum')}
+                        disabled={readonly}
                     />
                 )}
 
@@ -120,11 +126,16 @@ export function FieldEditor({ index, onRemove, onMoveUp, onMoveDown, isFirst, is
                         name={`fields.${index}.category`}
                         label={t('fieldType.category')}
                         placeholder={t('field.placeholder.selectCategory')}
+                        disabled={readonly}
                     />
                 )}
             </div>
 
-            <ControlledCheckbox name={`fields.${index}.isList`} label={t('articleTypes.allowMultiple')} />
+            <ControlledCheckbox
+                name={`fields.${index}.isList`}
+                label={t('articleTypes.allowMultiple')}
+                disabled={readonly}
+            />
         </div>
     );
 }

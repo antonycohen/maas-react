@@ -5,7 +5,7 @@ import { IconPlus } from '@tabler/icons-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { FieldEditor } from './field-editor';
 
-export function FieldsList() {
+export function FieldsList({ readonly = true }: { readonly?: boolean }) {
     const { t } = useTranslation();
     const { control } = useFormContext();
     const { fields, append, remove, swap } = useFieldArray({
@@ -44,10 +44,12 @@ export function FieldsList() {
                 <span className="text-muted-foreground text-sm">
                     {t('articleTypes.fieldsDefined', { count: fields.length })}
                 </span>
-                <Button type="button" variant="outline" size="sm" onClick={handleAdd} className="h-8">
-                    <IconPlus className="mr-1 h-4 w-4" />
-                    {t('articleTypes.addField')}
-                </Button>
+                {!readonly && (
+                    <Button type="button" variant="outline" size="sm" onClick={handleAdd} className="h-8">
+                        <IconPlus className="mr-1 h-4 w-4" />
+                        {t('articleTypes.addField')}
+                    </Button>
+                )}
             </div>
 
             {fields.length === 0 ? (
@@ -65,6 +67,7 @@ export function FieldsList() {
                             onMoveDown={() => handleMoveDown(index)}
                             isFirst={index === 0}
                             isLast={index === fields.length - 1}
+                            readonly={readonly}
                         />
                     ))}
                 </div>

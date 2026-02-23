@@ -4,7 +4,7 @@ import { Badge, Checkbox, LongText } from '@maas/web-components';
 import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collection';
 import { cn } from '@maas/core-utils';
 import { Link } from 'react-router';
-import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { IconEdit } from '@tabler/icons-react';
 import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 
@@ -84,13 +84,6 @@ export function useArticleTypesListColumns(): ColumnDef<ArticleType>[] {
                         {
                             label: t('articleTypes.edit'),
                             icon: IconEdit,
-                            linkTo: (articleType: ArticleType) => routes.articleTypeEdit(articleType.id),
-                        },
-                        {
-                            label: t('articleTypes.delete'),
-                            icon: IconTrash,
-                            group: 'danger',
-                            className: 'text-red-500!',
                             linkTo: (articleType: ArticleType) => routes.articleTypeEdit(articleType.id),
                         },
                     ]}
