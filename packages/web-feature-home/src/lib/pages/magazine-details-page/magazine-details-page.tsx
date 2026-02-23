@@ -6,19 +6,20 @@ import {
     mapIssueToFeedArticle,
     NotFoundPage,
 } from '@maas/web-components';
-import { ApiError, useGetIssueById } from '@maas/core-api';
+import { ApiError, useGetIssueBySlug } from '@maas/core-api';
 import { useParams } from 'react-router';
 import { SEO } from '@maas/core-seo';
 import { useMemo } from 'react';
 import { publicUrlBuilders } from '@maas/core-routes';
 
 export const MagazineDetailsPage = () => {
-    const issueId = useParams<{ id: string }>().id;
-    const { data: magazines, error } = useGetIssueById(
+    const issueSlug = useParams<{ slug: string }>().slug;
+    const { data: magazines, error } = useGetIssueBySlug(
         {
-            id: issueId as string,
+            slug: issueSlug as string,
             fields: {
                 id: null,
+                slug: null,
                 description: null,
                 title: null,
                 cover: null,
@@ -26,6 +27,7 @@ export const MagazineDetailsPage = () => {
                 folders: {
                     fields: {
                         id: null,
+                        slug: null,
                         name: null,
                         description: null,
                         type: null,
@@ -36,6 +38,7 @@ export const MagazineDetailsPage = () => {
                             fields: {
                                 title: null,
                                 id: null,
+                                slug: null,
                                 cover: null,
                                 publishedAt: null,
                                 categories: null,
@@ -97,7 +100,7 @@ export const MagazineDetailsPage = () => {
                 <div className="container mx-auto">
                     <MagazineHighlightsHero
                         issue={magazines}
-                        link={magazines?.id ? publicUrlBuilders.magazine(magazines.id) : ''}
+                        link={magazines?.slug ? publicUrlBuilders.magazine(magazines.slug) : ''}
                     />
                 </div>
             </div>
@@ -109,7 +112,11 @@ export const MagazineDetailsPage = () => {
                 {!magazines
                     ? Array.from({ length: 3 }).map((_, i) => <FolderCardSkeleton key={i} />)
                     : issuesFolders?.map((folder) => (
-                          <FolderCard key={folder.id} folder={folder} link={publicUrlBuilders.folder(folder.id)} />
+                          <FolderCard
+                              key={folder.id}
+                              folder={folder}
+                              link={publicUrlBuilders.folder(folder.slug ?? folder.id)}
+                          />
                       ))}
             </div>
             <div className="gap-tg-lg container mx-auto flex flex-col p-5 pb-10">

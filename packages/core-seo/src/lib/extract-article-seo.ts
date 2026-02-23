@@ -16,7 +16,7 @@ import type { SeoProps } from './seo';
 interface ArticleSeoCustomFields {
     seoTitle?: string;
     seoDescription?: string;
-    seoKeywords?: string;
+    seoKeywords?: string | string[];
     seoOgImage?: string | null;
     seoCanonicalUrl?: string;
     seoNoIndex?: boolean | null;
@@ -27,10 +27,12 @@ export function extractArticleSeo(article: Article): SeoProps {
     const cf = (article.customFields ?? {}) as ArticleSeoCustomFields;
 
     const keywords = cf.seoKeywords
-        ? cf.seoKeywords
-              .split(',')
-              .map((k) => k.trim())
-              .filter(Boolean)
+        ? Array.isArray(cf.seoKeywords)
+            ? cf.seoKeywords
+            : cf.seoKeywords
+                  .split(',')
+                  .map((k) => k.trim())
+                  .filter(Boolean)
         : (article.keywords ?? undefined);
 
     const authorName = article.author

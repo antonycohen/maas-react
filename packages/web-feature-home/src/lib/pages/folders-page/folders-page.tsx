@@ -11,6 +11,7 @@ export const FoldersPage = () => {
         offset: 0,
         fields: {
             id: null,
+            slug: null,
             name: null,
             description: null,
             type: null,
@@ -24,6 +25,7 @@ export const FoldersPage = () => {
                 fields: {
                     title: null,
                     id: null,
+                    slug: null,
                     cover: {
                         fields: {
                             resizedImages: null,
@@ -54,7 +56,7 @@ export const FoldersPage = () => {
                           <FolderCard
                               key={`folder-${folder.id}`}
                               folder={folder}
-                              link={publicUrlBuilders.folder(folder.id)}
+                              link={publicUrlBuilders.folder(folder.slug ?? folder.id)}
                           />
                       ))}
             </div>

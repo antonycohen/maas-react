@@ -5,6 +5,7 @@ import { readUserRefSchema } from '../users';
 
 export const homepageIssueSchema = z.object({
     id: z.string(),
+    slug: z.string().nullable(),
     title: z.string(),
     cover: z.object(readImageSchema).nullable(),
     publishedAt: z.string().nullable(),
@@ -15,6 +16,7 @@ export type HomepageIssue = z.infer<typeof homepageIssueSchema>;
 
 export const homepageArticleSchema = z.object({
     id: z.string(),
+    slug: z.string(),
     title: z.string(),
     cover: z.object(readImageSchema).nullable(),
     categories: z.array(categorySchema).nullable(),
@@ -27,6 +29,7 @@ export type HomepageArticle = z.infer<typeof homepageArticleSchema>;
 
 export const homepageFolderSchema = z.object({
     id: z.string(),
+    slug: z.string().nullable(),
     organization: z
         .object({
             id: z.string(),

@@ -1,6 +1,6 @@
 import { Article, CreateArticle, UpdateArticle } from '@maas/core-api-models';
 import { ApiClient } from '../api-client/api-client';
-import { ApiCollectionResponse, GetCollectionQueryParams, GetQueryByIdParams } from '../types';
+import { ApiCollectionResponse, GetCollectionQueryParams, GetQueryByIdParams, GetQueryBySlugParams } from '../types';
 
 const BASE_PATH = '/api/v1/articles';
 
@@ -57,6 +57,14 @@ export class ArticlesEndpoint {
      */
     async getArticle(params: GetQueryByIdParams<Article>): Promise<Article> {
         return this.client.getById<Article>(`${BASE_PATH}/${params.id}`, params.fields);
+    }
+
+    /**
+     * Get a single article by slug
+     * GET /api/v1/articles/slug/{slug}
+     */
+    async getArticleBySlug(params: GetQueryBySlugParams<Article>): Promise<Article> {
+        return this.client.getById<Article>(`${BASE_PATH}/slug/${params.slug}`, params.fields);
     }
 
     /**

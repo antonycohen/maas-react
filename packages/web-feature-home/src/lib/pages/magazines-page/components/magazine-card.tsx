@@ -24,7 +24,10 @@ export function MagazineCard({ magazine }: MagazineCardProps) {
         : '';
 
     return (
-        <Link to={publicUrlBuilders.magazine(magazine.id)} className="flex w-full flex-col items-start">
+        <Link
+            to={publicUrlBuilders.magazine(magazine.slug ?? magazine.id)}
+            className="flex w-full flex-col items-start"
+        >
             {/* Cover Image */}
             <div className="relative mb-5 aspect-[270/380] w-full rounded-t-[4px] shadow-[0px_0px_8px_0px_rgba(0,0,0,0.06),3px_8px_20px_0px_rgba(0,0,0,0.1)]">
                 <img

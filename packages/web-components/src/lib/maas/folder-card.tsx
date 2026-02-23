@@ -174,7 +174,7 @@ export const FolderCard = ({
                             <ArticleItem
                                 key={article.id}
                                 article={article}
-                                link={publicUrlBuilders.article(article.id)}
+                                link={publicUrlBuilders.article(article.slug)}
                             />
                         ))}
                     </div>

@@ -101,6 +101,7 @@ export const MagazinesPage = () => {
                 }}
                 queryFields={{
                     id: null,
+                    slug: null,
                     title: null,
                     description: null,
                     publishedAt: null,

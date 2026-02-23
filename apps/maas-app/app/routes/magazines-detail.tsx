@@ -8,8 +8,8 @@ import type { Route } from './+types/magazines-detail';
 // Server loader — only runs on SSR for SEO meta tags
 export async function loader({ params }: Route.LoaderArgs) {
     try {
-        const issue = await maasApi.issues.getIssue({
-            id: params.id ?? '',
+        const issue = await maasApi.issues.getIssueBySlug({
+            slug: params.slug ?? '',
             fields: {
                 title: null,
                 description: null,

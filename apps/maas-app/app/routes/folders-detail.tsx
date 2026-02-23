@@ -8,8 +8,8 @@ import type { Route } from './+types/folders-detail';
 // Server loader — only runs on SSR for SEO meta tags
 export async function loader({ params }: Route.LoaderArgs) {
     try {
-        const folder = await maasApi.folders.getFolder({
-            id: params.id ?? '',
+        const folder = await maasApi.folders.getFolderBySlug({
+            slug: params.slug ?? '',
             fields: {
                 name: null,
                 description: null,

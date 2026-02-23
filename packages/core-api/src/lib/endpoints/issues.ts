@@ -1,6 +1,6 @@
 import { Issue, CreateIssue, UpdateIssue } from '@maas/core-api-models';
 import { ApiClient } from '../api-client/api-client';
-import { ApiCollectionResponse, GetCollectionQueryParams, GetQueryByIdParams } from '../types';
+import { ApiCollectionResponse, GetCollectionQueryParams, GetQueryByIdParams, GetQueryBySlugParams } from '../types';
 
 const BASE_PATH = '/api/v1/magazine/issues';
 
@@ -36,6 +36,14 @@ export class IssuesEndpoint {
      */
     async getIssue(params: GetQueryByIdParams<Issue>): Promise<Issue> {
         return this.client.getById<Issue>(`${BASE_PATH}/${params.id}`, params.fields);
+    }
+
+    /**
+     * Get a single issue by slug
+     * GET /api/v1/magazine/issues/slug/{slug}
+     */
+    async getIssueBySlug(params: GetQueryBySlugParams<Issue>): Promise<Issue> {
+        return this.client.getById<Issue>(`${BASE_PATH}/slug/${params.slug}`, params.fields);
     }
 
     /**

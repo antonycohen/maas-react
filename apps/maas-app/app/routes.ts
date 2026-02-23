@@ -17,11 +17,11 @@ export default [
         route('/', 'routes/home.tsx', { index: true }),
         // Split: listing + detail (for per-entity SSR SEO)
         route('magazines', 'routes/magazines-list.tsx'),
-        route('magazines/:id', 'routes/magazines-detail.tsx'),
+        route('magazines/:slug', 'routes/magazines-detail.tsx'),
         route('dossiers', 'routes/folders-list.tsx'),
-        route('dossiers/:id', 'routes/folders-detail.tsx'),
+        route('dossiers/:slug', 'routes/folders-detail.tsx'),
         route('articles', 'routes/articles-list.tsx'),
-        route('articles/:id', 'routes/articles-detail.tsx'),
+        route('articles/:slug', 'routes/articles-detail.tsx'),
         // Unchanged
         route('categories/:slug', 'routes/category.tsx'),
         route('mathematical-themes/:theme?', 'routes/math-themes.tsx'),

@@ -8,8 +8,8 @@ import type { Route } from './+types/articles-detail';
 // Server loader — only runs on SSR for SEO meta tags
 export async function loader({ params }: Route.LoaderArgs) {
     try {
-        const article = await maasApi.articles.getArticle({
-            id: params.id ?? '',
+        const article = await maasApi.articles.getArticleBySlug({
+            slug: params.slug ?? '',
             fields: {
                 title: null,
                 description: null,
@@ -50,7 +50,7 @@ export function ErrorBoundary() {
 }
 
 export default function ArticlesDetail() {
-    const { id } = useParams();
+    const { slug } = useParams();
     // Key forces remount when navigating between articles (e.g. similar articles)
-    return <ArticleDetailsPage key={id} />;
+    return <ArticleDetailsPage key={slug} />;
 }

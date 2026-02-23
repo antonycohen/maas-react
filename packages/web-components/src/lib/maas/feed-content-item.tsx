@@ -98,7 +98,7 @@ export function mapIssueToFeedArticle(article: Article): FeedArticleData {
                   year: 'numeric',
               })
             : '',
-        link: publicUrlBuilders.article(article.id),
+        link: publicUrlBuilders.article(article.slug),
         articleType: article?.type?.name,
     };
 }

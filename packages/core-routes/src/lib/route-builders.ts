@@ -158,13 +158,13 @@ export const publicUrlBuilders = {
     accountProfile: () => PUBLIC_ROUTES.ACCOUNT_PROFILE,
 
     magazines: () => PUBLIC_ROUTES.MAGAZINES,
-    magazine: (magazineId: string) => `${PUBLIC_ROUTES.MAGAZINES}/${magazineId}`,
+    magazine: (magazineSlug: string) => `${PUBLIC_ROUTES.MAGAZINES}/${magazineSlug}`,
     dossiers: () => PUBLIC_ROUTES.DOSSIERS,
-    folder: (folderId: string) => `${PUBLIC_ROUTES.DOSSIERS}/${folderId}`,
+    folder: (folderSlug: string) => `${PUBLIC_ROUTES.DOSSIERS}/${folderSlug}`,
     categories: () => PUBLIC_ROUTES.CATEGORIES,
     category: (categorySlug: string) => `${PUBLIC_ROUTES.CATEGORIES}/${categorySlug}`,
     articles: () => PUBLIC_ROUTES.ARTICLES,
-    article: (articleId: string) => `${PUBLIC_ROUTES.ARTICLES}/${articleId}`,
+    article: (articleSlug: string) => `${PUBLIC_ROUTES.ARTICLES}/${articleSlug}`,
 
     mathematicalThemes: () => PUBLIC_ROUTES.MATHEMATICAL_THEMES,
     mathematicalTheme: (theme: string) => `${PUBLIC_ROUTES.MATHEMATICAL_THEMES}/${theme}`,

@@ -12,7 +12,7 @@ export const useGetMySubscriptionStatus = (
         queryKey: ['subscriptions', 'me', 'status'],
         queryFn: getMySubscriptionStatus,
         retry: (_failureCount, error) => {
-            if (error instanceof AuthenticationError && error.code === 700) return false;
+            if ((error instanceof AuthenticationError && error.code === 700) || error.code === 800) return false;
             return _failureCount < 3;
         },
         ...options,

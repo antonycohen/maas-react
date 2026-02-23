@@ -4,6 +4,7 @@ export const searchHighlightSchema = z.record(z.string(), z.array(z.string()));
 
 export const searchResultSchema = z.object({
     id: z.string(),
+    slug: z.string().nullable().optional(),
     entityType: z.enum(['article', 'issue', 'folder']),
     organizationId: z.string(),
     title: z.string(),

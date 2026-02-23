@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { ContentFeed, mapIssueToFeedArticle, NotFoundPage, Skeleton } from '@maas/web-components';
 import { useTranslation } from '@maas/core-translations';
 import { ArticleContent, ArticleSidebar } from './components';
-import { ApiError, useGetArticleById, useGetSimilarArticles } from '@maas/core-api';
+import { ApiError, useGetArticleBySlug, useGetSimilarArticles } from '@maas/core-api';
 import { useParams } from 'react-router';
 import { SEO, extractArticleSeo } from '@maas/core-seo';
 
@@ -39,11 +39,12 @@ const ArticleDetailsSkeleton = () => (
 
 const ArticleDetailsPage = () => {
     const { t } = useTranslation();
-    const articleId = useParams<{ id: string }>().id;
-    const { data: article, error } = useGetArticleById(
+    const articleSlug = useParams<{ slug: string }>().slug;
+    const { data: article, error } = useGetArticleBySlug(
         {
-            id: articleId as string,
+            slug: articleSlug as string,
             fields: {
+                id: null,
                 content: null,
                 title: null,
                 description: null,
@@ -76,11 +77,12 @@ const ArticleDetailsPage = () => {
 
     const { data: similarArticlesResponse } = useGetSimilarArticles(
         {
-            articleId: articleId as string,
+            articleId: article?.id as string,
             offset: 0,
             limit: 4,
             fields: {
                 id: null,
+                slug: null,
                 title: null,
                 cover: null,
                 categories: null,
@@ -92,7 +94,7 @@ const ArticleDetailsPage = () => {
                 publishedAt: null,
             },
         },
-        { enabled: !!articleId }
+        { enabled: !!article?.id }
     );
 
     const similarFeedItems = useMemo(

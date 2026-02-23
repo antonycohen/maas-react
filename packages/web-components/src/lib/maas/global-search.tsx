@@ -33,7 +33,7 @@ function mapSearchResultToFeedItem(result: SearchResult): FeedContentItemData {
                 subcategory: result.categoryNames?.[1],
                 author: result.authorName || 'Tangente',
                 date: formatDate(result.publishedAt),
-                link: publicUrlBuilders.article(result.id),
+                link: publicUrlBuilders.article(result.slug ?? result.id),
             };
         case 'folder':
             return {
@@ -45,7 +45,7 @@ function mapSearchResultToFeedItem(result: SearchResult): FeedContentItemData {
                 category: 'Dossier',
                 articleCount: result.articleCount || 0,
                 date: formatDate(result.updatedAt),
-                link: publicUrlBuilders.folder(result.id),
+                link: publicUrlBuilders.folder(result.slug ?? result.id),
             };
         case 'issue':
             return {
@@ -57,7 +57,7 @@ function mapSearchResultToFeedItem(result: SearchResult): FeedContentItemData {
                 category: result.brandName || 'Tangente',
                 edition: result.issueNumber ? `N°${result.issueNumber}` : '',
                 date: formatDate(result.publishedAt),
-                link: publicUrlBuilders.magazine(result.id),
+                link: publicUrlBuilders.magazine(result.slug ?? result.id),
             };
     }
 }

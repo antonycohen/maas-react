@@ -27,7 +27,7 @@ function mapFeaturedToHighlight(article: HomepageArticle) {
         image: getResizedImageUrl(article.cover?.resizedImages) || article.cover?.url || '',
         title: article.title,
         category: article.categories?.[0]?.name || '',
-        link: publicUrlBuilders.article(article.id),
+        link: publicUrlBuilders.article(article.slug),
     };
 }
 
@@ -55,7 +55,7 @@ function mapNewsItemToFeedItem(item: HomepageNewsItem): FeedContentItemData | nu
                 category: article.categories?.[0]?.name || '',
                 author: `${article.author?.firstName || ''} ${article.author?.lastName || ''}`.trim(),
                 date: formatDate(article.publishedAt),
-                link: publicUrlBuilders.article(article.id),
+                link: publicUrlBuilders.article(article.slug),
             } satisfies FeedArticleData;
         }
         case 'issue': {
@@ -72,7 +72,7 @@ function mapNewsItemToFeedItem(item: HomepageNewsItem): FeedContentItemData | nu
                 edition: issue.title,
                 issueNumber: issue.issueNumber,
                 date: formatDate(issue.publishedAt),
-                link: publicUrlBuilders.magazine(issue.id),
+                link: publicUrlBuilders.magazine(issue.slug ?? issue.id),
             } satisfies FeedMagazineData;
         }
         case 'folder': {
@@ -85,7 +85,7 @@ function mapNewsItemToFeedItem(item: HomepageNewsItem): FeedContentItemData | nu
                 category: 'Dossier',
                 articleCount: folder.articleCount ?? 0,
                 date: '',
-                link: publicUrlBuilders.folder(folder.id),
+                link: publicUrlBuilders.folder(folder.slug ?? folder.id),
             } satisfies FeedFolderData;
         }
         default:
@@ -105,7 +105,7 @@ function mapArticleToCategoryArticle(article: HomepageArticle): CategoryArticle 
         category: article.categories?.[0]?.name || '',
         author: `${article.author?.firstName || ''} ${article.author?.lastName || ''}`.trim(),
         date: formatDate(article.publishedAt),
-        link: publicUrlBuilders.article(article.id),
+        link: publicUrlBuilders.article(article.slug),
     };
 }
 
@@ -167,8 +167,8 @@ const CategoryArticlesSkeleton = () => (
 export const HomePage = () => {
     const { t } = useTranslation();
     const { data: homepage, isPending } = useGetHomepage({
-        issueFields: 'id,title,cover,published_at,issue_number',
-        articleFields: 'id,title,cover,categories,published_at,author,description',
+        issueFields: 'id,title,slug,cover,published_at,issue_number',
+        articleFields: 'id,title,cover,categories,slug,published_at,author,description',
     });
 
     const { resizedImage: issueCover } = useResizedImage({
@@ -185,7 +185,7 @@ export const HomePage = () => {
                 image: issueCover?.url || homepage.latestIssue.cover?.url || '',
                 title: homepage.latestIssue.title,
                 category: 'Magazine',
-                link: publicUrlBuilders.magazine(homepage.latestIssue.id),
+                link: publicUrlBuilders.magazine(homepage.latestIssue.slug ?? homepage.latestIssue.id),
             });
         }
 

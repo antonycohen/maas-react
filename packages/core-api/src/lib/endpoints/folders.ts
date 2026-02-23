@@ -1,6 +1,6 @@
 import { Folder, CreateFolder, UpdateFolder } from '@maas/core-api-models';
 import { ApiClient } from '../api-client/api-client';
-import { ApiCollectionResponse, GetCollectionQueryParams, GetQueryByIdParams } from '../types';
+import { ApiCollectionResponse, GetCollectionQueryParams, GetQueryByIdParams, GetQueryBySlugParams } from '../types';
 
 const BASE_PATH = '/api/v1/magazine/folders';
 
@@ -39,6 +39,14 @@ export class FoldersEndpoint {
      */
     async getFolder(params: GetQueryByIdParams<Folder>): Promise<Folder> {
         return this.client.getById<Folder>(`${BASE_PATH}/${params.id}`, params.fields);
+    }
+
+    /**
+     * Get a single folder by slug
+     * GET /api/v1/magazine/folders/slug/{slug}
+     */
+    async getFolderBySlug(params: GetQueryBySlugParams<Folder>): Promise<Folder> {
+        return this.client.getById<Folder>(`${BASE_PATH}/slug/${params.slug}`, params.fields);
     }
 
     /**

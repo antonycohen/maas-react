@@ -10,7 +10,7 @@ import {
     useResizedImage,
 } from '@maas/web-components';
 import { cn } from '@maas/core-utils';
-import { ApiError, useGetFolderById } from '@maas/core-api';
+import { ApiError, useGetFolderBySlug } from '@maas/core-api';
 import { useMemo } from 'react';
 
 const FolderDetailsSkeleton = () => (
@@ -32,10 +32,10 @@ const FolderDetailsSkeleton = () => (
 );
 
 export const FolderDetailsPages = () => {
-    const { id } = useParams();
-    const { data: currentFolders, error } = useGetFolderById(
+    const { slug } = useParams<{ slug: string }>();
+    const { data: currentFolders, error } = useGetFolderBySlug(
         {
-            id: id as string,
+            slug: slug as string,
             fields: {
                 id: null,
                 name: null,
@@ -50,6 +50,7 @@ export const FolderDetailsPages = () => {
                     fields: {
                         title: null,
                         id: null,
+                        slug: null,
                         publishedAt: null,
                         cover: {
                             fields: {

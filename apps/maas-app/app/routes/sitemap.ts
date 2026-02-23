@@ -12,9 +12,9 @@ export async function loader() {
     try {
         const sitemap = await maasApi.sitemap.getSitemap();
 
-        const articleUrls = sitemap.articles.map((id) => `/articles/${id}`);
-        const issueUrls = sitemap.issues.map((id) => `/magazines/${id}`);
-        const folderUrls = sitemap.folders.map((id) => `/dossiers/${id}`);
+        const articleUrls = sitemap.articles.map((slug) => `/articles/${slug}`);
+        const issueUrls = sitemap.issues.map((slug) => `/magazines/${slug}`);
+        const folderUrls = sitemap.folders.map((slug) => `/dossiers/${slug}`);
         const categoryUrls = sitemap.categories.filter((c) => c.slug).map((c) => `/categories/${c.slug}`);
         const themeUrls = sitemap.themes.map((theme) => `/mathematical-themes/${theme}`);
 
