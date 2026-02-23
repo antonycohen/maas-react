@@ -260,11 +260,21 @@ export function DynamicCustomFields() {
             const currentCustomFields = getValues('customFields') ?? {};
             const initializedFields = initCustomFields(articleTypeData);
 
+            // Build a lookup of isList fields for normalization
+            const listFieldKeys = new Set(
+                articleTypeData.fields?.filter((f) => f.isList).map((f) => camelCase(f.key)) ?? []
+            );
+
             // Merge: keep existing values, add new fields with defaults
             const mergedFields = { ...initializedFields };
             for (const key of Object.keys(initializedFields)) {
                 if (currentCustomFields[key] !== undefined) {
-                    mergedFields[key] = currentCustomFields[key];
+                    let value = currentCustomFields[key];
+                    // Normalize: if the field is a list but the API returned a string, convert to array
+                    if (listFieldKeys.has(key) && typeof value === 'string') {
+                        value = value.trim() ? value.split(',').map((s: string) => s.trim()) : [];
+                    }
+                    mergedFields[key] = value;
                 }
             }
 

@@ -91,6 +91,25 @@ export const useEditArticleForm = (articleId: string) => {
         }
         return fields;
     };
+
+    /** Normalize customFields: ensure isList fields are arrays (API may return strings) */
+    const normalizeCustomFields = (
+        customFields: ArticleCustomFields,
+        type: ArticleType | null | undefined
+    ): ArticleCustomFields => {
+        if (!type?.fields) return customFields;
+        const listFieldKeys = new Set(type.fields.filter((f) => f.isList).map((f) => camelCase(f.key)));
+        const normalized = { ...customFields };
+        for (const key of listFieldKeys) {
+            const value = normalized[key];
+            if (typeof value === 'string') {
+                normalized[key] = value.trim() ? value.split(',').map((s: string) => s.trim()) : [];
+            } else if (!Array.isArray(value) && value != null) {
+                normalized[key] = [];
+            }
+        }
+        return normalized;
+    };
     const form = useForm<CreateArticle | UpdateArticle>({
         resolver: zodResolver(isCreateMode ? createArticleSchema : updateArticleSchema),
         defaultValues: {
@@ -124,7 +143,7 @@ export const useEditArticleForm = (articleId: string) => {
                       type: article.type ?? null,
                       visibility: article.visibility,
                       customFields: article.customFields
-                          ? article.customFields
+                          ? normalizeCustomFields(article.customFields, article.type)
                           : article.type
                             ? initCustomFields(article.type)
                             : {},
