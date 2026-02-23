@@ -54,7 +54,7 @@ export class CustomersEndpoint {
     async getCustomers(
         params: GetCollectionQueryParams<ReadCustomer> & { filters?: GetCustomersFilter }
     ): Promise<ApiCollectionResponse<ReadCustomer>> {
-        const { fields, offset, limit, filters } = params;
+        const { fields, offset, limit, filters, sort } = params;
         return this.client.getCollection<ReadCustomer>(BASE_PATH, fields, {
             offset,
             limit,
@@ -65,6 +65,7 @@ export class CustomersEndpoint {
             ...(filters?.refId && { refId: filters.refId }),
             ...(filters?.taxExempt && { taxExempt: filters.taxExempt }),
             ...(filters?.delinquent !== undefined && { delinquent: filters.delinquent }),
+            ...(sort && { sortKey: sort.field, sortDirection: sort.direction }),
         });
     }
 
