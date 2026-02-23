@@ -1,120 +1,121 @@
-@import "tw-animate-css";
+@import 'tw-animate-css';
 
 @theme inline {
-  /* ===== FONT FAMILY ===== */
-  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-  "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-heading: "Barlow Semi Condensed", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+    /* ===== FONT FAMILY ===== */
+    --font-sans:
+        'Geist', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
+    --font-heading: 'Barlow Semi Condensed', ui-sans-serif, system-ui, sans-serif;
+    --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
 
-  /* ===== FONT WEIGHT ===== */
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
+    /* ===== FONT WEIGHT ===== */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
 
-  /* ===== TANGENTE FONT WEIGHT ===== */
-  --font-weight-tangente-normal: 400;
-  --font-weight-tangente-emphasized: 600;
-  --font-weight-tangente-accent: 700;
+    /* ===== TANGENTE FONT WEIGHT ===== */
+    --font-weight-tangente-normal: 400;
+    --font-weight-tangente-emphasized: 600;
+    --font-weight-tangente-accent: 700;
 
-  /* ===== LETTER SPACING ===== */
-  --letter-spacing-tight: -0.4px;
-  --letter-spacing-normal: 0;
+    /* ===== LETTER SPACING ===== */
+    --letter-spacing-tight: -0.4px;
+    --letter-spacing-normal: 0;
 
-  /* ===== LINE HEIGHT ===== */
-  --line-height-4: 16px;
-  --line-height-none: 1;
+    /* ===== LINE HEIGHT ===== */
+    --line-height-4: 16px;
+    --line-height-none: 1;
 
-  /* ===== TEXT SIZES ===== */
-  --text-xs: 12px;
-  --text-xs--line-height: 18px;
-  --text-sm: 14px;
-  --text-sm--line-height: 20px;
-  --text-base: 16px;
-  --text-base--line-height: 24px;
-  --text-lg: 18px;
-  --text-lg--line-height: 26px;
-  --text-xl: 20px;
-  --text-xl--line-height: 28px;
-  --text-2xl: 26px;
-  --text-2xl--line-height: 30px;
-  --text-3xl: 30px;
-  --text-3xl--line-height: 36px;
+    /* ===== TEXT SIZES ===== */
+    --text-xs: 12px;
+    --text-xs--line-height: 18px;
+    --text-sm: 14px;
+    --text-sm--line-height: 20px;
+    --text-base: 16px;
+    --text-base--line-height: 24px;
+    --text-lg: 18px;
+    --text-lg--line-height: 26px;
+    --text-xl: 20px;
+    --text-xl--line-height: 28px;
+    --text-2xl: 26px;
+    --text-2xl--line-height: 30px;
+    --text-3xl: 30px;
+    --text-3xl--line-height: 36px;
 
-  /* ===== TANGENTE TYPOGRAPHY ===== */
-  /* Caption */
-  --text-tangente-caption-s: 11px;
-  --text-tangente-caption-s--line-height: 16px;
-  --text-tangente-caption-m: 13px;
-  --text-tangente-caption-m--line-height: 18px;
+    /* ===== TANGENTE TYPOGRAPHY ===== */
+    /* Caption */
+    --text-tangente-caption-s: 11px;
+    --text-tangente-caption-s--line-height: 16px;
+    --text-tangente-caption-m: 13px;
+    --text-tangente-caption-m--line-height: 18px;
 
-  /* Body */
-  --text-tangente-body-s: 14px;
-  --text-tangente-body-s--line-height: 20px;
-  --text-tangente-body-s--letter-spacing: -0.5px;
-  --text-tangente-body-m: 16px;
-  --text-tangente-body-m--line-height: 22px;
-  --text-tangente-body-m--letter-spacing: -0.75px;
-  --text-tangente-body-l: 18px;
-  --text-tangente-body-l--line-height: 26px;
-  --text-tangente-body-l--letter-spacing: -1px;
+    /* Body */
+    --text-tangente-body-s: 14px;
+    --text-tangente-body-s--line-height: 20px;
+    --text-tangente-body-s--letter-spacing: -0.5px;
+    --text-tangente-body-m: 16px;
+    --text-tangente-body-m--line-height: 22px;
+    --text-tangente-body-m--letter-spacing: -0.75px;
+    --text-tangente-body-l: 18px;
+    --text-tangente-body-l--line-height: 26px;
+    --text-tangente-body-l--letter-spacing: -1px;
 
-  /* Heading */
-  --text-tangente-h6: 18px;
-  --text-tangente-h6--line-height: 22px;
-  --text-tangente-h6--letter-spacing: -1.5px;
-  --text-tangente-h5: 20px;
-  --text-tangente-h5--line-height: 24px;
-  --text-tangente-h5--letter-spacing: -1.5px;
-  --text-tangente-h4: 26px;
-  --text-tangente-h4--line-height: 32px;
-  --text-tangente-h4--letter-spacing: -2px;
-  --text-tangente-h3: 34px;
-  --text-tangente-h3--line-height: 40px;
-  --text-tangente-h3--letter-spacing: -2.5px;
-  --text-tangente-h2: 48px;
-  --text-tangente-h2--line-height: 52px;
-  --text-tangente-h2--letter-spacing: -2.75px;
+    /* Heading */
+    --text-tangente-h6: 18px;
+    --text-tangente-h6--line-height: 22px;
+    --text-tangente-h6--letter-spacing: -1.5px;
+    --text-tangente-h5: 20px;
+    --text-tangente-h5--line-height: 24px;
+    --text-tangente-h5--letter-spacing: -1.5px;
+    --text-tangente-h4: 26px;
+    --text-tangente-h4--line-height: 32px;
+    --text-tangente-h4--letter-spacing: -2px;
+    --text-tangente-h3: 34px;
+    --text-tangente-h3--line-height: 40px;
+    --text-tangente-h3--letter-spacing: -2.5px;
+    --text-tangente-h2: 48px;
+    --text-tangente-h2--line-height: 52px;
+    --text-tangente-h2--letter-spacing: -2.75px;
 
-  /* ===== BORDER RADIUS ===== */
-  --radius-xs: 2px;
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 10px;
-  --radius-xl: 14px;
-  --radius-full: 9999px;
+    /* ===== BORDER RADIUS ===== */
+    --radius-xs: 2px;
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 10px;
+    --radius-xl: 14px;
+    --radius-full: 9999px;
 
-  /* ===== TANGENTE BORDER RADIUS ===== */
-  --radius-tangente-xs: 4px;
-  --radius-tangente-sm: 12px;
-  --radius-tangente-md: 20px;
-  --radius-tangente-full: 9999px;
+    /* ===== TANGENTE BORDER RADIUS ===== */
+    --radius-tangente-xs: 4px;
+    --radius-tangente-sm: 12px;
+    --radius-tangente-md: 20px;
+    --radius-tangente-full: 9999px;
 
-  /* ===== SPACING ===== */
-  --spacing-0: 0px;
-  --spacing-0_5: 2px;
-  --spacing-1: 4px;
-  --spacing-1_5: 6px;
-  --spacing-2: 8px;
-  --spacing-2_5: 10px;
-  --spacing-3: 12px;
-  --spacing-4: 16px;
-  --spacing-5: 20px;
-  --spacing-6: 24px;
-  --spacing-7: 28px;
-  --spacing-8: 32px;
-  --spacing-9: 36px;
-  --spacing-10: 40px;
-  --spacing-12: 48px;
-  --spacing-14: 56px;
-  --spacing-16: 64px;
-  --spacing-20: 80px;
-  --spacing-24: 96px;
-  --spacing-28: 112px;
+    /* ===== SPACING ===== */
+    --spacing-0: 0px;
+    --spacing-0_5: 2px;
+    --spacing-1: 4px;
+    --spacing-1_5: 6px;
+    --spacing-2: 8px;
+    --spacing-2_5: 10px;
+    --spacing-3: 12px;
+    --spacing-4: 16px;
+    --spacing-5: 20px;
+    --spacing-6: 24px;
+    --spacing-7: 28px;
+    --spacing-8: 32px;
+    --spacing-9: 36px;
+    --spacing-10: 40px;
+    --spacing-12: 48px;
+    --spacing-14: 56px;
+    --spacing-16: 64px;
+    --spacing-20: 80px;
+    --spacing-24: 96px;
+    --spacing-28: 112px;
 
-  /* ===== TANGENTE SPACING ===== */
-  /*
+    /* ===== TANGENTE SPACING ===== */
+    /*
    * Usage with Tailwind utilities:
    * - gap-tg-lg, gap-tg-4xl
    * - p-tg-xl, px-tg-sm, py-tg-md
@@ -122,428 +123,437 @@
    * - w-tg-lg, h-tg-xl
    * - space-x-tg-sm, space-y-tg-md
    */
-  --spacing-tg-3xs: 2px;
-  --spacing-tg-2xs: 4px;
-  --spacing-tg-xs: 8px;
-  --spacing-tg-sm: 12px;
-  --spacing-tg-md: 16px;
-  --spacing-tg-lg: 20px;
-  --spacing-tg-xl: 24px;
-  --spacing-tg-2xl: 32px;
-  --spacing-tg-3xl: 40px;
-  --spacing-tg-4xl: 48px;
-  --spacing-tg-5xl: 80px;
+    --spacing-tg-3xs: 2px;
+    --spacing-tg-2xs: 4px;
+    --spacing-tg-xs: 8px;
+    --spacing-tg-sm: 12px;
+    --spacing-tg-md: 16px;
+    --spacing-tg-lg: 20px;
+    --spacing-tg-xl: 24px;
+    --spacing-tg-2xl: 32px;
+    --spacing-tg-3xl: 40px;
+    --spacing-tg-4xl: 48px;
+    --spacing-tg-5xl: 80px;
 
-  /* ===== WIDTH ===== */
-  --width-3: 12px;
-  --width-4: 16px;
-  --width-5: 20px;
-  --width-6: 24px;
-  --width-7: 28px;
-  --width-8: 32px;
-  --width-9: 36px;
-  --width-10: 40px;
-  --width-12: 48px;
-  --width-14: 56px;
-  --width-16: 64px;
-  --width-20: 80px;
-  --width-28: 112px;
+    /* ===== WIDTH ===== */
+    --width-3: 12px;
+    --width-4: 16px;
+    --width-5: 20px;
+    --width-6: 24px;
+    --width-7: 28px;
+    --width-8: 32px;
+    --width-9: 36px;
+    --width-10: 40px;
+    --width-12: 48px;
+    --width-14: 56px;
+    --width-16: 64px;
+    --width-20: 80px;
+    --width-28: 112px;
 
-  /* ===== HEIGHT ===== */
-  --height-1_5: 6px;
-  --height-2: 8px;
-  --height-4: 16px;
-  --height-5: 20px;
-  --height-7: 28px;
-  --height-8: 32px;
-  --height-9: 36px;
-  --height-10: 40px;
-  --height-12: 48px;
-  --height-16: 64px;
+    /* ===== HEIGHT ===== */
+    --height-1_5: 6px;
+    --height-2: 8px;
+    --height-4: 16px;
+    --height-5: 20px;
+    --height-7: 28px;
+    --height-8: 32px;
+    --height-9: 36px;
+    --height-10: 40px;
+    --height-12: 48px;
+    --height-16: 64px;
 
-  /* ===== MAX WIDTH ===== */
-  --container-xs: 320px;
-  --container-sm: 384px;
-  --container-md: 448px;
-  --container-lg: 512px;
-  --container-xl: 576px;
-  --container-3xl: 768px;
-  --container-4xl: 896px;
-  --container-7xl: 1280px;
+    /* ===== MAX WIDTH ===== */
+    --container-xs: 320px;
+    --container-sm: 384px;
+    --container-md: 448px;
+    --container-lg: 512px;
+    --container-xl: 576px;
+    --container-3xl: 768px;
+    --container-4xl: 896px;
+    --container-7xl: 1280px;
 
-  /* ===== TANGENTE CONTAINER ===== */
-  --container-tangente: 1220px;
+    /* ===== TANGENTE CONTAINER ===== */
+    --container-tangente: 1220px;
 
-  /* ===== BORDER WIDTH ===== */
-  --border-width-default: 1px;
-  --border-width-2: 2px;
+    /* ===== BORDER WIDTH ===== */
+    --border-width-default: 1px;
+    --border-width-2: 2px;
 
-  /* ===== STROKE WIDTH ===== */
-  --stroke-width-1_33: 1px;
-  --stroke-width-1_5: 2px;
+    /* ===== STROKE WIDTH ===== */
+    --stroke-width-1_33: 1px;
+    --stroke-width-1_5: 2px;
 
-  /* ===== OPACITY ===== */
-  --opacity-40: 0.4;
-  --opacity-50: 0.5;
-  --opacity-70: 0.7;
-  --opacity-80: 0.8;
+    /* ===== OPACITY ===== */
+    --opacity-40: 0.4;
+    --opacity-50: 0.5;
+    --opacity-70: 0.7;
+    --opacity-80: 0.8;
 
-  /* ===== SHADOWS ===== */
-  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 0.1), 0 1px 3px 0 rgb(0 0 0 / 0.1);
-  --shadow-md: 0 2px 4px -2px rgb(0 0 0 / 0.1), 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 4px 6px -4px rgb(0 0 0 / 0.1), 0 10px 15px -3px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 8px 10px -6px rgb(0 0 0 / 0.1), 0 20px 25px -5px rgb(0 0 0 / 0.1);
-  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    /* ===== SHADOWS ===== */
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 0.1), 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    --shadow-md: 0 2px 4px -2px rgb(0 0 0 / 0.1), 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 4px 6px -4px rgb(0 0 0 / 0.1), 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 8px 10px -6px rgb(0 0 0 / 0.1), 0 20px 25px -5px rgb(0 0 0 / 0.1);
+    --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 
-  /* ===== TANGENTE SHADOWS (Depth) ===== */
-  --shadow-tangente-1: 0 0 4px 0 rgb(0 0 0 / 0.06), 2px 4px 8px 0 rgb(0 0 0 / 0.04);
-  --shadow-tangente-2: 0 0 4px 0 rgb(0 0 0 / 0.06), 2px 6px 16px 0 rgb(0 0 0 / 0.08);
-  --shadow-tangente-3: 0 0 8px 0 rgb(0 0 0 / 0.06), 3px 8px 20px 0 rgb(0 0 0 / 0.10);
+    /* ===== TANGENTE SHADOWS (Depth) ===== */
+    --shadow-tangente-1: 0 0 4px 0 rgb(0 0 0 / 0.06), 2px 4px 8px 0 rgb(0 0 0 / 0.04);
+    --shadow-tangente-2: 0 0 4px 0 rgb(0 0 0 / 0.06), 2px 6px 16px 0 rgb(0 0 0 / 0.08);
+    --shadow-tangente-3: 0 0 8px 0 rgb(0 0 0 / 0.06), 3px 8px 20px 0 rgb(0 0 0 / 0.1);
 
-  /* ===== BASE COLORS (Light Mode) ===== */
-  --color-background: #ffffff;
-  --color-foreground: #0a0a0a;
+    /* ===== BASE COLORS (Light Mode) ===== */
+    --color-background: #ffffff;
+    --color-foreground: #0a0a0a;
 
-  --color-card: #ffffff;
-  --color-card-foreground: #0a0a0a;
+    --color-card: #ffffff;
+    --color-card-foreground: #0a0a0a;
 
-  --color-popover: #ffffff;
-  --color-popover-foreground: #0a0a0a;
+    --color-popover: #ffffff;
+    --color-popover-foreground: #0a0a0a;
 
-  --color-primary: #171717;
-  --color-primary-foreground: #fafafa;
+    --color-primary: #171717;
+    --color-primary-foreground: #fafafa;
 
-  --color-secondary: #f5f5f5;
-  --color-secondary-foreground: #171717;
+    --color-secondary: #f5f5f5;
+    --color-secondary-foreground: #171717;
 
-  --color-muted: #f5f5f5;
-  --color-muted-foreground: #737373;
+    --color-muted: #f5f5f5;
+    --color-muted-foreground: #737373;
 
-  --color-accent: #f5f5f5;
-  --color-accent-foreground: #171717;
+    --color-accent: #f5f5f5;
+    --color-accent-foreground: #171717;
 
-  --color-destructive: #dc2626;
-  --color-destructive-foreground: #fef2f2;
+    --color-destructive: #dc2626;
+    --color-destructive-foreground: #fef2f2;
 
-  --color-border: #e5e5e5;
-  --color-input: #e5e5e5;
-  --color-input-background: #ffffff;
-  --color-ring: #a3a3a3;
+    --color-border: #e5e5e5;
+    --color-input: #e5e5e5;
+    --color-input-background: #ffffff;
+    --color-ring: #a3a3a3;
 
-  /* ===== CHART COLORS ===== */
-  --color-chart-1: #ea580c;
-  --color-chart-2: #0d9488;
-  --color-chart-3: #2563eb;
-  --color-chart-4: #16a34a;
-  --color-chart-5: #8b5cf6;
+    /* ===== CHART COLORS ===== */
+    --color-chart-1: #ea580c;
+    --color-chart-2: #0d9488;
+    --color-chart-3: #2563eb;
+    --color-chart-4: #16a34a;
+    --color-chart-5: #8b5cf6;
 
-  /* ===== TANGENTE BRAND COLORS ===== */
-  --color-brand-primary: #e31b22;
-  --color-brand-secondary: #fff132;
-  --color-brand-black: #000000;
-  --color-brand-white: #ffffff;
-  --color-success: #079848;
-  --color-success-foreground: #ffffff;
+    /* ===== TANGENTE BRAND COLORS ===== */
+    --color-brand-primary: #e31b22;
+    --color-brand-secondary: #fff132;
+    --color-brand-black: #000000;
+    --color-brand-white: #ffffff;
+    --color-success: #079848;
+    --color-success-foreground: #ffffff;
 
-  /* ===== SIDEBAR COLORS ===== */
-  --color-sidebar: #ffffff;
-  --color-sidebar-foreground: #0a0a0a;
-  --color-sidebar-primary: #171717;
-  --color-sidebar-primary-foreground: #fafafa;
-  --color-sidebar-accent: #f5f5f5;
-  --color-sidebar-accent-foreground: #171717;
-  --color-sidebar-border: #e5e5e5;
-  --color-sidebar-ring: #a3a3a3;
+    /* ===== SIDEBAR COLORS ===== */
+    --color-sidebar: #ffffff;
+    --color-sidebar-foreground: #0a0a0a;
+    --color-sidebar-primary: #171717;
+    --color-sidebar-primary-foreground: #fafafa;
+    --color-sidebar-accent: #f5f5f5;
+    --color-sidebar-accent-foreground: #171717;
+    --color-sidebar-border: #e5e5e5;
+    --color-sidebar-ring: #a3a3a3;
 
-  /* ===== TAILWIND COLOR PALETTE ===== */
-  --color-transparent: transparent;
-  --color-white: #ffffff;
-  --color-black: #000000;
+    /* ===== TAILWIND COLOR PALETTE ===== */
+    --color-transparent: transparent;
+    --color-white: #ffffff;
+    --color-black: #000000;
 
-  /* Emerald */
-  --color-emerald-50: #ecfdf5;
-  --color-emerald-400: #34d399;
+    /* Emerald */
+    --color-emerald-50: #ecfdf5;
+    --color-emerald-400: #34d399;
 
-  /* Green */
-  --color-green-600: #16a34a;
+    /* Green */
+    --color-green-600: #16a34a;
 
-  /* Blue */
-  --color-blue-600: #2563eb;
+    /* Blue */
+    --color-blue-600: #2563eb;
 
-  /* Violet */
-  --color-violet-500: #8b5cf6;
+    /* Violet */
+    --color-violet-500: #8b5cf6;
 
-  /* Fuchsia */
-  --color-fuchsia-300: #f0abfc;
+    /* Fuchsia */
+    --color-fuchsia-300: #f0abfc;
 
-  /* Cyan */
-  --color-cyan-200: #a5f3fc;
+    /* Cyan */
+    --color-cyan-200: #a5f3fc;
 
-  /* ===== ALPHA COLORS ===== */
-  --color-alpha-10: rgb(255 255 255 / 0.9);
-  --color-alpha-40: rgb(255 255 255 / 0.6);
-  --color-alpha-50: rgb(255 255 255 / 0.5);
-  --color-alpha-90: rgb(255 255 255 / 0.1);
+    /* ===== ALPHA COLORS ===== */
+    --color-alpha-10: rgb(255 255 255 / 0.9);
+    --color-alpha-40: rgb(255 255 255 / 0.6);
+    --color-alpha-50: rgb(255 255 255 / 0.5);
+    --color-alpha-90: rgb(255 255 255 / 0.1);
 }
 
 /* ===== DARK MODE ===== */
 .dark {
-  --color-background: #0a0a0a;
-  --color-foreground: #fafafa;
+    --color-background: #0a0a0a;
+    --color-foreground: #fafafa;
 
-  --color-card: #0a0a0a;
-  --color-card-foreground: #fafafa;
+    --color-card: #0a0a0a;
+    --color-card-foreground: #fafafa;
 
-  --color-popover: #0a0a0a;
-  --color-popover-foreground: #fafafa;
+    --color-popover: #0a0a0a;
+    --color-popover-foreground: #fafafa;
 
-  --color-primary: #fafafa;
-  --color-primary-foreground: #171717;
+    --color-primary: #fafafa;
+    --color-primary-foreground: #171717;
 
-  --color-secondary: #262626;
-  --color-secondary-foreground: #fafafa;
+    --color-secondary: #262626;
+    --color-secondary-foreground: #fafafa;
 
-  --color-muted: #262626;
-  --color-muted-foreground: #a3a3a3;
+    --color-muted: #262626;
+    --color-muted-foreground: #a3a3a3;
 
-  --color-accent: #262626;
-  --color-accent-foreground: #fafafa;
+    --color-accent: #262626;
+    --color-accent-foreground: #fafafa;
 
-  --color-destructive: #dc2626;
-  --color-destructive-foreground: #fef2f2;
+    --color-destructive: #dc2626;
+    --color-destructive-foreground: #fef2f2;
 
-  --color-border: #262626;
-  --color-input: #262626;
-  --color-input-background: #0a0a0a;
-  --color-ring: #525252;
+    --color-border: #262626;
+    --color-input: #262626;
+    --color-input-background: #0a0a0a;
+    --color-ring: #525252;
 
-  /* Chart Colors (Dark) */
-  --color-chart-1: #f97316;
-  --color-chart-2: #14b8a6;
-  --color-chart-3: #3b82f6;
-  --color-chart-4: #22c55e;
-  --color-chart-5: #a78bfa;
+    /* Chart Colors (Dark) */
+    --color-chart-1: #f97316;
+    --color-chart-2: #14b8a6;
+    --color-chart-3: #3b82f6;
+    --color-chart-4: #22c55e;
+    --color-chart-5: #a78bfa;
 
-  /* Sidebar Colors (Dark) */
-  --color-sidebar: #0a0a0a;
-  --color-sidebar-foreground: #fafafa;
-  --color-sidebar-primary: #fafafa;
-  --color-sidebar-primary-foreground: #171717;
-  --color-sidebar-accent: #262626;
-  --color-sidebar-accent-foreground: #fafafa;
-  --color-sidebar-border: #262626;
-  --color-sidebar-ring: #525252;
+    /* Sidebar Colors (Dark) */
+    --color-sidebar: #0a0a0a;
+    --color-sidebar-foreground: #fafafa;
+    --color-sidebar-primary: #fafafa;
+    --color-sidebar-primary-foreground: #171717;
+    --color-sidebar-accent: #262626;
+    --color-sidebar-accent-foreground: #fafafa;
+    --color-sidebar-border: #262626;
+    --color-sidebar-ring: #525252;
 
-  /* Alpha Colors (Dark) */
-  --color-alpha-10: rgb(0 0 0 / 0.9);
-  --color-alpha-40: rgb(0 0 0 / 0.6);
-  --color-alpha-50: rgb(0 0 0 / 0.5);
-  --color-alpha-90: rgb(0 0 0 / 0.1);
+    /* Alpha Colors (Dark) */
+    --color-alpha-10: rgb(0 0 0 / 0.9);
+    --color-alpha-40: rgb(0 0 0 / 0.6);
+    --color-alpha-50: rgb(0 0 0 / 0.5);
+    --color-alpha-90: rgb(0 0 0 / 0.1);
 }
 
 /* ===== TANGENTE THEME (Light) ===== */
 .tangente {
-  /* Brand Colors */
-  --color-brand-primary: #e31b22;
-  --color-brand-secondary: #fff132;
-  --color-brand-black: #000000;
-  --color-brand-white: #ffffff;
+    /* Brand Colors */
+    --color-brand-primary: #e31b22;
+    --color-brand-secondary: #fff132;
+    --color-brand-black: #000000;
+    --color-brand-white: #ffffff;
 
-  /* Background Colors */
-  --color-background: #ffffff;
-  --color-background-secondary: #f5f5f5;
-  --color-background-tertiary: #e0e0e0;
-  --color-background-success: #079848;
-  --color-foreground: #000000;
+    /* Background Colors */
+    --color-background: #ffffff;
+    --color-background-secondary: #f5f5f5;
+    --color-background-tertiary: #e0e0e0;
+    --color-background-success: #079848;
+    --color-foreground: #000000;
 
-  /* Card & Popover */
-  --color-card: #ffffff;
-  --color-card-foreground: #000000;
-  --color-popover: #ffffff;
-  --color-popover-foreground: #000000;
+    /* Card & Popover */
+    --color-card: #ffffff;
+    --color-card-foreground: #000000;
+    --color-popover: #ffffff;
+    --color-popover-foreground: #000000;
 
-  /* Primary (using brand red) */
-  --color-primary: #e31b22;
-  --color-primary-foreground: #ffffff;
+    /* Primary (using brand red) */
+    --color-primary: #e31b22;
+    --color-primary-foreground: #ffffff;
 
-  /* Secondary */
-  --color-secondary: #f5f5f5;
-  --color-secondary-foreground: #000000;
+    /* Secondary */
+    --color-secondary: #f5f5f5;
+    --color-secondary-foreground: #000000;
 
-  /* Muted */
-  --color-muted: #f5f5f5;
-  --color-muted-foreground: #00000080;
+    /* Muted */
+    --color-muted: #f5f5f5;
+    --color-muted-foreground: #00000080;
 
-  /* Accent (using brand yellow) */
-  --color-accent: #fff132;
-  --color-accent-foreground: #000000;
+    /* Accent (using brand yellow) */
+    --color-accent: #fff132;
+    --color-accent-foreground: #000000;
 
-  /* Destructive */
-  --color-destructive: #e31b22;
-  --color-destructive-foreground: #ffffff;
+    /* Destructive */
+    --color-destructive: #e31b22;
+    --color-destructive-foreground: #ffffff;
 
-  /* Success */
-  --color-success: #079848;
-  --color-success-foreground: #ffffff;
+    /* Success */
+    --color-success: #079848;
+    --color-success-foreground: #ffffff;
 
-  /* Border & Input */
-  --color-border: #e0e0e0;
-  --color-border-secondary: #e0e0e0;
-  --color-border-tertiary: #adadad;
-  --color-input: #e0e0e0;
-  --color-input-background: #ffffff;
-  --color-ring: #e31b22;
+    /* Border & Input */
+    --color-border: #e0e0e0;
+    --color-border-secondary: #e0e0e0;
+    --color-border-tertiary: #adadad;
+    --color-input: #e0e0e0;
+    --color-input-background: #ffffff;
+    --color-ring: #e31b22;
 
-  /* Text Colors */
-  --color-text-primary: #000000;
-  --color-text-secondary: #000000b2;
-  --color-text-tertiary: #00000080;
-  --color-text-disabled: #0000004d;
+    /* Text Colors */
+    --color-text-primary: #000000;
+    --color-text-secondary: #000000b2;
+    --color-text-tertiary: #00000080;
+    --color-text-disabled: #0000004d;
 
-  /* Icon Colors */
-  --color-icon-primary: #000000;
-  --color-icon-secondary: #000000b2;
-  --color-icon-tertiary: #00000080;
-  --color-icon-success: #079848;
+    /* Icon Colors */
+    --color-icon-primary: #000000;
+    --color-icon-secondary: #000000b2;
+    --color-icon-tertiary: #00000080;
+    --color-icon-success: #079848;
 
-  /* Neutral */
-  --color-neutral-100: #e6eaeb;
+    /* Neutral */
+    --color-neutral-100: #e6eaeb;
 
-  /* Sidebar Colors */
-  --color-sidebar: #ffffff;
-  --color-sidebar-foreground: #000000;
-  --color-sidebar-primary: #e31b22;
-  --color-sidebar-primary-foreground: #ffffff;
-  --color-sidebar-accent: #f5f5f5;
-  --color-sidebar-accent-foreground: #000000;
-  --color-sidebar-border: #e0e0e0;
-  --color-sidebar-ring: #e31b22;
+    /* Sidebar Colors */
+    --color-sidebar: #ffffff;
+    --color-sidebar-foreground: #000000;
+    --color-sidebar-primary: #e31b22;
+    --color-sidebar-primary-foreground: #ffffff;
+    --color-sidebar-accent: #f5f5f5;
+    --color-sidebar-accent-foreground: #000000;
+    --color-sidebar-border: #e0e0e0;
+    --color-sidebar-ring: #e31b22;
 
-  /* Chart Colors */
-  --color-chart-1: #e31b22;
-  --color-chart-2: #fff132;
-  --color-chart-3: #079848;
-  --color-chart-4: #000000;
-  --color-chart-5: #adadad;
+    /* Chart Colors */
+    --color-chart-1: #e31b22;
+    --color-chart-2: #fff132;
+    --color-chart-3: #079848;
+    --color-chart-4: #000000;
+    --color-chart-5: #adadad;
 
-  /* Translucent */
-  --color-translucent-strong: #000000b2;
-  --color-translucent-normal: #00000080;
+    /* Translucent */
+    --color-translucent-strong: #000000b2;
+    --color-translucent-normal: #00000080;
 
-  /* Alpha Colors */
-  --color-alpha-10: rgb(255 255 255 / 0.9);
-  --color-alpha-40: rgb(255 255 255 / 0.6);
-  --color-alpha-50: rgb(255 255 255 / 0.5);
-  --color-alpha-90: rgb(255 255 255 / 0.1);
+    /* Alpha Colors */
+    --color-alpha-10: rgb(255 255 255 / 0.9);
+    --color-alpha-40: rgb(255 255 255 / 0.6);
+    --color-alpha-50: rgb(255 255 255 / 0.5);
+    --color-alpha-90: rgb(255 255 255 / 0.1);
 }
 
 /* ===== TANGENTE THEME (Dark) ===== */
 .tangente.dark {
-  /* Background Colors */
-  --color-background: #000000;
-  --color-background-secondary: #141414;
-  --color-background-tertiary: #333333;
-  --color-foreground: #ffffff;
+    /* Background Colors */
+    --color-background: #000000;
+    --color-background-secondary: #141414;
+    --color-background-tertiary: #333333;
+    --color-foreground: #ffffff;
 
-  /* Card & Popover */
-  --color-card: #141414;
-  --color-card-foreground: #ffffff;
-  --color-popover: #141414;
-  --color-popover-foreground: #ffffff;
+    /* Card & Popover */
+    --color-card: #141414;
+    --color-card-foreground: #ffffff;
+    --color-popover: #141414;
+    --color-popover-foreground: #ffffff;
 
-  /* Primary (brand red) */
-  --color-primary: #e31b22;
-  --color-primary-foreground: #ffffff;
+    /* Primary (brand red) */
+    --color-primary: #e31b22;
+    --color-primary-foreground: #ffffff;
 
-  /* Secondary */
-  --color-secondary: #141414;
-  --color-secondary-foreground: #ffffff;
+    /* Secondary */
+    --color-secondary: #141414;
+    --color-secondary-foreground: #ffffff;
 
-  /* Muted */
-  --color-muted: #141414;
-  --color-muted-foreground: #ffffffb2;
+    /* Muted */
+    --color-muted: #141414;
+    --color-muted-foreground: #ffffffb2;
 
-  /* Accent (brand yellow) */
-  --color-accent: #fff132;
-  --color-accent-foreground: #000000;
+    /* Accent (brand yellow) */
+    --color-accent: #fff132;
+    --color-accent-foreground: #000000;
 
-  /* Border & Input */
-  --color-border: #333333;
-  --color-border-secondary: #333333;
-  --color-border-tertiary: #333333;
-  --color-input: #333333;
-  --color-input-background: #000000;
-  --color-ring: #e31b22;
+    /* Border & Input */
+    --color-border: #333333;
+    --color-border-secondary: #333333;
+    --color-border-tertiary: #333333;
+    --color-input: #333333;
+    --color-input-background: #000000;
+    --color-ring: #e31b22;
 
-  /* Text Colors */
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #ffffffb2;
-  --color-text-tertiary: #ffffff80;
-  --color-text-disabled: #ffffff4d;
+    /* Text Colors */
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #ffffffb2;
+    --color-text-tertiary: #ffffff80;
+    --color-text-disabled: #ffffff4d;
 
-  /* Icon Colors */
-  --color-icon-primary: #ffffff;
-  --color-icon-secondary: #ffffffb2;
-  --color-icon-tertiary: #ffffff80;
+    /* Icon Colors */
+    --color-icon-primary: #ffffff;
+    --color-icon-secondary: #ffffffb2;
+    --color-icon-tertiary: #ffffff80;
 
-  /* Sidebar Colors */
-  --color-sidebar: #000000;
-  --color-sidebar-foreground: #ffffff;
-  --color-sidebar-primary: #e31b22;
-  --color-sidebar-primary-foreground: #ffffff;
-  --color-sidebar-accent: #141414;
-  --color-sidebar-accent-foreground: #ffffff;
-  --color-sidebar-border: #333333;
-  --color-sidebar-ring: #e31b22;
+    /* Sidebar Colors */
+    --color-sidebar: #000000;
+    --color-sidebar-foreground: #ffffff;
+    --color-sidebar-primary: #e31b22;
+    --color-sidebar-primary-foreground: #ffffff;
+    --color-sidebar-accent: #141414;
+    --color-sidebar-accent-foreground: #ffffff;
+    --color-sidebar-border: #333333;
+    --color-sidebar-ring: #e31b22;
 
-  /* Chart Colors (Dark) */
-  --color-chart-1: #e31b22;
-  --color-chart-2: #fff132;
-  --color-chart-3: #079848;
-  --color-chart-4: #ffffff;
-  --color-chart-5: #adadad;
+    /* Chart Colors (Dark) */
+    --color-chart-1: #e31b22;
+    --color-chart-2: #fff132;
+    --color-chart-3: #079848;
+    --color-chart-4: #ffffff;
+    --color-chart-5: #adadad;
 
-  /* Translucent */
-  --color-translucent-strong: #000000b2;
-  --color-translucent-normal: #00000080;
+    /* Translucent */
+    --color-translucent-strong: #000000b2;
+    --color-translucent-normal: #00000080;
 
-  /* Alpha Colors (Dark) */
-  --color-alpha-10: rgb(0 0 0 / 0.9);
-  --color-alpha-40: rgb(0 0 0 / 0.6);
-  --color-alpha-50: rgb(0 0 0 / 0.5);
-  --color-alpha-90: rgb(0 0 0 / 0.1);
+    /* Alpha Colors (Dark) */
+    --color-alpha-10: rgb(0 0 0 / 0.9);
+    --color-alpha-40: rgb(0 0 0 / 0.6);
+    --color-alpha-50: rgb(0 0 0 / 0.5);
+    --color-alpha-90: rgb(0 0 0 / 0.1);
 }
 
 /* ===== BASE STYLES ===== */
 @layer base {
-  * {
-    @apply border-border;
-  }
+    * {
+        @apply border-border;
+    }
 
-  body {
-    @apply bg-background text-foreground font-sans;
-  }
+    a,
+    button,
+    [role='button'],
+    label[for],
+    select,
+    summary,
+    [type='button'],
+    [type='reset'],
+    [type='submit'] {
+        cursor: pointer;
+    }
 
-  /* Tangente-specific base styles */
-  .tangente body {
-    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  }
+    body {
+        @apply bg-background text-foreground font-sans;
+    }
 
-  .tangente h1,
-  .tangente h2,
-  .tangente h3,
-  .tangente h4,
-  .tangente h5,
-  .tangente h6 {
-    font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
-  }
+    /* Tangente-specific base styles */
+    .tangente body {
+        font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    }
 
+    .tangente h1,
+    .tangente h2,
+    .tangente h3,
+    .tangente h4,
+    .tangente h5,
+    .tangente h6 {
+        font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
+    }
 }
 
 /* Tangente container override - outside @layer for higher specificity */
 .tangente .container {
-  max-width: var(--container-tangente) !important;
+    max-width: var(--container-tangente) !important;
 }
-
-
