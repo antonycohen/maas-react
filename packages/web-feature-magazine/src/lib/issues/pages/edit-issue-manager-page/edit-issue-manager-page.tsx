@@ -63,6 +63,7 @@ export function EditIssueManagerPage() {
             id: issueId,
             fields: {
                 id: null,
+                slug: null,
                 title: null,
                 description: null,
                 issueNumber: null,

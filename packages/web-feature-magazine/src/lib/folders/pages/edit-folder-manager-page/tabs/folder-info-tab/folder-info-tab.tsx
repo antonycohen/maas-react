@@ -1,14 +1,14 @@
 import { useOutletContext } from 'react-router';
 import { useTranslation } from '@maas/core-translations';
 import { FolderFormValues } from '../../hooks';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@maas/web-components';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, ReadonlyCopyField } from '@maas/web-components';
 import { createConnectedInputHelpers } from '@maas/web-form';
 import { LayoutContent } from '@maas/web-layout';
 import { EditFolderOutletContext } from '../../edit-folder-manager-page';
 
 export const FolderInfoTab = () => {
     const { t } = useTranslation();
-    const { isCreateMode, isLoading } = useOutletContext<EditFolderOutletContext>();
+    const { isCreateMode, isLoading, folder } = useOutletContext<EditFolderOutletContext>();
 
     const { ControlledTextInput, ControlledTextAreaInput, ControlledImageInput, ControlledSwitchInput } =
         createConnectedInputHelpers<FolderFormValues>();
@@ -30,6 +30,14 @@ export const FolderInfoTab = () => {
                 </CardHeader>
                 <CardContent className="px-6 pt-2">
                     <div className="flex flex-col divide-y">
+                        {!isCreateMode && folder?.slug && (
+                            <ReadonlyCopyField
+                                label={t('field.slug')}
+                                value={folder.slug}
+                                direction="horizontal"
+                                className="py-6"
+                            />
+                        )}
                         <ControlledTextInput
                             name="name"
                             label={t('field.name')}

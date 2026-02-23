@@ -13,6 +13,7 @@ import {
     CollapsibleTrigger,
     FieldGroup,
     Separator,
+    ReadonlyCopyField,
 } from '@maas/web-components';
 import { FormProvider } from 'react-hook-form';
 import { Article } from '@maas/core-api-models';
@@ -298,8 +299,21 @@ export function EditArticleManagerPage() {
                                 defaultOpen={true}
                             >
                                 <FieldGroup className="space-y-4">
-                                    <ControlledSwitchInput name="isPublished" label={t('status.published')} />
-                                    <ControlledSwitchInput name="isFeatured" label={t('field.featured')} />
+                                    {!isCreateMode && article?.slug && (
+                                        <ReadonlyCopyField label={t('field.slug')} value={article.slug} />
+                                    )}
+                                    <div className="flex items-center gap-4">
+                                        <ControlledSwitchInput
+                                            name="isPublished"
+                                            label={t('status.published')}
+                                            className="flex-1"
+                                        />
+                                        <ControlledSwitchInput
+                                            name="isFeatured"
+                                            label={t('field.featured')}
+                                            className="flex-1"
+                                        />
+                                    </div>
                                     <ControlledArticleTypeInput name="type" label={t('field.articleType')} />
                                     <ControlledSelectInput
                                         name="visibility"

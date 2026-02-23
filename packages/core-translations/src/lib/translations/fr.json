@@ -131,6 +131,7 @@
     "table.desc": "Décroissant",
     "table.hide": "Masquer",
     "field.name": "Nom",
+    "field.slug": "Slug",
     "field.email": "E-mail",
     "field.title": "Titre",
     "field.description": "Description",

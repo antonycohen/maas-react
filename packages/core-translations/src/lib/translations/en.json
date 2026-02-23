@@ -132,6 +132,7 @@
     "table.desc": "Desc",
     "table.hide": "Hide",
     "field.name": "Name",
+    "field.slug": "Slug",
     "field.email": "Email",
     "field.title": "Title",
     "field.description": "Description",

@@ -36,6 +36,7 @@ const {
     ControlledImageInput,
     ControlledVideoInput,
     ControlledCheckbox,
+    ControlledTokenInput,
 } = createConnectedInputHelpers<any>();
 
 function DynamicEnumField({ field }: DynamicFieldProps) {
@@ -60,6 +61,18 @@ function DynamicEnumField({ field }: DynamicFieldProps) {
             value: v.value,
             label: v.label,
         })) ?? [];
+
+    if (field.isList) {
+        return (
+            <ControlledTokenInput
+                name={`customFields.${field.key}` as keyof Article}
+                label={field.label}
+                placeholder={`Select ${field.label.toLowerCase()}...`}
+                source={{ type: 'static', options }}
+                forceSelection
+            />
+        );
+    }
 
     return (
         <ControlledSelectInput
@@ -117,6 +130,15 @@ function DynamicField({ field }: DynamicFieldProps) {
 
     switch (field.type) {
         case 'string':
+            if (field.isList) {
+                return (
+                    <ControlledTokenInput
+                        name={fieldName}
+                        label={field.label}
+                        placeholder={`Add ${field.label.toLowerCase()}...`}
+                    />
+                );
+            }
             return <ControlledTextInput name={fieldName} label={field.label} />;
 
         case 'text':
@@ -230,7 +252,6 @@ export function DynamicCustomFields() {
             enabled: !!articleType?.id,
         }
     );
-
     // Initialize customFields when article type changes
     useEffect(() => {
         if (articleTypeData && articleType?.id !== previousTypeIdRef.current) {

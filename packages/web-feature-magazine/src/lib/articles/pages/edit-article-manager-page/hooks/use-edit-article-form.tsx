@@ -23,6 +23,7 @@ export const useEditArticleForm = (articleId: string) => {
                 id: null,
                 title: null,
                 description: null,
+                slug: null,
                 createdAt: null,
                 updatedAt: null,
                 author: null,

@@ -27,16 +27,15 @@ export const useEditActions = (
     };
 
     const createMutation = useCreateArticle({
-        onSuccess: () => {
-            navigate(routes.articles());
+        onSuccess: (data) => {
             toast.success(t('message.success.created', { entity: t('articles.title') }));
+            navigate(routes.articleEdit(data.id), { replace: true });
         },
         onError: handleApiError,
     });
 
     const updateMutation = useUpdateArticle({
         onSuccess: () => {
-            navigate(routes.articles());
             toast.success(t('message.success.updated', { entity: t('articles.title') }));
         },
         onError: handleApiError,
@@ -56,9 +55,11 @@ export const useEditActions = (
         if (isCreateMode) {
             createMutation.mutate(data as CreateArticle);
         } else {
+            // Strip read-only fields that shouldn't be sent on update
+            const { slug, ...updateData } = data as UpdateArticle & { slug?: unknown };
             updateMutation.mutate({
                 articleId,
-                data: data as UpdateArticle,
+                data: updateData,
             });
         }
     }

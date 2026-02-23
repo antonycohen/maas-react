@@ -70,6 +70,7 @@ export * from './lib/maas/sso-connector';
 export * from './lib/maas/tab-nav-links';
 export * from './lib/maas/article-author';
 export * from './lib/maas/share-articles';
+export * from './lib/maas/readonly-copy-field';
 export * from './lib/maas/not-found-page';
 
 export * from './lib/shadcn-io/color-picker';

@@ -2,6 +2,8 @@ import { Badge } from '@maas/web-components';
 import { Article } from '@maas/core-api-models';
 import { Separator } from '@maas/web-components';
 import { useTranslation } from '@maas/core-translations';
+import { usePublicRoutes } from '@maas/core-routes';
+import { Link } from 'react-router';
 
 export const Thematiques = ({
     categories,
@@ -11,6 +13,7 @@ export const Thematiques = ({
     withSeparator?: boolean;
 }) => {
     const { t } = useTranslation();
+    const routes = usePublicRoutes();
     if (categories?.length === 0) return null;
     return (
         <>
@@ -23,16 +26,17 @@ export const Thematiques = ({
                     {t('home.themes')}
                 </h2>
                 <div className={'flex flex-row flex-wrap gap-1'}>
-                    {categories?.map((cat, index) => (
-                        <Badge
-                            key={index}
-                            variant={'outline'}
-                            className={
-                                'font-body rounded-[4px] border-[#E0E0E0] bg-white px-2 py-1 text-[11px] font-semibold tracking-[0.33px] text-black uppercase hover:bg-gray-50'
-                            }
-                        >
-                            {cat.name}
-                        </Badge>
+                    {categories?.map((cat) => (
+                        <Link key={cat.id} to={routes.category(cat.slug ?? cat.id)}>
+                            <Badge
+                                variant={'outline'}
+                                className={
+                                    'font-body cursor-pointer rounded-[4px] border-[#E0E0E0] bg-white px-2 py-1 text-[11px] font-semibold tracking-[0.33px] text-black uppercase hover:bg-gray-50'
+                                }
+                            >
+                                {cat.name}
+                            </Badge>
+                        </Link>
                     ))}
                 </div>
             </div>

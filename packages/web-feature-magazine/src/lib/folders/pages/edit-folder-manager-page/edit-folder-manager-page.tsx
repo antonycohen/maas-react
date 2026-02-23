@@ -56,6 +56,7 @@ export function EditFolderManagerPage() {
             id: folderId,
             fields: {
                 id: null,
+                slug: null,
                 name: null,
                 description: null,
                 cover: null,

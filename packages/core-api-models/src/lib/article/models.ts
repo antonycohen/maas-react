@@ -52,6 +52,7 @@ export type ArticleCustomFields = z.infer<typeof articleCustomFieldsSchema>;
 // Full article schema for read operations
 export const articleSchema = z.object({
     id: z.string(),
+    slug: z.string(),
     issues: z.array(readIssueRefSchema).nullable(),
     organization: readOrganizationRefSchema.nullable(),
     isFeatured: z.boolean().nullable(),

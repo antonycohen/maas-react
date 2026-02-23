@@ -1,6 +1,6 @@
 import { useOutletContext } from 'react-router';
 import { useTranslation } from '@maas/core-translations';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@maas/web-components';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, ReadonlyCopyField } from '@maas/web-components';
 import { createConnectedInputHelpers } from '@maas/web-form';
 import { LayoutContent } from '@maas/web-layout';
 import { useGetBrandById } from '@maas/core-api';
@@ -10,7 +10,7 @@ import { parseRatio } from '@maas/core-utils';
 
 export const IssueInfoTab = () => {
     const { t } = useTranslation();
-    const { isCreateMode, isLoading, form } = useOutletContext<EditIssueOutletContext>();
+    const { isCreateMode, isLoading, form, issue } = useOutletContext<EditIssueOutletContext>();
 
     const brandRef = form.watch('brand');
 
@@ -60,6 +60,14 @@ export const IssueInfoTab = () => {
                 </CardHeader>
                 <CardContent className="px-6 pt-2">
                     <div className="flex flex-col divide-y">
+                        {!isCreateMode && issue?.slug && (
+                            <ReadonlyCopyField
+                                label={t('field.slug')}
+                                value={issue.slug}
+                                direction="horizontal"
+                                className="py-6"
+                            />
+                        )}
                         <ControlledMagazineBrandInput
                             name="brand"
                             label={t('field.brand')}
