@@ -12,10 +12,12 @@ export async function loader() {
     try {
         const sitemap = await maasApi.sitemap.getSitemap();
 
-        const articleUrls = sitemap.articles.map((slug) => `/articles/${slug}`);
-        const issueUrls = sitemap.issues.map((slug) => `/magazines/${slug}`);
-        const folderUrls = sitemap.folders.map((slug) => `/dossiers/${slug}`);
-        const categoryUrls = sitemap.categories.filter((c) => c.slug).map((c) => `/categories/${c.slug}`);
+        const articleUrls = sitemap.articles.map((entry) => `/articles/${entry.slug}`);
+        const issueUrls = sitemap.issues.map((entry) => `/magazines/${entry.slug}`);
+        const folderUrls = sitemap.folders.map((entry) => `/dossiers/${entry.slug}`);
+        const categoryUrls = sitemap.categories
+            .filter((entry) => entry.slug)
+            .map((entry) => `/categories/${entry.slug}`);
         const themeUrls = sitemap.themes.map((theme) => `/mathematical-themes/${theme}`);
 
         dynamicUrls = [...articleUrls, ...issueUrls, ...folderUrls, ...categoryUrls, ...themeUrls];
