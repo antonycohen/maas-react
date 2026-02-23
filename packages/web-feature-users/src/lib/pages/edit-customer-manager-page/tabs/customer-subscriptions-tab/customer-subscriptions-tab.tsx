@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { Link, useOutletContext } from 'react-router';
 import { useGetSubscriptions, useGetInvoices, useGetCustomerQuotas } from '@maas/core-api';
-import { Invoice, Subscription } from '@maas/core-api-models';
+import { Invoice, Quota, Subscription } from '@maas/core-api-models';
 import { useRoutes } from '@maas/core-workspace';
 import {
     Badge,
@@ -19,9 +20,12 @@ import {
     TableHeader,
     TableRow,
 } from '@maas/web-components';
+import { IconEdit, IconExternalLink, IconPlus } from '@tabler/icons-react';
 import { LayoutContent } from '@maas/web-layout';
 import { EditCustomerOutletContext } from '../../edit-customer-manager-page';
 import { CustomerInvoiceListSection } from './components/customer-invoice-list-section';
+import { CreateSubscriptionDialog } from './components/create-subscription-dialog';
+import { UpdateQuotaDialog } from './components/update-quota-dialog';
 import { useTranslation } from '@maas/core-translations';
 
 const SUBSCRIPTION_STATUS_STYLES: Record<string, string> = {
@@ -63,6 +67,8 @@ export const CustomerSubscriptionsTab = () => {
     const { customerId } = useOutletContext<EditCustomerOutletContext>();
     const { t } = useTranslation();
     const routes = useRoutes();
+    const [showCreateSubscription, setShowCreateSubscription] = useState(false);
+    const [editingQuota, setEditingQuota] = useState<Quota | null>(null);
 
     const { data: subscriptionsData, isLoading: isLoadingSubscriptions } = useGetSubscriptions({
         filters: { customerId },
@@ -74,6 +80,7 @@ export const CustomerSubscriptionsTab = () => {
             currentPeriodStart: null,
             currentPeriodEnd: null,
             cancelAtPeriodEnd: null,
+            metadata: null,
         },
         offset: 0,
         limit: 100,
@@ -87,6 +94,7 @@ export const CustomerSubscriptionsTab = () => {
             status: null,
             amountDue: null,
             currency: null,
+            subscriptionId: null,
             createdAt: null,
         },
         offset: 0,
@@ -96,6 +104,11 @@ export const CustomerSubscriptionsTab = () => {
     const { data: quotas, isLoading: isLoadingQuotas } = useGetCustomerQuotas(customerId);
 
     const subscriptions = subscriptionsData?.data ?? [];
+    const activeSubscription = subscriptions.find((s) => s.status === 'active' || s.status === 'trialing');
+    const hasActiveSubscription = !!activeSubscription;
+    const manualSubscriptionIds = new Set(
+        subscriptions.filter((s) => (s.metadata as Record<string, unknown> | null)?.manual === 'true').map((s) => s.id)
+    );
     // The admin invoices API returns { invoices: [...] } not a flat array
     const invoices = (invoicesData?.data as unknown as { invoices?: Invoice[] })?.invoices ?? [];
 
@@ -110,13 +123,21 @@ export const CustomerSubscriptionsTab = () => {
                                 <CardTitle className="text-xl">{t('customers.subscriptions.title')}</CardTitle>
                                 <CardDescription>{t('customers.subscriptions.description')}</CardDescription>
                             </div>
-                            {subscriptions.length > 0 && (
-                                <Button variant="outline" size="sm" asChild>
-                                    <Link to={routes.pmsSubscriptionView(subscriptions[0].id)}>
-                                        {t('customers.subscriptions.editSubscriptions')}
-                                    </Link>
-                                </Button>
-                            )}
+                            <div className="flex items-center gap-2">
+                                {!hasActiveSubscription && !isLoadingSubscriptions && (
+                                    <Button variant="default" size="sm" onClick={() => setShowCreateSubscription(true)}>
+                                        <IconPlus className="mr-1 h-4 w-4" />
+                                        {t('customers.subscriptions.createSubscription')}
+                                    </Button>
+                                )}
+                                {activeSubscription && (
+                                    <Button variant="outline" size="sm" asChild>
+                                        <Link to={routes.pmsSubscriptionView(activeSubscription.id)}>
+                                            {t('customers.subscriptions.editSubscriptions')}
+                                        </Link>
+                                    </Button>
+                                )}
+                            </div>
                         </div>
                     </CardHeader>
                     <CardContent>
@@ -133,6 +154,7 @@ export const CustomerSubscriptionsTab = () => {
                                         <TableHead>{t('customers.subscriptions.periodStart')}</TableHead>
                                         <TableHead>{t('customers.subscriptions.periodEnd')}</TableHead>
                                         <TableHead>{t('customers.info.currency')}</TableHead>
+                                        <TableHead className="text-right">{t('field.actions')}</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -165,6 +187,19 @@ export const CustomerSubscriptionsTab = () => {
                                                 <TableCell className="text-sm">
                                                     {subscription.currency?.toUpperCase() ?? '\u2014'}
                                                 </TableCell>
+                                                <TableCell className="text-right">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        className="h-8 w-8"
+                                                        asChild
+                                                        title={t('customers.subscriptions.viewSubscription')}
+                                                    >
+                                                        <Link to={routes.pmsSubscriptionView(subscription.id)}>
+                                                            <IconExternalLink className="h-4 w-4" />
+                                                        </Link>
+                                                    </Button>
+                                                </TableCell>
                                             </TableRow>
                                         );
                                     })}
@@ -175,7 +210,11 @@ export const CustomerSubscriptionsTab = () => {
                 </Card>
 
                 {/* Invoices */}
-                <CustomerInvoiceListSection invoices={invoices} isLoading={isLoadingInvoices} />
+                <CustomerInvoiceListSection
+                    invoices={invoices}
+                    isLoading={isLoadingInvoices}
+                    manualSubscriptionIds={manualSubscriptionIds}
+                />
 
                 {/* Quotas */}
                 <Card className="rounded-2xl">
@@ -204,9 +243,19 @@ export const CustomerSubscriptionsTab = () => {
                                                             ? formatFeatureKey(quota.featureKey)
                                                             : quota.id}
                                                     </span>
-                                                    <span className="text-xs text-gray-500">
-                                                        {used} / {limit}
-                                                    </span>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-xs text-gray-500">
+                                                            {used} / {limit}
+                                                        </span>
+                                                        <button
+                                                            type="button"
+                                                            className="text-muted-foreground hover:text-foreground"
+                                                            onClick={() => setEditingQuota(quota)}
+                                                            title={t('customers.quotas.updateUsage')}
+                                                        >
+                                                            <IconEdit className="h-3.5 w-3.5" />
+                                                        </button>
+                                                    </div>
                                                 </div>
                                                 <Progress value={percentage} />
                                             </div>
@@ -217,6 +266,24 @@ export const CustomerSubscriptionsTab = () => {
                     </CardContent>
                 </Card>
             </div>
+
+            {/* Dialogs */}
+            <CreateSubscriptionDialog
+                open={showCreateSubscription}
+                onOpenChange={setShowCreateSubscription}
+                customerId={customerId}
+            />
+
+            {editingQuota && (
+                <UpdateQuotaDialog
+                    open={editingQuota !== null}
+                    onOpenChange={(open) => {
+                        if (!open) setEditingQuota(null);
+                    }}
+                    customerId={customerId}
+                    quota={editingQuota}
+                />
+            )}
         </LayoutContent>
     );
 };

@@ -4,3 +4,4 @@ export * from './use-get-invoice-payment-url';
 export * from './use-get-invoices';
 export * from './use-get-invoice-by-id';
 export * from './use-download-invoice';
+export * from './use-pay-invoice';

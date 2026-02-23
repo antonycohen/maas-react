@@ -1,4 +1,4 @@
-import { ReadCustomer, TaxExempt, Quota } from '@maas/core-api-models';
+import { ReadCustomer, TaxExempt, Quota, Subscription } from '@maas/core-api-models';
 import { ApiClient } from '../api-client/api-client';
 import { ApiCollectionResponse, FieldQuery, GetCollectionQueryParams, GetQueryByIdParams } from '../types';
 
@@ -32,6 +32,20 @@ export interface UpdateMyCustomerData {
     currency?: string | null;
     billingAddress?: BillingAddress;
     shippingAddress?: ShippingAddress;
+}
+
+export interface UpdateQuotaUsageData {
+    featureKey: string;
+    amount: number;
+    operation: 'consume' | 'add';
+    description?: string;
+}
+
+export interface CreateCustomerSubscriptionData {
+    priceIds: string[];
+    collectionMethod: 'send_invoice' | 'charge_automatically';
+    daysUntilDue?: number;
+    metadata?: Record<string, unknown>;
 }
 
 export interface GetCustomersFilter {
@@ -115,5 +129,21 @@ export class CustomersEndpoint {
      */
     async getCustomerQuotas(customerId: string): Promise<Quota[]> {
         return this.client.getById<Quota[]>(`${BASE_PATH}/${customerId}/quotas`);
+    }
+
+    /**
+     * Update quota usage for a customer
+     * POST /api/v1/pms/customers/{customerId}/quotas/usage
+     */
+    async updateQuotaUsage(customerId: string, data: UpdateQuotaUsageData): Promise<Quota> {
+        return this.client.post<Quota>(`${BASE_PATH}/${customerId}/quotas/usage`, data);
+    }
+
+    /**
+     * Create a subscription for a customer (admin)
+     * POST /api/v1/pms/customers/{customerId}/subscriptions
+     */
+    async createCustomerSubscription(customerId: string, data: CreateCustomerSubscriptionData): Promise<Subscription> {
+        return this.client.post<Subscription>(`${BASE_PATH}/${customerId}/subscriptions`, data);
     }
 }

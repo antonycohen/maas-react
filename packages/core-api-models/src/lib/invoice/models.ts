@@ -19,6 +19,7 @@ export const invoiceSchema = z.object({
     amountRemaining: z.number(),
     currency: z.string().nullable(),
     customerEmail: z.string().nullable(),
+    subscriptionId: z.string().nullable(),
     hostedInvoiceUrl: z.string().nullable(),
     lineItems: z.array(invoiceLineItemSchema).nullable(),
     createdAt: z.string().nullable(),

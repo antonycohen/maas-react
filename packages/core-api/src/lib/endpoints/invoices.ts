@@ -90,4 +90,12 @@ export class InvoicesEndpoint {
         });
         return response.data;
     }
+
+    /**
+     * Pay an invoice (admin)
+     * POST /api/v1/pms/invoices/{invoiceId}/pay
+     */
+    async payInvoice(invoiceId: string): Promise<Invoice> {
+        return this.client.post<Invoice>(`${ADMIN_PATH}/${invoiceId}/pay`, {});
+    }
 }

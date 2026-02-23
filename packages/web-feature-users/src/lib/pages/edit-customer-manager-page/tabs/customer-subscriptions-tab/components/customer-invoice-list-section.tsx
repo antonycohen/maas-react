@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { Invoice } from '@maas/core-api-models';
-import { useDownloadInvoice } from '@maas/core-api';
+import { useDownloadInvoice, usePayInvoice } from '@maas/core-api';
 import {
     Badge,
     Button,
@@ -8,6 +9,7 @@ import {
     CardHeader,
     CardTitle,
     CardDescription,
+    ConfirmActionDialog,
     Table,
     TableBody,
     TableCell,
@@ -16,6 +18,7 @@ import {
     TableRow,
 } from '@maas/web-components';
 import { Download } from 'lucide-react';
+import { IconCreditCardPay } from '@tabler/icons-react';
 import { toast } from 'sonner';
 import { triggerBlobDownload } from '../../../../account-settings-page/tabs/account-invoices-tab/utils/trigger-blob-download';
 import { useTranslation } from '@maas/core-translations';
@@ -64,10 +67,12 @@ const formatDate = (dateStr: string | null): string => {
 type Props = {
     invoices: Invoice[] | undefined;
     isLoading: boolean;
+    manualSubscriptionIds?: Set<string>;
 };
 
-export const CustomerInvoiceListSection = ({ invoices, isLoading }: Props) => {
+export const CustomerInvoiceListSection = ({ invoices, isLoading, manualSubscriptionIds }: Props) => {
     const { t } = useTranslation();
+    const [payingInvoiceId, setPayingInvoiceId] = useState<string | null>(null);
 
     const { mutate: download, isPending: isDownloading } = useDownloadInvoice({
         onSuccess: (blob, invoiceId) => {
@@ -77,6 +82,17 @@ export const CustomerInvoiceListSection = ({ invoices, isLoading }: Props) => {
         },
         onError: () => {
             toast.error(t('customers.invoices.downloadError'));
+        },
+    });
+
+    const { mutate: payInvoice, isPending: isPaying } = usePayInvoice({
+        onSuccess: () => {
+            toast.success(t('customers.invoices.paySuccess'));
+            setPayingInvoiceId(null);
+        },
+        onError: () => {
+            toast.error(t('customers.invoices.payError'));
+            setPayingInvoiceId(null);
         },
     });
 
@@ -144,17 +160,33 @@ export const CustomerInvoiceListSection = ({ invoices, isLoading }: Props) => {
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="icon"
-                                            className="h-8 w-8"
-                                            disabled={isDownloading}
-                                            onClick={() => download(invoice.id)}
-                                            title={t('customers.invoices.download')}
-                                        >
-                                            <Download className="h-4 w-4" />
-                                        </Button>
+                                        <div className="flex items-center justify-end gap-1">
+                                            {manualSubscriptionIds?.has(invoice.subscriptionId ?? '') &&
+                                                invoice.status !== 'paid' && (
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        className="h-8 w-8"
+                                                        disabled={isPaying}
+                                                        onClick={() => setPayingInvoiceId(invoice.id)}
+                                                        title={t('customers.invoices.pay')}
+                                                    >
+                                                        <IconCreditCardPay className="h-4 w-4" />
+                                                    </Button>
+                                                )}
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-8 w-8"
+                                                disabled={isDownloading}
+                                                onClick={() => download(invoice.id)}
+                                                title={t('customers.invoices.download')}
+                                            >
+                                                <Download className="h-4 w-4" />
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             );
@@ -162,6 +194,23 @@ export const CustomerInvoiceListSection = ({ invoices, isLoading }: Props) => {
                     </TableBody>
                 </Table>
             </CardContent>
+
+            <ConfirmActionDialog
+                open={payingInvoiceId !== null}
+                onOpenChange={(open) => {
+                    if (!open) setPayingInvoiceId(null);
+                }}
+                onConfirm={() => {
+                    if (payingInvoiceId) payInvoice(payingInvoiceId);
+                }}
+                title={t('customers.invoices.payConfirmTitle')}
+                description={t('customers.invoices.payConfirmDescription')}
+                confirmLabel={t('customers.invoices.pay')}
+                cancelLabel={t('common.cancel')}
+                variant="default"
+                isLoading={isPaying}
+                countdown={0}
+            />
         </Card>
     );
 };
