@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ApiError, useCreateEnum, useDeleteEnum, useUpdateEnum } from '@maas/core-api';
 import { UseFormReturn } from 'react-hook-form';
 import { CreateEnum, UpdateEnum } from '@maas/core-api-models';
@@ -59,10 +60,14 @@ export const useEditActions = (form: UseFormReturn<CreateEnum | UpdateEnum>, isC
         }
     }
 
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
     function handleDelete() {
-        if (window.confirm(t('message.confirm.delete', { entity: 'enum' }))) {
-            deleteMutation.mutate(enumId);
-        }
+        setDeleteDialogOpen(true);
+    }
+
+    function confirmDelete() {
+        deleteMutation.mutate(enumId);
     }
 
     const isSaving = createMutation.isPending || updateMutation.isPending;
@@ -70,6 +75,9 @@ export const useEditActions = (form: UseFormReturn<CreateEnum | UpdateEnum>, isC
     return {
         onSubmit,
         handleDelete,
+        confirmDelete,
+        deleteDialogOpen,
+        setDeleteDialogOpen,
         isSaving,
         deleteMutation,
     };

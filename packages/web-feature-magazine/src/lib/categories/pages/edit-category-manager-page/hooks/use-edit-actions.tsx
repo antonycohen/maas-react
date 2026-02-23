@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ApiError, useCreateCategory, useDeleteCategory, useUpdateCategory } from '@maas/core-api';
 import { UseFormReturn } from 'react-hook-form';
 import { CreateCategory, UpdateCategory } from '@maas/core-api-models';
@@ -60,10 +61,14 @@ export const useEditActions = (
         }
     }
 
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
     function handleDelete() {
-        if (window.confirm(t('message.confirm.delete', { entity: 'category' }))) {
-            deleteMutation.mutate(categoryId);
-        }
+        setDeleteDialogOpen(true);
+    }
+
+    function confirmDelete() {
+        deleteMutation.mutate(categoryId);
     }
 
     const isSaving = createMutation.isPending || updateMutation.isPending;
@@ -71,6 +76,9 @@ export const useEditActions = (
     return {
         onSubmit,
         handleDelete,
+        confirmDelete,
+        deleteDialogOpen,
+        setDeleteDialogOpen,
         isSaving,
         deleteMutation,
     };

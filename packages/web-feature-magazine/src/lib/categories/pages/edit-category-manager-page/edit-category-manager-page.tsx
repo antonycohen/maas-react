@@ -9,6 +9,7 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
+    ConfirmActionDialog,
     FieldGroup,
 } from '@maas/web-components';
 import { FormProvider } from 'react-hook-form';
@@ -27,7 +28,8 @@ export function EditCategoryManagerPage() {
 
     const { category, isLoading, form, isCreateMode } = useEditCategoryForm(categoryId);
 
-    const { deleteMutation, handleDelete, isSaving, onSubmit } = useEditActions(form, isCreateMode, categoryId);
+    const { deleteMutation, handleDelete, confirmDelete, deleteDialogOpen, setDeleteDialogOpen, isSaving, onSubmit } =
+        useEditActions(form, isCreateMode, categoryId);
 
     if (!isCreateMode && !isLoading && !category) {
         return <div>{t('categories.notFound')}</div>;
@@ -109,6 +111,16 @@ export function EditCategoryManagerPage() {
                     </form>
                 </FormProvider>
             </LayoutContent>
+
+            <ConfirmActionDialog
+                open={deleteDialogOpen}
+                onOpenChange={setDeleteDialogOpen}
+                onConfirm={confirmDelete}
+                title={t('message.confirm.delete', { entity: t('categories.title') })}
+                description={t('message.confirm.deleteDescription')}
+                confirmLabel={t('common.delete')}
+                isLoading={deleteMutation.isPending}
+            />
         </div>
     );
 }

@@ -1,10 +1,20 @@
 import { useOutletContext } from 'react-router';
-import { ArticlePreviewPanel, ArticlesPanel, FoldersPanel } from './components';
+import { useTranslation } from '@maas/core-translations';
+import { ConfirmActionDialog } from '@maas/web-components';
+import { ArticlePreviewPanel, ArticlesPanel, FolderPreviewPanel, FoldersPanel } from './components';
 import { AddArticleModal, AddFolderModal, useAddArticleModal, useAddFolderModal } from './modals';
-import { useFolderDisplay, useArticleDisplay, useArticlePreview, useFolderActions, useArticleActions } from './hooks';
+import {
+    useFolderDisplay,
+    useArticleDisplay,
+    useArticlePreview,
+    useFolderPreview,
+    useFolderActions,
+    useArticleActions,
+} from './hooks';
 import { EditIssueOutletContext } from '../../edit-issue-manager-page';
 
 export const IssueOrganizerTab = () => {
+    const { t } = useTranslation();
     const {
         issueId,
         isCreateMode,
@@ -38,6 +48,11 @@ export const IssueOrganizerTab = () => {
     // Article preview
     const { selectedArticle, isLoadingArticle } = useArticlePreview({
         selectedArticleId,
+    });
+
+    // Folder preview
+    const { selectedFolder, isLoadingFolder } = useFolderPreview({
+        selectedFolderId: selectedArticleId ? null : selectedFolderId,
     });
 
     // Folder actions
@@ -108,7 +123,11 @@ export const IssueOrganizerTab = () => {
 
                 {/* Right: Preview */}
                 <div className="h-full w-1/3 min-w-[200px] border-l">
-                    <ArticlePreviewPanel article={selectedArticle} isLoading={isLoadingArticle} />
+                    {selectedArticleId ? (
+                        <ArticlePreviewPanel article={selectedArticle} isLoading={isLoadingArticle} />
+                    ) : (
+                        <FolderPreviewPanel folder={selectedFolder} isLoading={isLoadingFolder} />
+                    )}
                 </div>
             </div>
 
@@ -127,6 +146,26 @@ export const IssueOrganizerTab = () => {
                 onOpenChange={articleModal.setOpen}
                 onSelectExisting={articleModal.handleSelectExisting}
                 onCreate={articleModal.handleCreate}
+            />
+
+            {/* Remove Folder Confirmation */}
+            <ConfirmActionDialog
+                open={folderActions.removeFolderDialogOpen}
+                onOpenChange={folderActions.setRemoveFolderDialogOpen}
+                onConfirm={folderActions.confirmRemoveFolderFromIssue}
+                title={t('common.remove')}
+                description={t('message.confirm.removeFolderFromIssue')}
+                confirmLabel={t('common.remove')}
+            />
+
+            {/* Remove Article Confirmation */}
+            <ConfirmActionDialog
+                open={articleActions.removeArticleDialogOpen}
+                onOpenChange={articleActions.setRemoveArticleDialogOpen}
+                onConfirm={articleActions.confirmDeleteArticle}
+                title={t('common.remove')}
+                description={t('message.confirm.removeFromFolder')}
+                confirmLabel={t('common.remove')}
             />
         </>
     );

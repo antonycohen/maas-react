@@ -1,4 +1,4 @@
-import { Badge, Button, TabNavLinks } from '@maas/web-components';
+import { Badge, Button, ConfirmActionDialog, TabNavLinks } from '@maas/web-components';
 import { LayoutBreadcrumb } from '@maas/web-layout';
 import { Outlet, useParams } from 'react-router';
 import { useGetIssueById } from '@maas/core-api';
@@ -111,7 +111,8 @@ export function EditIssueManagerPage() {
         isCreateMode,
     });
     // Actions
-    const { onSubmit, handleDelete, isSaving, deleteMutation } = useEditIssueActions(form, isCreateMode, issueId);
+    const { onSubmit, handleDelete, confirmDelete, deleteDialogOpen, setDeleteDialogOpen, isSaving, deleteMutation } =
+        useEditIssueActions(form, isCreateMode, issueId);
 
     const isPublished = form.watch('isPublished');
     const pageTitle = isCreateMode ? 'New Issue' : (issue?.title ?? '');
@@ -209,6 +210,16 @@ export function EditIssueManagerPage() {
 
                 <Outlet context={outletContext} />
             </form>
+
+            <ConfirmActionDialog
+                open={deleteDialogOpen}
+                onOpenChange={setDeleteDialogOpen}
+                onConfirm={confirmDelete}
+                title={t('message.confirm.delete', { entity: t('issues.title') })}
+                description={t('message.confirm.deleteDescription')}
+                confirmLabel={t('common.delete')}
+                isLoading={deleteMutation.isPending}
+            />
         </FormProvider>
     );
 }

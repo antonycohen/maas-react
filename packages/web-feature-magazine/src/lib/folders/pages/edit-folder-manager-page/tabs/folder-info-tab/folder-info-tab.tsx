@@ -2,6 +2,7 @@ import { useOutletContext } from 'react-router';
 import { useTranslation } from '@maas/core-translations';
 import { FolderFormValues } from '../../hooks';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, ReadonlyCopyField } from '@maas/web-components';
+import { publicUrlBuilders } from '@maas/core-routes';
 import { createConnectedInputHelpers } from '@maas/web-form';
 import { LayoutContent } from '@maas/web-layout';
 import { EditFolderOutletContext } from '../../edit-folder-manager-page';
@@ -34,6 +35,7 @@ export const FolderInfoTab = () => {
                             <ReadonlyCopyField
                                 label={t('field.slug')}
                                 value={folder.slug}
+                                copyValue={`${window.location.origin}${publicUrlBuilders.folder(folder.slug)}`}
                                 direction="horizontal"
                                 className="py-6"
                             />

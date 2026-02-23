@@ -1,109 +1,117 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { Article, ReadArticleRef } from '@maas/core-api-models';
 import { UseFormReturn } from 'react-hook-form';
 import { IssueFormValues } from '../../../hooks';
 
 type UseArticleActionsParams = {
-  form: UseFormReturn<IssueFormValues>;
-  selectedFolderId: string | null;
-  selectedArticleId: string | null;
-  setSelectedArticleId: (id: string | null) => void;
+    form: UseFormReturn<IssueFormValues>;
+    selectedFolderId: string | null;
+    selectedArticleId: string | null;
+    setSelectedArticleId: (id: string | null) => void;
 };
 
 export const useArticleActions = ({
-  form,
-  selectedFolderId,
-  selectedArticleId,
-  setSelectedArticleId,
+    form,
+    selectedFolderId,
+    selectedArticleId,
+    setSelectedArticleId,
 }: UseArticleActionsParams) => {
-  // Handle article link (from search)
-  const handleLinkExistingArticle = useCallback(
-    (article: ReadArticleRef) => {
-      if (!selectedFolderId) return;
+    // Handle article link (from search)
+    const handleLinkExistingArticle = useCallback(
+        (article: ReadArticleRef) => {
+            if (!selectedFolderId) return;
 
-      const currentFolders = form.getValues('folders') ?? [];
-      const folderIndex = currentFolders.findIndex(
-        (f) => f.id === selectedFolderId,
-      );
+            const currentFolders = form.getValues('folders') ?? [];
+            const folderIndex = currentFolders.findIndex((f) => f.id === selectedFolderId);
 
-      if (folderIndex === -1) return;
+            if (folderIndex === -1) return;
 
-      const folder = currentFolders[folderIndex];
-      const existingArticles = folder.articles ?? [];
+            const folder = currentFolders[folderIndex];
+            const existingArticles = folder.articles ?? [];
 
-      // Avoid duplicates
-      if (existingArticles.some((a) => a.id === article.id)) {
-        return;
-      }
+            // Avoid duplicates
+            if (existingArticles.some((a) => a.id === article.id)) {
+                return;
+            }
 
-      // Update folder's articles
-      const updatedFolders = [...currentFolders];
-      updatedFolders[folderIndex] = {
-        ...folder,
-        articles: [...existingArticles, { id: article.id }],
-      };
+            // Update folder's articles
+            const updatedFolders = [...currentFolders];
+            updatedFolders[folderIndex] = {
+                ...folder,
+                articles: [...existingArticles, { id: article.id }],
+            };
 
-      form.setValue('folders', updatedFolders, { shouldDirty: true });
-      setSelectedArticleId(article.id);
-    },
-    [form, selectedFolderId, setSelectedArticleId],
-  );
+            form.setValue('folders', updatedFolders, { shouldDirty: true });
+            setSelectedArticleId(article.id);
+        },
+        [form, selectedFolderId, setSelectedArticleId]
+    );
 
-  // Handle article delete (remove from folder)
-  const handleDeleteArticle = useCallback(
-    (articleId: string) => {
-      if (!selectedFolderId) return;
-      if (!window.confirm('Remove this article from the folder?')) return;
+    // Handle article delete (remove from folder)
+    const [removeArticleDialogOpen, setRemoveArticleDialogOpen] = useState(false);
+    const [articleIdToRemove, setArticleIdToRemove] = useState<string | null>(null);
 
-      const currentFolders = form.getValues('folders') ?? [];
-      const folderIndex = currentFolders.findIndex(
-        (f) => f.id === selectedFolderId,
-      );
+    const handleDeleteArticle = useCallback(
+        (articleId: string) => {
+            if (!selectedFolderId) return;
+            setArticleIdToRemove(articleId);
+            setRemoveArticleDialogOpen(true);
+        },
+        [selectedFolderId]
+    );
 
-      if (folderIndex === -1) return;
+    const confirmDeleteArticle = useCallback(() => {
+        if (!selectedFolderId || !articleIdToRemove) return;
 
-      const folder = currentFolders[folderIndex];
-      const updatedFolders = [...currentFolders];
-      updatedFolders[folderIndex] = {
-        ...folder,
-        articles: (folder.articles ?? []).filter((a) => a.id !== articleId),
-      };
+        const currentFolders = form.getValues('folders') ?? [];
+        const folderIndex = currentFolders.findIndex((f) => f.id === selectedFolderId);
 
-      form.setValue('folders', updatedFolders, { shouldDirty: true });
+        if (folderIndex === -1) return;
 
-      if (selectedArticleId === articleId) {
-        setSelectedArticleId(null);
-      }
-    },
-    [form, selectedFolderId, selectedArticleId, setSelectedArticleId],
-  );
+        const folder = currentFolders[folderIndex];
+        const updatedFolders = [...currentFolders];
+        updatedFolders[folderIndex] = {
+            ...folder,
+            articles: (folder.articles ?? []).filter((a) => a.id !== articleIdToRemove),
+        };
 
-  // Handle article reorder
-  const handleReorderArticles = useCallback(
-    (reorderedArticles: Article[]) => {
-      if (!selectedFolderId) return;
+        form.setValue('folders', updatedFolders, { shouldDirty: true });
 
-      const currentFolders = form.getValues('folders') ?? [];
-      const folderIndex = currentFolders.findIndex(
-        (f) => f.id === selectedFolderId,
-      );
+        if (selectedArticleId === articleIdToRemove) {
+            setSelectedArticleId(null);
+        }
 
-      if (folderIndex === -1) return;
+        setRemoveArticleDialogOpen(false);
+        setArticleIdToRemove(null);
+    }, [articleIdToRemove, form, selectedFolderId, selectedArticleId, setSelectedArticleId]);
 
-      const updatedFolders = [...currentFolders];
-      updatedFolders[folderIndex] = {
-        ...currentFolders[folderIndex],
-        articles: reorderedArticles.map((a) => ({ id: a.id })),
-      };
+    // Handle article reorder
+    const handleReorderArticles = useCallback(
+        (reorderedArticles: Article[]) => {
+            if (!selectedFolderId) return;
 
-      form.setValue('folders', updatedFolders, { shouldDirty: true });
-    },
-    [form, selectedFolderId],
-  );
+            const currentFolders = form.getValues('folders') ?? [];
+            const folderIndex = currentFolders.findIndex((f) => f.id === selectedFolderId);
 
-  return {
-    handleLinkExistingArticle,
-    handleDeleteArticle,
-    handleReorderArticles,
-  };
+            if (folderIndex === -1) return;
+
+            const updatedFolders = [...currentFolders];
+            updatedFolders[folderIndex] = {
+                ...currentFolders[folderIndex],
+                articles: reorderedArticles.map((a) => ({ id: a.id })),
+            };
+
+            form.setValue('folders', updatedFolders, { shouldDirty: true });
+        },
+        [form, selectedFolderId]
+    );
+
+    return {
+        handleLinkExistingArticle,
+        handleDeleteArticle,
+        confirmDeleteArticle,
+        removeArticleDialogOpen,
+        setRemoveArticleDialogOpen,
+        handleReorderArticles,
+    };
 };

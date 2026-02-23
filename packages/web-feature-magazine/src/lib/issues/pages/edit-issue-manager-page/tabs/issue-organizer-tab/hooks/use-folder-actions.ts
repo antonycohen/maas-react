@@ -137,32 +137,38 @@ export const useFolderActions = ({
         [createFolderMutation, issueId, organizationId]
     );
 
-    const handleRemoveFolderFromIssue = useCallback(
-        (folderId: string) => {
-            if (!window.confirm('Are you sure you want to remove this folder from the issue?')) {
-                return;
-            }
+    const [removeFolderDialogOpen, setRemoveFolderDialogOpen] = useState(false);
+    const [folderIdToRemove, setFolderIdToRemove] = useState<string | null>(null);
 
-            const currentFolders = form.getValues('folders') ?? [];
-            form.setValue(
-                'folders',
-                currentFolders.filter((f) => f.id !== folderId),
-                { shouldDirty: true }
-            );
+    const handleRemoveFolderFromIssue = useCallback((folderId: string) => {
+        setFolderIdToRemove(folderId);
+        setRemoveFolderDialogOpen(true);
+    }, []);
 
-            // Remove from cache
-            setFolderCache((prev) => {
-                const next = new Map(prev);
-                next.delete(folderId);
-                return next;
-            });
+    const confirmRemoveFolderFromIssue = useCallback(() => {
+        if (!folderIdToRemove) return;
 
-            if (selectedFolderId === folderId) {
-                setSelectedFolderId(null);
-            }
-        },
-        [form, setFolderCache, selectedFolderId, setSelectedFolderId]
-    );
+        const currentFolders = form.getValues('folders') ?? [];
+        form.setValue(
+            'folders',
+            currentFolders.filter((f) => f.id !== folderIdToRemove),
+            { shouldDirty: true }
+        );
+
+        // Remove from cache
+        setFolderCache((prev) => {
+            const next = new Map(prev);
+            next.delete(folderIdToRemove);
+            return next;
+        });
+
+        if (selectedFolderId === folderIdToRemove) {
+            setSelectedFolderId(null);
+        }
+
+        setRemoveFolderDialogOpen(false);
+        setFolderIdToRemove(null);
+    }, [folderIdToRemove, form, setFolderCache, selectedFolderId, setSelectedFolderId]);
 
     // Handle folder reorder
     const handleReorderFolders = useCallback(
@@ -188,6 +194,9 @@ export const useFolderActions = ({
         handleLinkExistingFolder,
         handleCreateFolder,
         handleRemoveFolderFromIssue,
+        confirmRemoveFolderFromIssue,
+        removeFolderDialogOpen,
+        setRemoveFolderDialogOpen,
         handleReorderFolders,
         isCreatingFolder: createFolderMutation.isPending,
         isLinkingFolder,

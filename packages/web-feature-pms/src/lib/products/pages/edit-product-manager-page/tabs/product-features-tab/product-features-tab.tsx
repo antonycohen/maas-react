@@ -4,14 +4,14 @@ import {
     useAttachFeatureToProduct,
     useDetachFeatureFromProduct,
 } from '@maas/core-api';
-import { Button } from '@maas/web-components';
+import { Button, ConfirmActionDialog } from '@maas/web-components';
 import { IconPlus } from '@tabler/icons-react';
 import { useOutletContext } from 'react-router';
 import { FeaturePreview, FeaturesList } from './components';
 import { AttachFeatureModal } from './modals';
 import { EditProductOutletContext } from '../../edit-product-manager-page';
 import { Feature } from '@maas/core-api-models';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
 
@@ -73,20 +73,29 @@ export const ProductFeaturesTab = () => {
         );
     };
 
-    const handleDetachFeature = (productFeatureId: string) => {
-        // Find the feature to check if it's selected
-        const pf = productFeatures.find((p) => p.id === productFeatureId);
-        const featureId = pf?.feature.id;
+    const [detachDialogOpen, setDetachDialogOpen] = useState(false);
+    const [productFeatureIdToDetach, setProductFeatureIdToDetach] = useState<string | null>(null);
 
-        if (window.confirm(t('products.detachFeatureConfirm'))) {
+    const handleDetachFeature = (productFeatureId: string) => {
+        setProductFeatureIdToDetach(productFeatureId);
+        setDetachDialogOpen(true);
+    };
+
+    const confirmDetachFeature = () => {
+        if (productFeatureIdToDetach) {
+            const pf = productFeatures.find((p) => p.id === productFeatureIdToDetach);
+            const featureId = pf?.feature.id;
+
             detachFeatureMutation.mutate(
-                { productId, productFeatureId },
+                { productId, productFeatureId: productFeatureIdToDetach },
                 {
                     onSuccess: () => {
                         toast.success(t('products.featureDetached'));
                         if (selectedFeatureId === featureId) {
                             setSelectedFeatureId(null);
                         }
+                        setDetachDialogOpen(false);
+                        setProductFeatureIdToDetach(null);
                     },
                     onError: () => {
                         toast.error(t('products.featureDetachFailed'));
@@ -150,6 +159,16 @@ export const ProductFeaturesTab = () => {
                 productId={productId}
                 onSelectFeature={handleAttachFeature}
                 existingFeatureIds={featureIds}
+            />
+
+            <ConfirmActionDialog
+                open={detachDialogOpen}
+                onOpenChange={setDetachDialogOpen}
+                onConfirm={confirmDetachFeature}
+                title={t('products.detachFeatureTitle')}
+                description={t('products.detachFeatureConfirm')}
+                confirmLabel={t('common.remove')}
+                isLoading={detachFeatureMutation.isPending}
             />
         </>
     );

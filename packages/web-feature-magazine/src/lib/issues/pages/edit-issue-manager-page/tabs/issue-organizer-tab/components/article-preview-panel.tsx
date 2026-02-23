@@ -2,9 +2,11 @@ import { Article, ArticleTypeField } from '@maas/core-api-models';
 import { useTranslation } from '@maas/core-translations';
 import { Badge, Button, ScrollArea, Separator, Skeleton } from '@maas/web-components';
 import { useRoutes } from '@maas/core-workspace';
+import { publicUrlBuilders } from '@maas/core-routes';
 import {
     IconCalendar,
     IconEdit,
+    IconExternalLink,
     IconEye,
     IconFileText,
     IconFolder,
@@ -133,12 +135,26 @@ export function ArticlePreviewPanel({ article, isLoading }: ArticlePreviewPanelP
                     <IconEye className="text-muted-foreground h-4 w-4" />
                     <span className="text-sm font-semibold">{t('common.preview')}</span>
                 </div>
-                <Button asChild size="sm" variant="outline">
-                    <Link to={routes.articleEdit(article?.id ?? '')}>
-                        <IconEdit className="mr-1.5 h-4 w-4" />
-                        {t('common.edit')}
-                    </Link>
-                </Button>
+                <div className="flex items-center gap-2">
+                    {article?.slug && (
+                        <Button asChild size="sm" variant="outline">
+                            <a
+                                href={`${window.location.origin}${publicUrlBuilders.article(article.slug)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <IconExternalLink className="mr-1.5 h-4 w-4" />
+                                {t('common.preview')}
+                            </a>
+                        </Button>
+                    )}
+                    <Button asChild size="sm" variant="outline">
+                        <Link to={routes.articleEdit(article?.id ?? '')}>
+                            <IconEdit className="mr-1.5 h-4 w-4" />
+                            {t('common.edit')}
+                        </Link>
+                    </Button>
+                </div>
             </div>
 
             <ScrollArea className="min-h-0 flex-1">

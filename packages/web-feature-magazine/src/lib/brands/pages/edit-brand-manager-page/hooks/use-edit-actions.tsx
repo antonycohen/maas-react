@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ApiError, useCreateBrand, useDeleteBrand, useUpdateBrand } from '@maas/core-api';
 import { UseFormReturn } from 'react-hook-form';
 import { CreateBrand, UpdateBrand } from '@maas/core-api-models';
@@ -63,10 +64,14 @@ export const useEditActions = (
         }
     }
 
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
     function handleDelete() {
-        if (window.confirm(t('message.confirm.delete', { entity: 'brand' }))) {
-            deleteMutation.mutate(brandId);
-        }
+        setDeleteDialogOpen(true);
+    }
+
+    function confirmDelete() {
+        deleteMutation.mutate(brandId);
     }
 
     const isSaving = createMutation.isPending || updateMutation.isPending;
@@ -74,6 +79,9 @@ export const useEditActions = (
     return {
         onSubmit,
         handleDelete,
+        confirmDelete,
+        deleteDialogOpen,
+        setDeleteDialogOpen,
         isSaving,
         deleteMutation,
     };

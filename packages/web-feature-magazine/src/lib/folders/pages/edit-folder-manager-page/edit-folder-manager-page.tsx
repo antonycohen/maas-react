@@ -1,4 +1,4 @@
-import { Badge, Button, TabNavLinks } from '@maas/web-components';
+import { Badge, Button, ConfirmActionDialog, TabNavLinks } from '@maas/web-components';
 import { useTranslation } from '@maas/core-translations';
 import { LayoutBreadcrumb } from '@maas/web-layout';
 import { Outlet, useParams } from 'react-router';
@@ -91,7 +91,8 @@ export function EditFolderManagerPage() {
     });
 
     // Actions
-    const { onSubmit, handleDelete, isSaving, deleteMutation } = useEditFolderActions(form, isCreateMode, folderId);
+    const { onSubmit, handleDelete, confirmDelete, deleteDialogOpen, setDeleteDialogOpen, isSaving, deleteMutation } =
+        useEditFolderActions(form, isCreateMode, folderId);
 
     const isPublished = form.watch('isPublished');
     const pageTitle = isCreateMode ? 'New Folder' : (folder?.name ?? '');
@@ -191,6 +192,16 @@ export function EditFolderManagerPage() {
 
                 <Outlet context={outletContext} />
             </form>
+
+            <ConfirmActionDialog
+                open={deleteDialogOpen}
+                onOpenChange={setDeleteDialogOpen}
+                onConfirm={confirmDelete}
+                title={t('message.confirm.delete', { entity: t('folders.title') })}
+                description={t('message.confirm.deleteDescription')}
+                confirmLabel={t('common.delete')}
+                isLoading={deleteMutation.isPending}
+            />
         </FormProvider>
     );
 }

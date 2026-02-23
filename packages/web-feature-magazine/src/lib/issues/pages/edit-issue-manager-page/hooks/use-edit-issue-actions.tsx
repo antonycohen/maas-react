@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ApiError, useCreateIssue, useDeleteIssue, useUpdateIssue } from '@maas/core-api';
 import { UseFormReturn } from 'react-hook-form';
 import { CreateIssue, UpdateIssue } from '@maas/core-api-models';
@@ -71,10 +72,14 @@ export const useEditIssueActions = (form: UseFormReturn<IssueFormValues>, isCrea
         }
     }
 
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
     function handleDelete() {
-        if (window.confirm(t('message.confirm.delete', { entity: 'issue' }))) {
-            deleteMutation.mutate(issueId);
-        }
+        setDeleteDialogOpen(true);
+    }
+
+    function confirmDelete() {
+        deleteMutation.mutate(issueId);
     }
 
     const isSaving = createMutation.isPending || updateMutation.isPending;
@@ -82,6 +87,9 @@ export const useEditIssueActions = (form: UseFormReturn<IssueFormValues>, isCrea
     return {
         onSubmit,
         handleDelete,
+        confirmDelete,
+        deleteDialogOpen,
+        setDeleteDialogOpen,
         isSaving,
         deleteMutation,
     };

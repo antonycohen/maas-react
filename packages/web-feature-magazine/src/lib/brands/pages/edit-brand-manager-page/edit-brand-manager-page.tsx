@@ -1,7 +1,16 @@
 import { useParams } from 'react-router';
 import { useTranslation } from '@maas/core-translations';
 import { LayoutBreadcrumb, LayoutContent, LayoutHeader } from '@maas/web-layout';
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, FieldGroup } from '@maas/web-components';
+import {
+    Button,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+    ConfirmActionDialog,
+    FieldGroup,
+} from '@maas/web-components';
 import { FormProvider } from 'react-hook-form';
 import { Brand } from '@maas/core-api-models';
 import { cn } from '@maas/core-utils';
@@ -18,7 +27,8 @@ export function EditBrandManagerPage() {
     const { brand, isLoading, form, isCreateMode } = useEditBrandForm(brandId);
     const routes = useRoutes();
 
-    const { deleteMutation, handleDelete, isSaving, onSubmit } = useEditActions(form, isCreateMode, brandId);
+    const { deleteMutation, handleDelete, confirmDelete, deleteDialogOpen, setDeleteDialogOpen, isSaving, onSubmit } =
+        useEditActions(form, isCreateMode, brandId);
 
     if (!isCreateMode && !isLoading && !brand) {
         return <div>Brand not found</div>;
@@ -111,6 +121,16 @@ export function EditBrandManagerPage() {
                     </form>
                 </FormProvider>
             </LayoutContent>
+
+            <ConfirmActionDialog
+                open={deleteDialogOpen}
+                onOpenChange={setDeleteDialogOpen}
+                onConfirm={confirmDelete}
+                title={t('message.confirm.delete', { entity: t('brands.title') })}
+                description={t('message.confirm.deleteDescription')}
+                confirmLabel={t('common.delete')}
+                isLoading={deleteMutation.isPending}
+            />
         </div>
     );
 }

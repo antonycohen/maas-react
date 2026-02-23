@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { useGetArticleById, useGetArticles } from '@maas/core-api';
 import { useTranslation } from '@maas/core-translations';
-import { Button } from '@maas/web-components';
+import { Button, ConfirmActionDialog } from '@maas/web-components';
 import { IconPlus } from '@tabler/icons-react';
 import { useOutletContext } from 'react-router';
 import { ArticlePreview, ArticlesList } from './components';
@@ -69,6 +70,7 @@ export const FolderArticlesTab = () => {
             id: selectedArticleId ?? '',
             fields: {
                 id: null,
+                slug: null,
                 title: null,
                 description: null,
                 type: null,
@@ -94,18 +96,27 @@ export const FolderArticlesTab = () => {
         setAddArticleModalOpen(false);
     };
 
+    const [removeDialogOpen, setRemoveDialogOpen] = useState(false);
+    const [articleIdToRemove, setArticleIdToRemove] = useState<string | null>(null);
+
     const handleRemoveArticle = (articleId: string) => {
-        if (window.confirm('Remove this article from the folder?')) {
-            const currentArticles = form.getValues('articles') ?? [];
-            form.setValue(
-                'articles',
-                currentArticles.filter((a) => a.id !== articleId),
-                { shouldDirty: true }
-            );
-            if (selectedArticleId === articleId) {
-                setSelectedArticleId(null);
-            }
+        setArticleIdToRemove(articleId);
+        setRemoveDialogOpen(true);
+    };
+
+    const confirmRemoveArticle = () => {
+        if (!articleIdToRemove) return;
+        const currentArticles = form.getValues('articles') ?? [];
+        form.setValue(
+            'articles',
+            currentArticles.filter((a) => a.id !== articleIdToRemove),
+            { shouldDirty: true }
+        );
+        if (selectedArticleId === articleIdToRemove) {
+            setSelectedArticleId(null);
         }
+        setRemoveDialogOpen(false);
+        setArticleIdToRemove(null);
     };
 
     const handleReorderArticles = (reorderedArticles: Article[]) => {
@@ -162,6 +173,16 @@ export const FolderArticlesTab = () => {
                 folderId={folderId}
                 onSelectExisting={handleLinkExistingArticle}
                 existingArticleIds={articleIds.map((a) => a.id)}
+            />
+
+            {/* Remove Article Confirmation */}
+            <ConfirmActionDialog
+                open={removeDialogOpen}
+                onOpenChange={setRemoveDialogOpen}
+                onConfirm={confirmRemoveArticle}
+                title={t('common.remove')}
+                description={t('message.confirm.removeFromFolder')}
+                confirmLabel={t('common.remove')}
             />
         </>
     );

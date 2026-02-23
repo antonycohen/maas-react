@@ -1,7 +1,16 @@
 import { useParams } from 'react-router';
 import { useTranslation } from '@maas/core-translations';
 import { LayoutBreadcrumb, LayoutContent, LayoutHeader } from '@maas/web-layout';
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, FieldGroup } from '@maas/web-components';
+import {
+    Button,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+    ConfirmActionDialog,
+    FieldGroup,
+} from '@maas/web-components';
 import { FormProvider } from 'react-hook-form';
 import { Enum } from '@maas/core-api-models';
 import { cn } from '@maas/core-utils';
@@ -19,7 +28,8 @@ export function EditEnumManagerPage() {
     const { enumData, isLoading, form, isCreateMode } = useEditEnumForm(enumId, workspaceId as string);
     const routes = useRoutes();
 
-    const { deleteMutation, handleDelete, isSaving, onSubmit } = useEditActions(form, isCreateMode, enumId);
+    const { deleteMutation, handleDelete, confirmDelete, deleteDialogOpen, setDeleteDialogOpen, isSaving, onSubmit } =
+        useEditActions(form, isCreateMode, enumId);
 
     if (!isCreateMode && !isLoading && !enumData) {
         return <div>{t('enums.notFound')}</div>;
@@ -101,6 +111,16 @@ export function EditEnumManagerPage() {
                     </form>
                 </FormProvider>
             </LayoutContent>
+
+            <ConfirmActionDialog
+                open={deleteDialogOpen}
+                onOpenChange={setDeleteDialogOpen}
+                onConfirm={confirmDelete}
+                title={t('message.confirm.delete', { entity: t('enums.title') })}
+                description={t('message.confirm.deleteDescription')}
+                confirmLabel={t('common.delete')}
+                isLoading={deleteMutation.isPending}
+            />
         </div>
     );
 }

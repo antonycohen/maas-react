@@ -7,6 +7,7 @@ export * from './lib/ui/button';
 export * from './lib/ui/button-group';
 export * from './lib/ui/card';
 export * from './lib/ui/calendar';
+export * from './lib/ui/collapsible';
 export * from './lib/ui/carousel';
 export * from './lib/ui/checkbox';
 export * from './lib/ui/collapsible';
@@ -71,6 +72,7 @@ export * from './lib/maas/tab-nav-links';
 export * from './lib/maas/article-author';
 export * from './lib/maas/share-articles';
 export * from './lib/maas/readonly-copy-field';
+export * from './lib/maas/confirm-action-dialog';
 export * from './lib/maas/not-found-page';
 
 export * from './lib/shadcn-io/color-picker';

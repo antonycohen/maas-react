@@ -11,6 +11,7 @@ import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
+    ConfirmActionDialog,
     FieldGroup,
     Separator,
     ReadonlyCopyField,
@@ -31,6 +32,7 @@ import {
 import { useEditArticleForm } from './hooks/use-edit-article-form';
 import { useEditActions } from './hooks/use-edit-actions';
 import { useRoutes } from '@maas/core-workspace';
+import { publicUrlBuilders } from '@maas/core-routes';
 import { DynamicCustomFields } from './components/dynamic-custom-fields';
 import {
     CardEventPlugin,
@@ -47,7 +49,8 @@ import {
     QuotesPlugin,
     VideoPlugin,
 } from '@maas/web-cms-editor';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+import { ReadArticleTypeRef } from '@maas/core-api-models';
 
 const useVisibilityOptions = () => {
     const { t } = useTranslation();
@@ -109,7 +112,8 @@ export function EditArticleManagerPage() {
     const { article, isLoading, form, isCreateMode } = useEditArticleForm(articleId);
     const routes = useRoutes();
 
-    const { deleteMutation, handleDelete, isSaving, onSubmit } = useEditActions(form, isCreateMode, articleId);
+    const { deleteMutation, handleDelete, confirmDelete, deleteDialogOpen, setDeleteDialogOpen, isSaving, onSubmit } =
+        useEditActions(form, isCreateMode, articleId);
 
     const {
         ControlledTextInput,
@@ -125,6 +129,29 @@ export function EditArticleManagerPage() {
 
     const pageTitle = isCreateMode ? 'New Article' : (article?.title ?? '');
     const breadcrumbLabel = isCreateMode ? 'New' : (article?.title ?? '');
+
+    // Article type change confirmation
+    const [typeChangeDialogOpen, setTypeChangeDialogOpen] = useState(false);
+    const [pendingType, setPendingType] = useState<{ id: string; name: string } | null>(null);
+    const currentType = form.watch('type') as ReadArticleTypeRef | null | undefined;
+
+    const handleBeforeTypeChange = useCallback(
+        (newValue: { id: string; name: string } | null) => {
+            // Allow if no current type set (first selection) or same type
+            if (!currentType?.id || newValue?.id === currentType?.id) return true;
+            // Has a type already — show confirmation
+            setPendingType(newValue);
+            setTypeChangeDialogOpen(true);
+            return false;
+        },
+        [currentType?.id]
+    );
+
+    const confirmTypeChange = useCallback(() => {
+        form.setValue('type', pendingType as any, { shouldDirty: true });
+        setTypeChangeDialogOpen(false);
+        setPendingType(null);
+    }, [form, pendingType]);
 
     const isPublished = form.watch('isPublished');
     const visibility = form.watch('visibility');
@@ -300,7 +327,11 @@ export function EditArticleManagerPage() {
                             >
                                 <FieldGroup className="space-y-4">
                                     {!isCreateMode && article?.slug && (
-                                        <ReadonlyCopyField label={t('field.slug')} value={article.slug} />
+                                        <ReadonlyCopyField
+                                            label={t('field.slug')}
+                                            value={article.slug}
+                                            copyValue={`${window.location.origin}${publicUrlBuilders.article(article.slug)}`}
+                                        />
                                     )}
                                     <div className="flex items-center gap-4">
                                         <ControlledSwitchInput
@@ -314,7 +345,11 @@ export function EditArticleManagerPage() {
                                             className="flex-1"
                                         />
                                     </div>
-                                    <ControlledArticleTypeInput name="type" label={t('field.articleType')} />
+                                    <ControlledArticleTypeInput
+                                        name="type"
+                                        label={t('field.articleType')}
+                                        onBeforeChange={handleBeforeTypeChange}
+                                    />
                                     <ControlledSelectInput
                                         name="visibility"
                                         label={t('field.visibility')}
@@ -359,6 +394,26 @@ export function EditArticleManagerPage() {
                     </aside>
                 </form>
             </FormProvider>
+
+            <ConfirmActionDialog
+                open={deleteDialogOpen}
+                onOpenChange={setDeleteDialogOpen}
+                onConfirm={confirmDelete}
+                title={t('message.confirm.delete', { entity: t('articles.title') })}
+                description={t('message.confirm.deleteDescription')}
+                confirmLabel={t('common.delete')}
+                isLoading={deleteMutation.isPending}
+            />
+
+            <ConfirmActionDialog
+                open={typeChangeDialogOpen}
+                onOpenChange={setTypeChangeDialogOpen}
+                onConfirm={confirmTypeChange}
+                title={t('message.confirm.changeArticleType')}
+                description={t('message.confirm.changeArticleTypeDescription')}
+                confirmLabel={t('common.confirm')}
+                variant="destructive"
+            />
         </div>
     );
 }

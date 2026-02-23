@@ -1,6 +1,7 @@
 import { useOutletContext } from 'react-router';
 import { useTranslation } from '@maas/core-translations';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, ReadonlyCopyField } from '@maas/web-components';
+import { publicUrlBuilders } from '@maas/core-routes';
 import { createConnectedInputHelpers } from '@maas/web-form';
 import { LayoutContent } from '@maas/web-layout';
 import { useGetBrandById } from '@maas/core-api';
@@ -64,6 +65,7 @@ export const IssueInfoTab = () => {
                             <ReadonlyCopyField
                                 label={t('field.slug')}
                                 value={issue.slug}
+                                copyValue={`${window.location.origin}${publicUrlBuilders.magazine(issue.slug)}`}
                                 direction="horizontal"
                                 className="py-6"
                             />

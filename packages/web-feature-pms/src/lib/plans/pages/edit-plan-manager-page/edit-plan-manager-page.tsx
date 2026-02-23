@@ -1,4 +1,4 @@
-import { Badge, Button, TabNavLinks } from '@maas/web-components';
+import { Badge, Button, ConfirmActionDialog, TabNavLinks } from '@maas/web-components';
 import { LayoutBreadcrumb } from '@maas/web-layout';
 import { Outlet, useParams } from 'react-router';
 import { useGetPlanById } from '@maas/core-api';
@@ -72,7 +72,8 @@ export function EditPlanManagerPage() {
     });
 
     // Actions
-    const { onSubmit, handleDelete, isSaving, deleteMutation } = useEditPlanActions(form, isCreateMode, planId);
+    const { onSubmit, handleDelete, confirmDelete, deleteDialogOpen, setDeleteDialogOpen, isSaving, deleteMutation } =
+        useEditPlanActions(form, isCreateMode, planId);
 
     const active = form.watch('active');
     const pageTitle = isCreateMode ? t('plans.new') : (plan?.name ?? '');
@@ -168,6 +169,16 @@ export function EditPlanManagerPage() {
 
                 <Outlet context={outletContext} />
             </form>
+
+            <ConfirmActionDialog
+                open={deleteDialogOpen}
+                onOpenChange={setDeleteDialogOpen}
+                onConfirm={confirmDelete}
+                title={t('plans.deleteTitle')}
+                description={t('plans.deleteConfirm')}
+                confirmLabel={t('common.delete')}
+                isLoading={deleteMutation.isPending}
+            />
         </FormProvider>
     );
 }

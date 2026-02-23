@@ -1,12 +1,12 @@
 import { useDeletePrice, useGetPriceById, useGetPrices } from '@maas/core-api';
-import { Button } from '@maas/web-components';
+import { Button, ConfirmActionDialog } from '@maas/web-components';
 import { IconPlus } from '@tabler/icons-react';
 import { useOutletContext } from 'react-router';
 import { PricePreview, PricesList } from './components';
 import { CreatePriceModal } from './modals';
 import { EditProductOutletContext } from '../../edit-product-manager-page';
 import { Price } from '@maas/core-api-models';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
 
@@ -89,10 +89,20 @@ export const ProductPricesTab = () => {
         setSelectedPriceId(price.id);
     };
 
+    const [removeDialogOpen, setRemoveDialogOpen] = useState(false);
+    const [priceIdToRemove, setPriceIdToRemove] = useState<string | null>(null);
+
     const handleRemovePrice = (priceId: string) => {
-        if (window.confirm(t('prices.deleteConfirm'))) {
-            deleteMutation.mutate(priceId);
+        setPriceIdToRemove(priceId);
+        setRemoveDialogOpen(true);
+    };
+
+    const confirmRemovePrice = () => {
+        if (priceIdToRemove) {
+            deleteMutation.mutate(priceIdToRemove);
         }
+        setRemoveDialogOpen(false);
+        setPriceIdToRemove(null);
     };
 
     if (isCreateMode) {
@@ -145,6 +155,16 @@ export const ProductPricesTab = () => {
                 onOpenChange={setAddPriceModalOpen}
                 productId={productId}
                 onSuccess={handlePriceCreated}
+            />
+
+            <ConfirmActionDialog
+                open={removeDialogOpen}
+                onOpenChange={setRemoveDialogOpen}
+                onConfirm={confirmRemovePrice}
+                title={t('prices.deleteTitle')}
+                description={t('prices.deleteConfirm')}
+                confirmLabel={t('common.delete')}
+                isLoading={deleteMutation.isPending}
             />
         </>
     );

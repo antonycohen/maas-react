@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useGetArticleTypeById, useGetEnumById } from '@maas/core-api';
 import { useTranslation } from '@maas/core-translations';
@@ -9,12 +9,17 @@ import {
     CardDescription,
     CardHeader,
     CardTitle,
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
     Field,
     FieldError,
     FieldGroup,
     FieldLabel,
     Skeleton,
 } from '@maas/web-components';
+import { IconChevronDown } from '@tabler/icons-react';
+import { cn } from '@maas/core-utils';
 import { camelize } from '@nx/devkit/src/utils/string-utils';
 import { createConnectedInputHelpers } from '@maas/web-form';
 import { editorPlugins } from '../edit-article-manager-page';
@@ -310,18 +315,50 @@ export function DynamicCustomFields() {
     }
 
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>{t('articles.customFields')}</CardTitle>
-                <CardDescription>Fields defined by the article type "{articleTypeData?.name}".</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <FieldGroup>
-                    {fields.map((field) => (
-                        <DynamicField key={field.key} field={field} />
-                    ))}
-                </FieldGroup>
-            </CardContent>
-        </Card>
+        <CollapsibleCustomFieldsCard title={t('articles.customFields')} description={articleTypeData?.name ?? ''}>
+            <FieldGroup>
+                {fields.map((field) => (
+                    <DynamicField key={field.key} field={field} />
+                ))}
+            </FieldGroup>
+        </CollapsibleCustomFieldsCard>
+    );
+}
+
+function CollapsibleCustomFieldsCard({
+    title,
+    description,
+    children,
+}: {
+    title: string;
+    description: string;
+    children: React.ReactNode;
+}) {
+    const [isOpen, setIsOpen] = useState(false);
+
+    return (
+        <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+            <Card>
+                <CollapsibleTrigger asChild>
+                    <CardHeader className="cursor-pointer">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <CardTitle>{title}</CardTitle>
+                                <CardDescription>{description}</CardDescription>
+                            </div>
+                            <IconChevronDown
+                                className={cn(
+                                    'text-muted-foreground h-4 w-4 transition-transform duration-200',
+                                    isOpen && 'rotate-180'
+                                )}
+                            />
+                        </div>
+                    </CardHeader>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                    <CardContent>{children}</CardContent>
+                </CollapsibleContent>
+            </Card>
+        </Collapsible>
     );
 }

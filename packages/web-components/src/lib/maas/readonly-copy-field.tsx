@@ -6,15 +6,22 @@ import { Button } from '../ui/button';
 type ReadonlyCopyFieldProps = {
     label: string;
     value: string;
+    copyValue?: string;
     direction?: 'horizontal' | 'vertical';
     className?: string;
 };
 
-export function ReadonlyCopyField({ label, value, direction = 'vertical', className }: ReadonlyCopyFieldProps) {
+export function ReadonlyCopyField({
+    label,
+    value,
+    copyValue,
+    direction = 'vertical',
+    className,
+}: ReadonlyCopyFieldProps) {
     const [copied, setCopied] = useState(false);
 
     const handleCopy = () => {
-        navigator.clipboard.writeText(value);
+        navigator.clipboard.writeText(copyValue ?? value);
         setCopied(true);
         toast.success('Copied to clipboard');
         setTimeout(() => setCopied(false), 2000);

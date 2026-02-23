@@ -6,6 +6,7 @@ import { useRoutes } from '@maas/core-workspace';
 import { toast } from 'sonner';
 import { PlanFormValues } from './use-edit-plan-form';
 import { useTranslation } from '@maas/core-translations';
+import { useState } from 'react';
 
 export const useEditPlanActions = (form: UseFormReturn<PlanFormValues>, isCreateMode: boolean, planId: string) => {
     const { t } = useTranslation();
@@ -59,10 +60,14 @@ export const useEditPlanActions = (form: UseFormReturn<PlanFormValues>, isCreate
         }
     }
 
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
     function handleDelete() {
-        if (window.confirm(t('plans.deleteConfirm'))) {
-            deleteMutation.mutate(planId);
-        }
+        setDeleteDialogOpen(true);
+    }
+
+    function confirmDelete() {
+        deleteMutation.mutate(planId);
     }
 
     const isSaving = createMutation.isPending || updateMutation.isPending;
@@ -70,6 +75,9 @@ export const useEditPlanActions = (form: UseFormReturn<PlanFormValues>, isCreate
     return {
         onSubmit,
         handleDelete,
+        confirmDelete,
+        deleteDialogOpen,
+        setDeleteDialogOpen,
         isSaving,
         deleteMutation,
     };

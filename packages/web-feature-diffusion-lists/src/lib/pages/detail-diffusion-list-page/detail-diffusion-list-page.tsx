@@ -3,6 +3,7 @@ import { useGetDiffusionListById } from '@maas/core-api';
 import { LayoutBreadcrumb, LayoutContent } from '@maas/web-layout';
 import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
+import { ConfirmActionDialog } from '@maas/web-components';
 import { DiffusionListHeader } from './components/diffusion-list-header';
 import { EntriesTable } from './components/entries-table';
 import { useDiffusionListActions } from './hooks/use-diffusion-list-actions';
@@ -39,6 +40,7 @@ export default function DetailDiffusionListPage() {
     );
 
     const actions = useDiffusionListActions(diffusionListId, refetch);
+    const confirmActionProps = actions.getConfirmActionProps();
 
     if (isLoading) {
         return <div className="flex h-screen items-center justify-center">{t('common.loading')}</div>;
@@ -91,6 +93,18 @@ export default function DetailDiffusionListPage() {
                     diffusionListId={diffusionListId}
                 />
             )}
+
+            <ConfirmActionDialog
+                open={actions.confirmAction.open}
+                onOpenChange={(open) => actions.setConfirmAction((prev) => ({ ...prev, open }))}
+                onConfirm={actions.executeConfirmAction}
+                title={confirmActionProps.title}
+                description={confirmActionProps.description}
+                confirmLabel={confirmActionProps.confirmLabel}
+                variant={confirmActionProps.variant}
+                countdown={confirmActionProps.countdown}
+                isLoading={confirmActionProps.isLoading}
+            />
         </div>
     );
 }

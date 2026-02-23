@@ -1,4 +1,4 @@
-import { Badge, Button, TabNavLinks } from '@maas/web-components';
+import { Badge, Button, ConfirmActionDialog, TabNavLinks } from '@maas/web-components';
 import { LayoutBreadcrumb } from '@maas/web-layout';
 import { Outlet, useParams } from 'react-router';
 import { useGetProductById } from '@maas/core-api';
@@ -82,7 +82,8 @@ export function EditProductManagerPage() {
     });
 
     // Actions
-    const { onSubmit, handleDelete, isSaving, deleteMutation } = useEditProductActions(form, isCreateMode, productId);
+    const { onSubmit, handleDelete, confirmDelete, deleteDialogOpen, setDeleteDialogOpen, isSaving, deleteMutation } =
+        useEditProductActions(form, isCreateMode, productId);
 
     const active = form.watch('active');
     const pageTitle = isCreateMode ? t('products.new') : (product?.name ?? '');
@@ -188,6 +189,16 @@ export function EditProductManagerPage() {
 
                 <Outlet context={outletContext} />
             </form>
+
+            <ConfirmActionDialog
+                open={deleteDialogOpen}
+                onOpenChange={setDeleteDialogOpen}
+                onConfirm={confirmDelete}
+                title={t('products.deleteTitle')}
+                description={t('products.deleteConfirm')}
+                confirmLabel={t('common.delete')}
+                isLoading={deleteMutation.isPending}
+            />
         </FormProvider>
     );
 }

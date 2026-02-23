@@ -1,7 +1,16 @@
 import { useParams } from 'react-router';
 import { useTranslation } from '@maas/core-translations';
 import { LayoutBreadcrumb, LayoutContent, LayoutHeader } from '@maas/web-layout';
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, FieldGroup } from '@maas/web-components';
+import {
+    Button,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+    ConfirmActionDialog,
+    FieldGroup,
+} from '@maas/web-components';
 import { FormProvider } from 'react-hook-form';
 import { ArticleType } from '@maas/core-api-models';
 import { cn } from '@maas/core-utils';
@@ -20,7 +29,8 @@ export function EditArticleTypeManagerPage() {
     const { articleTypeData, isLoading, form, isCreateMode } = useEditArticleTypeForm(articleTypeId, workspaceId);
     const routes = useRoutes();
 
-    const { deleteMutation, handleDelete, isSaving, onSubmit } = useEditActions(form, isCreateMode, articleTypeId);
+    const { deleteMutation, handleDelete, confirmDelete, deleteDialogOpen, setDeleteDialogOpen, isSaving, onSubmit } =
+        useEditActions(form, isCreateMode, articleTypeId);
 
     if (!isCreateMode && !isLoading && !articleTypeData) {
         return <div>{t('articleTypes.notFound')}</div>;
@@ -86,6 +96,16 @@ export function EditArticleTypeManagerPage() {
                     </form>
                 </FormProvider>
             </LayoutContent>
+
+            <ConfirmActionDialog
+                open={deleteDialogOpen}
+                onOpenChange={setDeleteDialogOpen}
+                onConfirm={confirmDelete}
+                title={t('message.confirm.delete', { entity: t('articleTypes.title') })}
+                description={t('message.confirm.deleteDescription')}
+                confirmLabel={t('common.delete')}
+                isLoading={deleteMutation.isPending}
+            />
         </div>
     );
 }

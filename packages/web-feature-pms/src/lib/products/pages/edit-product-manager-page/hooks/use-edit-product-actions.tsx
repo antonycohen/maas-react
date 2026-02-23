@@ -6,6 +6,7 @@ import { useRoutes } from '@maas/core-workspace';
 import { toast } from 'sonner';
 import { ProductFormValues } from './use-edit-product-form';
 import { useTranslation } from '@maas/core-translations';
+import { useState } from 'react';
 
 export const useEditProductActions = (
     form: UseFormReturn<ProductFormValues>,
@@ -63,10 +64,14 @@ export const useEditProductActions = (
         }
     }
 
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
     function handleDelete() {
-        if (window.confirm(t('products.deleteConfirm'))) {
-            deleteMutation.mutate(productId);
-        }
+        setDeleteDialogOpen(true);
+    }
+
+    function confirmDelete() {
+        deleteMutation.mutate(productId);
     }
 
     const isSaving = createMutation.isPending || updateMutation.isPending;
@@ -74,6 +79,9 @@ export const useEditProductActions = (
     return {
         onSubmit,
         handleDelete,
+        confirmDelete,
+        deleteDialogOpen,
+        setDeleteDialogOpen,
         isSaving,
         deleteMutation,
     };

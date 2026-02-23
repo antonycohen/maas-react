@@ -1,4 +1,13 @@
-import { Badge, Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@maas/web-components';
+import {
+    Badge,
+    Button,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+    ConfirmActionDialog,
+} from '@maas/web-components';
 import { LayoutBreadcrumb, LayoutContent } from '@maas/web-layout';
 import { Link, useParams } from 'react-router';
 import {
@@ -56,6 +65,7 @@ function CopyField({ value }: { value: string }) {
 export function ViewSubscriptionManagerPage() {
     const { subscriptionId = '' } = useParams<{ subscriptionId: string }>();
     const routes = useRoutes();
+    const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
 
     const {
         data: subscription,
@@ -132,197 +142,207 @@ export function ViewSubscriptionManagerPage() {
     const isActive = subscription.status === 'active' || subscription.status === 'trialing';
     const isCancelingAtPeriodEnd = subscription.cancelAtPeriodEnd;
 
+    const confirmCancelImmediately = () => {
+        cancelImmediatelyMutation.mutate(subscriptionId);
+    };
+
     return (
-        <div>
-            <header>
-                <LayoutBreadcrumb
-                    items={[
-                        { label: 'Home', to: routes.root() },
-                        { label: 'Subscriptions', to: routes.pmsSubscriptions() },
-                        { label: subscription.id.slice(0, 8) + '...' },
-                    ]}
-                />
-            </header>
+        <>
+            <div>
+                <header>
+                    <LayoutBreadcrumb
+                        items={[
+                            { label: 'Home', to: routes.root() },
+                            { label: 'Subscriptions', to: routes.pmsSubscriptions() },
+                            { label: subscription.id.slice(0, 8) + '...' },
+                        ]}
+                    />
+                </header>
 
-            {/* Sticky Action Bar */}
-            <div className="bg-background sticky top-0 z-10 flex items-center justify-between border-b px-6 py-3">
-                <div className="flex items-center gap-3">
-                    <h1 className="font-mono text-xl font-semibold">{subscription.id.slice(0, 8)}...</h1>
-                    <Badge variant={getStatusColor(subscription.status)}>{subscription.status}</Badge>
-                    {isCancelingAtPeriodEnd && <Badge variant="destructive">Canceling at Period End</Badge>}
-                </div>
+                {/* Sticky Action Bar */}
+                <div className="bg-background sticky top-0 z-10 flex items-center justify-between border-b px-6 py-3">
+                    <div className="flex items-center gap-3">
+                        <h1 className="font-mono text-xl font-semibold">{subscription.id.slice(0, 8)}...</h1>
+                        <Badge variant={getStatusColor(subscription.status)}>{subscription.status}</Badge>
+                        {isCancelingAtPeriodEnd && <Badge variant="destructive">Canceling at Period End</Badge>}
+                    </div>
 
-                <div className="flex items-center gap-2">
-                    <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => syncMutation.mutate(subscriptionId)}
-                        disabled={syncMutation.isPending}
-                    >
-                        <IconRefresh className={cn('mr-1.5 h-4 w-4', syncMutation.isPending && 'animate-spin')} />
-                        Sync
-                    </Button>
-                    {isActive && !isCancelingAtPeriodEnd && (
-                        <>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => cancelAtPeriodEndMutation.mutate(subscriptionId)}
-                                disabled={cancelAtPeriodEndMutation.isPending}
-                            >
-                                <IconPlayerPause className="mr-1.5 h-4 w-4" />
-                                Cancel at Period End
-                            </Button>
-                            <Button
-                                type="button"
-                                variant="destructive"
-                                size="sm"
-                                onClick={() => {
-                                    if (
-                                        window.confirm('Are you sure you want to cancel this subscription immediately?')
-                                    ) {
-                                        cancelImmediatelyMutation.mutate(subscriptionId);
-                                    }
-                                }}
-                                disabled={cancelImmediatelyMutation.isPending}
-                            >
-                                <IconX className="mr-1.5 h-4 w-4" />
-                                Cancel Now
-                            </Button>
-                        </>
-                    )}
-                    {isCancelingAtPeriodEnd && (
+                    <div className="flex items-center gap-2">
                         <Button
                             type="button"
-                            variant="default"
+                            variant="outline"
                             size="sm"
-                            onClick={() => resumeMutation.mutate(subscriptionId)}
-                            disabled={resumeMutation.isPending}
+                            onClick={() => syncMutation.mutate(subscriptionId)}
+                            disabled={syncMutation.isPending}
                         >
-                            <IconPlayerPlay className="mr-1.5 h-4 w-4" />
-                            Resume
+                            <IconRefresh className={cn('mr-1.5 h-4 w-4', syncMutation.isPending && 'animate-spin')} />
+                            Sync
                         </Button>
-                    )}
+                        {isActive && !isCancelingAtPeriodEnd && (
+                            <>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => cancelAtPeriodEndMutation.mutate(subscriptionId)}
+                                    disabled={cancelAtPeriodEndMutation.isPending}
+                                >
+                                    <IconPlayerPause className="mr-1.5 h-4 w-4" />
+                                    Cancel at Period End
+                                </Button>
+                                <Button
+                                    type="button"
+                                    variant="destructive"
+                                    size="sm"
+                                    onClick={() => setCancelDialogOpen(true)}
+                                    disabled={cancelImmediatelyMutation.isPending}
+                                >
+                                    <IconX className="mr-1.5 h-4 w-4" />
+                                    Cancel Now
+                                </Button>
+                            </>
+                        )}
+                        {isCancelingAtPeriodEnd && (
+                            <Button
+                                type="button"
+                                variant="default"
+                                size="sm"
+                                onClick={() => resumeMutation.mutate(subscriptionId)}
+                                disabled={resumeMutation.isPending}
+                            >
+                                <IconPlayerPlay className="mr-1.5 h-4 w-4" />
+                                Resume
+                            </Button>
+                        )}
+                    </div>
                 </div>
-            </div>
 
-            <LayoutContent>
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                    {/* Left: Details */}
-                    <div className="lg:col-span-2">
-                        <Card className="gap-0 rounded-2xl">
-                            <CardHeader>
-                                <CardTitle className="text-xl">Subscription Details</CardTitle>
-                                <CardDescription>View and manage this subscription.</CardDescription>
-                            </CardHeader>
-                            <CardContent className="px-6 pt-2">
-                                <div className="space-y-6">
-                                    <div>
-                                        <p className="text-muted-foreground mb-1 text-sm font-medium">
-                                            Subscription ID
-                                        </p>
-                                        <CopyField value={subscription.id} />
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-4">
+                <LayoutContent>
+                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                        {/* Left: Details */}
+                        <div className="lg:col-span-2">
+                            <Card className="gap-0 rounded-2xl">
+                                <CardHeader>
+                                    <CardTitle className="text-xl">Subscription Details</CardTitle>
+                                    <CardDescription>View and manage this subscription.</CardDescription>
+                                </CardHeader>
+                                <CardContent className="px-6 pt-2">
+                                    <div className="space-y-6">
                                         <div>
-                                            <p className="text-muted-foreground text-sm font-medium">Status</p>
-                                            <Badge variant={getStatusColor(subscription.status)} className="mt-1">
-                                                {subscription.status}
-                                            </Badge>
+                                            <p className="text-muted-foreground mb-1 text-sm font-medium">
+                                                Subscription ID
+                                            </p>
+                                            <CopyField value={subscription.id} />
                                         </div>
+
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <p className="text-muted-foreground text-sm font-medium">Status</p>
+                                                <Badge variant={getStatusColor(subscription.status)} className="mt-1">
+                                                    {subscription.status}
+                                                </Badge>
+                                            </div>
+                                            <div>
+                                                <p className="text-muted-foreground text-sm font-medium">Plan</p>
+                                                {subscription.plan ? (
+                                                    <p className="mt-1 text-sm font-medium">
+                                                        {subscription.plan.name ?? subscription.plan.id}
+                                                    </p>
+                                                ) : (
+                                                    <p className="text-muted-foreground mt-1 text-sm">-</p>
+                                                )}
+                                            </div>
+                                        </div>
+
                                         <div>
-                                            <p className="text-muted-foreground text-sm font-medium">Plan</p>
-                                            {subscription.plan ? (
-                                                <p className="mt-1 text-sm font-medium">
-                                                    {subscription.plan.name ?? subscription.plan.id}
-                                                </p>
+                                            <p className="text-muted-foreground text-sm font-medium">User</p>
+                                            {subscription.customer ? (
+                                                <div className="mt-1">
+                                                    <Link
+                                                        to={routes.customerEdit(subscription.customer.id)}
+                                                        className="text-primary text-sm font-medium underline underline-offset-4 hover:opacity-80"
+                                                    >
+                                                        {subscription.customer.name ??
+                                                            subscription.customer.email ??
+                                                            subscription.customer.id}
+                                                    </Link>
+                                                    {subscription.customer.email && subscription.customer.name && (
+                                                        <p className="text-muted-foreground text-xs">
+                                                            {subscription.customer.email}
+                                                        </p>
+                                                    )}
+                                                </div>
                                             ) : (
                                                 <p className="text-muted-foreground mt-1 text-sm">-</p>
                                             )}
                                         </div>
-                                    </div>
 
-                                    <div>
-                                        <p className="text-muted-foreground text-sm font-medium">User</p>
-                                        {subscription.customer ? (
-                                            <div className="mt-1">
-                                                <Link
-                                                    to={routes.customerEdit(subscription.customer.id)}
-                                                    className="text-primary text-sm font-medium underline underline-offset-4 hover:opacity-80"
-                                                >
-                                                    {subscription.customer.name ??
-                                                        subscription.customer.email ??
-                                                        subscription.customer.id}
-                                                </Link>
-                                                {subscription.customer.email && subscription.customer.name && (
-                                                    <p className="text-muted-foreground text-xs">
-                                                        {subscription.customer.email}
-                                                    </p>
-                                                )}
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <p className="text-muted-foreground text-sm font-medium">
+                                                    Current Period Start
+                                                </p>
+                                                <p className="mt-1 text-sm">
+                                                    {subscription.currentPeriodStart
+                                                        ? new Date(subscription.currentPeriodStart).toLocaleString()
+                                                        : '-'}
+                                                </p>
                                             </div>
-                                        ) : (
-                                            <p className="text-muted-foreground mt-1 text-sm">-</p>
+                                            <div>
+                                                <p className="text-muted-foreground text-sm font-medium">
+                                                    Current Period End
+                                                </p>
+                                                <p className="mt-1 text-sm">
+                                                    {subscription.currentPeriodEnd
+                                                        ? new Date(subscription.currentPeriodEnd).toLocaleString()
+                                                        : '-'}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {subscription.canceledAt && (
+                                            <div>
+                                                <p className="text-muted-foreground text-sm font-medium">Canceled At</p>
+                                                <p className="mt-1 text-sm">
+                                                    {new Date(subscription.canceledAt).toLocaleString()}
+                                                </p>
+                                            </div>
                                         )}
                                     </div>
+                                </CardContent>
+                            </Card>
+                        </div>
 
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <p className="text-muted-foreground text-sm font-medium">
-                                                Current Period Start
-                                            </p>
-                                            <p className="mt-1 text-sm">
-                                                {subscription.currentPeriodStart
-                                                    ? new Date(subscription.currentPeriodStart).toLocaleString()
-                                                    : '-'}
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p className="text-muted-foreground text-sm font-medium">
-                                                Current Period End
-                                            </p>
-                                            <p className="mt-1 text-sm">
-                                                {subscription.currentPeriodEnd
-                                                    ? new Date(subscription.currentPeriodEnd).toLocaleString()
-                                                    : '-'}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    {subscription.canceledAt && (
-                                        <div>
-                                            <p className="text-muted-foreground text-sm font-medium">Canceled At</p>
-                                            <p className="mt-1 text-sm">
-                                                {new Date(subscription.canceledAt).toLocaleString()}
-                                            </p>
-                                        </div>
+                        {/* Right: Metadata */}
+                        <div>
+                            <Card className="gap-0 rounded-2xl">
+                                <CardHeader>
+                                    <CardTitle className="text-xl">Metadata</CardTitle>
+                                </CardHeader>
+                                <CardContent className="px-6 pt-2">
+                                    {subscription.metadata && Object.keys(subscription.metadata).length > 0 ? (
+                                        <pre className="bg-muted/50 overflow-auto rounded-lg p-4 text-xs">
+                                            {JSON.stringify(subscription.metadata, null, 2)}
+                                        </pre>
+                                    ) : (
+                                        <p className="text-muted-foreground text-sm">No metadata available.</p>
                                     )}
-                                </div>
-                            </CardContent>
-                        </Card>
+                                </CardContent>
+                            </Card>
+                        </div>
                     </div>
+                </LayoutContent>
+            </div>
 
-                    {/* Right: Metadata */}
-                    <div>
-                        <Card className="gap-0 rounded-2xl">
-                            <CardHeader>
-                                <CardTitle className="text-xl">Metadata</CardTitle>
-                            </CardHeader>
-                            <CardContent className="px-6 pt-2">
-                                {subscription.metadata && Object.keys(subscription.metadata).length > 0 ? (
-                                    <pre className="bg-muted/50 overflow-auto rounded-lg p-4 text-xs">
-                                        {JSON.stringify(subscription.metadata, null, 2)}
-                                    </pre>
-                                ) : (
-                                    <p className="text-muted-foreground text-sm">No metadata available.</p>
-                                )}
-                            </CardContent>
-                        </Card>
-                    </div>
-                </div>
-            </LayoutContent>
-        </div>
+            <ConfirmActionDialog
+                open={cancelDialogOpen}
+                onOpenChange={setCancelDialogOpen}
+                onConfirm={confirmCancelImmediately}
+                title="Cancel Subscription"
+                description="Are you sure you want to cancel this subscription immediately?"
+                confirmLabel="Cancel Now"
+                isLoading={cancelImmediatelyMutation.isPending}
+            />
+        </>
     );
 }

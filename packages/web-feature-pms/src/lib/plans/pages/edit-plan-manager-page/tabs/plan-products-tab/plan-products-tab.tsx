@@ -1,12 +1,12 @@
 import { useGetProductById, useGetProducts } from '@maas/core-api';
-import { Button } from '@maas/web-components';
+import { Button, ConfirmActionDialog } from '@maas/web-components';
 import { IconPlus } from '@tabler/icons-react';
 import { useOutletContext } from 'react-router';
 import { ProductPreview, ProductsList } from './components';
 import { AddProductToPlanModal } from './modals';
 import { EditPlanOutletContext } from '../../edit-plan-manager-page';
 import { Product } from '@maas/core-api-models';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from '@maas/core-translations';
 
 export const PlanProductsTab = () => {
@@ -70,14 +70,24 @@ export const PlanProductsTab = () => {
         setAddProductModalOpen(false);
     };
 
+    const [removeDialogOpen, setRemoveDialogOpen] = useState(false);
+    const [productIdToRemove, setProductIdToRemove] = useState<string | null>(null);
+
     const handleRemoveProduct = (productId: string) => {
-        if (window.confirm(t('plans.removeProductConfirm'))) {
+        setProductIdToRemove(productId);
+        setRemoveDialogOpen(true);
+    };
+
+    const confirmRemoveProduct = () => {
+        if (productIdToRemove) {
             // Note: Removing product from plan requires updating the product's planId to null
             // This should be done through an API call
-            if (selectedProductId === productId) {
+            if (selectedProductId === productIdToRemove) {
                 setSelectedProductId(null);
             }
         }
+        setRemoveDialogOpen(false);
+        setProductIdToRemove(null);
     };
 
     if (isCreateMode) {
@@ -134,6 +144,15 @@ export const PlanProductsTab = () => {
                 planId={planId}
                 onSelectExisting={handleAddProduct}
                 existingProductIds={productIds}
+            />
+
+            <ConfirmActionDialog
+                open={removeDialogOpen}
+                onOpenChange={setRemoveDialogOpen}
+                onConfirm={confirmRemoveProduct}
+                title={t('plans.removeProductTitle')}
+                description={t('plans.removeProductConfirm')}
+                confirmLabel={t('common.remove')}
             />
         </>
     );

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ApiError, useCreateFolder, useDeleteFolder, useUpdateFolder } from '@maas/core-api';
 import { UseFormReturn } from 'react-hook-form';
 import { CreateFolder, UpdateFolder } from '@maas/core-api-models';
@@ -75,10 +76,14 @@ export const useEditFolderActions = (
         }
     }
 
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
     function handleDelete() {
-        if (window.confirm(t('message.confirm.delete', { entity: 'folder' }))) {
-            deleteMutation.mutate(folderId);
-        }
+        setDeleteDialogOpen(true);
+    }
+
+    function confirmDelete() {
+        deleteMutation.mutate(folderId);
     }
 
     const isSaving = createMutation.isPending || updateMutation.isPending;
@@ -86,6 +91,9 @@ export const useEditFolderActions = (
     return {
         onSubmit,
         handleDelete,
+        confirmDelete,
+        deleteDialogOpen,
+        setDeleteDialogOpen,
         isSaving,
         deleteMutation,
     };

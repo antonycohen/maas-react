@@ -1,10 +1,11 @@
 import { useGetDiffusionListEntries, useRemoveDiffusionListEntry } from '@maas/core-api';
 import { DiffusionListEntry } from '@maas/core-api-models';
-import { Button } from '@maas/web-components';
+import { Button, ConfirmActionDialog } from '@maas/web-components';
 import { Collection } from '@maas/web-collection';
 import { IconPlus } from '@tabler/icons-react';
 import { useTranslation } from '@maas/core-translations';
 import { toast } from 'sonner';
+import { useState } from 'react';
 import { useEntriesColumns } from '../hooks/use-entries-columns';
 
 interface Props {
@@ -15,10 +16,12 @@ interface Props {
 
 export const EntriesTable = ({ diffusionListId, isDraft, onAddEntry }: Props) => {
     const { t } = useTranslation();
+    const [removeDialog, setRemoveDialog] = useState<{ open: boolean; entryId?: string }>({ open: false });
 
     const removeMutation = useRemoveDiffusionListEntry({
         onSuccess: () => {
             toast.success(t('diffusionLists.entryRemoved'));
+            setRemoveDialog({ open: false });
         },
         onError: (error) => {
             toast.error(error.message);
@@ -26,8 +29,12 @@ export const EntriesTable = ({ diffusionListId, isDraft, onAddEntry }: Props) =>
     });
 
     const handleRemove = (entry: DiffusionListEntry) => {
-        if (window.confirm(t('diffusionLists.removeEntryPrompt'))) {
-            removeMutation.mutate({ diffusionListId, entryId: entry.id });
+        setRemoveDialog({ open: true, entryId: entry.id });
+    };
+
+    const handleConfirmRemove = () => {
+        if (removeDialog.entryId) {
+            removeMutation.mutate({ diffusionListId, entryId: removeDialog.entryId });
         }
     };
 
@@ -82,6 +89,18 @@ export const EntriesTable = ({ diffusionListId, isDraft, onAddEntry }: Props) =>
                     addressCountry: null,
                     isManual: null,
                 }}
+            />
+
+            <ConfirmActionDialog
+                open={removeDialog.open}
+                onOpenChange={(open) => setRemoveDialog((prev) => ({ ...prev, open }))}
+                onConfirm={handleConfirmRemove}
+                title={t('diffusionLists.removeEntryPrompt')}
+                description={t('diffusionLists.removeEntryDescription')}
+                confirmLabel={t('common.remove')}
+                variant="destructive"
+                countdown={0}
+                isLoading={removeMutation.isPending}
             />
         </div>
     );

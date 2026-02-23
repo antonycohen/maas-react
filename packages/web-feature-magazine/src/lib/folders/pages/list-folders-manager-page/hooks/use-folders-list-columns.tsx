@@ -4,7 +4,7 @@ import { Badge, Checkbox, LongText } from '@maas/web-components';
 import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collection';
 import { cn } from '@maas/core-utils';
 import { Link } from 'react-router';
-import { IconEdit, IconFolder, IconTrash } from '@tabler/icons-react';
+import { IconEdit, IconFolder } from '@tabler/icons-react';
 import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 
@@ -96,13 +96,6 @@ export function useFoldersListColumns(): ColumnDef<Folder>[] {
                         {
                             label: t('folders.edit'),
                             icon: IconEdit,
-                            linkTo: (folder: Folder) => routes.folderInfo(folder.id),
-                        },
-                        {
-                            label: t('folders.delete'),
-                            icon: IconTrash,
-                            group: 'danger',
-                            className: 'text-red-500!',
                             linkTo: (folder: Folder) => routes.folderInfo(folder.id),
                         },
                     ]}

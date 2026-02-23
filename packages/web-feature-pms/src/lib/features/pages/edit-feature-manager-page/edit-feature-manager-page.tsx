@@ -10,12 +10,13 @@ import {
     Input,
     Label,
     Textarea,
+    ConfirmActionDialog,
 } from '@maas/web-components';
 import { LayoutBreadcrumb, LayoutContent } from '@maas/web-layout';
 import { useNavigate, useParams } from 'react-router';
 import { useCreateFeature, useDeleteFeature, useGetFeatureById, useUpdateFeature } from '@maas/core-api';
 import { useRoutes } from '@maas/core-workspace';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { CreateFeature, UpdateFeature } from '@maas/core-api-models';
 import { IconDeviceFloppy, IconLoader2, IconTrash } from '@tabler/icons-react';
@@ -105,10 +106,14 @@ export function EditFeatureManagerPage() {
         }
     };
 
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
     const handleDelete = () => {
-        if (window.confirm('Are you sure you want to delete this feature?')) {
-            deleteMutation.mutate(featureId);
-        }
+        setDeleteDialogOpen(true);
+    };
+
+    const confirmDelete = () => {
+        deleteMutation.mutate(featureId);
     };
 
     if (!isCreateMode && isLoading) {
@@ -123,124 +128,138 @@ export function EditFeatureManagerPage() {
     const pageTitle = isCreateMode ? 'New Feature' : (feature?.displayName ?? '');
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-            <header>
-                <LayoutBreadcrumb
-                    items={[
-                        { label: 'Home', to: routes.root() },
-                        { label: 'Features', to: routes.pmsFeatures() },
-                        { label: isCreateMode ? 'New' : (feature?.displayName ?? '') },
-                    ]}
-                />
-            </header>
+        <>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+                <header>
+                    <LayoutBreadcrumb
+                        items={[
+                            { label: 'Home', to: routes.root() },
+                            { label: 'Features', to: routes.pmsFeatures() },
+                            { label: isCreateMode ? 'New' : (feature?.displayName ?? '') },
+                        ]}
+                    />
+                </header>
 
-            {/* Sticky Action Bar */}
-            <div className="bg-background sticky top-0 z-10 flex items-center justify-between border-b px-6 py-3">
-                <div className="flex items-center gap-3">
-                    <h1 className="text-xl font-semibold">{pageTitle || 'Untitled'}</h1>
-                    {feature?.withQuota && <Badge variant="outline">Has Quota</Badge>}
-                </div>
+                {/* Sticky Action Bar */}
+                <div className="bg-background sticky top-0 z-10 flex items-center justify-between border-b px-6 py-3">
+                    <div className="flex items-center gap-3">
+                        <h1 className="text-xl font-semibold">{pageTitle || 'Untitled'}</h1>
+                        {feature?.withQuota && <Badge variant="outline">Has Quota</Badge>}
+                    </div>
 
-                <div className="flex items-center gap-2">
-                    {!isCreateMode && (
+                    <div className="flex items-center gap-2">
+                        {!isCreateMode && (
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={handleDelete}
+                                disabled={deleteMutation.isPending}
+                                className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                            >
+                                <IconTrash className="mr-1.5 h-4 w-4" />
+                                Delete
+                            </Button>
+                        )}
                         <Button
                             type="button"
-                            variant="ghost"
+                            variant="outline"
                             size="sm"
-                            onClick={handleDelete}
-                            disabled={deleteMutation.isPending}
-                            className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                            onClick={() => form.reset()}
+                            disabled={!form.formState.isDirty}
                         >
-                            <IconTrash className="mr-1.5 h-4 w-4" />
-                            Delete
+                            Discard
                         </Button>
-                    )}
-                    <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => form.reset()}
-                        disabled={!form.formState.isDirty}
-                    >
-                        Discard
-                    </Button>
-                    <Button type="submit" size="sm" disabled={isSaving}>
-                        {isSaving ? (
-                            <>
-                                <IconLoader2 className="mr-1.5 h-4 w-4 animate-spin" />
-                                Saving...
-                            </>
-                        ) : (
-                            <>
-                                <IconDeviceFloppy className="mr-1.5 h-4 w-4" />
-                                {isCreateMode ? 'Create' : 'Save'}
-                            </>
-                        )}
-                    </Button>
+                        <Button type="submit" size="sm" disabled={isSaving}>
+                            {isSaving ? (
+                                <>
+                                    <IconLoader2 className="mr-1.5 h-4 w-4 animate-spin" />
+                                    Saving...
+                                </>
+                            ) : (
+                                <>
+                                    <IconDeviceFloppy className="mr-1.5 h-4 w-4" />
+                                    {isCreateMode ? 'Create' : 'Save'}
+                                </>
+                            )}
+                        </Button>
+                    </div>
                 </div>
-            </div>
 
-            <LayoutContent>
-                <Card className="gap-0 rounded-2xl">
-                    <CardHeader>
-                        <CardTitle className="text-xl">{isCreateMode ? 'Create Feature' : 'Feature Details'}</CardTitle>
-                        <CardDescription>
-                            {isCreateMode
-                                ? 'Fill in the details to create a new feature.'
-                                : 'Update the feature configuration.'}
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="px-6 pt-2">
-                        <div className="space-y-6">
-                            <div className="space-y-2">
-                                <Label htmlFor="displayName">Display Name</Label>
-                                <Input
-                                    id="displayName"
-                                    placeholder="e.g., API Calls"
-                                    {...form.register('displayName')}
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="lookupKey">Lookup Key</Label>
-                                <Input
-                                    id="lookupKey"
-                                    placeholder="e.g., api_calls"
-                                    className="font-mono"
-                                    {...form.register('lookupKey')}
-                                />
-                                <p className="text-muted-foreground text-sm">
-                                    A unique identifier for this feature, used in code.
-                                </p>
-                            </div>
-
-                            <div className="flex items-center space-x-2">
-                                <Checkbox
-                                    id="withQuota"
-                                    checked={form.watch('withQuota') ?? false}
-                                    onCheckedChange={(checked) => form.setValue('withQuota', checked === true)}
-                                />
-                                <Label htmlFor="withQuota">Enable Quota</Label>
-                            </div>
-
-                            {form.watch('withQuota') && (
+                <LayoutContent>
+                    <Card className="gap-0 rounded-2xl">
+                        <CardHeader>
+                            <CardTitle className="text-xl">
+                                {isCreateMode ? 'Create Feature' : 'Feature Details'}
+                            </CardTitle>
+                            <CardDescription>
+                                {isCreateMode
+                                    ? 'Fill in the details to create a new feature.'
+                                    : 'Update the feature configuration.'}
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="px-6 pt-2">
+                            <div className="space-y-6">
                                 <div className="space-y-2">
-                                    <Label htmlFor="quotaAggregationFormula">Quota Aggregation Formula</Label>
-                                    <Textarea
-                                        id="quotaAggregationFormula"
-                                        placeholder="e.g., SUM(usage)"
-                                        className="min-h-[100px] font-mono"
-                                        {...form.register('quotaAggregationFormula')}
+                                    <Label htmlFor="displayName">Display Name</Label>
+                                    <Input
+                                        id="displayName"
+                                        placeholder="e.g., API Calls"
+                                        {...form.register('displayName')}
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="lookupKey">Lookup Key</Label>
+                                    <Input
+                                        id="lookupKey"
+                                        placeholder="e.g., api_calls"
+                                        className="font-mono"
+                                        {...form.register('lookupKey')}
                                     />
                                     <p className="text-muted-foreground text-sm">
-                                        Optional. Define how quota usage is aggregated.
+                                        A unique identifier for this feature, used in code.
                                     </p>
                                 </div>
-                            )}
-                        </div>
-                    </CardContent>
-                </Card>
-            </LayoutContent>
-        </form>
+
+                                <div className="flex items-center space-x-2">
+                                    <Checkbox
+                                        id="withQuota"
+                                        checked={form.watch('withQuota') ?? false}
+                                        onCheckedChange={(checked) => form.setValue('withQuota', checked === true)}
+                                    />
+                                    <Label htmlFor="withQuota">Enable Quota</Label>
+                                </div>
+
+                                {form.watch('withQuota') && (
+                                    <div className="space-y-2">
+                                        <Label htmlFor="quotaAggregationFormula">Quota Aggregation Formula</Label>
+                                        <Textarea
+                                            id="quotaAggregationFormula"
+                                            placeholder="e.g., SUM(usage)"
+                                            className="min-h-[100px] font-mono"
+                                            {...form.register('quotaAggregationFormula')}
+                                        />
+                                        <p className="text-muted-foreground text-sm">
+                                            Optional. Define how quota usage is aggregated.
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        </CardContent>
+                    </Card>
+                </LayoutContent>
+            </form>
+
+            <ConfirmActionDialog
+                open={deleteDialogOpen}
+                onOpenChange={setDeleteDialogOpen}
+                onConfirm={confirmDelete}
+                title="Delete Feature"
+                description="Are you sure you want to delete this feature?"
+                confirmLabel="Delete"
+                isLoading={deleteMutation.isPending}
+            />
+        </>
     );
 }
