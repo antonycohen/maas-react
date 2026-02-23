@@ -15,7 +15,7 @@ export function AccountSidebar({ baseUrl }: AccountSidebarProps) {
     ];
 
     return (
-        <div className="flex w-[290px] shrink-0 flex-col gap-6 border-r border-gray-200 pr-5">
+        <div className="flex w-72.5 shrink-0 flex-col gap-6 border-r border-gray-200 pr-5">
             <div className="flex w-full flex-col gap-1">
                 {navItems.map((item) => (
                     <NavLink

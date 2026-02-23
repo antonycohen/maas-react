@@ -21,7 +21,7 @@ export function AccountSettingsPage({ baseUrl }: { baseUrl: string }) {
     }
 
     return (
-        <LayoutContent className={'container mx-auto min-h-[700px] gap-8 pb-24'}>
+        <LayoutContent className={'container mx-auto min-h-175 gap-8 pb-24'}>
             <div className="flex w-full items-start gap-10">
                 <div className="hidden shrink-0 md:flex">
                     <AccountSidebar baseUrl={baseUrl} />
@@ -29,7 +29,7 @@ export function AccountSettingsPage({ baseUrl }: { baseUrl: string }) {
 
                 <AccountMobileNav baseUrl={baseUrl} />
 
-                <div className="mx-auto w-full max-w-[700px] flex-1">
+                <div className="mx-auto w-full max-w-175 flex-1">
                     <Outlet context={outletContext} />
                 </div>
             </div>

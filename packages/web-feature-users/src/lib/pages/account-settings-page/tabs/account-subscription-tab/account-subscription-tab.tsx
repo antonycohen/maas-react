@@ -27,10 +27,10 @@ export const AccountSubscriptionTab = () => {
     if (isLoadingSubscription || isLoadingQuotas) {
         return (
             <div className="flex flex-col gap-6">
-                <Skeleton className="h-[200px] w-full rounded-2xl" />
-                <Skeleton className="h-[200px] w-full rounded-2xl" />
-                <Skeleton className="h-[300px] w-full rounded-2xl" />
-                <Skeleton className="h-[80px] w-full rounded-2xl" />
+                <Skeleton className="h-50 w-full rounded-2xl" />
+                <Skeleton className="h-50 w-full rounded-2xl" />
+                <Skeleton className="h-75 w-full rounded-2xl" />
+                <Skeleton className="h-20 w-full rounded-2xl" />
             </div>
         );
     }
