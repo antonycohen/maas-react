@@ -69,6 +69,7 @@ export const SEGMENTS = {
     // Sub-routes / tabs
     SUBSCRIPTION: 'subscription',
     INFO: 'info',
+    ADDRESSES: 'addresses',
     ORGANIZER: 'organizer',
     NEW: 'new',
 } as const;
@@ -168,6 +169,7 @@ export const ADMIN_ROUTES = {
     CUSTOMERS_WILDCARD: `${SEGMENTS.CUSTOMERS}/*`,
     CUSTOMER_EDIT: `${SEGMENTS.CUSTOMERS}/:customerId`,
     CUSTOMER_INFO: `${SEGMENTS.CUSTOMERS}/:customerId/${SEGMENTS.INFO}`,
+    CUSTOMER_ADDRESSES: `${SEGMENTS.CUSTOMERS}/:customerId/${SEGMENTS.ADDRESSES}`,
     CUSTOMER_SUBSCRIPTIONS: `${SEGMENTS.CUSTOMERS}/:customerId/${SEGMENTS.SUBSCRIPTIONS}`,
 
     // Users

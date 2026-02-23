@@ -53,6 +53,7 @@ export function EditCustomerManagerPage() {
 
     const getTabItems = (id: string) => [
         { title: t('customers.tabs.info'), url: routes.customerInfo(id) },
+        { title: t('customers.tabs.addresses'), url: routes.customerAddresses(id) },
         { title: t('customers.tabs.subscriptions'), url: routes.customerSubscriptions(id) },
     ];
 

@@ -1,8 +1,10 @@
-import { useOutletContext } from 'react-router';
+import { Link, useOutletContext } from 'react-router';
 import { useGetSubscriptions, useGetInvoices, useGetCustomerQuotas } from '@maas/core-api';
 import { Invoice, Subscription } from '@maas/core-api-models';
+import { useRoutes } from '@maas/core-workspace';
 import {
     Badge,
+    Button,
     Card,
     CardContent,
     CardHeader,
@@ -60,6 +62,7 @@ const formatFeatureKey = (key: string): string => {
 export const CustomerSubscriptionsTab = () => {
     const { customerId } = useOutletContext<EditCustomerOutletContext>();
     const { t } = useTranslation();
+    const routes = useRoutes();
 
     const { data: subscriptionsData, isLoading: isLoadingSubscriptions } = useGetSubscriptions({
         filters: { customerId },
@@ -102,8 +105,19 @@ export const CustomerSubscriptionsTab = () => {
                 {/* Subscriptions */}
                 <Card className="rounded-2xl">
                     <CardHeader>
-                        <CardTitle className="text-xl">{t('customers.subscriptions.title')}</CardTitle>
-                        <CardDescription>{t('customers.subscriptions.description')}</CardDescription>
+                        <div className="flex items-center justify-between">
+                            <div className="flex flex-col gap-1.5">
+                                <CardTitle className="text-xl">{t('customers.subscriptions.title')}</CardTitle>
+                                <CardDescription>{t('customers.subscriptions.description')}</CardDescription>
+                            </div>
+                            {subscriptions.length > 0 && (
+                                <Button variant="outline" size="sm" asChild>
+                                    <Link to={routes.pmsSubscriptionView(subscriptions[0].id)}>
+                                        {t('customers.subscriptions.editSubscriptions')}
+                                    </Link>
+                                </Button>
+                            )}
+                        </div>
                     </CardHeader>
                     <CardContent>
                         {isLoadingSubscriptions ? (

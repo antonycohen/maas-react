@@ -1,6 +1,8 @@
 import { ApiError, useUpdateCustomer } from '@maas/core-api';
 import { UseFormReturn } from 'react-hook-form';
+import { useLocation, useNavigate } from 'react-router';
 import { toast } from 'sonner';
+import { useRoutes } from '@maas/core-workspace';
 import { CustomerFormValues } from './use-edit-customer-form';
 import { useTranslation } from '@maas/core-translations';
 
@@ -13,10 +15,10 @@ const toBillingAddress = (address: CustomerFormValues['billingAddress']) => {
     if (!address || !hasData(address)) return undefined;
     return {
         name: address.name ?? '',
-        line1: address.line1 ?? '',
-        line2: address.line2 ?? undefined,
+        line1: String(address.line1 ?? ''),
+        line2: address.line2 ? String(address.line2) : undefined,
         city: address.city ?? '',
-        postalCode: address.postalCode ?? '',
+        postalCode: String(address.postalCode ?? ''),
         country: address.country ?? '',
     };
 };
@@ -26,16 +28,19 @@ const toShippingAddress = (address: CustomerFormValues['shippingAddress']) => {
     return {
         firstName: address.firstName ?? '',
         lastName: address.lastName ?? '',
-        line1: address.line1 ?? '',
-        line2: address.line2 ?? undefined,
+        line1: String(address.line1 ?? ''),
+        line2: address.line2 ? String(address.line2) : undefined,
         city: address.city ?? '',
-        postalCode: address.postalCode ?? '',
+        postalCode: String(address.postalCode ?? ''),
         country: address.country ?? '',
     };
 };
 
 export const useEditCustomerActions = (form: UseFormReturn<CustomerFormValues>, customerId: string) => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const routes = useRoutes();
 
     const handleApiError = (error: ApiError) => {
         if (error.parametersErrors) {
@@ -49,8 +54,13 @@ export const useEditCustomerActions = (form: UseFormReturn<CustomerFormValues>, 
     };
 
     const updateMutation = useUpdateCustomer({
-        onSuccess: () => {
+        onSuccess: (data) => {
             toast.success(t('customers.saveSuccess'));
+            if (data.id && data.id !== customerId) {
+                const currentTab = location.pathname.split('/').pop() ?? 'info';
+                const newBase = routes.customerEdit(data.id);
+                navigate(`${newBase}/${currentTab}`, { replace: true });
+            }
         },
         onError: handleApiError,
     });

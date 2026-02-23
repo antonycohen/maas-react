@@ -20,10 +20,11 @@ type ControlledTextInputProps<T extends FieldValues> = {
     direction?: 'horizontal' | 'vertical';
     className?: string;
     maxLength?: number;
+    readOnly?: boolean;
 };
 
 export function ControlledTextareaInput<T extends FieldValues>(props: ControlledTextInputProps<T>) {
-    const { name, label, placeholder, description, direction = 'vertical', className, maxLength } = props;
+    const { name, label, placeholder, description, direction = 'vertical', className, maxLength, readOnly } = props;
     const { t } = useTranslation();
     const form = useFormContext();
     const { control } = form;
@@ -42,6 +43,7 @@ export function ControlledTextareaInput<T extends FieldValues>(props: Controlled
                 rows={6}
                 className="min-h-24 resize-none"
                 aria-invalid={fieldState.invalid}
+                readOnly={readOnly}
             />
             {maxLength && (
                 <InputGroupAddon align="block-end">

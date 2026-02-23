@@ -43,6 +43,7 @@ const defaultRoutes = {
     customers: () => '/customers',
     customerEdit: () => '/customers',
     customerInfo: () => '/customers',
+    customerAddresses: () => '/customers',
     customerSubscriptions: () => '/customers',
     users: () => '/users',
     userEdit: () => '/users',

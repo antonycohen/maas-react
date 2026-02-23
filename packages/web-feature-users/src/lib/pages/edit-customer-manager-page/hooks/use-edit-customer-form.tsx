@@ -51,10 +51,10 @@ const parseDeliveryAddress = (metadata: Record<string, unknown> | null) => {
     return {
         firstName: addr.firstName ?? '',
         lastName: addr.lastName ?? '',
-        line1: addr.line1 ?? '',
-        line2: addr.line2 ?? '',
+        line1: String(addr.line1 ?? ''),
+        line2: String(addr.line2 ?? ''),
         city: addr.city ?? '',
-        postalCode: addr.postalCode ?? '',
+        postalCode: String(addr.postalCode ?? ''),
         country: addr.country ?? '',
     };
 };
@@ -99,10 +99,10 @@ export const useEditCustomerForm = ({ customer }: UseEditCustomerFormParams) => 
                   currency: customer.currency ?? '',
                   billingAddress: {
                       name: customer.name ?? '',
-                      line1: customer.addressLine1 ?? '',
-                      line2: customer.addressLine2 ?? '',
+                      line1: String(customer.addressLine1 ?? ''),
+                      line2: String(customer.addressLine2 ?? ''),
                       city: customer.addressCity ?? '',
-                      postalCode: customer.addressPostalCode ?? '',
+                      postalCode: String(customer.addressPostalCode ?? ''),
                       country: customer.addressCountry ?? '',
                   },
                   shippingAddress: parseDeliveryAddress(customer.metadata),

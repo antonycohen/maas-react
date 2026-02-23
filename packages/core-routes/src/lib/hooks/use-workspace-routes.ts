@@ -107,6 +107,8 @@ export const useWorkspaceRoutes = (workspaceId: string | null) => {
             customerEdit: (customerId: string) => `${baseUrl}/${adminUrlBuilders.customerEdit(customerId)}`,
             /** Customer info URL */
             customerInfo: (customerId: string) => `${baseUrl}/${adminUrlBuilders.customerInfo(customerId)}`,
+            /** Customer addresses URL */
+            customerAddresses: (customerId: string) => `${baseUrl}/${adminUrlBuilders.customerAddresses(customerId)}`,
             /** Customer subscriptions URL */
             customerSubscriptions: (customerId: string) =>
                 `${baseUrl}/${adminUrlBuilders.customerSubscriptions(customerId)}`,

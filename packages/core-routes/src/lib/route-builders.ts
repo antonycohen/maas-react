@@ -82,6 +82,8 @@ export const adminUrlBuilders = {
     customerEdit: (customerId: string) => buildPath(`${SEGMENTS.CUSTOMERS}/:customerId`, { customerId }),
     customerInfo: (customerId: string) =>
         buildPath(`${SEGMENTS.CUSTOMERS}/:customerId/${SEGMENTS.INFO}`, { customerId }),
+    customerAddresses: (customerId: string) =>
+        buildPath(`${SEGMENTS.CUSTOMERS}/:customerId/${SEGMENTS.ADDRESSES}`, { customerId }),
     customerSubscriptions: (customerId: string) =>
         buildPath(`${SEGMENTS.CUSTOMERS}/:customerId/${SEGMENTS.SUBSCRIPTIONS}`, { customerId }),
 
