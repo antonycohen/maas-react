@@ -1,11 +1,11 @@
 import { useOAuthStore } from '@maas/core-store-oauth';
 import { useSessionStore } from '@maas/core-store-session';
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router';
 import { PUBLIC_ROUTES } from '@maas/core-routes';
 import { useIsClient } from '@maas/core-utils';
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { AccountRoutes } from '@maas/web-feature-users';
+
+const AccountRoutes = lazy(() => import('@maas/web-feature-users').then((m) => ({ default: m.AccountRoutes })));
 
 export default function Account() {
     const isClient = useIsClient();
@@ -27,5 +27,9 @@ export default function Account() {
         return null;
     }
 
-    return <AccountRoutes />;
+    return (
+        <Suspense>
+            <AccountRoutes />
+        </Suspense>
+    );
 }

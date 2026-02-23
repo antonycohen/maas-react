@@ -38,8 +38,8 @@ export const AccountSubscriptionTab = () => {
     return (
         <div className="flex flex-col gap-6">
             <SubscriptionOverviewSection subscription={subscription} />
-            <QuotaUsageSection quotas={quotas} />
-            <PaymentMethodSection />
+            {subscription && <QuotaUsageSection quotas={quotas} />}
+            {subscription && <PaymentMethodSection />}
         </div>
     );
 };

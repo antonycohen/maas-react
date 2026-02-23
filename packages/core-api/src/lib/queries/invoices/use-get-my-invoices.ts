@@ -13,5 +13,11 @@ export const useGetMyInvoices = (
     useQuery({
         queryKey: ['invoices', 'me', filters],
         queryFn: () => getMyInvoices(filters),
+        retry: (failureCount, error) => {
+            if (error.code === 900) {
+                return false;
+            }
+            return failureCount < 3;
+        },
         ...options,
     });
