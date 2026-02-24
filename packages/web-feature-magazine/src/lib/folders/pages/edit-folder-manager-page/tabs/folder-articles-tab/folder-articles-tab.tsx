@@ -136,11 +136,11 @@ export const FolderArticlesTab = () => {
                     <div className="flex items-center justify-between border-b px-4 py-3">
                         <h3 className="font-semibold">{t('articles.title')}</h3>
                         <Button
+                            type="button"
                             variant="outline"
                             size="sm"
-                            onClick={(e) => {
+                            onClick={() => {
                                 setAddArticleModalOpen(true);
-                                e.preventDefault();
                             }}
                         >
                             <IconPlus className="mr-2 h-4 w-4" />

@@ -87,6 +87,7 @@ function SortableArticleItem({ article, isSelected, onSelect, onRemove }: Sortab
             </div>
             <div className="flex shrink-0 items-center gap-1">
                 <Button
+                    type="button"
                     variant="ghost"
                     size="sm"
                     onClick={(e) => {
