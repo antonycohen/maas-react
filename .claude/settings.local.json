@@ -40,7 +40,8 @@
             "Bash(cd /home/jacky/developments/poleditions/maas-app/maas-react/apps/maas-app && npx react-router typegen --help 2>&1)",
             "Bash(/home/jacky/developments/poleditions/maas-app/maas-react/node_modules/.bin/react-router-serve:*)",
             "Bash(ls:*)",
-            "Bash(lsof:*)"
+            "Bash(lsof:*)",
+            "Bash(wc:*)"
         ],
         "deny": []
     }

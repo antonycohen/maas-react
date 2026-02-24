@@ -1,9 +1,24 @@
+import { useMemo } from 'react';
 import { Link } from 'react-router';
-import { PUBLIC_ROUTES } from '@maas/core-routes';
+import { PUBLIC_ROUTES, publicUrlBuilders } from '@maas/core-routes';
+import { useTranslation } from '@maas/core-translations';
+import { useGetHomepage } from '@maas/core-api';
+import { HomepageNewsItem } from '@maas/core-api-models';
 
 interface FooterLink {
-    text: string;
+    label: string;
     url: string;
+    children?: FooterLink[];
+}
+
+function extractRecentArticles(news: HomepageNewsItem[]): FooterLink[] {
+    return news
+        .filter((item): item is Extract<HomepageNewsItem, { type: 'article' }> => item.type === 'article')
+        .slice(0, 5)
+        .map((item) => ({
+            label: item.article.title,
+            url: publicUrlBuilders.article(item.article.slug),
+        }));
 }
 
 interface FooterProps {
@@ -11,58 +26,101 @@ interface FooterProps {
         src: string;
         alt: string;
     };
-    tagline?: string;
-    subscribeLabel?: string;
-    subscribeUrl?: string;
-    recentArticles?: FooterLink[];
-    categories?: FooterLink[][];
 }
+
+const linkClass =
+    'font-body truncate text-[14px] leading-5 font-normal tracking-[-0.07px] text-white/70 transition-colors hover:text-white';
+const subLinkClass =
+    'font-body truncate text-[13px] leading-5 font-normal tracking-[-0.07px] text-white/50 transition-colors hover:text-white';
+const sectionTitleClass = 'font-body text-[13px] leading-4 font-bold tracking-[0.26px] text-white uppercase';
 
 const Footer = ({
     logo = {
         src: '/logo-tangente-full.png',
         alt: 'Tangente',
     },
-    tagline = 'www.tangente-mag.com est le site du magazine Tangente, consacré à la vulgarisation des mathématiques sous une forme ludique et culturelle.',
-    subscribeLabel = "Je m'abonne",
-    subscribeUrl = PUBLIC_ROUTES.PRICING,
-    recentArticles = [
-        { text: 'Voyage au cœur des mathématiques avec Michel Jardonnet', url: '#' },
-        { text: "L'architecture : une perspective sur les maths", url: '#' },
-        { text: 'Probabilités, modélisation et éruptions : les volcans décryptés par les maths', url: '#' },
-        { text: 'Quand les nombres frappent fort, la science mathématique du baseball', url: '#' },
-        { text: "L'architecture : une perspective sur les maths", url: '#' },
-    ],
-    categories = [
-        [
-            { text: 'Actualités', url: '#' },
-            { text: 'Algèbre', url: '#' },
-            { text: 'Analyse', url: '#' },
-            { text: 'Arithmétique', url: '#' },
-            { text: 'Article', url: '#' },
-        ],
-        [
-            { text: 'Dossiers thématique', url: '#' },
-            { text: 'Géométrie', url: '#' },
-            { text: 'Histoire & Culture', url: '#' },
-            { text: 'HS Kiosque', url: '#' },
-            { text: 'Jeux & Défis', url: '#' },
-        ],
-        [
-            { text: 'Les dossiers', url: '#' },
-            { text: 'Maths faciles', url: '#' },
-            { text: 'Notes de lecture', url: '#' },
-            { text: 'Personnages célèbres', url: '#' },
-            { text: 'Ressources', url: '#' },
-        ],
-        [
-            { text: 'Tangente', url: '#' },
-            { text: 'Magazines', url: '#' },
-            { text: 'Thématiques', url: '#' },
-            { text: 'Vidéos', url: '#' },
-        ],
-    ],
 }: FooterProps) => {
+    const { t } = useTranslation();
+    const { data: homepage } = useGetHomepage({
+        articleFields: 'id,title,slug',
+    });
+
+    const recentArticles = useMemo(() => {
+        if (!homepage?.news) return [];
+        return extractRecentArticles(homepage.news);
+    }, [homepage]);
+
+    const mathThemes: FooterLink[] = useMemo(
+        () => [
+            { label: t('nav.public.geometry'), url: publicUrlBuilders.mathematicalTheme('geometry') },
+            { label: t('nav.public.algebra'), url: publicUrlBuilders.mathematicalTheme('algebra') },
+            { label: t('nav.public.analysis'), url: publicUrlBuilders.mathematicalTheme('analysis') },
+            { label: t('nav.public.arithmetic'), url: publicUrlBuilders.mathematicalTheme('arithmetic') },
+            { label: t('nav.public.numerical'), url: publicUrlBuilders.mathematicalTheme('numerical') },
+            { label: t('nav.public.logic'), url: publicUrlBuilders.mathematicalTheme('logic') },
+            {
+                label: t('nav.public.combinatoricsAndGames'),
+                url: publicUrlBuilders.mathematicalTheme('combinatorics_and_games'),
+            },
+            {
+                label: t('nav.public.appliedMathematics'),
+                url: publicUrlBuilders.mathematicalTheme('applied_mathematics'),
+            },
+            {
+                label: t('nav.public.probabilityAndStatistics'),
+                url: publicUrlBuilders.mathematicalTheme('probability_and_statistics'),
+            },
+        ],
+        [t]
+    );
+
+    const categories: FooterLink[] = useMemo(
+        () => [
+            {
+                label: t('nav.public.gamesChallenges'),
+                url: publicUrlBuilders.category('jeux-et-defi'),
+                children: [
+                    { label: t('nav.public.problems'), url: publicUrlBuilders.category('problemes') },
+                    { label: t('nav.public.shortStory'), url: publicUrlBuilders.category('nouvelle') },
+                    { label: t('nav.public.recremaths'), url: publicUrlBuilders.category('recremaths') },
+                    {
+                        label: t('nav.public.myFavoriteProblems'),
+                        url: publicUrlBuilders.category('mes-problemes-preferes'),
+                    },
+                    { label: t('nav.public.amazingMath'), url: publicUrlBuilders.category('maths-etonnantes') },
+                    { label: t('nav.public.logicMatters'), url: publicUrlBuilders.category('affaires-de-logique') },
+                ],
+            },
+            {
+                label: t('nav.public.historyCulture'),
+                url: publicUrlBuilders.category('histoire-et-cultures'),
+                children: [
+                    { label: t('nav.public.interview'), url: publicUrlBuilders.category('interview') },
+                    {
+                        label: t('nav.public.famousPersonalities'),
+                        url: publicUrlBuilders.category('personnages-celebres'),
+                    },
+                    { label: t('nav.public.mathAndHistory'), url: publicUrlBuilders.category('maths-et-histoire') },
+                    {
+                        label: t('nav.public.mathAndPhilosophy'),
+                        url: publicUrlBuilders.category('maths-et-philosophie'),
+                    },
+                    { label: t('nav.public.mathAndArt'), url: publicUrlBuilders.category('maths-et-art') },
+                ],
+            },
+        ],
+        [t]
+    );
+
+    const quickLinks: FooterLink[] = useMemo(
+        () => [
+            { label: t('nav.public.magazines'), url: publicUrlBuilders.magazines() },
+            { label: t('nav.public.articles'), url: publicUrlBuilders.articles() },
+            { label: t('nav.public.folders'), url: publicUrlBuilders.dossiers() },
+        ],
+        [t]
+    );
+
     return (
         <section className="flex items-center justify-center bg-[#141414] px-5">
             <div className="container mx-auto flex flex-col gap-20 py-10">
@@ -72,54 +130,75 @@ const Footer = ({
                         <img src={logo.src} alt={logo.alt} className="h-full w-full object-contain" />
                     </div>
                     <p className="font-heading max-w-[596px] text-center text-2xl leading-[40px] font-semibold tracking-[-0.85px] text-white md:text-[34px]">
-                        {tagline}
+                        {t('footer.tagline')}
                     </p>
                     <Link
-                        to={subscribeUrl}
+                        to={PUBLIC_ROUTES.PRICING}
                         className="bg-brand-primary font-body hover:bg-brand-primary/90 flex h-10 items-center justify-center gap-1 rounded px-4 py-2 text-[14px] leading-5 font-semibold tracking-[-0.07px] text-white transition-colors"
                     >
-                        {subscribeLabel}
+                        {t('footer.subscribe')}
                     </Link>
                 </div>
 
                 {/* Bottom Block - Links */}
-                <div className="flex flex-col gap-5 md:flex-row">
+                <div className="flex flex-col gap-8 md:flex-row md:gap-5">
                     {/* Recent Articles Column */}
-                    <div className="flex w-full shrink-0 flex-col gap-4 pr-5 md:w-[228px]">
-                        <h3 className="font-body text-[13px] leading-4 font-bold tracking-[0.26px] text-white uppercase">
-                            Articles récents
-                        </h3>
+                    {recentArticles.length > 0 && (
+                        <div className="flex w-full shrink-0 flex-col gap-4 md:w-[228px]">
+                            <h3 className={sectionTitleClass}>{t('footer.recentArticles')}</h3>
+                            <div className="flex flex-col gap-2">
+                                {recentArticles.map((link) => (
+                                    <Link key={link.url} to={link.url} className={linkClass}>
+                                        {link.label}
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Mathematical Themes Column */}
+                    <div className="flex min-w-0 flex-1 flex-col gap-4">
+                        <h3 className={sectionTitleClass}>{t('footer.mathThemes')}</h3>
                         <div className="flex flex-col gap-2">
-                            {recentArticles.map((link, index) => (
-                                <Link
-                                    key={index}
-                                    to={link.url}
-                                    className="font-body truncate text-[14px] leading-5 font-normal tracking-[-0.07px] text-white/70 transition-colors hover:text-white"
-                                >
-                                    {link.text}
+                            {mathThemes.map((link) => (
+                                <Link key={link.url} to={link.url} className={linkClass}>
+                                    {link.label}
                                 </Link>
                             ))}
                         </div>
                     </div>
 
-                    {/* Categories Columns */}
-                    <div className="flex flex-1 flex-col gap-4">
-                        <h3 className="font-body text-[13px] leading-4 font-bold tracking-[0.26px] text-white uppercase">
-                            Catégories populaires
-                        </h3>
-                        <div className="flex flex-wrap gap-5">
-                            {categories.map((column, colIndex) => (
-                                <div key={colIndex} className="flex flex-1 flex-col gap-2">
-                                    {column.map((link, linkIndex) => (
-                                        <Link
-                                            key={linkIndex}
-                                            to={link.url}
-                                            className="font-body truncate text-[14px] leading-5 font-normal tracking-[-0.07px] text-white/70 transition-colors hover:text-white"
-                                        >
-                                            {link.text}
-                                        </Link>
-                                    ))}
+                    {/* Categories Column */}
+                    <div className="flex min-w-0 flex-1 flex-col gap-4">
+                        <h3 className={sectionTitleClass}>{t('footer.categories')}</h3>
+                        <div className="flex flex-col gap-4">
+                            {categories.map((cat) => (
+                                <div key={cat.url} className="flex flex-col gap-2">
+                                    <Link to={cat.url} className={linkClass}>
+                                        {cat.label}
+                                    </Link>
+                                    {cat.children && (
+                                        <div className="flex flex-col gap-1.5 pl-3">
+                                            {cat.children.map((child) => (
+                                                <Link key={child.url} to={child.url} className={subLinkClass}>
+                                                    {child.label}
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Quick Links Column */}
+                    <div className="flex min-w-0 flex-1 flex-col gap-4">
+                        <h3 className={sectionTitleClass}>{t('footer.explore')}</h3>
+                        <div className="flex flex-col gap-2">
+                            {quickLinks.map((link) => (
+                                <Link key={link.url} to={link.url} className={linkClass}>
+                                    {link.label}
+                                </Link>
                             ))}
                         </div>
                     </div>

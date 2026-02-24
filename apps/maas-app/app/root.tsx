@@ -21,12 +21,7 @@ const queryClient = new QueryClient({
 });
 
 export function meta() {
-    return [
-        { title: 'Tangente Magazine' },
-        { name: 'description', content: 'Tangente Magazine - Mathématiques' },
-        { charSet: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-    ];
+    return [{ title: 'Tangente Magazine' }, { name: 'description', content: 'Tangente Magazine - Mathématiques' }];
 }
 
 export function links() {
@@ -35,12 +30,14 @@ export function links() {
 
 export default function Root() {
     return (
-        <html lang="fr">
+        <html lang="fr" suppressHydrationWarning>
             <head>
+                <meta charSet="utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <Meta />
                 <Links />
             </head>
-            <body>
+            <body suppressHydrationWarning>
                 <QueryClientProvider client={queryClient}>
                     {import.meta.env.DEV && (
                         <Suspense fallback={null}>
