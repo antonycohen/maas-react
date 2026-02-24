@@ -2,13 +2,6 @@ import * as z from 'zod';
 
 import { CMSBlockCommon, cmsBlockCommonSchema } from '../common';
 
-// Coerce empty string to null, keep strings and null as-is
-const dimensionFieldSchema = z.preprocess((val) => {
-    if (val === undefined || val === '') return null;
-    if (val === null) return null;
-    return String(val);
-}, z.string().nullish());
-
 export interface CMSVideoBlock extends CMSBlockCommon {
     type: 'video';
     data: {
@@ -25,8 +18,8 @@ export const cmsVideoBlockSchema = z.object({
     data: z.object({
         url: z.string().optional(),
         title: z.string().nullish(),
-        height: dimensionFieldSchema,
-        width: dimensionFieldSchema,
+        height: z.string().nullish(),
+        width: z.string().nullish(),
     }),
 });
 

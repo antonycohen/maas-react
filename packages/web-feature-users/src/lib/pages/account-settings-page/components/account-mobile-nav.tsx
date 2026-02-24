@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router';
-import { User, Lock, Settings, LogOut, CreditCard, FileText, MapPin } from 'lucide-react';
+import { User, Lock, LogOut, CreditCard, FileText, MapPin } from 'lucide-react';
 interface AccountMobileNavProps {
     baseUrl: string;
 }
