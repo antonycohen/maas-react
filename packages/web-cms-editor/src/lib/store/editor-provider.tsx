@@ -25,7 +25,7 @@ type EditorProviderProps = React.PropsWithChildren<{
 export function EditorProvider(props: EditorProviderProps) {
     const { children, plugins, field, context } = props;
 
-    // Track the last saved version using a ref when editor is hidden
+    // Track the last saved version — captured when editor opens so cancel restores correctly
     const lastSavedVersionRef = useRef<CMSBlock[]>(field?.data ?? []);
 
     const [selectedBlockId, setSelectedBlockIdState] = useState<string | null>(null);
@@ -39,11 +39,11 @@ export function EditorProvider(props: EditorProviderProps) {
         setParentBlockId(parentId ?? null);
     }, []);
 
-    // Sync ref when editor becomes hidden
+    // Capture content snapshot when editor opens, so cancel restores to pre-edit state
     const prevVisibleRef = useRef(settings.visible);
     useEffect(() => {
-        if (prevVisibleRef.current && !settings.visible) {
-            // Editor just closed, capture current field data as last saved
+        if (!prevVisibleRef.current && settings.visible) {
+            // Editor just opened — snapshot current content for cancel/reset
             lastSavedVersionRef.current = field?.data ?? [];
         }
         prevVisibleRef.current = settings.visible;

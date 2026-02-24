@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { ApiError, useCreateArticle, useDeleteArticle, useUpdateArticle } from '@maas/core-api';
-import { UseFormReturn } from 'react-hook-form';
+import { FieldErrors, UseFormReturn } from 'react-hook-form';
 import { CreateArticle, UpdateArticle } from '@maas/core-api-models';
 import { useNavigate } from 'react-router';
 import { useRoutes } from '@maas/core-workspace';
@@ -25,6 +25,7 @@ export const useEditActions = (
                 });
             });
         }
+        toast.error(error.message || t('message.error.save', { entity: t('articles.title') }));
     };
 
     const createMutation = useCreateArticle({
@@ -77,8 +78,23 @@ export const useEditActions = (
 
     const isSaving = createMutation.isPending || updateMutation.isPending;
 
+    const onValidationError = useCallback(
+        (errors: FieldErrors<CreateArticle | UpdateArticle>) => {
+            console.error('Form validation errors:', errors);
+            const errorCount = Object.keys(errors).length;
+            toast.error(
+                t('message.error.formValidation', {
+                    count: errorCount,
+                    defaultValue: `Validation failed: ${errorCount} field(s) have errors. Please check the form.`,
+                })
+            );
+        },
+        [t]
+    );
+
     return {
         onSubmit,
+        onValidationError,
         handleDelete,
         confirmDelete,
         deleteDialogOpen,

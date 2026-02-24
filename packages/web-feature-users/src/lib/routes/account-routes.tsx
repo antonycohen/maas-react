@@ -5,6 +5,7 @@ import { AccountConnexionTab } from '../pages/account-settings-page/tabs/account
 // import { AccountPreferencesTab } from '../pages/account-settings-page/tabs/account-preferences-tab/account-preferences-tab';
 import { AccountSubscriptionTab } from '../pages/account-settings-page/tabs/account-subscription-tab/account-subscription-tab';
 import { AccountInvoicesTab } from '../pages/account-settings-page/tabs/account-invoices-tab/account-invoices-tab';
+import { AccountAddressesTab } from '../pages/account-settings-page/tabs/account-addresses-tab/account-addresses-tab';
 
 export const AccountRoutes = ({ baseUrl = '' }: { baseUrl?: string }) => {
     return (
@@ -13,6 +14,7 @@ export const AccountRoutes = ({ baseUrl = '' }: { baseUrl?: string }) => {
                 <Route path="profile" element={<AccountProfileTab />} />
                 <Route path="connexion" element={<AccountConnexionTab />} />
                 {/* <Route path="preferences" element={<AccountPreferencesTab />} /> */}
+                <Route path="addresses" element={<AccountAddressesTab />} />
                 <Route path="subscription" element={<AccountSubscriptionTab />} />
                 <Route path="invoices" element={<AccountInvoicesTab />} />
                 <Route path="*" element={<Navigate to="profile" replace />} />

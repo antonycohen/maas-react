@@ -14,5 +14,11 @@ export const useGetMyCustomer = (
     useQuery({
         queryKey: ['customers', 'me', fields],
         queryFn: () => getMyCustomer(fields),
+        retry: (failureCount, error) => {
+            if (error.code === 900) {
+                return false;
+            }
+            return failureCount < 3;
+        },
         ...options,
     });

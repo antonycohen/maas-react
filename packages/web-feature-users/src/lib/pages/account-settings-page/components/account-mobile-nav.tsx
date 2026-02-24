@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router';
-import { User, Lock, Settings, LogOut, CreditCard, FileText } from 'lucide-react';
+import { User, Lock, Settings, LogOut, CreditCard, FileText, MapPin } from 'lucide-react';
 interface AccountMobileNavProps {
     baseUrl: string;
 }
@@ -7,7 +7,8 @@ export function AccountMobileNav({ baseUrl }: AccountMobileNavProps) {
     const navItems = [
         { title: 'Mon compte', url: `${baseUrl}/account/profile`, icon: User },
         { title: 'Connexion', url: `${baseUrl}/account/connexion`, icon: Lock },
-        { title: 'Préférences', url: `${baseUrl}/account/preferences`, icon: Settings },
+        { title: 'Adresses', url: `${baseUrl}/account/addresses`, icon: MapPin },
+        // { title: 'Préférences', url: `${baseUrl}/account/preferences`, icon: Settings },
         { title: 'Abonnement', url: `${baseUrl}/account/subscription`, icon: CreditCard },
         { title: 'Factures', url: `${baseUrl}/account/invoices`, icon: FileText },
     ];
@@ -19,16 +20,14 @@ export function AccountMobileNav({ baseUrl }: AccountMobileNavProps) {
                         key={item.url}
                         to={item.url}
                         className={({ isActive }) =>
-                            `flex flex-col items-center gap-1 ${isActive ? 'text-black' : 'text-gray-400'}`
+                            `flex items-center justify-center p-2 ${isActive ? 'text-black' : 'text-gray-400'}`
                         }
                     >
                         <item.icon className="h-6 w-6" />
-                        <span className="text-[10px] font-medium sm:text-xs">{item.title}</span>
                     </NavLink>
                 ))}
-                <NavLink to="/logout" className="flex flex-col items-center gap-1 text-gray-400">
+                <NavLink to="/logout" className="flex items-center justify-center p-2 text-gray-400">
                     <LogOut className="h-6 w-6" />
-                    <span className="text-[10px] font-medium sm:text-xs">Déco.</span>
                 </NavLink>
             </div>
         </div>

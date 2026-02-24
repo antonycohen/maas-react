@@ -8,7 +8,7 @@ type ControlledCountryInputProps<T extends FieldValues> = {
     name: FieldPath<T>;
     label: string;
     placeholder?: string;
-    direction?: 'horizontal' | 'vertical';
+    direction?: 'horizontal' | 'vertical' | 'responsive';
     className?: string;
     disabled?: boolean;
 };
@@ -60,8 +60,8 @@ export function ControlledCountryInput<T extends FieldValues>(props: ControlledC
 
     return (
         <Field data-invalid={fieldState.invalid} orientation={direction} className={className}>
-            <FieldLabel className={direction === 'horizontal' ? 'basis-1/2 font-semibold' : ''}>{label}</FieldLabel>
-            {direction === 'horizontal' ? (
+            <FieldLabel className={direction !== 'vertical' ? 'basis-1/2 font-semibold' : ''}>{label}</FieldLabel>
+            {direction !== 'vertical' ? (
                 <div className="flex basis-1/2 flex-col">
                     {combobox}
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

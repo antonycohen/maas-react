@@ -112,8 +112,16 @@ export function EditArticleManagerPage() {
     const { article, isLoading, form, isCreateMode } = useEditArticleForm(articleId);
     const routes = useRoutes();
 
-    const { deleteMutation, handleDelete, confirmDelete, deleteDialogOpen, setDeleteDialogOpen, isSaving, onSubmit } =
-        useEditActions(form, isCreateMode, articleId);
+    const {
+        deleteMutation,
+        handleDelete,
+        confirmDelete,
+        deleteDialogOpen,
+        setDeleteDialogOpen,
+        isSaving,
+        onSubmit,
+        onValidationError,
+    } = useEditActions(form, isCreateMode, articleId);
 
     const {
         ControlledTextInput,
@@ -271,7 +279,7 @@ export function EditArticleManagerPage() {
             <FormProvider {...form}>
                 <form
                     id="article-form"
-                    onSubmit={form.handleSubmit(onSubmit, (errors) => console.error('Form validation errors:', errors))}
+                    onSubmit={form.handleSubmit(onSubmit, onValidationError)}
                     className="flex flex-1"
                 >
                     {/* Content Area */}

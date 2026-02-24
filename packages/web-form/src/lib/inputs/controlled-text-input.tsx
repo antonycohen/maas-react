@@ -15,7 +15,7 @@ type ControlledTextInputProps<T extends FieldValues> = {
     name: FieldPath<T>;
     label: string;
     placeholder?: string;
-    direction?: 'horizontal' | 'vertical';
+    direction?: 'horizontal' | 'vertical' | 'responsive';
     className?: string;
     disabled?: boolean;
     readOnly?: boolean;
@@ -61,10 +61,10 @@ export function ControlledTextInput<T extends FieldValues>(props: ControlledText
 
     return (
         <Field data-invalid={fieldState.invalid} orientation={direction} className={className}>
-            <FieldLabel htmlFor={id} className={direction === 'horizontal' ? 'basis-1/2 font-semibold' : ''}>
+            <FieldLabel htmlFor={id} className={direction !== 'vertical' ? 'basis-1/2 font-semibold' : ''}>
                 {label}
             </FieldLabel>
-            {direction === 'horizontal' ? (
+            {direction !== 'vertical' ? (
                 <div className="flex basis-1/2 flex-col">
                     {inputElement}
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
