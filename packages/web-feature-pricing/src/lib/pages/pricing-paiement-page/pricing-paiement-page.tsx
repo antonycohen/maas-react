@@ -1,6 +1,6 @@
 import { useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { useOAuthStore } from '@maas/core-store-oauth';
+import { useOAuthStore, useOAuthHydrated } from '@maas/core-store-oauth';
 import { usePublicRoutes } from '@maas/core-routes';
 import { usePricingData } from '../../hooks/use-pricing-data';
 import { usePricingStore } from '../../store/pricing-store';
@@ -12,6 +12,7 @@ export const PricingPaiementPage = () => {
     const publicRoutes = usePublicRoutes();
     const selectedPlanId = usePricingStore((s) => s.selectedPlanId);
     const accessToken = useOAuthStore((s) => s.accessToken);
+    const isHydrated = useOAuthHydrated();
     const { pricingPlans, isLoading } = usePricingData();
 
     const selectedPlan = useMemo(
@@ -26,12 +27,12 @@ export const PricingPaiementPage = () => {
     }, [isLoading, selectedPlanId, navigate]);
 
     useEffect(() => {
-        if (!accessToken) {
+        if (isHydrated && !accessToken) {
             navigate(publicRoutes.pricingAuth);
         }
-    }, [accessToken, navigate]);
+    }, [isHydrated, accessToken, navigate]);
 
-    if (isLoading || !selectedPlan || !accessToken) {
+    if (!isHydrated || isLoading || !selectedPlan || !accessToken) {
         return null;
     }
 

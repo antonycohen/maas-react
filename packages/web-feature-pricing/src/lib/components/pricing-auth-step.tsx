@@ -30,7 +30,7 @@ export function PricingAuthStep() {
             .catch(() => {
                 setIsLoading(false);
             });
-    }, [accessToken, navigate]);
+    }, [accessToken, navigate, publicRoutes.pricingPaiement]);
 
     // Poll for auth token changes (iframe sets cookies, we rehydrate to detect)
     useEffect(() => {
@@ -45,11 +45,11 @@ export function PricingAuthStep() {
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [accessToken, navigate]);
+    }, [accessToken, navigate, publicRoutes.pricingPaiement]);
 
     return (
         <div className="animate-in fade-in slide-in-from-top-4 w-full duration-300">
-            <div className="border-border bg-background overflow-hidden rounded-xl border">
+            <div className="overflow-hidden rounded-xl">
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 pb-0 md:px-8 md:pt-8">
                     <div className="flex flex-col gap-1">
@@ -72,7 +72,7 @@ export function PricingAuthStep() {
                             <div className="border-brand-primary h-8 w-8 animate-spin rounded-full border-2 border-t-transparent" />
                         </div>
                     )}
-                    {iframeUrl && <iframe src={iframeUrl} className="h-[550px] w-full border-0" title="Connexion" />}
+                    {iframeUrl && <iframe src={iframeUrl} className="h-[650px] w-full border-0" title="Connexion" />}
                 </div>
             </div>
         </div>

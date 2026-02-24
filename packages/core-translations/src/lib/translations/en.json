@@ -493,6 +493,7 @@
     "customers.quotas.usageUpdated": "Quota updated",
     "customers.quotas.updateError": "Failed to update quota",
     "customers.saveSuccess": "Customer updated successfully",
+    "customers.addressCountryRestriction": "The selected country is not compatible with your current subscription. Your subscription does not include a shipping option outside metropolitan France. Please update your subscription first if you are located outside metropolitan France.",
     "customers.createTitle": "New Customer",
     "customers.createSuccess": "Customer created successfully",
     "customers.validation.nameRequired": "Name is required",

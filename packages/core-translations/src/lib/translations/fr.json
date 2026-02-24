@@ -513,6 +513,7 @@
     "customers.quotas.usageUpdated": "Quota mis à jour",
     "customers.quotas.updateError": "Échec de la mise à jour du quota",
     "customers.saveSuccess": "Client mis à jour avec succès",
+    "customers.addressCountryRestriction": "Le pays sélectionné n'est pas compatible avec votre abonnement actuel. Votre abonnement ne comprend pas l'option « Hors Métropole ». Veuillez d'abord modifier votre abonnement si vous êtes situé en dehors de la France métropolitaine.",
     "customers.createTitle": "Nouveau client",
     "customers.createSuccess": "Client créé avec succès",
     "customers.validation.nameRequired": "Le nom est requis",

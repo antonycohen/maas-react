@@ -150,6 +150,10 @@ export const AccountAddressesTab = () => {
             setIsDeliveryEditable(false);
         },
         onError: (error: ApiError) => {
+            if (error.code === 3000) {
+                toast.error(t('customers.addressCountryRestriction'));
+                return;
+            }
             if (error.parametersErrors) {
                 Object.entries(error.parametersErrors).forEach(([field, messages]) => {
                     form.setError(field as keyof AddressFormValues, {

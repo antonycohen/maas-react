@@ -104,7 +104,7 @@ export class CustomersEndpoint {
      * PATCH /api/v1/pms/customers/me
      */
     async updateMyCustomer(data: UpdateMyCustomerData): Promise<ReadCustomer> {
-        return this.client.put<ReadCustomer>(`${BASE_PATH}/me`, data);
+        return this.client.patch<ReadCustomer>(`${BASE_PATH}/me`, data);
     }
 
     /**

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { useOAuthStore } from '@maas/core-store-oauth';
+import { useOAuthStore, useOAuthHydrated } from '@maas/core-store-oauth';
 import { usePublicRoutes } from '@maas/core-routes';
 import { usePrefillCustomerAddress } from '../../hooks/use-prefill-customer-address';
 import { PricingAdresseStep } from '../../components/pricing-adresse-step';
@@ -10,15 +10,16 @@ export const PricingAdressePage = () => {
     const navigate = useNavigate();
     const publicRoutes = usePublicRoutes();
     const accessToken = useOAuthStore((s) => s.accessToken);
+    const isHydrated = useOAuthHydrated();
     usePrefillCustomerAddress();
 
     useEffect(() => {
-        if (!accessToken) {
+        if (isHydrated && !accessToken) {
             navigate(publicRoutes.pricingAuth);
         }
-    }, [accessToken, navigate]);
+    }, [isHydrated, accessToken, navigate]);
 
-    if (!accessToken) {
+    if (!isHydrated || !accessToken) {
         return null;
     }
 

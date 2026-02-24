@@ -3,7 +3,7 @@ import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
 import { SessionProvider } from '@maas/core-store-session';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { lazy, Suspense } from 'react';
-import { Toaster } from 'sonner';
+import { Toaster } from '@maas/web-components';
 import { TranslationProvider } from '@maas/core-translations';
 
 import '../src/styles.css';
@@ -44,7 +44,7 @@ export default function Root() {
                             <ReactQueryDevtools initialIsOpen={false} />
                         </Suspense>
                     )}
-                    <Toaster />
+                    <Toaster position="bottom-right" />
                     <TranslationProvider>
                         <SessionProvider>
                             <Outlet />
