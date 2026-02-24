@@ -3,6 +3,7 @@ import { useSubscriptionsListColumns } from './hooks/use-subscriptions-list-colu
 import { useGetSubscriptions } from '@maas/core-api';
 import { LayoutBreadcrumb, LayoutContent, LayoutHeader } from '@maas/web-layout';
 import { useTranslation } from '@maas/core-translations';
+import { useRoutes } from '@maas/core-workspace';
 
 const useSubscriptionStatusOptions = () => {
     const { t } = useTranslation();
@@ -20,20 +21,23 @@ export function SubscriptionsListManagerPage() {
     const { t } = useTranslation();
     const columns = useSubscriptionsListColumns();
     const statusOptions = useSubscriptionStatusOptions();
+    const routes = useRoutes();
 
     return (
         <div>
             <header>
-                <LayoutBreadcrumb items={[{ label: 'Home', to: '/' }, { label: 'Subscriptions' }]} />
+                <LayoutBreadcrumb
+                    items={[{ label: t('common.home'), to: routes.root() }, { label: t('subscriptions.title') }]}
+                />
             </header>
             <LayoutContent>
-                <LayoutHeader pageTitle="Subscriptions" />
+                <LayoutHeader pageTitle={t('subscriptions.title')} />
                 <Collection
                     useLocationAsState
                     columns={columns}
                     filtersConfiguration={{
                         textFilter: {
-                            placeholder: 'Search subscriptions...',
+                            placeholder: t('subscriptions.searchPlaceholder'),
                             queryParamName: 'term',
                         },
                         facetedFilters: [

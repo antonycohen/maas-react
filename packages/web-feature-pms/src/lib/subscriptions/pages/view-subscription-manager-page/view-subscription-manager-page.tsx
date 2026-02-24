@@ -23,6 +23,7 @@ import { cn } from '@maas/core-utils';
 import { IconRefresh, IconPlayerPause, IconPlayerPlay, IconX, IconCopy, IconCheck } from '@tabler/icons-react';
 import { toast } from 'sonner';
 import { useState } from 'react';
+import { useTranslation } from '@maas/core-translations';
 
 const getStatusColor = (status: SubscriptionStatus | null): 'default' | 'secondary' | 'destructive' | 'outline' => {
     switch (status) {
@@ -44,11 +45,12 @@ const getStatusColor = (status: SubscriptionStatus | null): 'default' | 'seconda
 
 function CopyField({ value }: { value: string }) {
     const [copied, setCopied] = useState(false);
+    const { t } = useTranslation();
 
     const handleCopy = () => {
         navigator.clipboard.writeText(value);
         setCopied(true);
-        toast.success('Copied to clipboard');
+        toast.success(t('common.copiedToClipboard'));
         setTimeout(() => setCopied(false), 2000);
     };
 
@@ -65,6 +67,7 @@ function CopyField({ value }: { value: string }) {
 export function ViewSubscriptionManagerPage() {
     const { subscriptionId = '' } = useParams<{ subscriptionId: string }>();
     const routes = useRoutes();
+    const { t } = useTranslation();
     const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
 
     const {
@@ -93,50 +96,50 @@ export function ViewSubscriptionManagerPage() {
     });
     const cancelAtPeriodEndMutation = useCancelSubscriptionAtPeriodEnd({
         onSuccess: () => {
-            toast.success('Subscription will be canceled at period end');
+            toast.success(t('subscriptions.cancelAtPeriodEndSuccess'));
             refetch();
         },
         onError: () => {
-            toast.error('Failed to cancel subscription');
+            toast.error(t('subscriptions.cancelError'));
         },
     });
 
     const cancelImmediatelyMutation = useCancelSubscriptionImmediately({
         onSuccess: () => {
-            toast.success('Subscription canceled immediately');
+            toast.success(t('subscriptions.cancelNowSuccess'));
             refetch();
         },
         onError: () => {
-            toast.error('Failed to cancel subscription');
+            toast.error(t('subscriptions.cancelError'));
         },
     });
 
     const resumeMutation = useResumeSubscription({
         onSuccess: () => {
-            toast.success('Subscription resumed');
+            toast.success(t('subscriptions.resumeSuccess'));
             refetch();
         },
         onError: () => {
-            toast.error('Failed to resume subscription');
+            toast.error(t('subscriptions.resumeError'));
         },
     });
 
     const syncMutation = useSyncSubscription({
         onSuccess: () => {
-            toast.success('Subscription synced from Stripe');
+            toast.success(t('subscriptions.syncSuccess'));
             refetch();
         },
         onError: () => {
-            toast.error('Failed to sync subscription');
+            toast.error(t('subscriptions.syncError'));
         },
     });
 
     if (isLoading) {
-        return <div className="flex h-screen items-center justify-center">Loading...</div>;
+        return <div className="flex h-screen items-center justify-center">{t('common.loading')}</div>;
     }
 
     if (!subscription) {
-        return <div className="flex h-screen items-center justify-center">Subscription not found</div>;
+        return <div className="flex h-screen items-center justify-center">{t('subscriptions.notFound')}</div>;
     }
 
     const isActive = subscription.status === 'active' || subscription.status === 'trialing';
@@ -152,8 +155,8 @@ export function ViewSubscriptionManagerPage() {
                 <header>
                     <LayoutBreadcrumb
                         items={[
-                            { label: 'Home', to: routes.root() },
-                            { label: 'Subscriptions', to: routes.pmsSubscriptions() },
+                            { label: t('common.home'), to: routes.root() },
+                            { label: t('subscriptions.title'), to: routes.pmsSubscriptions() },
                             { label: subscription.id.slice(0, 8) + '...' },
                         ]}
                     />
@@ -164,7 +167,9 @@ export function ViewSubscriptionManagerPage() {
                     <div className="flex items-center gap-3">
                         <h1 className="font-mono text-xl font-semibold">{subscription.id.slice(0, 8)}...</h1>
                         <Badge variant={getStatusColor(subscription.status)}>{subscription.status}</Badge>
-                        {isCancelingAtPeriodEnd && <Badge variant="destructive">Canceling at Period End</Badge>}
+                        {isCancelingAtPeriodEnd && (
+                            <Badge variant="destructive">{t('subscriptions.cancelingAtPeriodEnd')}</Badge>
+                        )}
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -176,7 +181,7 @@ export function ViewSubscriptionManagerPage() {
                             disabled={syncMutation.isPending}
                         >
                             <IconRefresh className={cn('mr-1.5 h-4 w-4', syncMutation.isPending && 'animate-spin')} />
-                            Sync
+                            {t('common.sync')}
                         </Button>
                         {isActive && !isCancelingAtPeriodEnd && (
                             <>
@@ -188,7 +193,7 @@ export function ViewSubscriptionManagerPage() {
                                     disabled={cancelAtPeriodEndMutation.isPending}
                                 >
                                     <IconPlayerPause className="mr-1.5 h-4 w-4" />
-                                    Cancel at Period End
+                                    {t('subscriptions.cancelAtPeriodEnd')}
                                 </Button>
                                 <Button
                                     type="button"
@@ -198,7 +203,7 @@ export function ViewSubscriptionManagerPage() {
                                     disabled={cancelImmediatelyMutation.isPending}
                                 >
                                     <IconX className="mr-1.5 h-4 w-4" />
-                                    Cancel Now
+                                    {t('subscriptions.cancelNow')}
                                 </Button>
                             </>
                         )}
@@ -211,7 +216,7 @@ export function ViewSubscriptionManagerPage() {
                                 disabled={resumeMutation.isPending}
                             >
                                 <IconPlayerPlay className="mr-1.5 h-4 w-4" />
-                                Resume
+                                {t('common.resume')}
                             </Button>
                         )}
                     </div>
@@ -223,27 +228,31 @@ export function ViewSubscriptionManagerPage() {
                         <div className="lg:col-span-2">
                             <Card className="gap-0 rounded-2xl">
                                 <CardHeader>
-                                    <CardTitle className="text-xl">Subscription Details</CardTitle>
-                                    <CardDescription>View and manage this subscription.</CardDescription>
+                                    <CardTitle className="text-xl">{t('subscriptions.details')}</CardTitle>
+                                    <CardDescription>{t('subscriptions.detailsDescription')}</CardDescription>
                                 </CardHeader>
                                 <CardContent className="px-6 pt-2">
                                     <div className="space-y-6">
                                         <div>
                                             <p className="text-muted-foreground mb-1 text-sm font-medium">
-                                                Subscription ID
+                                                {t('subscriptions.subscriptionId')}
                                             </p>
                                             <CopyField value={subscription.id} />
                                         </div>
 
                                         <div className="grid grid-cols-2 gap-4">
                                             <div>
-                                                <p className="text-muted-foreground text-sm font-medium">Status</p>
+                                                <p className="text-muted-foreground text-sm font-medium">
+                                                    {t('field.status')}
+                                                </p>
                                                 <Badge variant={getStatusColor(subscription.status)} className="mt-1">
                                                     {subscription.status}
                                                 </Badge>
                                             </div>
                                             <div>
-                                                <p className="text-muted-foreground text-sm font-medium">Plan</p>
+                                                <p className="text-muted-foreground text-sm font-medium">
+                                                    {t('subscriptions.plan')}
+                                                </p>
                                                 {subscription.plan ? (
                                                     <p className="mt-1 text-sm font-medium">
                                                         {subscription.plan.name ?? subscription.plan.id}
@@ -255,7 +264,9 @@ export function ViewSubscriptionManagerPage() {
                                         </div>
 
                                         <div>
-                                            <p className="text-muted-foreground text-sm font-medium">User</p>
+                                            <p className="text-muted-foreground text-sm font-medium">
+                                                {t('subscriptions.user')}
+                                            </p>
                                             {subscription.customer ? (
                                                 <div className="mt-1">
                                                     <Link
@@ -280,7 +291,7 @@ export function ViewSubscriptionManagerPage() {
                                         <div className="grid grid-cols-2 gap-4">
                                             <div>
                                                 <p className="text-muted-foreground text-sm font-medium">
-                                                    Current Period Start
+                                                    {t('subscriptions.currentPeriodStart')}
                                                 </p>
                                                 <p className="mt-1 text-sm">
                                                     {subscription.currentPeriodStart
@@ -290,7 +301,7 @@ export function ViewSubscriptionManagerPage() {
                                             </div>
                                             <div>
                                                 <p className="text-muted-foreground text-sm font-medium">
-                                                    Current Period End
+                                                    {t('subscriptions.currentPeriodEnd')}
                                                 </p>
                                                 <p className="mt-1 text-sm">
                                                     {subscription.currentPeriodEnd
@@ -302,7 +313,9 @@ export function ViewSubscriptionManagerPage() {
 
                                         {subscription.canceledAt && (
                                             <div>
-                                                <p className="text-muted-foreground text-sm font-medium">Canceled At</p>
+                                                <p className="text-muted-foreground text-sm font-medium">
+                                                    {t('subscriptions.canceledAt')}
+                                                </p>
                                                 <p className="mt-1 text-sm">
                                                     {new Date(subscription.canceledAt).toLocaleString()}
                                                 </p>
@@ -317,7 +330,7 @@ export function ViewSubscriptionManagerPage() {
                         <div>
                             <Card className="gap-0 rounded-2xl">
                                 <CardHeader>
-                                    <CardTitle className="text-xl">Metadata</CardTitle>
+                                    <CardTitle className="text-xl">{t('subscriptions.metadata')}</CardTitle>
                                 </CardHeader>
                                 <CardContent className="px-6 pt-2">
                                     {subscription.metadata && Object.keys(subscription.metadata).length > 0 ? (
@@ -325,7 +338,7 @@ export function ViewSubscriptionManagerPage() {
                                             {JSON.stringify(subscription.metadata, null, 2)}
                                         </pre>
                                     ) : (
-                                        <p className="text-muted-foreground text-sm">No metadata available.</p>
+                                        <p className="text-muted-foreground text-sm">{t('subscriptions.noMetadata')}</p>
                                     )}
                                 </CardContent>
                             </Card>
@@ -338,9 +351,9 @@ export function ViewSubscriptionManagerPage() {
                 open={cancelDialogOpen}
                 onOpenChange={setCancelDialogOpen}
                 onConfirm={confirmCancelImmediately}
-                title="Cancel Subscription"
-                description="Are you sure you want to cancel this subscription immediately?"
-                confirmLabel="Cancel Now"
+                title={t('subscriptions.cancelNowConfirm')}
+                description={t('subscriptions.cancelNowDescription')}
+                confirmLabel={t('subscriptions.cancelNow')}
                 isLoading={cancelImmediatelyMutation.isPending}
             />
         </>

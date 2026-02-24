@@ -6,6 +6,7 @@ import { cn } from '@maas/core-utils';
 import { Link } from 'react-router';
 import { IconEye, IconCreditCard } from '@tabler/icons-react';
 import { useRoutes } from '@maas/core-workspace';
+import { useTranslation } from '@maas/core-translations';
 
 const getStatusColor = (status: SubscriptionStatus | null): 'default' | 'secondary' | 'destructive' | 'outline' => {
     switch (status) {
@@ -27,6 +28,7 @@ const getStatusColor = (status: SubscriptionStatus | null): 'default' | 'seconda
 
 export function useSubscriptionsListColumns(): ColumnDef<Subscription>[] {
     const routes = useRoutes();
+    const { t } = useTranslation();
 
     return [
         {
@@ -58,7 +60,7 @@ export function useSubscriptionsListColumns(): ColumnDef<Subscription>[] {
         },
         {
             accessorKey: 'id',
-            header: ({ column }) => <CollectionColumnHeader column={column} title="Subscription" />,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('subscriptions.title')} />,
             cell: ({ row }) => {
                 return (
                     <Link to={routes.pmsSubscriptionView(row.original.id)} className="flex items-center gap-3">
@@ -77,7 +79,7 @@ export function useSubscriptionsListColumns(): ColumnDef<Subscription>[] {
         },
         {
             accessorKey: 'status',
-            header: ({ column }) => <CollectionColumnHeader column={column} title="Status" />,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.status')} />,
             cell: ({ row }) => {
                 const status = row.getValue('status') as SubscriptionStatus | null;
                 return <Badge variant={getStatusColor(status)}>{status || 'Unknown'}</Badge>;
@@ -86,7 +88,7 @@ export function useSubscriptionsListColumns(): ColumnDef<Subscription>[] {
         },
         {
             accessorKey: 'currentPeriodStart',
-            header: ({ column }) => <CollectionColumnHeader column={column} title="Period Start" />,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('subscriptions.periodStart')} />,
             cell: ({ row }) => {
                 const date = row.getValue('currentPeriodStart');
                 if (!date) return <span>-</span>;
@@ -96,7 +98,7 @@ export function useSubscriptionsListColumns(): ColumnDef<Subscription>[] {
         },
         {
             accessorKey: 'currentPeriodEnd',
-            header: ({ column }) => <CollectionColumnHeader column={column} title="Period End" />,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('subscriptions.periodEnd')} />,
             cell: ({ row }) => {
                 const date = row.getValue('currentPeriodEnd');
                 if (!date) return <span>-</span>;
@@ -106,13 +108,13 @@ export function useSubscriptionsListColumns(): ColumnDef<Subscription>[] {
         },
         {
             accessorKey: 'cancelAtPeriodEnd',
-            header: ({ column }) => <CollectionColumnHeader column={column} title="Canceling" />,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('subscriptions.canceling')} />,
             cell: ({ row }) => {
                 const cancelAtPeriodEnd = row.getValue('cancelAtPeriodEnd');
                 if (cancelAtPeriodEnd) {
-                    return <Badge variant="destructive">Yes</Badge>;
+                    return <Badge variant="destructive">{t('common.yes')}</Badge>;
                 }
-                return <span className="text-muted-foreground">No</span>;
+                return <span className="text-muted-foreground">{t('common.no')}</span>;
             },
             enableSorting: false,
         },
@@ -123,7 +125,7 @@ export function useSubscriptionsListColumns(): ColumnDef<Subscription>[] {
                     row={row}
                     actions={[
                         {
-                            label: 'View Subscription',
+                            label: t('subscriptions.viewSubscription'),
                             icon: IconEye,
                             linkTo: (subscription: Subscription) => routes.pmsSubscriptionView(subscription.id),
                         },
