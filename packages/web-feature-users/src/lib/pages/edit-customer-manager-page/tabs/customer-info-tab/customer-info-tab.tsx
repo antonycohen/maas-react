@@ -2,7 +2,7 @@ import { useOutletContext } from 'react-router';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@maas/web-components';
 import { createConnectedInputHelpers } from '@maas/web-form';
 import { EditCustomerOutletContext } from '../../edit-customer-manager-page';
-import { CustomerFormValues, useCurrencyOptions } from '../../hooks';
+import { CustomerFormValues, useCurrencyOptions, useCustomerTypeOptions } from '../../hooks';
 import { useTranslation } from '@maas/core-translations';
 import { CustomerSummarySidebar } from './components/customer-summary-sidebar';
 
@@ -11,6 +11,7 @@ export const CustomerInfoTab = () => {
     const { t } = useTranslation();
 
     const currencyOptions = useCurrencyOptions();
+    const customerTypeOptions = useCustomerTypeOptions();
     const { ControlledTextInput, ControlledTextAreaInput, ControlledSelectInput } =
         createConnectedInputHelpers<CustomerFormValues>();
 
@@ -54,6 +55,14 @@ export const CustomerInfoTab = () => {
                                     label={t('field.description')}
                                     direction="horizontal"
                                     maxLength={500}
+                                    className="py-6"
+                                />
+                                <ControlledSelectInput
+                                    name="customerType"
+                                    label={t('customers.info.customerType')}
+                                    options={customerTypeOptions}
+                                    placeholder={t('customers.info.customerType')}
+                                    direction="horizontal"
                                     className="py-6"
                                 />
                                 <ControlledSelectInput

@@ -84,6 +84,9 @@ export const useEditCustomerActions = (
             ...(data.phone ? { phone: data.phone } : {}),
             ...(data.description ? { description: data.description } : {}),
             ...(data.currency ? { currency: data.currency } : {}),
+            metadata: {
+                ...(data.customerType ? { customerType: data.customerType } : {}),
+            },
             billingAddress: toBillingAddress(data.billingAddress),
             shippingAddress: toShippingAddress(data.shippingAddress),
         };

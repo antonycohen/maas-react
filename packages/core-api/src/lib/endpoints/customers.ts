@@ -30,6 +30,7 @@ export interface UpdateMyCustomerData {
     phone?: string | null;
     description?: string | null;
     currency?: string | null;
+    metadata?: Record<string, unknown>;
     billingAddress?: BillingAddress;
     shippingAddress?: ShippingAddress;
 }

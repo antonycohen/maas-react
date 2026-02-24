@@ -22,12 +22,24 @@ const deliveryAddressSchema = z.object({
     country: z.string(),
 });
 
+export const customerTypeEnum = z.enum([
+    'individual',
+    'establishment',
+    'professor',
+    'student',
+    'researcher',
+    'library',
+]);
+
+export type CustomerType = z.infer<typeof customerTypeEnum>;
+
 export const customerFormSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     email: z.string().email('Invalid email format'),
     phone: z.string().nullable().optional(),
     description: z.string().nullable().optional(),
     currency: z.string().nullable().optional(),
+    customerType: customerTypeEnum.nullable().optional(),
     billingAddress: billingAddressSchema.optional(),
     shippingAddress: deliveryAddressSchema.optional(),
 });
@@ -59,6 +71,12 @@ const parseDeliveryAddress = (metadata: Record<string, unknown> | null) => {
     };
 };
 
+const parseCustomerType = (metadata: Record<string, unknown> | null): CustomerType | null => {
+    if (!metadata?.customerType) return null;
+    const result = customerTypeEnum.safeParse(metadata.customerType);
+    return result.success ? result.data : null;
+};
+
 type UseEditCustomerFormParams = {
     customer: ReadCustomer | undefined;
 };
@@ -72,6 +90,7 @@ export const useEditCustomerForm = ({ customer }: UseEditCustomerFormParams) => 
             phone: '',
             description: '',
             currency: '',
+            customerType: null,
             billingAddress: {
                 name: '',
                 line1: '',
@@ -97,6 +116,7 @@ export const useEditCustomerForm = ({ customer }: UseEditCustomerFormParams) => 
                   phone: customer.phone ?? '',
                   description: customer.description ?? '',
                   currency: customer.currency ?? '',
+                  customerType: parseCustomerType(customer.metadata),
                   billingAddress: {
                       name: customer.name ?? '',
                       line1: String(customer.addressLine1 ?? ''),
