@@ -600,7 +600,7 @@
     "search.placeholder": "Rechercher des articles, dossiers, numéros...",
     "search.noResults": "Aucun résultat trouvé",
     "search.noResultsDescription": "Essayez avec d'autres mots-clés",
-    "search.resultCount": "{{count}} résultat(s)",
+    "search.resultCount": "{count, plural, one {# résultat} other {# résultats}}",
     "search.articles": "Articles",
     "search.folders": "Dossiers",
     "search.issues": "Numéros",

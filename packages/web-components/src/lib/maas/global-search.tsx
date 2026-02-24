@@ -91,11 +91,6 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
 
     const handleOpenChange = useCallback(
         (nextOpen: boolean) => {
-            if (!nextOpen) {
-                setQuery('');
-                setDebouncedQuery('');
-                setActiveFilter('all');
-            }
             onOpenChange(nextOpen);
         },
         [onOpenChange]

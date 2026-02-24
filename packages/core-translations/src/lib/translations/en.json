@@ -580,7 +580,7 @@
     "search.placeholder": "Search articles, folders, issues...",
     "search.noResults": "No results found",
     "search.noResultsDescription": "Try different keywords",
-    "search.resultCount": "{{count}} result(s)",
+    "search.resultCount": "{count, plural, one {# result} other {# results}}",
     "search.articles": "Articles",
     "search.folders": "Folders",
     "search.issues": "Issues",
