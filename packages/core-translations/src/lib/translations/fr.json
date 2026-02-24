@@ -513,6 +513,8 @@
     "customers.quotas.usageUpdated": "Quota mis à jour",
     "customers.quotas.updateError": "Échec de la mise à jour du quota",
     "customers.saveSuccess": "Client mis à jour avec succès",
+    "customers.createTitle": "Nouveau client",
+    "customers.createSuccess": "Client créé avec succès",
     "customers.validation.nameRequired": "Le nom est requis",
     "customers.validation.invalidEmail": "Format d'e-mail invalide",
     "customers.tabs.info": "Infos",

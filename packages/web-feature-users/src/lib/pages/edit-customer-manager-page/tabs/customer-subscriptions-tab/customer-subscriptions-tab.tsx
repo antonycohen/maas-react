@@ -125,7 +125,12 @@ export const CustomerSubscriptionsTab = () => {
                             </div>
                             <div className="flex items-center gap-2">
                                 {!hasActiveSubscription && !isLoadingSubscriptions && (
-                                    <Button variant="default" size="sm" onClick={() => setShowCreateSubscription(true)}>
+                                    <Button
+                                        type="button"
+                                        variant="default"
+                                        size="sm"
+                                        onClick={() => setShowCreateSubscription(true)}
+                                    >
                                         <IconPlus className="mr-1 h-4 w-4" />
                                         {t('customers.subscriptions.createSubscription')}
                                     </Button>

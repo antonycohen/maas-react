@@ -493,6 +493,8 @@
     "customers.quotas.usageUpdated": "Quota updated",
     "customers.quotas.updateError": "Failed to update quota",
     "customers.saveSuccess": "Customer updated successfully",
+    "customers.createTitle": "New Customer",
+    "customers.createSuccess": "Customer created successfully",
     "customers.validation.nameRequired": "Name is required",
     "customers.validation.invalidEmail": "Invalid email format",
     "customers.tabs.info": "Info",

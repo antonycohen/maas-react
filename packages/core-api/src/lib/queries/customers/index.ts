@@ -6,4 +6,5 @@ export * from './use-get-customer-quotas';
 export * from './use-update-my-customer';
 export * from './use-update-customer';
 export * from './use-update-quota-usage';
+export * from './use-create-customer';
 export * from './use-create-customer-subscription';

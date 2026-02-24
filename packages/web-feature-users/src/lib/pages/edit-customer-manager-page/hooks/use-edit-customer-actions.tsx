@@ -1,4 +1,4 @@
-import { ApiError, useUpdateCustomer } from '@maas/core-api';
+import { ApiError, useCreateCustomer, useUpdateCustomer } from '@maas/core-api';
 import { UseFormReturn } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router';
 import { toast } from 'sonner';
@@ -36,7 +36,11 @@ const toShippingAddress = (address: CustomerFormValues['shippingAddress']) => {
     };
 };
 
-export const useEditCustomerActions = (form: UseFormReturn<CustomerFormValues>, customerId: string) => {
+export const useEditCustomerActions = (
+    form: UseFormReturn<CustomerFormValues>,
+    customerId: string,
+    isCreateMode: boolean
+) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
@@ -53,6 +57,14 @@ export const useEditCustomerActions = (form: UseFormReturn<CustomerFormValues>, 
         }
     };
 
+    const createMutation = useCreateCustomer({
+        onSuccess: (data) => {
+            toast.success(t('customers.createSuccess'));
+            navigate(routes.customerInfo(data.id), { replace: true });
+        },
+        onError: handleApiError,
+    });
+
     const updateMutation = useUpdateCustomer({
         onSuccess: (data) => {
             toast.success(t('customers.saveSuccess'));
@@ -66,21 +78,24 @@ export const useEditCustomerActions = (form: UseFormReturn<CustomerFormValues>, 
     });
 
     function onSubmit(data: CustomerFormValues) {
-        updateMutation.mutate({
-            customerId,
-            data: {
-                name: data.name,
-                email: data.email,
-                ...(data.phone ? { phone: data.phone } : {}),
-                ...(data.description ? { description: data.description } : {}),
-                ...(data.currency ? { currency: data.currency } : {}),
-                billingAddress: toBillingAddress(data.billingAddress),
-                shippingAddress: toShippingAddress(data.shippingAddress),
-            },
-        });
+        const payload = {
+            name: data.name,
+            email: data.email,
+            ...(data.phone ? { phone: data.phone } : {}),
+            ...(data.description ? { description: data.description } : {}),
+            ...(data.currency ? { currency: data.currency } : {}),
+            billingAddress: toBillingAddress(data.billingAddress),
+            shippingAddress: toShippingAddress(data.shippingAddress),
+        };
+
+        if (isCreateMode) {
+            createMutation.mutate(payload);
+        } else {
+            updateMutation.mutate({ customerId, data: payload });
+        }
     }
 
-    const isSaving = updateMutation.isPending;
+    const isSaving = createMutation.isPending || updateMutation.isPending;
 
     return {
         onSubmit,

@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react';
 import { useQueries } from '@tanstack/react-query';
 import { type Product, type Price, type ProductFeature } from '@maas/core-api-models';
 import { getPlans, getProducts, getPrices, getProductFeatures, useCreateCustomerSubscription } from '@maas/core-api';
+import { useNavigate } from 'react-router';
+import { useRoutes } from '@maas/core-workspace';
 import {
     Badge,
     Button,
@@ -267,6 +269,8 @@ type Step = 'plan' | 'configure';
 
 export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Props) => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
+    const routes = useRoutes();
     const { pricingPlans, isLoading } = useAdminPricingData();
 
     const [step, setStep] = useState<Step>('plan');
@@ -279,9 +283,11 @@ export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Pro
     const selectedPlan = pricingPlans.find((p) => p.planId === selectedPlanId) ?? null;
 
     const { mutate: createSubscription, isPending } = useCreateCustomerSubscription({
-        onSuccess: () => {
+        onSuccess: (data) => {
             toast.success(t('customers.subscriptions.subscriptionCreated'));
-            window.location.reload();
+            if (data?.customer?.id) {
+                navigate(routes.customerInfo(data.customer.id), { replace: true });
+            }
         },
         onError: () => {
             toast.error(t('customers.subscriptions.createError'));
@@ -328,14 +334,16 @@ export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Pro
             }
         }
 
+        const subscriptionData = {
+            priceIds,
+            collectionMethod,
+            ...(collectionMethod === 'send_invoice' && { daysUntilDue }),
+            metadata: { manual: true },
+        };
+
         createSubscription({
             customerId,
-            data: {
-                priceIds,
-                collectionMethod,
-                ...(collectionMethod === 'send_invoice' && { daysUntilDue }),
-                metadata: { manual: true },
-            },
+            data: subscriptionData,
         });
     };
 

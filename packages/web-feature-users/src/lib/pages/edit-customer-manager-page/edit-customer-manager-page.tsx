@@ -13,6 +13,7 @@ export type EditCustomerOutletContext = {
     customerId: string;
     customer: ReadCustomer | undefined;
     isLoading: boolean;
+    isCreateMode: boolean;
     form: UseFormReturn<CustomerFormValues>;
 };
 
@@ -21,47 +22,56 @@ export function EditCustomerManagerPage() {
     const routes = useRoutes();
     const { t } = useTranslation();
 
-    const { data: customer, isLoading } = useGetCustomerById({
-        id: customerId,
-        fields: {
-            id: null,
-            name: null,
-            email: null,
-            phone: null,
-            description: null,
-            addressLine1: null,
-            addressLine2: null,
-            addressCity: null,
-            addressState: null,
-            addressPostalCode: null,
-            addressCountry: null,
-            currency: null,
-            balance: null,
-            taxExempt: null,
-            refId: null,
-            delinquent: null,
-            createdAt: null,
-            updatedAt: null,
-            metadata: null,
+    const isCreateMode = customerId === 'new';
+
+    const { data: customer, isLoading } = useGetCustomerById(
+        {
+            id: customerId,
+            fields: {
+                id: null,
+                name: null,
+                email: null,
+                phone: null,
+                description: null,
+                addressLine1: null,
+                addressLine2: null,
+                addressCity: null,
+                addressState: null,
+                addressPostalCode: null,
+                addressCountry: null,
+                currency: null,
+                balance: null,
+                taxExempt: null,
+                refId: null,
+                delinquent: null,
+                createdAt: null,
+                updatedAt: null,
+                metadata: null,
+            },
         },
-    });
+        { enabled: !isCreateMode }
+    );
 
     const { form } = useEditCustomerForm({ customer });
-    const { onSubmit, isSaving } = useEditCustomerActions(form, customerId);
+    const { onSubmit, isSaving } = useEditCustomerActions(form, customerId, isCreateMode);
 
-    const pageTitle = customer?.name ?? '';
+    const pageTitle = isCreateMode ? t('customers.createTitle') : (customer?.name ?? '');
 
     const getTabItems = (id: string) => [
         { title: t('customers.tabs.info'), url: routes.customerInfo(id) },
-        { title: t('customers.tabs.addresses'), url: routes.customerAddresses(id) },
-        { title: t('customers.tabs.subscriptions'), url: routes.customerSubscriptions(id) },
+        ...(isCreateMode
+            ? []
+            : [
+                  { title: t('customers.tabs.addresses'), url: routes.customerAddresses(id) },
+                  { title: t('customers.tabs.subscriptions'), url: routes.customerSubscriptions(id) },
+              ]),
     ];
 
-    if (isLoading) {
+    if (!isCreateMode && isLoading) {
         return <div className="flex h-screen items-center justify-center">{t('common.loading')}</div>;
     }
 
-    if (!isLoading && !customer) {
+    if (!isCreateMode && !isLoading && !customer) {
         return <div className="flex h-screen items-center justify-center">{t('customers.notFound')}</div>;
     }
 
@@ -69,6 +79,7 @@ export function EditCustomerManagerPage() {
         customerId,
         customer,
         isLoading,
+        isCreateMode,
         form,
     };
 
@@ -84,7 +95,7 @@ export function EditCustomerManagerPage() {
                         items={[
                             { label: t('common.home'), to: routes.root() },
                             { label: t('customers.title'), to: routes.customers() },
-                            { label: customer?.name ?? customerId },
+                            { label: isCreateMode ? t('customers.createTitle') : (customer?.name ?? customerId) },
                         ]}
                     />
                 </header>
@@ -116,7 +127,7 @@ export function EditCustomerManagerPage() {
                             ) : (
                                 <>
                                     <IconDeviceFloppy className="mr-1.5 h-4 w-4" />
-                                    {t('common.save')}
+                                    {isCreateMode ? t('common.create') : t('common.save')}
                                 </>
                             )}
                         </Button>

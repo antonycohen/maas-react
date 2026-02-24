@@ -1,4 +1,4 @@
-import { ReadCustomer, TaxExempt, Quota, Subscription } from '@maas/core-api-models';
+import { ReadCustomer, CreateCustomer, TaxExempt, Quota, Subscription } from '@maas/core-api-models';
 import { ApiClient } from '../api-client/api-client';
 import { ApiCollectionResponse, FieldQuery, GetCollectionQueryParams, GetQueryByIdParams } from '../types';
 
@@ -105,6 +105,14 @@ export class CustomersEndpoint {
      */
     async updateMyCustomer(data: UpdateMyCustomerData): Promise<ReadCustomer> {
         return this.client.put<ReadCustomer>(`${BASE_PATH}/me`, data);
+    }
+
+    /**
+     * Create a new customer
+     * POST /api/v1/pms/customers
+     */
+    async createCustomer(data: CreateCustomer): Promise<ReadCustomer> {
+        return this.client.post<ReadCustomer>(BASE_PATH, data);
     }
 
     /**
