@@ -22,6 +22,7 @@ export const invoiceSchema = z.object({
     subscriptionId: z.string().nullable(),
     hostedInvoiceUrl: z.string().nullable(),
     lineItems: z.array(invoiceLineItemSchema).nullable(),
+    metadata: z.record(z.string(), z.unknown()).nullable().optional(),
     createdAt: z.string().nullable(),
 });
 export type Invoice = z.infer<typeof invoiceSchema>;

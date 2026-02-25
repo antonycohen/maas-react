@@ -83,19 +83,20 @@ export class InvoicesEndpoint {
      * Download an invoice PDF (admin)
      * GET /api/v1/pms/invoices/{invoiceId}/download
      */
-    async downloadInvoice(invoiceId: string): Promise<Blob> {
-        const response = await this.client.request<Blob>(`${ADMIN_PATH}/${invoiceId}/download`, {
-            method: 'GET',
-            responseType: 'blob',
-        });
-        return response.data;
+    async downloadInvoice(invoiceId: string): Promise<{ invoicePdf: string; hostedInvoiceUrl: string }> {
+        return this.client.getById<{ invoicePdf: string; hostedInvoiceUrl: string }>(
+            `${ADMIN_PATH}/${invoiceId}/download`
+        );
     }
 
     /**
      * Pay an invoice (admin)
      * POST /api/v1/pms/invoices/{invoiceId}/pay
      */
-    async payInvoice(invoiceId: string): Promise<Invoice> {
-        return this.client.post<Invoice>(`${ADMIN_PATH}/${invoiceId}/pay`, {});
+    async payInvoice(
+        invoiceId: string,
+        data?: { paymentReference?: string; paymentMethod?: string }
+    ): Promise<Invoice> {
+        return this.client.post<Invoice>(`${ADMIN_PATH}/${invoiceId}/pay`, data ?? {});
     }
 }

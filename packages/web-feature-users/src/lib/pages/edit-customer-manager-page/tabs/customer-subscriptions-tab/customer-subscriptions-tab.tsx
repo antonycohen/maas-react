@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { Link, useOutletContext } from 'react-router';
+import { useOutletContext } from 'react-router';
 import { useGetSubscriptions, useGetInvoices, useGetCustomerQuotas } from '@maas/core-api';
 import { Invoice, Quota, Subscription } from '@maas/core-api-models';
-import { useRoutes } from '@maas/core-workspace';
 import {
     Badge,
     Button,
@@ -25,6 +24,7 @@ import { LayoutContent } from '@maas/web-layout';
 import { EditCustomerOutletContext } from '../../edit-customer-manager-page';
 import { CustomerInvoiceListSection } from './components/customer-invoice-list-section';
 import { CreateSubscriptionDialog } from './components/create-subscription-dialog';
+import { ViewSubscriptionDialog } from './components/view-subscription-dialog';
 import { UpdateQuotaDialog } from './components/update-quota-dialog';
 import { useTranslation } from '@maas/core-translations';
 
@@ -66,8 +66,8 @@ const formatFeatureKey = (key: string): string => {
 export const CustomerSubscriptionsTab = () => {
     const { customerId } = useOutletContext<EditCustomerOutletContext>();
     const { t } = useTranslation();
-    const routes = useRoutes();
     const [showCreateSubscription, setShowCreateSubscription] = useState(false);
+    const [viewingSubscriptionId, setViewingSubscriptionId] = useState<string | null>(null);
     const [editingQuota, setEditingQuota] = useState<Quota | null>(null);
 
     const { data: subscriptionsData, isLoading: isLoadingSubscriptions } = useGetSubscriptions({
@@ -95,6 +95,7 @@ export const CustomerSubscriptionsTab = () => {
             amountDue: null,
             currency: null,
             subscriptionId: null,
+            metadata: null,
             createdAt: null,
         },
         offset: 0,
@@ -109,6 +110,7 @@ export const CustomerSubscriptionsTab = () => {
     const manualSubscriptionIds = new Set(
         subscriptions.filter((s) => (s.metadata as Record<string, unknown> | null)?.manual === 'true').map((s) => s.id)
     );
+    const canceledSubscriptionIds = new Set(subscriptions.filter((s) => s.status === 'canceled').map((s) => s.id));
     // The admin invoices API returns { invoices: [...] } not a flat array
     const invoices = (invoicesData?.data as unknown as { invoices?: Invoice[] })?.invoices ?? [];
 
@@ -136,10 +138,12 @@ export const CustomerSubscriptionsTab = () => {
                                     </Button>
                                 )}
                                 {activeSubscription && (
-                                    <Button variant="outline" size="sm" asChild>
-                                        <Link to={routes.pmsSubscriptionView(activeSubscription.id)}>
-                                            {t('customers.subscriptions.editSubscriptions')}
-                                        </Link>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => setViewingSubscriptionId(activeSubscription.id)}
+                                    >
+                                        {t('customers.subscriptions.editSubscriptions')}
                                     </Button>
                                 )}
                             </div>
@@ -197,12 +201,10 @@ export const CustomerSubscriptionsTab = () => {
                                                         variant="ghost"
                                                         size="icon"
                                                         className="h-8 w-8"
-                                                        asChild
                                                         title={t('customers.subscriptions.viewSubscription')}
+                                                        onClick={() => setViewingSubscriptionId(subscription.id)}
                                                     >
-                                                        <Link to={routes.pmsSubscriptionView(subscription.id)}>
-                                                            <IconExternalLink className="h-4 w-4" />
-                                                        </Link>
+                                                        <IconExternalLink className="h-4 w-4" />
                                                     </Button>
                                                 </TableCell>
                                             </TableRow>
@@ -219,6 +221,7 @@ export const CustomerSubscriptionsTab = () => {
                     invoices={invoices}
                     isLoading={isLoadingInvoices}
                     manualSubscriptionIds={manualSubscriptionIds}
+                    canceledSubscriptionIds={canceledSubscriptionIds}
                 />
 
                 {/* Quotas */}
@@ -278,6 +281,16 @@ export const CustomerSubscriptionsTab = () => {
                 onOpenChange={setShowCreateSubscription}
                 customerId={customerId}
             />
+
+            {viewingSubscriptionId && (
+                <ViewSubscriptionDialog
+                    open={viewingSubscriptionId !== null}
+                    onOpenChange={(open) => {
+                        if (!open) setViewingSubscriptionId(null);
+                    }}
+                    subscriptionId={viewingSubscriptionId}
+                />
+            )}
 
             {editingQuota && (
                 <UpdateQuotaDialog

@@ -13,7 +13,6 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    Input,
     Label,
     Select,
     SelectContent,
@@ -267,6 +266,17 @@ type Props = {
 
 type Step = 'plan' | 'configure';
 
+type PaymentMethod = 'card' | 'cheque' | 'virement' | 'prelevement';
+
+const PAYMENT_METHODS: PaymentMethod[] = ['card', 'cheque', 'virement', 'prelevement'];
+
+const PAYMENT_METHOD_TRANSLATION_KEYS: Record<PaymentMethod, string> = {
+    card: 'customers.subscriptions.paymentMethodCard',
+    cheque: 'customers.subscriptions.paymentMethodCheque',
+    virement: 'customers.subscriptions.paymentMethodVirement',
+    prelevement: 'customers.subscriptions.paymentMethodPrelevement',
+};
+
 export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Props) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -277,8 +287,7 @@ export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Pro
     const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
     const [selectedInterval, setSelectedInterval] = useState<BillingInterval | null>(null);
     const [addonToggles, setAddonToggles] = useState<Record<string, boolean>>({});
-    const [collectionMethod, setCollectionMethod] = useState<'send_invoice' | 'charge_automatically'>('send_invoice');
-    const [daysUntilDue, setDaysUntilDue] = useState(30);
+    const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
 
     const selectedPlan = pricingPlans.find((p) => p.planId === selectedPlanId) ?? null;
 
@@ -299,8 +308,7 @@ export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Pro
         setSelectedPlanId(null);
         setSelectedInterval(null);
         setAddonToggles({});
-        setCollectionMethod('send_invoice');
-        setDaysUntilDue(30);
+        setPaymentMethod('card');
     };
 
     const handleSelectPlan = (planId: string) => {
@@ -336,8 +344,7 @@ export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Pro
 
         const subscriptionData = {
             priceIds,
-            collectionMethod,
-            ...(collectionMethod === 'send_invoice' && { daysUntilDue }),
+            paymentMethod,
             metadata: { manual: true },
         };
 
@@ -534,44 +541,22 @@ export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Pro
 
                         <Separator />
 
-                        {/* Collection Method */}
+                        {/* Payment Method */}
                         <div className="flex flex-col gap-2">
-                            <Label className="text-sm font-medium">
-                                {t('customers.subscriptions.collectionMethod')}
-                            </Label>
-                            <Select
-                                value={collectionMethod}
-                                onValueChange={(v) => setCollectionMethod(v as 'send_invoice' | 'charge_automatically')}
-                            >
+                            <Label className="text-sm font-medium">{t('customers.subscriptions.paymentMethod')}</Label>
+                            <Select value={paymentMethod} onValueChange={(v) => setPaymentMethod(v as PaymentMethod)}>
                                 <SelectTrigger>
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="send_invoice">
-                                        {t('customers.subscriptions.sendInvoice')}
-                                    </SelectItem>
-                                    <SelectItem value="charge_automatically">
-                                        {t('customers.subscriptions.chargeAutomatically')}
-                                    </SelectItem>
+                                    {PAYMENT_METHODS.map((method) => (
+                                        <SelectItem key={method} value={method}>
+                                            {t(PAYMENT_METHOD_TRANSLATION_KEYS[method])}
+                                        </SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
                         </div>
-
-                        {collectionMethod === 'send_invoice' && (
-                            <div className="flex flex-col gap-2">
-                                <Label className="text-sm font-medium">
-                                    {t('customers.subscriptions.daysUntilDue')}
-                                </Label>
-                                <Input
-                                    type="number"
-                                    min={1}
-                                    max={365}
-                                    value={daysUntilDue}
-                                    onChange={(e) => setDaysUntilDue(Number(e.target.value))}
-                                    className="w-32"
-                                />
-                            </div>
-                        )}
 
                         <Separator />
 

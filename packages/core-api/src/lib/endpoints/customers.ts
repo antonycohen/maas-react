@@ -44,7 +44,8 @@ export interface UpdateQuotaUsageData {
 
 export interface CreateCustomerSubscriptionData {
     priceIds: string[];
-    collectionMethod: 'send_invoice' | 'charge_automatically';
+    paymentMethod?: 'card' | 'cheque' | 'virement' | 'prelevement';
+    collectionMethod?: 'send_invoice' | 'charge_automatically';
     daysUntilDue?: number;
     metadata?: Record<string, unknown>;
 }

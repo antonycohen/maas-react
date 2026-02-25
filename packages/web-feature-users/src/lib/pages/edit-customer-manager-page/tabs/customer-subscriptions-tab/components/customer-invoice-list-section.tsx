@@ -9,7 +9,18 @@ import {
     CardHeader,
     CardTitle,
     CardDescription,
-    ConfirmActionDialog,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+    Input,
+    Label,
     Table,
     TableBody,
     TableCell,
@@ -18,10 +29,11 @@ import {
     TableRow,
 } from '@maas/web-components';
 import { Download } from 'lucide-react';
-import { IconCreditCardPay } from '@tabler/icons-react';
+import { IconCreditCardPay, IconDotsVertical } from '@tabler/icons-react';
 import { toast } from 'sonner';
-import { triggerBlobDownload } from '../../../../account-settings-page/tabs/account-invoices-tab/utils/trigger-blob-download';
 import { useTranslation } from '@maas/core-translations';
+
+type PaymentMethod = 'card' | 'cheque' | 'virement' | 'prelevement';
 
 const STATUS_STYLES: Record<string, string> = {
     paid: 'border-emerald-200 bg-emerald-50 text-emerald-700',
@@ -68,17 +80,28 @@ type Props = {
     invoices: Invoice[] | undefined;
     isLoading: boolean;
     manualSubscriptionIds?: Set<string>;
+    canceledSubscriptionIds?: Set<string>;
 };
 
-export const CustomerInvoiceListSection = ({ invoices, isLoading, manualSubscriptionIds }: Props) => {
+export const CustomerInvoiceListSection = ({
+    invoices,
+    isLoading,
+    manualSubscriptionIds,
+    canceledSubscriptionIds,
+}: Props) => {
     const { t } = useTranslation();
-    const [payingInvoiceId, setPayingInvoiceId] = useState<string | null>(null);
+    const [payingInvoice, setPayingInvoice] = useState<Invoice | null>(null);
+    const [payReference, setPayReference] = useState('');
+    const [payReferenceError, setPayReferenceError] = useState(false);
+
+    const paymentMethod = payingInvoice
+        ? (((payingInvoice.metadata as Record<string, unknown> | null)?.paymentMethod as PaymentMethod | undefined) ??
+          null)
+        : null;
 
     const { mutate: download, isPending: isDownloading } = useDownloadInvoice({
-        onSuccess: (blob, invoiceId) => {
-            const invoice = invoices?.find((inv) => inv.id === invoiceId);
-            const filename = `${invoice?.number ?? invoiceId}.pdf`;
-            triggerBlobDownload(blob, filename);
+        onSuccess: (data) => {
+            window.open(data.invoicePdf, '_blank');
         },
         onError: () => {
             toast.error(t('customers.invoices.downloadError'));
@@ -88,13 +111,32 @@ export const CustomerInvoiceListSection = ({ invoices, isLoading, manualSubscrip
     const { mutate: payInvoice, isPending: isPaying } = usePayInvoice({
         onSuccess: () => {
             toast.success(t('customers.invoices.paySuccess'));
-            setPayingInvoiceId(null);
+            setPayingInvoice(null);
+            setPayReference('');
+            setPayReferenceError(false);
         },
         onError: () => {
             toast.error(t('customers.invoices.payError'));
-            setPayingInvoiceId(null);
+            setPayingInvoice(null);
+            setPayReference('');
+            setPayReferenceError(false);
         },
     });
+
+    const handlePay = () => {
+        if (!payingInvoice || !paymentMethod) return;
+
+        if (!payReference.trim()) {
+            setPayReferenceError(true);
+            return;
+        }
+
+        payInvoice({
+            invoiceId: payingInvoice.id,
+            paymentMethod,
+            paymentReference: payReference.trim(),
+        });
+    };
 
     if (isLoading) {
         return (
@@ -141,6 +183,9 @@ export const CustomerInvoiceListSection = ({ invoices, isLoading, manualSubscrip
                             const statusStyle = STATUS_STYLES[status] ?? STATUS_STYLES.draft;
                             const statusKey = STATUS_KEYS[status];
                             const statusLabel = statusKey ? t(statusKey) : status;
+                            const isManual = manualSubscriptionIds?.has(invoice.subscriptionId ?? '');
+                            const isCanceled = canceledSubscriptionIds?.has(invoice.subscriptionId ?? '');
+                            const canPay = isManual && !isCanceled && invoice.status !== 'paid';
 
                             return (
                                 <TableRow key={invoice.id}>
@@ -160,33 +205,34 @@ export const CustomerInvoiceListSection = ({ invoices, isLoading, manualSubscrip
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        <div className="flex items-center justify-end gap-1">
-                                            {manualSubscriptionIds?.has(invoice.subscriptionId ?? '') &&
-                                                invoice.status !== 'paid' && (
-                                                    <Button
-                                                        type="button"
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        className="h-8 w-8"
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                                    <IconDotsVertical className="h-4 w-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                {canPay && (
+                                                    <DropdownMenuItem
+                                                        onClick={() => {
+                                                            setPayReference('');
+                                                            setPayingInvoice(invoice);
+                                                        }}
                                                         disabled={isPaying}
-                                                        onClick={() => setPayingInvoiceId(invoice.id)}
-                                                        title={t('customers.invoices.pay')}
                                                     >
-                                                        <IconCreditCardPay className="h-4 w-4" />
-                                                    </Button>
+                                                        <IconCreditCardPay className="mr-2 h-4 w-4" />
+                                                        {t('customers.invoices.pay')}
+                                                    </DropdownMenuItem>
                                                 )}
-                                            <Button
-                                                type="button"
-                                                variant="ghost"
-                                                size="icon"
-                                                className="h-8 w-8"
-                                                disabled={isDownloading}
-                                                onClick={() => download(invoice.id)}
-                                                title={t('customers.invoices.download')}
-                                            >
-                                                <Download className="h-4 w-4" />
-                                            </Button>
-                                        </div>
+                                                <DropdownMenuItem
+                                                    onClick={() => download(invoice.id)}
+                                                    disabled={isDownloading}
+                                                >
+                                                    <Download className="mr-2 h-4 w-4" />
+                                                    {t('customers.invoices.download')}
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
                                     </TableCell>
                                 </TableRow>
                             );
@@ -195,22 +241,63 @@ export const CustomerInvoiceListSection = ({ invoices, isLoading, manualSubscrip
                 </Table>
             </CardContent>
 
-            <ConfirmActionDialog
-                open={payingInvoiceId !== null}
+            {/* Pay Invoice Dialog */}
+            <Dialog
+                open={payingInvoice !== null}
                 onOpenChange={(open) => {
-                    if (!open) setPayingInvoiceId(null);
+                    if (!open) {
+                        setPayingInvoice(null);
+                        setPayReference('');
+                        setPayReferenceError(false);
+                    }
                 }}
-                onConfirm={() => {
-                    if (payingInvoiceId) payInvoice(payingInvoiceId);
-                }}
-                title={t('customers.invoices.payConfirmTitle')}
-                description={t('customers.invoices.payConfirmDescription')}
-                confirmLabel={t('customers.invoices.pay')}
-                cancelLabel={t('common.cancel')}
-                variant="default"
-                isLoading={isPaying}
-                countdown={0}
-            />
+            >
+                <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                        <DialogTitle>{t('customers.invoices.payConfirmTitle')}</DialogTitle>
+                        <DialogDescription>{t('customers.invoices.payConfirmDescription')}</DialogDescription>
+                    </DialogHeader>
+
+                    {paymentMethod && (
+                        <div className="flex flex-col gap-2">
+                            <Label className="text-sm font-medium">
+                                {t(`customers.invoices.payReferenceLabel.${paymentMethod}`)}
+                            </Label>
+                            <Input
+                                value={payReference}
+                                onChange={(e) => {
+                                    setPayReference(e.target.value);
+                                    if (payReferenceError) setPayReferenceError(false);
+                                }}
+                                placeholder={t(`customers.invoices.payReferencePlaceholder.${paymentMethod}`)}
+                                className={payReferenceError ? 'border-destructive' : ''}
+                            />
+                            {payReferenceError && (
+                                <p className="text-destructive text-sm">
+                                    {t('customers.invoices.payReferenceRequired')}
+                                </p>
+                            )}
+                        </div>
+                    )}
+
+                    <DialogFooter>
+                        <Button
+                            variant="outline"
+                            onClick={() => {
+                                setPayingInvoice(null);
+                                setPayReference('');
+                                setPayReferenceError(false);
+                            }}
+                            disabled={isPaying}
+                        >
+                            {t('common.cancel')}
+                        </Button>
+                        <Button onClick={handlePay} disabled={isPaying} isLoading={isPaying}>
+                            {t('customers.invoices.pay')}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </Card>
     );
 };
