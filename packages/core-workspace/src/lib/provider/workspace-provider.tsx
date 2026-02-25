@@ -74,6 +74,8 @@ const defaultRoutes = {
     pmsFeatureEdit: () => '/pms/features',
     pmsSubscriptions: () => '/pms/subscriptions',
     pmsSubscriptionView: () => '/pms/subscriptions',
+    pmsInvoices: () => '/pms/invoices',
+    pmsInvoiceView: () => '/pms/invoices',
     pmsWizard: () => '/pms/wizard',
 } as WorkspaceRoutes;
 

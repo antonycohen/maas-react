@@ -185,6 +185,11 @@ export const useWorkspaceRoutes = (workspaceId: string | null) => {
             /** View PMS Subscription URL */
             pmsSubscriptionView: (subscriptionId: string) =>
                 `${baseUrl}/${adminUrlBuilders.pmsSubscriptionView(subscriptionId)}`,
+            // PMS Invoices
+            /** PMS Invoices list URL */
+            pmsInvoices: () => `${baseUrl}/${adminUrlBuilders.pmsInvoices()}`,
+            /** View PMS Invoice URL */
+            pmsInvoiceView: (invoiceId: string) => `${baseUrl}/${adminUrlBuilders.pmsInvoiceView(invoiceId)}`,
             // PMS Wizard
             /** PMS Wizard URL */
             pmsWizard: () => `${baseUrl}/${adminUrlBuilders.pmsWizard()}`,

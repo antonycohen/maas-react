@@ -2,7 +2,7 @@ import { Invoice, InvoiceListResponse, InvoicePayResponse } from '@maas/core-api
 import { ApiClient } from '../api-client/api-client';
 import { ApiCollectionResponse, FieldQuery, GetCollectionQueryParams } from '../types';
 
-const ADMIN_PATH = '/api/v1/pms/invoices';
+const ADMIN_PATH = '/api/v1/pms/invoices/all';
 const ME_PATH = '/api/v1/users/me/invoices';
 
 export interface GetMyInvoicesFilter {
@@ -13,6 +13,7 @@ export interface GetMyInvoicesFilter {
 export interface GetAdminInvoicesFilter {
     customerId?: string;
     status?: string;
+    overdue?: boolean;
 }
 
 export class InvoicesEndpoint {
@@ -57,18 +58,35 @@ export class InvoicesEndpoint {
 
     /**
      * List customer invoices (admin)
-     * GET /api/v1/pms/invoices
+     * GET /api/v1/pms/invoices/all
+     * Returns { invoices: [...], total, limit, offset }
      */
     async getInvoices(
         params: GetCollectionQueryParams<Invoice> & { filters?: GetAdminInvoicesFilter }
     ): Promise<ApiCollectionResponse<Invoice>> {
-        const { fields, offset, limit, filters } = params;
-        return this.client.getCollection<Invoice>(ADMIN_PATH, fields, {
-            offset,
-            limit,
-            ...(filters?.customerId && { customerId: filters.customerId }),
-            ...(filters?.status && { status: filters.status }),
+        const { offset, limit, filters } = params;
+        const response = await this.client.getById<{
+            invoices: Invoice[];
+            total: number;
+            limit: number;
+            offset: number;
+        }>(ADMIN_PATH, undefined, {
+            params: {
+                offset,
+                limit,
+                ...(filters?.customerId && { customer_id: filters.customerId }),
+                ...(filters?.status && { status: filters.status }),
+                ...(filters?.overdue !== undefined && { overdue: filters.overdue }),
+            },
         });
+        return {
+            data: response.invoices ?? [],
+            pagination: {
+                count: response.total ?? 0,
+                limit: response.limit ?? limit,
+                offset: response.offset ?? offset,
+            },
+        };
     }
 
     /**

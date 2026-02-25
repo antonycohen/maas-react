@@ -71,6 +71,7 @@
     "nav.users": "Utilisateurs",
     "nav.organizations": "Organisations",
     "nav.subscriptions": "Abonnements",
+    "nav.invoices": "Factures",
     "nav.productsAndPlans": "Produits & Forfaits",
     "nav.plans": "Forfaits",
     "nav.products": "Produits",
@@ -952,5 +953,24 @@
     "permissions.assignAliasSuccess": "Alias attribué avec succès",
     "permissions.assignAliasError": "Échec de l'attribution de l'alias",
     "permissions.aliasUpdated": "Alias mis à jour avec succès",
-    "permissions.aliasUpdateError": "Échec de la mise à jour de l'alias"
+    "permissions.aliasUpdateError": "Échec de la mise à jour de l'alias",
+
+    "invoices.title": "Factures",
+    "invoices.number": "N° Facture",
+    "invoices.customerEmail": "Email client",
+    "invoices.customer": "Client",
+    "invoices.selectCustomer": "Sélectionner un client...",
+    "invoices.searchCustomer": "Rechercher un client...",
+    "invoices.noCustomerFound": "Aucun client trouvé.",
+    "invoices.amountDue": "Montant dû",
+    "invoices.amountRemaining": "Reste à payer",
+    "invoices.dueDate": "Échéance",
+    "invoices.createdAt": "Créée le",
+    "invoices.overdueOnly": "En retard uniquement",
+    "invoices.viewOnStripe": "Voir sur Stripe",
+    "invoices.statusDraft": "Brouillon",
+    "invoices.statusOpen": "Ouverte",
+    "invoices.statusPaid": "Payée",
+    "invoices.statusUncollectible": "Irrécouvrable",
+    "invoices.statusVoid": "Annulée"
 }

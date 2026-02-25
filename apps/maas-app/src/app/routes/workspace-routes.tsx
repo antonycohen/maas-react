@@ -41,6 +41,7 @@ const FeaturesRoutes = lazy(() => import('@maas/web-feature-pms').then((m) => ({
 const PmsSubscriptionsRoutes = lazy(() =>
     import('@maas/web-feature-pms').then((m) => ({ default: m.SubscriptionsRoutes }))
 );
+const PmsInvoicesRoutes = lazy(() => import('@maas/web-feature-pms').then((m) => ({ default: m.InvoicesRoutes })));
 const WizardRoutes = lazy(() => import('@maas/web-feature-pms').then((m) => ({ default: m.WizardRoutes })));
 
 const DiffusionListsRoutes = lazy(() =>
@@ -147,6 +148,7 @@ const WorkspaceRoutesContent = ({ connectedUser, organizationId, organizations }
                         <Route path={ADMIN_ROUTES.PMS_PRICES_WILDCARD} element={<PricesRoutes />} />
                         <Route path={ADMIN_ROUTES.PMS_FEATURES_WILDCARD} element={<FeaturesRoutes />} />
                         <Route path={ADMIN_ROUTES.PMS_SUBSCRIPTIONS_WILDCARD} element={<PmsSubscriptionsRoutes />} />
+                        <Route path={ADMIN_ROUTES.PMS_INVOICES_WILDCARD} element={<PmsInvoicesRoutes />} />
                         <Route path={ADMIN_ROUTES.PMS_WIZARD} element={<WizardRoutes />} />
                         <Route path="*" element={<NotFoundPage />} />
                     </Route>

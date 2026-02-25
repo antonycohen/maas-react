@@ -71,6 +71,7 @@
     "nav.users": "Users",
     "nav.organizations": "Organizations",
     "nav.subscriptions": "Subscriptions",
+    "nav.invoices": "Invoices",
     "nav.productsAndPlans": "Products & Plans",
     "nav.plans": "Plans",
     "plans.plan": "Plan",
@@ -952,5 +953,24 @@
     "permissions.assignAliasSuccess": "Alias assigned successfully",
     "permissions.assignAliasError": "Failed to assign alias",
     "permissions.aliasUpdated": "Alias updated successfully",
-    "permissions.aliasUpdateError": "Failed to update alias"
+    "permissions.aliasUpdateError": "Failed to update alias",
+
+    "invoices.title": "Invoices",
+    "invoices.number": "Invoice #",
+    "invoices.customerEmail": "Customer email",
+    "invoices.customer": "Customer",
+    "invoices.selectCustomer": "Select a customer...",
+    "invoices.searchCustomer": "Search a customer...",
+    "invoices.noCustomerFound": "No customer found.",
+    "invoices.amountDue": "Amount due",
+    "invoices.amountRemaining": "Remaining",
+    "invoices.dueDate": "Due date",
+    "invoices.createdAt": "Created at",
+    "invoices.overdueOnly": "Overdue only",
+    "invoices.viewOnStripe": "View on Stripe",
+    "invoices.statusDraft": "Draft",
+    "invoices.statusOpen": "Open",
+    "invoices.statusPaid": "Paid",
+    "invoices.statusUncollectible": "Uncollectible",
+    "invoices.statusVoid": "Void"
 }
