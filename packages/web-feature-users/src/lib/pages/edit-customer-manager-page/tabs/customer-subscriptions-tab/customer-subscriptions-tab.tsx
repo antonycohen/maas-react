@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useOutletContext } from 'react-router';
 import { useGetSubscriptions, useGetInvoices, useGetCustomerQuotas } from '@maas/core-api';
-import { Invoice, Quota, Subscription } from '@maas/core-api-models';
+import { Quota, Subscription } from '@maas/core-api-models';
 import {
     Badge,
     Button,
@@ -112,8 +112,7 @@ export const CustomerSubscriptionsTab = () => {
         subscriptions.filter((s) => (s.metadata as Record<string, unknown> | null)?.manual === 'true').map((s) => s.id)
     );
     const canceledSubscriptionIds = new Set(subscriptions.filter((s) => s.status === 'canceled').map((s) => s.id));
-    // The admin invoices API returns { invoices: [...] } not a flat array
-    const invoices = (invoicesData?.data as unknown as { invoices?: Invoice[] })?.invoices ?? [];
+    const invoices = invoicesData?.data ?? [];
 
     return (
         <LayoutContent>
@@ -203,7 +202,11 @@ export const CustomerSubscriptionsTab = () => {
                                                         size="icon"
                                                         className="h-8 w-8"
                                                         title={t('customers.subscriptions.viewSubscription')}
-                                                        onClick={() => setViewingSubscriptionId(subscription.id)}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            e.preventDefault();
+                                                            setViewingSubscriptionId(subscription.id);
+                                                        }}
                                                     >
                                                         <IconExternalLink className="h-4 w-4" />
                                                     </Button>

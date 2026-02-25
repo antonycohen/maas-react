@@ -2,7 +2,7 @@ import { Invoice, InvoiceListResponse, InvoicePayResponse } from '@maas/core-api
 import { ApiClient } from '../api-client/api-client';
 import { ApiCollectionResponse, FieldQuery, GetCollectionQueryParams } from '../types';
 
-const ADMIN_PATH = '/api/v1/pms/invoices/all';
+const ADMIN_PATH = '/api/v1/pms/invoices';
 const ME_PATH = '/api/v1/users/me/invoices';
 
 export interface GetMyInvoicesFilter {
@@ -70,7 +70,7 @@ export class InvoicesEndpoint {
             total: number;
             limit: number;
             offset: number;
-        }>(ADMIN_PATH, undefined, {
+        }>(`${ADMIN_PATH}/all`, undefined, {
             params: {
                 offset,
                 limit,
