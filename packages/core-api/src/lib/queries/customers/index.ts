@@ -8,3 +8,4 @@ export * from './use-update-customer';
 export * from './use-update-quota-usage';
 export * from './use-create-customer';
 export * from './use-create-customer-subscription';
+export * from './use-get-quota-transactions';

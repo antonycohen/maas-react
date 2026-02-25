@@ -26,6 +26,7 @@ import { CustomerInvoiceListSection } from './components/customer-invoice-list-s
 import { CreateSubscriptionDialog } from './components/create-subscription-dialog';
 import { ViewSubscriptionDialog } from './components/view-subscription-dialog';
 import { UpdateQuotaDialog } from './components/update-quota-dialog';
+import { QuotaTransactionsSection } from './components/quota-transactions-section';
 import { useTranslation } from '@maas/core-translations';
 
 const SUBSCRIPTION_STATUS_STYLES: Record<string, string> = {
@@ -273,6 +274,9 @@ export const CustomerSubscriptionsTab = () => {
                         )}
                     </CardContent>
                 </Card>
+
+                {/* Quota Transactions */}
+                <QuotaTransactionsSection customerId={customerId} />
             </div>
 
             {/* Dialogs */}

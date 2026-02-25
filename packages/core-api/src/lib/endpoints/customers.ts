@@ -1,4 +1,4 @@
-import { ReadCustomer, CreateCustomer, TaxExempt, Quota, Subscription } from '@maas/core-api-models';
+import { ReadCustomer, CreateCustomer, TaxExempt, Quota, QuotaTransaction, Subscription } from '@maas/core-api-models';
 import { ApiClient } from '../api-client/api-client';
 import { ApiCollectionResponse, FieldQuery, GetCollectionQueryParams, GetQueryByIdParams } from '../types';
 
@@ -156,5 +156,21 @@ export class CustomersEndpoint {
      */
     async createCustomerSubscription(customerId: string, data: CreateCustomerSubscriptionData): Promise<Subscription> {
         return this.client.post<Subscription>(`${BASE_PATH}/${customerId}/subscriptions`, data);
+    }
+
+    /**
+     * Get quota transactions for a customer
+     * GET /api/v1/pms/customers/{customerId}/quota-transactions
+     */
+    async getQuotaTransactions(
+        customerId: string,
+        params: GetCollectionQueryParams<QuotaTransaction> & { filters?: { operationType?: string } }
+    ): Promise<ApiCollectionResponse<QuotaTransaction>> {
+        const { fields, offset, limit, filters } = params;
+        return this.client.getCollection<QuotaTransaction>(`${BASE_PATH}/${customerId}/quota-transactions`, fields, {
+            offset,
+            limit,
+            ...(filters?.operationType && { operationType: filters.operationType }),
+        });
     }
 }
