@@ -18,6 +18,8 @@ export * from './lib/queries/users/use-update-user';
 export * from './lib/queries/users/use-change-email';
 export * from './lib/queries/users/use-change-password';
 export * from './lib/queries/users/use-delete-user';
+export * from './lib/queries/users/use-ban-user';
+export * from './lib/queries/users/use-send-reset-password';
 
 export * from './lib/queries/organizations/use-get-organization-by-id';
 export * from './lib/queries/organizations/use-get-organizations';
@@ -48,6 +50,9 @@ export * from './lib/queries/diffusion-lists';
 
 // Homepage
 export * from './lib/queries/homepage';
+
+// Permissions
+export * from './lib/queries/permissions';
 
 // Search
 export * from './lib/queries/search';

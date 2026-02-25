@@ -3,9 +3,10 @@ import { OrganizationMember } from '@maas/core-api-models';
 import { Avatar, AvatarFallback, AvatarImage, Badge } from '@maas/web-components';
 import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collection';
 import { format } from 'date-fns';
-import { IconBan, IconCircleCheck } from '@tabler/icons-react';
+import { IconBan, IconCircleCheck, IconMailForward, IconShieldCheck, IconTrash } from '@tabler/icons-react';
 import { Trash, UserCog } from 'lucide-react';
 import { useTranslation } from '@maas/core-translations';
+import { useConnectedUser } from '@maas/core-store-session';
 
 const roleVariants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
     ADMIN: 'default',
@@ -27,11 +28,25 @@ type UseTeamMembersColumnsOptions = {
     onSuspendMember?: (member: OrganizationMember) => void;
     onUnsuspendMember?: (member: OrganizationMember) => void;
     onRemoveMember?: (member: OrganizationMember) => void;
+    onSendResetPassword?: (member: OrganizationMember) => void;
+    onAssignAlias?: (member: OrganizationMember) => void;
+    onBanUser?: (member: OrganizationMember) => void;
+    onDeleteUser?: (member: OrganizationMember) => void;
 };
 
 export function useTeamMembersColumns(options: UseTeamMembersColumnsOptions): ColumnDef<OrganizationMember>[] {
     const { t } = useTranslation();
-    const { onChangeRole, onSuspendMember, onUnsuspendMember, onRemoveMember } = options;
+    const connectedUser = useConnectedUser();
+    const {
+        onChangeRole,
+        onSuspendMember,
+        onUnsuspendMember,
+        onRemoveMember,
+        onSendResetPassword,
+        onAssignAlias,
+        onBanUser,
+        onDeleteUser,
+    } = options;
 
     const statusLabels: Record<string, string> = {
         accepted: t('status.accepted'),
@@ -117,7 +132,9 @@ export function useTeamMembersColumns(options: UseTeamMembersColumnsOptions): Co
             id: 'actions',
             header: () => <div className="text-right">{t('field.actions')}</div>,
             cell: ({ row }) => {
-                const isSuspended = row.original.status === 'suspended';
+                const member = row.original;
+                const isSuspended = member.status === 'suspended';
+                const isSelf = connectedUser?.id === member.user?.id;
 
                 return (
                     <div className="flex items-center justify-end gap-1">
@@ -127,34 +144,70 @@ export function useTeamMembersColumns(options: UseTeamMembersColumnsOptions): Co
                                 {
                                     label: t('organizations.changeRole'),
                                     icon: UserCog,
-                                    onClick: (member: OrganizationMember) => {
-                                        onChangeRole?.(member);
+                                    onClick: (m: OrganizationMember) => {
+                                        onChangeRole?.(m);
                                     },
                                 },
-                                isSuspended
-                                    ? {
-                                          label: t('organizations.restoreAccess'),
-                                          icon: IconCircleCheck,
-                                          onClick: (member: OrganizationMember) => {
-                                              onUnsuspendMember?.(member);
-                                          },
-                                      }
-                                    : {
-                                          label: t('organizations.suspendAccess'),
-                                          icon: IconBan,
-                                          onClick: (member: OrganizationMember) => {
-                                              onSuspendMember?.(member);
-                                          },
-                                      },
                                 {
-                                    label: t('organizations.removeFromWorkspace'),
-                                    icon: Trash,
-                                    group: 'danger',
-                                    className: 'text-red-500!',
-                                    onClick: (member: OrganizationMember) => {
-                                        onRemoveMember?.(member);
+                                    label: t('permissions.assignAlias'),
+                                    icon: IconShieldCheck,
+                                    onClick: (m: OrganizationMember) => {
+                                        onAssignAlias?.(m);
                                     },
                                 },
+                                {
+                                    label: t('users.actions.sendResetPassword'),
+                                    icon: IconMailForward,
+                                    onClick: (m: OrganizationMember) => {
+                                        onSendResetPassword?.(m);
+                                    },
+                                },
+                                ...(isSelf
+                                    ? []
+                                    : [
+                                          isSuspended
+                                              ? {
+                                                    label: t('organizations.restoreAccess'),
+                                                    icon: IconCircleCheck,
+                                                    onClick: (m: OrganizationMember) => {
+                                                        onUnsuspendMember?.(m);
+                                                    },
+                                                }
+                                              : {
+                                                    label: t('organizations.suspendAccess'),
+                                                    icon: IconBan,
+                                                    onClick: (m: OrganizationMember) => {
+                                                        onSuspendMember?.(m);
+                                                    },
+                                                },
+                                          {
+                                              label: t('users.actions.banUser'),
+                                              icon: IconBan,
+                                              group: 'danger',
+                                              className: 'text-red-500!',
+                                              onClick: (m: OrganizationMember) => {
+                                                  onBanUser?.(m);
+                                              },
+                                          },
+                                          {
+                                              label: t('organizations.removeFromWorkspace'),
+                                              icon: Trash,
+                                              group: 'danger',
+                                              className: 'text-red-500!',
+                                              onClick: (m: OrganizationMember) => {
+                                                  onRemoveMember?.(m);
+                                              },
+                                          },
+                                          {
+                                              label: t('users.actions.deleteUser'),
+                                              icon: IconTrash,
+                                              group: 'danger',
+                                              className: 'text-red-500!',
+                                              onClick: (m: OrganizationMember) => {
+                                                  onDeleteUser?.(m);
+                                              },
+                                          },
+                                      ]),
                             ]}
                         />
                     </div>

@@ -33,6 +33,9 @@
             "path": "../web-layout/tsconfig.lib.json"
         },
         {
+            "path": "../core-store-session/tsconfig.lib.json"
+        },
+        {
             "path": "../web-collection/tsconfig.lib.json"
         },
         {

@@ -108,7 +108,6 @@ export function useCustomersListColumns(): ColumnDef<ReadCustomer>[] {
                     {row.getValue('createdAt') ? format(row.getValue('createdAt'), 'dd MMM, yyyy') : ''}
                 </div>
             ),
-            enableSorting: false,
         },
         {
             id: 'actions',

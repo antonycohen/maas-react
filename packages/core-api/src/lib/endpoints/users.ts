@@ -50,4 +50,16 @@ export class UsersEndpoint {
     async deleteUser(userId: string): Promise<void> {
         return this.client.delete<void>(`/api/v1/users/${userId}`);
     }
+
+    async banUser(userId: string): Promise<User> {
+        return this.client.post<User>(`/api/v1/users/${userId}/ban`, {});
+    }
+
+    async unbanUser(userId: string): Promise<User> {
+        return this.client.post<User>(`/api/v1/users/${userId}/unban`, {});
+    }
+
+    async sendResetPasswordLink(userId: string): Promise<void> {
+        return this.client.post<void>(`/api/v1/users/${userId}/reset-password-request`, {});
+    }
 }

@@ -7,7 +7,7 @@ import { useTranslation } from '@maas/core-translations';
 import { CustomerSummarySidebar } from './components/customer-summary-sidebar';
 
 export const CustomerInfoTab = () => {
-    const { isLoading, customer, customerId } = useOutletContext<EditCustomerOutletContext>();
+    const { isLoading, isCreateMode, customer, customerId } = useOutletContext<EditCustomerOutletContext>();
     const { t } = useTranslation();
 
     const currencyOptions = useCurrencyOptions();
@@ -42,7 +42,7 @@ export const CustomerInfoTab = () => {
                                     label={t('field.email')}
                                     direction="horizontal"
                                     className="py-6"
-                                    readOnly
+                                    readOnly={!isCreateMode}
                                 />
                                 <ControlledTextInput
                                     name="phone"

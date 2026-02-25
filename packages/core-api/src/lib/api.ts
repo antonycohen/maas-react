@@ -25,6 +25,7 @@ import { DiffusionListsEndpoint } from './endpoints/diffusion-lists';
 import { HomepageEndpoint } from './endpoints/homepage';
 import { SearchEndpoint } from './endpoints/search';
 import { SitemapEndpoint } from './endpoints/sitemap';
+import { PermissionsEndpoint } from './endpoints/permissions';
 
 class MaasApi {
     private readonly client: ApiClient;
@@ -54,6 +55,7 @@ class MaasApi {
     public readonly homepage: HomepageEndpoint;
     public readonly search: SearchEndpoint;
     public readonly sitemap: SitemapEndpoint;
+    public readonly permissions: PermissionsEndpoint;
 
     setOrganizationId(organizationId: string | null) {
         this.client.setOrganizationId(organizationId);
@@ -87,6 +89,7 @@ class MaasApi {
         this.homepage = new HomepageEndpoint(this.client);
         this.search = new SearchEndpoint(this.client);
         this.sitemap = new SitemapEndpoint(this.client);
+        this.permissions = new PermissionsEndpoint(this.client);
     }
 }
 
@@ -118,6 +121,7 @@ export * from './endpoints/diffusion-lists';
 export * from './endpoints/homepage';
 export * from './endpoints/search';
 export * from './endpoints/sitemap';
+export * from './endpoints/permissions';
 
 export const maasApi = new MaasApi({
     baseUrl: `${import.meta.env['VITE_API_URL']}` || 'https://localhost:8080',

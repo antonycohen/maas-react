@@ -72,7 +72,7 @@ export function useUsersListColumns(): ColumnDef<User>[] {
                     <div className="flex items-center gap-x-2">
                         <span className="text-sm capitalize">
                             {roles?.map((role) => {
-                                return <Badge>{role}</Badge>;
+                                return <Badge key={role}>{role}</Badge>;
                             })}
                         </span>
                     </div>
