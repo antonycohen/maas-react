@@ -523,6 +523,8 @@
     "customers.subscriptions.selectPlan": "Sélectionner une formule",
     "customers.subscriptions.duration": "Durée",
     "customers.subscriptions.addons": "Options",
+    "customers.subscriptions.activateNow": "Activer l'abonnement immédiatement",
+    "customers.subscriptions.activateNowHint": "Par défaut, Stripe marque l'abonnement comme incomplet en attendant le paiement. En cochant cette option, l'abonnement sera activé immédiatement et les quotas seront attribués.",
     "customers.quotas.updateUsage": "Modifier l'utilisation",
     "customers.quotas.updateUsageDescription": "Ajuster l'utilisation du quota pour ce client.",
     "customers.quotas.featureKey": "Fonctionnalité",

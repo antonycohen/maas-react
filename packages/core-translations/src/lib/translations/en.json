@@ -503,6 +503,8 @@
     "customers.subscriptions.selectPlan": "Select a plan",
     "customers.subscriptions.duration": "Duration",
     "customers.subscriptions.addons": "Add-ons",
+    "customers.subscriptions.activateNow": "Activate subscription now",
+    "customers.subscriptions.activateNowHint": "By default, Stripe marks the subscription as incomplete pending payment. Check this to activate the subscription immediately and assign quotas.",
     "customers.quotas.updateUsage": "Update usage",
     "customers.quotas.updateUsageDescription": "Adjust quota usage for this customer.",
     "customers.quotas.featureKey": "Feature",

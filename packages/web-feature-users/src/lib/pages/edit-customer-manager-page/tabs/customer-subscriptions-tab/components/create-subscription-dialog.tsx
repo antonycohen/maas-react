@@ -13,6 +13,7 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
+    Checkbox,
     Label,
     Select,
     SelectContent,
@@ -22,9 +23,12 @@ import {
     Separator,
     Skeleton,
     Switch,
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
 } from '@maas/web-components';
 import { cn } from '@maas/core-utils';
-import { IconArrowLeft, IconCheck } from '@tabler/icons-react';
+import { IconArrowLeft, IconCheck, IconInfoCircle } from '@tabler/icons-react';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
 
@@ -288,6 +292,7 @@ export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Pro
     const [selectedInterval, setSelectedInterval] = useState<BillingInterval | null>(null);
     const [addonToggles, setAddonToggles] = useState<Record<string, boolean>>({});
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
+    const [defaultComplete, setDefaultComplete] = useState(false);
 
     const selectedPlan = pricingPlans.find((p) => p.planId === selectedPlanId) ?? null;
 
@@ -309,6 +314,7 @@ export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Pro
         setSelectedInterval(null);
         setAddonToggles({});
         setPaymentMethod('card');
+        setDefaultComplete(false);
     };
 
     const handleSelectPlan = (planId: string) => {
@@ -345,6 +351,7 @@ export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Pro
         const subscriptionData = {
             priceIds,
             paymentMethod,
+            defaultComplete,
             metadata: { manual: true },
         };
 
@@ -557,6 +564,23 @@ export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Pro
                                 </SelectContent>
                             </Select>
                         </div>
+
+                        {/* Activate Now */}
+                        <label className="flex items-center gap-3">
+                            <Checkbox
+                                checked={defaultComplete}
+                                onCheckedChange={(val) => setDefaultComplete(val === true)}
+                            />
+                            <span className="text-sm font-medium">{t('customers.subscriptions.activateNow')}</span>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <IconInfoCircle className="text-muted-foreground h-4 w-4" />
+                                </TooltipTrigger>
+                                <TooltipContent className="max-w-xs">
+                                    <p>{t('customers.subscriptions.activateNowHint')}</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </label>
 
                         <Separator />
 
