@@ -1,7 +1,14 @@
 import * as z from 'zod';
 
 // Status enum
-export const diffusionListStatusEnum = z.enum(['draft', 'populating', 'confirmed', 'generating', 'generated']);
+export const diffusionListStatusEnum = z.enum([
+    'draft',
+    'populating',
+    'confirmed',
+    'generating',
+    'generated',
+    'refreshing',
+]);
 export type DiffusionListStatus = z.infer<typeof diffusionListStatusEnum>;
 
 // Reference schema (for writes/foreign keys)
@@ -54,6 +61,9 @@ export type UpdateDiffusionList = z.infer<typeof updateDiffusionListSchema>;
 export const diffusionListEntrySchema = z.object({
     id: z.string(),
     firstName: z.string().nullable(),
+    needsAttention: z.boolean().nullable(),
+    attentionReason: z.string().nullable(),
+    customerId: z.string().nullable(),
     lastName: z.string().nullable(),
     email: z.string().nullable(),
     phone: z.string().nullable(),

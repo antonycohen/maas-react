@@ -8,6 +8,7 @@ import {
     IconEye,
     IconDownload,
     IconLoader2,
+    IconRefresh,
 } from '@tabler/icons-react';
 import { DiffusionListStatusBadge } from './diffusion-list-status-badge';
 import { useTranslation } from '@maas/core-translations';
@@ -20,6 +21,7 @@ interface Props {
     onGenerate?: () => void;
     onDelete?: () => void;
     onDownloadPdf?: () => void;
+    onRefreshEntries?: () => void;
     isActionPending: boolean;
 }
 
@@ -31,6 +33,7 @@ export const DiffusionListHeader = ({
     onGenerate,
     onDelete,
     onDownloadPdf,
+    onRefreshEntries,
     isActionPending,
 }: Props) => {
     const { t } = useTranslation();
@@ -51,6 +54,19 @@ export const DiffusionListHeader = ({
                     <Button type="button" variant="outline" size="sm" onClick={onPopulate} disabled={isActionPending}>
                         <IconEye className="mr-1.5 h-4 w-4" />
                         {t('diffusionLists.populate')}
+                    </Button>
+                )}
+
+                {onRefreshEntries && (
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={onRefreshEntries}
+                        disabled={isActionPending}
+                    >
+                        <IconRefresh className="mr-1.5 h-4 w-4" />
+                        {t('diffusionLists.refreshEntries')}
                     </Button>
                 )}
 

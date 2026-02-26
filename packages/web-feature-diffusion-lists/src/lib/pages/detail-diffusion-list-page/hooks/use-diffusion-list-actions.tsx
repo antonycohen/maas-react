@@ -4,6 +4,7 @@ import {
     useRevertDiffusionList,
     useGenerateDiffusionList,
     useDeleteDiffusionList,
+    useRefreshDiffusionListEntries,
     maasApi,
 } from '@maas/core-api';
 import { useNavigate } from 'react-router';
@@ -42,6 +43,7 @@ export const useDiffusionListActions = (diffusionListId: string, refetch: () => 
             refetch();
         },
         onError: (error) => {
+            setConfirmAction({ open: false });
             toast.error(error.message);
         },
     });
@@ -53,6 +55,7 @@ export const useDiffusionListActions = (diffusionListId: string, refetch: () => 
             refetch();
         },
         onError: (error) => {
+            setConfirmAction({ open: false });
             toast.error(error.message);
         },
     });
@@ -64,6 +67,7 @@ export const useDiffusionListActions = (diffusionListId: string, refetch: () => 
             refetch();
         },
         onError: (error) => {
+            setConfirmAction({ open: false });
             toast.error(error.message);
         },
     });
@@ -73,6 +77,17 @@ export const useDiffusionListActions = (diffusionListId: string, refetch: () => 
             setConfirmAction({ open: false });
             navigate(routes.diffusionLists());
             toast.success(t('diffusionLists.deletedSuccess'));
+        },
+        onError: (error) => {
+            setConfirmAction({ open: false });
+            toast.error(error.message);
+        },
+    });
+
+    const refreshEntriesMutation = useRefreshDiffusionListEntries({
+        onSuccess: () => {
+            toast.success(t('diffusionLists.refreshEntriesSuccess'));
+            refetch();
         },
         onError: (error) => {
             toast.error(error.message);
@@ -97,6 +112,10 @@ export const useDiffusionListActions = (diffusionListId: string, refetch: () => 
 
     const handleDelete = () => {
         setConfirmAction({ open: true, action: 'delete' });
+    };
+
+    const handleRefreshEntries = () => {
+        refreshEntriesMutation.mutate(diffusionListId);
     };
 
     const handleDownloadPdf = async () => {
@@ -181,7 +200,8 @@ export const useDiffusionListActions = (diffusionListId: string, refetch: () => 
         confirmMutation.isPending ||
         revertMutation.isPending ||
         generateMutation.isPending ||
-        deleteMutation.isPending;
+        deleteMutation.isPending ||
+        refreshEntriesMutation.isPending;
 
     return {
         handlePopulate,
@@ -190,6 +210,7 @@ export const useDiffusionListActions = (diffusionListId: string, refetch: () => 
         handleGenerate,
         handleDelete,
         handleDownloadPdf,
+        handleRefreshEntries,
         isActionPending,
         confirmAction,
         setConfirmAction,

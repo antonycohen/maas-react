@@ -54,6 +54,7 @@ export default function DetailDiffusionListPage() {
     const isDraft = status === 'draft';
     const isConfirmed = status === 'confirmed';
     const isGenerated = status === 'generated';
+    const hasEntries = (diffusionList.entryCount ?? 0) > 0;
 
     return (
         <div>
@@ -69,12 +70,13 @@ export default function DetailDiffusionListPage() {
 
             <DiffusionListHeader
                 diffusionList={diffusionList}
-                onPopulate={isDraft ? actions.handlePopulate : undefined}
+                onPopulate={isDraft && !hasEntries ? actions.handlePopulate : undefined}
                 onConfirm={isDraft ? actions.handleConfirm : undefined}
                 onRevertToDraft={isConfirmed ? actions.handleRevert : undefined}
                 onGenerate={isConfirmed ? actions.handleGenerate : undefined}
                 onDelete={!isGenerated ? actions.handleDelete : undefined}
                 onDownloadPdf={isGenerated ? actions.handleDownloadPdf : undefined}
+                onRefreshEntries={hasEntries && !isGenerated ? actions.handleRefreshEntries : undefined}
                 isActionPending={actions.isActionPending}
             />
 

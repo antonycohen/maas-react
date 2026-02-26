@@ -8,6 +8,7 @@ export const statusVariantMap: Record<DiffusionListStatus, 'default' | 'secondar
     confirmed: 'outline',
     generating: 'outline',
     generated: 'default',
+    refreshing: 'outline',
 };
 
 interface Props {

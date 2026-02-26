@@ -117,6 +117,14 @@ export class DiffusionListsEndpoint {
         return this.client.delete<void>(`/api/v1/diffusion-lists/${id}/entries/${entryId}`);
     }
 
+    async refreshDiffusionListEntries(id: string): Promise<DiffusionList> {
+        return this.client.post<DiffusionList>(`/api/v1/diffusion-lists/${id}/refresh-entries`);
+    }
+
+    async refreshDiffusionListEntry(id: string, entryId: string): Promise<DiffusionListEntry> {
+        return this.client.post<DiffusionListEntry>(`/api/v1/diffusion-lists/${id}/entries/${entryId}/refresh`);
+    }
+
     async downloadDiffusionList(id: string): Promise<Blob> {
         return this.client.getById<Blob>(`/api/v1/diffusion-lists/${id}/download`, undefined, {
             responseType: 'blob',
