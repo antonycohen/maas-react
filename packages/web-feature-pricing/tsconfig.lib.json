@@ -34,9 +34,6 @@
             "path": "../core-api-models/tsconfig.lib.json"
         },
         {
-            "path": "../core-translations/tsconfig.lib.json"
-        },
-        {
             "path": "../core-store-oauth/tsconfig.lib.json"
         },
         {

@@ -101,7 +101,8 @@ export const useDiffusionListActions = (diffusionListId: string, refetch: () => 
 
     const handleDownloadPdf = async () => {
         try {
-            const { url } = await maasApi.diffusionLists.downloadDiffusionList(diffusionListId);
+            const blob = await maasApi.diffusionLists.downloadDiffusionList(diffusionListId);
+            const url = URL.createObjectURL(blob);
             window.open(url, '_blank');
         } catch (error) {
             toast.error(error instanceof Error ? error.message : t('common.errorLoading'));

@@ -117,7 +117,9 @@ export class DiffusionListsEndpoint {
         return this.client.delete<void>(`/api/v1/diffusion-lists/${id}/entries/${entryId}`);
     }
 
-    async downloadDiffusionList(id: string): Promise<{ url: string }> {
-        return this.client.getById<{ url: string }>(`/api/v1/diffusion-lists/${id}/download`);
+    async downloadDiffusionList(id: string): Promise<Blob> {
+        return this.client.getById<Blob>(`/api/v1/diffusion-lists/${id}/download`, undefined, {
+            responseType: 'blob',
+        });
     }
 }
