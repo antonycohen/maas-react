@@ -3,7 +3,7 @@ import * as z from 'zod';
 export const quotaStatusEnum = z.enum(['active', 'inactive']);
 export type QuotaStatus = z.infer<typeof quotaStatusEnum>;
 
-export const quotaAggregationTypeEnum = z.enum(['count', 'sum']);
+export const quotaAggregationTypeEnum = z.enum(['count', 'sum', 'last']);
 export type QuotaAggregationType = z.infer<typeof quotaAggregationTypeEnum>;
 
 export const quotaSchema = z.object({

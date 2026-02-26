@@ -1,8 +1,10 @@
 import { useMemo, useState } from 'react';
-import { Switch } from '@maas/web-components';
+import { Switch, Tooltip, TooltipContent, TooltipTrigger } from '@maas/web-components';
 import type { BillingInterval, PricingPlan } from '../hooks/use-pricing-data';
 import { usePricingStore } from '../store/pricing-store';
 import { cn } from '@maas/core-utils';
+import { IconInfoCircle } from '@tabler/icons-react';
+import { useTranslation } from '@maas/core-translations';
 
 const SHIPPING_METRO = 'metro';
 
@@ -35,7 +37,7 @@ export function PricingSummary({ plan, children, hideCheckedAddonToggles, contai
     const addonToggles = usePricingStore((s) => s.addonToggles);
     const toggleAddon = usePricingStore((s) => s.toggleAddon);
     const shippingSelections = usePricingStore((s) => s.shippingSelections);
-
+    const { t } = useTranslation();
     const intervalLabel = selectedInterval ? INTERVAL_LABELS[selectedInterval] : '';
     const basePrice = selectedInterval ? plan.prices.find((p) => p.interval === selectedInterval) : null;
     const basePriceCents = basePrice?.unitAmountInCents ?? 0;
@@ -142,9 +144,17 @@ export function PricingSummary({ plan, children, hideCheckedAddonToggles, contai
                                         checked={checked}
                                         onCheckedChange={(val) => toggleAddon(addon.productId, val)}
                                     />
-                                    <span className="text-foreground text-sm font-medium">
+                                    <div className="text-foreground flex gap-1 text-sm font-medium">
                                         {(addon?.metadata?.displayName as string) ?? addon.name}
-                                    </span>
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <IconInfoCircle className="text-muted-foreground h-4 w-4" />
+                                            </TooltipTrigger>
+                                            <TooltipContent className="max-w-xs">
+                                                <p>{addon?.metadata?.displayDescription as string}</p>
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </div>
                                 </div>
                                 <span className="text-text-secondary text-xs font-medium">{priceText}</span>
                             </label>

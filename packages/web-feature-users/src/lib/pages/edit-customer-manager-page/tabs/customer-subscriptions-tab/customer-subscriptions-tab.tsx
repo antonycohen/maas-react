@@ -244,6 +244,7 @@ export const CustomerSubscriptionsTab = () => {
                                 {quotas
                                     .filter((q) => q.status === 'active')
                                     .map((quota) => {
+                                        const isLast = quota.aggregationType === 'last';
                                         const limit = quota.quotaLimit ?? 0;
                                         const used = quota.currentUsage ?? 0;
                                         const percentage = limit > 0 ? Math.round((used / limit) * 100) : 0;
@@ -256,20 +257,31 @@ export const CustomerSubscriptionsTab = () => {
                                                             : quota.id}
                                                     </span>
                                                     <div className="flex items-center gap-2">
-                                                        <span className="text-xs text-gray-500">
-                                                            {used} / {limit}
-                                                        </span>
-                                                        <button
-                                                            type="button"
-                                                            className="text-muted-foreground hover:text-foreground"
-                                                            onClick={() => setEditingQuota(quota)}
-                                                            title={t('customers.quotas.updateUsage')}
-                                                        >
-                                                            <IconEdit className="h-3.5 w-3.5" />
-                                                        </button>
+                                                        {isLast ? (
+                                                            <Badge
+                                                                variant="outline"
+                                                                className="border-emerald-200 bg-emerald-50 text-emerald-700"
+                                                            >
+                                                                {t('common.yes')}
+                                                            </Badge>
+                                                        ) : (
+                                                            <>
+                                                                <span className="text-xs text-gray-500">
+                                                                    {used} / {limit}
+                                                                </span>
+                                                                <button
+                                                                    type="button"
+                                                                    className="text-muted-foreground hover:text-foreground"
+                                                                    onClick={() => setEditingQuota(quota)}
+                                                                    title={t('customers.quotas.updateUsage')}
+                                                                >
+                                                                    <IconEdit className="h-3.5 w-3.5" />
+                                                                </button>
+                                                            </>
+                                                        )}
                                                     </div>
                                                 </div>
-                                                <Progress value={percentage} />
+                                                {!isLast && <Progress value={percentage} />}
                                             </div>
                                         );
                                     })}

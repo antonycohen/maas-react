@@ -43,7 +43,7 @@ export const CreateDiffusionListModal = ({ open, onOpenChange }: Props) => {
         { enabled: open }
     );
 
-    const quotaFeatures = (featuresData?.data ?? []).filter((f) => f.withQuota);
+    const quotaFeatures = (featuresData?.data ?? []).filter((f) => f?.lookupKey !== 'digital_access' && f.withQuota);
 
     const form = useForm<CreateDiffusionList>({
         resolver: zodResolver(createDiffusionListSchema),

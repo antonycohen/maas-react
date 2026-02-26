@@ -524,16 +524,23 @@ export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Pro
                                                 className="hover:bg-muted/50 flex cursor-pointer items-center justify-between rounded-lg border px-3 py-2.5"
                                             >
                                                 <div className="flex items-center gap-2.5">
-                                                    <Switch
-                                                        checked={checked}
-                                                        onCheckedChange={(val) =>
-                                                            setAddonToggles((prev) => ({
-                                                                ...prev,
-                                                                [addon.productId]: val,
-                                                            }))
-                                                        }
-                                                    />
-                                                    <span className="text-sm font-medium">{displayName}</span>
+                                                    <div className="flex items-center gap-2.5">
+                                                        <Switch
+                                                            checked={checked}
+                                                            onCheckedChange={(val) =>
+                                                                setAddonToggles((prev) => ({
+                                                                    ...prev,
+                                                                    [addon.productId]: val,
+                                                                }))
+                                                            }
+                                                        />
+                                                        <div className="flex flex-col text-sm">
+                                                            <span className="text-sm font-medium">{displayName}</span>
+                                                            <span className="text-muted-foreground text-sm">
+                                                                {addon.metadata?.displayDescription as string}
+                                                            </span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 {addonPrice && (
                                                     <span className="text-muted-foreground text-sm">
