@@ -4,7 +4,6 @@ import type { BillingInterval, PricingPlan } from '../hooks/use-pricing-data';
 import { usePricingStore } from '../store/pricing-store';
 import { cn } from '@maas/core-utils';
 import { IconInfoCircle } from '@tabler/icons-react';
-import { useTranslation } from '@maas/core-translations';
 
 const SHIPPING_METRO = 'metro';
 
@@ -37,7 +36,6 @@ export function PricingSummary({ plan, children, hideCheckedAddonToggles, contai
     const addonToggles = usePricingStore((s) => s.addonToggles);
     const toggleAddon = usePricingStore((s) => s.toggleAddon);
     const shippingSelections = usePricingStore((s) => s.shippingSelections);
-    const { t } = useTranslation();
     const intervalLabel = selectedInterval ? INTERVAL_LABELS[selectedInterval] : '';
     const basePrice = selectedInterval ? plan.prices.find((p) => p.interval === selectedInterval) : null;
     const basePriceCents = basePrice?.unitAmountInCents ?? 0;
