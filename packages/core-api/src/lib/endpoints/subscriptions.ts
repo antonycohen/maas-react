@@ -72,6 +72,25 @@ export class SubscriptionsEndpoint {
     }
 
     /**
+     * Renew a subscription
+     * POST /api/v1/pms/subscriptions/{subscriptionId}/renew
+     */
+    async renewSubscription(subscriptionId: string, data?: { paymentMethod?: string }): Promise<Subscription> {
+        return this.client.post<Subscription>(`${BASE_PATH}/${subscriptionId}/renew`, data ?? {});
+    }
+
+    /**
+     * Upgrade/change a subscription
+     * POST /api/v1/pms/subscriptions/{subscriptionId}/upgrade
+     */
+    async upgradeSubscription(
+        subscriptionId: string,
+        data: { priceIds: string[]; paymentMethod?: string; daysUntilDue?: number; metadata?: Record<string, unknown> }
+    ): Promise<Subscription> {
+        return this.client.post<Subscription>(`${BASE_PATH}/${subscriptionId}/upgrade`, data);
+    }
+
+    /**
      * Sync a subscription from Stripe
      * POST /api/v1/pms/subscriptions/{subscriptionId}/sync
      */

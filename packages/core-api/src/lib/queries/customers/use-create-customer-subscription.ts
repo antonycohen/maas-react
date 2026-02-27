@@ -13,12 +13,14 @@ export const useCreateCustomerSubscription = (
     const queryClient = useQueryClient();
 
     return useMutation({
+        ...options,
         mutationFn: ({ customerId, data }: CreateCustomerSubscriptionParams) =>
             maasApi.customers.createCustomerSubscription(customerId, data),
-        onSuccess: (_, { customerId }) => {
+        onSuccess: (data, variables, onMutateResult, context) => {
             queryClient.invalidateQueries({ queryKey: ['subscriptions'] });
-            queryClient.invalidateQueries({ queryKey: ['quotas', customerId] });
+            queryClient.invalidateQueries({ queryKey: ['invoices'] });
+            queryClient.invalidateQueries({ queryKey: ['quotas', variables.customerId] });
+            options?.onSuccess?.(data, variables, onMutateResult, context);
         },
-        ...options,
     });
 };

@@ -108,6 +108,14 @@ export class InvoicesEndpoint {
     }
 
     /**
+     * Sync an invoice from Stripe (admin)
+     * POST /api/v1/pms/invoices/{invoiceId}/sync
+     */
+    async syncInvoice(invoiceId: string): Promise<Invoice> {
+        return this.client.post<Invoice>(`${ADMIN_PATH}/${invoiceId}/sync`, {});
+    }
+
+    /**
      * Pay an invoice (admin)
      * POST /api/v1/pms/invoices/{invoiceId}/pay
      */

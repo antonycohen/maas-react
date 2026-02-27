@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Invoice } from '@maas/core-api-models';
-import { useDownloadInvoice, usePayInvoice } from '@maas/core-api';
+import { useDownloadInvoice, usePayInvoice, useSyncInvoice } from '@maas/core-api';
 import {
     Badge,
     Button,
@@ -29,11 +29,11 @@ import {
     TableRow,
 } from '@maas/web-components';
 import { Download } from 'lucide-react';
-import { IconCreditCardPay, IconDotsVertical } from '@tabler/icons-react';
+import { IconCreditCardPay, IconDotsVertical, IconExternalLink, IconRefresh } from '@tabler/icons-react';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
 
-type PaymentMethod = 'card' | 'cheque' | 'virement' | 'prelevement';
+type PaymentMethod = 'card' | 'cheque' | 'virement' | 'prelevement' | 'bon';
 
 const STATUS_STYLES: Record<string, string> = {
     paid: 'border-emerald-200 bg-emerald-50 text-emerald-700',
@@ -105,6 +105,15 @@ export const CustomerInvoiceListSection = ({
         },
         onError: () => {
             toast.error(t('customers.invoices.downloadError'));
+        },
+    });
+
+    const { mutate: syncInvoice, isPending: isSyncing } = useSyncInvoice({
+        onSuccess: () => {
+            toast.success(t('customers.invoices.syncSuccess'));
+        },
+        onError: () => {
+            toast.error(t('customers.invoices.syncError'));
         },
     });
 
@@ -224,12 +233,29 @@ export const CustomerInvoiceListSection = ({
                                                         {t('customers.invoices.pay')}
                                                     </DropdownMenuItem>
                                                 )}
+                                                {!isManual && invoice.hostedInvoiceUrl && (
+                                                    <DropdownMenuItem
+                                                        onClick={() =>
+                                                            window.open(invoice.hostedInvoiceUrl ?? '', '_blank')
+                                                        }
+                                                    >
+                                                        <IconExternalLink className="mr-2 h-4 w-4" />
+                                                        {t('customers.invoices.viewOnStripe')}
+                                                    </DropdownMenuItem>
+                                                )}
                                                 <DropdownMenuItem
                                                     onClick={() => download(invoice.id)}
                                                     disabled={isDownloading}
                                                 >
                                                     <Download className="mr-2 h-4 w-4" />
                                                     {t('customers.invoices.download')}
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    onClick={() => syncInvoice(invoice.id)}
+                                                    disabled={isSyncing}
+                                                >
+                                                    <IconRefresh className="mr-2 h-4 w-4" />
+                                                    {t('customers.invoices.sync')}
                                                 </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>

@@ -14,11 +14,14 @@ export const usePayInvoice = (
     const queryClient = useQueryClient();
 
     return useMutation({
+        ...options,
         mutationFn: ({ invoiceId, paymentReference, paymentMethod }: PayInvoiceParams) =>
             maasApi.invoices.payInvoice(invoiceId, { paymentReference, paymentMethod }),
-        onSuccess: () => {
+        onSuccess: (data, variables, onMutateResult, context) => {
             queryClient.invalidateQueries({ queryKey: ['invoices'] });
+            queryClient.invalidateQueries({ queryKey: ['subscriptions'] });
+            queryClient.invalidateQueries({ queryKey: ['quotas'] });
+            options?.onSuccess?.(data, variables, onMutateResult, context);
         },
-        ...options,
     });
 };

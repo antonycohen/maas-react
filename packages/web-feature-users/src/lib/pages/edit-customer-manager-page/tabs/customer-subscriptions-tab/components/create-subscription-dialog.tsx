@@ -1,9 +1,14 @@
 import { useMemo, useState } from 'react';
 import { useQueries } from '@tanstack/react-query';
 import { type Product, type Price, type ProductFeature } from '@maas/core-api-models';
-import { getPlans, getProducts, getPrices, getProductFeatures, useCreateCustomerSubscription } from '@maas/core-api';
-import { useNavigate } from 'react-router';
-import { useRoutes } from '@maas/core-workspace';
+import {
+    getPlans,
+    getProducts,
+    getPrices,
+    getProductFeatures,
+    useCreateCustomerSubscription,
+    useUpgradeSubscription,
+} from '@maas/core-api';
 import {
     Badge,
     Button,
@@ -266,26 +271,38 @@ type Props = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     customerId: string;
+    mode?: 'create' | 'change';
+    subscriptionId?: string;
+    currentPlanId?: string | null;
 };
 
 type Step = 'plan' | 'configure';
 
-type PaymentMethod = 'card' | 'cheque' | 'virement' | 'prelevement';
+type PaymentMethod = 'card' | 'cheque' | 'virement' | 'prelevement' | 'bon';
 
-const PAYMENT_METHODS: PaymentMethod[] = ['card', 'cheque', 'virement', 'prelevement'];
+const PAYMENT_METHODS: PaymentMethod[] = ['card', 'cheque', 'virement', 'prelevement', 'bon'];
 
 const PAYMENT_METHOD_TRANSLATION_KEYS: Record<PaymentMethod, string> = {
     card: 'customers.subscriptions.paymentMethodCard',
     cheque: 'customers.subscriptions.paymentMethodCheque',
     virement: 'customers.subscriptions.paymentMethodVirement',
     prelevement: 'customers.subscriptions.paymentMethodPrelevement',
+    bon: 'customers.subscriptions.paymentMethodBon',
 };
 
-export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Props) => {
+export const CreateSubscriptionDialog = ({
+    open,
+    onOpenChange,
+    customerId,
+    mode = 'create',
+    subscriptionId,
+    currentPlanId,
+}: Props) => {
     const { t } = useTranslation();
-    const navigate = useNavigate();
-    const routes = useRoutes();
     const { pricingPlans, isLoading } = useAdminPricingData();
+    const isChangeMode = mode === 'change';
+
+    const availablePlans = isChangeMode ? pricingPlans.filter((p) => p.planId !== currentPlanId) : pricingPlans;
 
     const [step, setStep] = useState<Step>('plan');
     const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
@@ -296,17 +313,29 @@ export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Pro
 
     const selectedPlan = pricingPlans.find((p) => p.planId === selectedPlanId) ?? null;
 
-    const { mutate: createSubscription, isPending } = useCreateCustomerSubscription({
-        onSuccess: (data) => {
+    const { mutate: createSubscription, isPending: isCreating } = useCreateCustomerSubscription({
+        onSuccess: () => {
             toast.success(t('customers.subscriptions.subscriptionCreated'));
-            if (data?.customer?.id) {
-                navigate(routes.customerInfo(data.customer.id), { replace: true });
-            }
+            resetForm();
+            onOpenChange(false);
         },
         onError: () => {
             toast.error(t('customers.subscriptions.createError'));
         },
     });
+
+    const { mutate: upgradeSubscription, isPending: isUpgrading } = useUpgradeSubscription({
+        onSuccess: () => {
+            toast.success(t('customers.subscriptions.subscriptionChanged'));
+            resetForm();
+            onOpenChange(false);
+        },
+        onError: () => {
+            toast.error(t('customers.subscriptions.changeError'));
+        },
+    });
+
+    const isPending = isCreating || isUpgrading;
 
     const resetForm = () => {
         setStep('plan');
@@ -348,17 +377,26 @@ export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Pro
             }
         }
 
-        const subscriptionData = {
-            priceIds,
-            paymentMethod,
-            defaultComplete,
-            metadata: { manual: true },
-        };
-
-        createSubscription({
-            customerId,
-            data: subscriptionData,
-        });
+        if (isChangeMode && subscriptionId) {
+            upgradeSubscription({
+                subscriptionId,
+                data: {
+                    priceIds,
+                    paymentMethod,
+                    metadata: { manual: true },
+                },
+            });
+        } else {
+            createSubscription({
+                customerId,
+                data: {
+                    priceIds,
+                    paymentMethod,
+                    defaultComplete,
+                    metadata: { manual: true },
+                },
+            });
+        }
     };
 
     // Calculate total
@@ -384,8 +422,16 @@ export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Pro
         >
             <DialogContent className="sm:max-w-2xl">
                 <DialogHeader>
-                    <DialogTitle>{t('customers.subscriptions.createSubscription')}</DialogTitle>
-                    <DialogDescription>{t('customers.subscriptions.createSubscriptionDescription')}</DialogDescription>
+                    <DialogTitle>
+                        {isChangeMode
+                            ? t('customers.subscriptions.changeSubscription')
+                            : t('customers.subscriptions.createSubscription')}
+                    </DialogTitle>
+                    <DialogDescription>
+                        {isChangeMode
+                            ? t('customers.subscriptions.changeSubscriptionDescription')
+                            : t('customers.subscriptions.createSubscriptionDescription')}
+                    </DialogDescription>
                 </DialogHeader>
 
                 {isLoading ? (
@@ -396,9 +442,13 @@ export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Pro
                 ) : step === 'plan' ? (
                     /* ─── Step 1: Select Plan ─── */
                     <div className="flex flex-col gap-3">
-                        <Label className="text-sm font-medium">{t('customers.subscriptions.selectPlan')}</Label>
+                        <Label className="text-sm font-medium">
+                            {isChangeMode
+                                ? t('customers.subscriptions.selectNewPlan')
+                                : t('customers.subscriptions.selectPlan')}
+                        </Label>
                         <div className="flex max-h-[400px] flex-col gap-2 overflow-y-auto">
-                            {pricingPlans.map((plan) => {
+                            {availablePlans.map((plan) => {
                                 const cheapest =
                                     plan.prices.length > 0
                                         ? plan.prices.reduce((min, p) =>
@@ -572,22 +622,24 @@ export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Pro
                             </Select>
                         </div>
 
-                        {/* Activate Now */}
-                        <label className="flex items-center gap-3">
-                            <Checkbox
-                                checked={defaultComplete}
-                                onCheckedChange={(val) => setDefaultComplete(val === true)}
-                            />
-                            <span className="text-sm font-medium">{t('customers.subscriptions.activateNow')}</span>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <IconInfoCircle className="text-muted-foreground h-4 w-4" />
-                                </TooltipTrigger>
-                                <TooltipContent className="max-w-xs">
-                                    <p>{t('customers.subscriptions.activateNowHint')}</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </label>
+                        {/* Activate Now (create mode only) */}
+                        {!isChangeMode && (
+                            <label className="flex items-center gap-3">
+                                <Checkbox
+                                    checked={defaultComplete}
+                                    onCheckedChange={(val) => setDefaultComplete(val === true)}
+                                />
+                                <span className="text-sm font-medium">{t('customers.subscriptions.activateNow')}</span>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <IconInfoCircle className="text-muted-foreground h-4 w-4" />
+                                    </TooltipTrigger>
+                                    <TooltipContent className="max-w-xs">
+                                        <p>{t('customers.subscriptions.activateNowHint')}</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </label>
+                        )}
 
                         <Separator />
 
@@ -657,7 +709,9 @@ export const CreateSubscriptionDialog = ({ open, onOpenChange, customerId }: Pro
                                 disabled={isPending || !selectedInterval}
                                 isLoading={isPending}
                             >
-                                {t('customers.subscriptions.createSubscription')}
+                                {isChangeMode
+                                    ? t('customers.subscriptions.changeSubscription')
+                                    : t('customers.subscriptions.createSubscription')}
                             </Button>
                         </>
                     )}
