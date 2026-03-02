@@ -87,6 +87,14 @@ export class SubscriptionsEndpoint {
     }
 
     /**
+     * Uncancel a subscription (reverse a pending cancellation)
+     * POST /api/v1/pms/subscriptions/{subscriptionId}/uncancel
+     */
+    async uncancelSubscription(subscriptionId: string): Promise<Subscription> {
+        return this.client.post<Subscription>(`${BASE_PATH}/${subscriptionId}/uncancel`, {});
+    }
+
+    /**
      * Sync a subscription from Stripe
      * POST /api/v1/pms/subscriptions/{subscriptionId}/sync
      */

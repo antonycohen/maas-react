@@ -5,7 +5,11 @@ import { QuotaUsageSection } from './components/quota-usage-section';
 import { PaymentMethodSection } from './components/payment-method-section';
 
 export const AccountSubscriptionTab = () => {
-    const { data: subscription, isLoading: isLoadingSubscription } = useGetMySubscription({
+    const {
+        data: subscription,
+        isLoading: isLoadingSubscription,
+        refetch: refetchSubscription,
+    } = useGetMySubscription({
         id: null,
         status: null,
         plan: {
@@ -18,6 +22,7 @@ export const AccountSubscriptionTab = () => {
         currentPeriodStart: null,
         currentPeriodEnd: null,
         cancelAtPeriodEnd: null,
+        cancelAt: null,
         canceledAt: null,
         startDate: null,
         items: null,
@@ -37,7 +42,7 @@ export const AccountSubscriptionTab = () => {
 
     return (
         <div className="flex flex-col gap-6">
-            <SubscriptionOverviewSection subscription={subscription} />
+            <SubscriptionOverviewSection subscription={subscription} onMutationSuccess={() => refetchSubscription()} />
             {subscription && <QuotaUsageSection quotas={quotas} />}
             {subscription && <PaymentMethodSection />}
         </div>

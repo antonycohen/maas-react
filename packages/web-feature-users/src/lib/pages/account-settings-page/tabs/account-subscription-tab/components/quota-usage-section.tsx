@@ -1,4 +1,4 @@
-import { Quota } from '@maas/core-api-models';
+import { Quota, FEATURE_DIGITAL_ACCESS } from '@maas/core-api-models';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, Progress } from '@maas/web-components';
 import { useTranslation } from '@maas/core-translations';
 
@@ -28,6 +28,24 @@ export const QuotaUsageSection = ({ quotas }: Props) => {
                         {activeQuotas.map((quota) => {
                             const limit = quota.quotaLimit ?? 0;
                             const used = quota.currentUsage ?? 0;
+                            const isDigitalAccess = quota.featureKey === FEATURE_DIGITAL_ACCESS;
+
+                            if (isDigitalAccess) {
+                                const hasAccess = limit > 0;
+                                return (
+                                    <div key={quota.id} className="flex items-center justify-between">
+                                        <span className="text-sm font-medium">
+                                            {formatFeatureKey(quota.featureKey ?? '')}
+                                        </span>
+                                        <span
+                                            className={`text-sm font-medium ${hasAccess ? 'text-green-600' : 'text-red-600'}`}
+                                        >
+                                            {hasAccess ? t('common.yes') : t('common.no')}
+                                        </span>
+                                    </div>
+                                );
+                            }
+
                             const percentage = limit > 0 ? Math.round((used / limit) * 100) : 0;
                             return (
                                 <div key={quota.id} className="flex flex-col gap-1.5">
