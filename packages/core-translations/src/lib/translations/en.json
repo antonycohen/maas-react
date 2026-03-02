@@ -1018,5 +1018,14 @@
     "invoices.statusOpen": "Open",
     "invoices.statusPaid": "Paid",
     "invoices.statusUncollectible": "Uncollectible",
-    "invoices.statusVoid": "Void"
+    "invoices.statusVoid": "Void",
+
+    "pricing.alreadySubscribedTitle": "You are already subscribed",
+    "pricing.alreadySubscribedDescription": "You already have an active subscription. Visit your subscription settings to manage your plan.",
+    "pricing.goToSubscription": "Go to my subscription",
+
+    "checkout.successTitle": "Thank you for subscribing!",
+    "checkout.successDescription": "Your payment has been processed. You can now enjoy all your content.",
+    "checkout.goToSubscription": "Go to my subscription",
+    "checkout.backToHome": "Back to home"
 }

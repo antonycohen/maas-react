@@ -35,15 +35,13 @@ export class InvoicesEndpoint {
     }
 
     /**
-     * Download an invoice PDF for current user
+     * Get invoice PDF URL for current user
      * GET /api/v1/users/me/invoices/{invoiceId}/download
      */
-    async downloadMyInvoice(invoiceId: string): Promise<Blob> {
-        const response = await this.client.request<Blob>(`${ME_PATH}/${invoiceId}/download`, {
-            method: 'GET',
-            responseType: 'blob',
-        });
-        return response.data;
+    async downloadMyInvoice(invoiceId: string): Promise<{ invoicePdf: string; hostedInvoiceUrl: string }> {
+        return this.client.getById<{ invoicePdf: string; hostedInvoiceUrl: string }>(
+            `${ME_PATH}/${invoiceId}/download`
+        );
     }
 
     /**

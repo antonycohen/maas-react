@@ -13,6 +13,7 @@ import { useState, useEffect, useRef, useMemo, RefObject, ReactNode } from 'reac
 import { Link, NavLink } from 'react-router';
 import { useTranslation } from '@maas/core-translations';
 import { publicUrlBuilders, PUBLIC_ROUTES } from '@maas/core-routes';
+import { useSubscriptionStatus } from '@maas/core-store-session';
 
 // =============================================================================
 // Types
@@ -198,6 +199,10 @@ function IconButton({
 
 function SubscribeButton({ href, compact = false }: { href?: string; compact?: boolean }) {
     const { t } = useTranslation();
+    const { isUserSubscribed } = useSubscriptionStatus();
+
+    if (isUserSubscribed) return null;
+
     return (
         <Link to={href ?? PUBLIC_ROUTES.PRICING} className={cn(styles.subscribeButton, compact ? 'px-3' : 'px-4')}>
             <span className={cn(styles.subscribeText, compact ? 'text-[10px] md:text-[14px]' : 'text-[14px]')}>

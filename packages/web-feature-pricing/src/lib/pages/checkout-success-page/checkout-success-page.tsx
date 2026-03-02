@@ -1,10 +1,19 @@
 import { Link } from 'react-router';
 import { CircleCheck } from 'lucide-react';
 import { Button } from '@maas/web-components';
-import { usePublicRoutes } from '@maas/core-routes';
+import { PUBLIC_ROUTES, usePublicRoutes } from '@maas/core-routes';
+import { useRefreshSubscriptionStatus } from '@maas/core-store-session';
+import { useEffect } from 'react';
+import { useTranslation } from '@maas/core-translations';
 
 export function CheckoutSuccessPage() {
     const publicRoutes = usePublicRoutes();
+    const { refresh } = useRefreshSubscriptionStatus();
+    const { t } = useTranslation();
+
+    useEffect(() => {
+        refresh();
+    }, [refresh]);
 
     return (
         <div className="flex w-full justify-center px-5 py-16 md:min-h-[650px] md:py-24">
@@ -15,20 +24,17 @@ export function CheckoutSuccessPage() {
 
                 <div className="flex flex-col gap-3">
                     <h1 className="font-heading text-foreground text-[34px] leading-10 font-semibold tracking-[-0.85px]">
-                        Merci pour votre abonnement&nbsp;!
+                        {t('checkout.successTitle')}
                     </h1>
-                    <p className="text-text-secondary text-base leading-relaxed">
-                        Votre paiement a bien été pris en compte. Vous pouvez dès à présent profiter de l'ensemble de
-                        vos contenus.
-                    </p>
+                    <p className="text-text-secondary text-base leading-relaxed">{t('checkout.successDescription')}</p>
                 </div>
 
                 <div className="flex flex-col gap-3 sm:flex-row">
                     <Button asChild size="lg">
-                        <Link to={publicRoutes.account}>Accéder à mon compte</Link>
+                        <Link to={PUBLIC_ROUTES.ACCOUNT_SUBSCRIPTION}>{t('checkout.goToSubscription')}</Link>
                     </Button>
                     <Button asChild variant="outline" size="lg">
-                        <Link to={publicRoutes.home}>Retour à l'accueil</Link>
+                        <Link to={publicRoutes.home}>{t('checkout.backToHome')}</Link>
                     </Button>
                 </div>
             </div>

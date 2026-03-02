@@ -1018,5 +1018,14 @@
     "invoices.statusOpen": "Ouverte",
     "invoices.statusPaid": "Payée",
     "invoices.statusUncollectible": "Irrécouvrable",
-    "invoices.statusVoid": "Annulée"
+    "invoices.statusVoid": "Annulée",
+
+    "pricing.alreadySubscribedTitle": "Vous êtes déjà abonné",
+    "pricing.alreadySubscribedDescription": "Vous disposez déjà d'un abonnement actif. Consultez votre espace abonnement pour gérer votre offre.",
+    "pricing.goToSubscription": "Accéder à mon abonnement",
+
+    "checkout.successTitle": "Merci pour votre abonnement !",
+    "checkout.successDescription": "Votre paiement a bien été pris en compte. Vous pouvez dès à présent profiter de l'ensemble de vos contenus.",
+    "checkout.goToSubscription": "Accéder à mon abonnement",
+    "checkout.backToHome": "Retour à l'accueil"
 }

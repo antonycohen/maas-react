@@ -4,6 +4,7 @@ import { PUBLIC_ROUTES, publicUrlBuilders } from '@maas/core-routes';
 import { useTranslation } from '@maas/core-translations';
 import { useGetHomepage } from '@maas/core-api';
 import { HomepageNewsItem } from '@maas/core-api-models';
+import { useSubscriptionStatus } from '@maas/core-store-session';
 
 interface FooterLink {
     label: string;
@@ -41,6 +42,7 @@ const Footer = ({
     },
 }: FooterProps) => {
     const { t } = useTranslation();
+    const { isUserSubscribed } = useSubscriptionStatus();
     const { data: homepage } = useGetHomepage({
         articleFields: 'id,title,slug',
     });
@@ -132,12 +134,14 @@ const Footer = ({
                     <p className="font-heading max-w-[596px] text-center text-2xl leading-[40px] font-semibold tracking-[-0.85px] text-white md:text-[34px]">
                         {t('footer.tagline')}
                     </p>
-                    <Link
-                        to={PUBLIC_ROUTES.PRICING}
-                        className="bg-brand-primary font-body hover:bg-brand-primary/90 flex h-10 items-center justify-center gap-1 rounded px-4 py-2 text-[14px] leading-5 font-semibold tracking-[-0.07px] text-white transition-colors"
-                    >
-                        {t('footer.subscribe')}
-                    </Link>
+                    {!isUserSubscribed && (
+                        <Link
+                            to={PUBLIC_ROUTES.PRICING}
+                            className="bg-brand-primary font-body hover:bg-brand-primary/90 flex h-10 items-center justify-center gap-1 rounded px-4 py-2 text-[14px] leading-5 font-semibold tracking-[-0.07px] text-white transition-colors"
+                        >
+                            {t('footer.subscribe')}
+                        </Link>
+                    )}
                 </div>
 
                 {/* Bottom Block - Links */}

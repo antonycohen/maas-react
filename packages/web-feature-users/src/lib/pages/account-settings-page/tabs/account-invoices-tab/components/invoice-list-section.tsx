@@ -18,7 +18,6 @@ import {
 import { Download, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
-import { triggerBlobDownload } from '../utils/trigger-blob-download';
 import { INVOICE_STATUS_STYLES, INVOICE_STATUS_TRANSLATION_KEYS } from '../../../../../constants/status-styles';
 
 const numberFormatCache = new Map<string, Intl.NumberFormat>();
@@ -53,10 +52,8 @@ type Props = {
 export const InvoiceListSection = ({ invoices }: Props) => {
     const { t } = useTranslation();
     const { mutate: download, isPending: isDownloading } = useDownloadMyInvoice({
-        onSuccess: (blob, invoiceId) => {
-            const invoice = invoices?.find((inv) => inv.id === invoiceId);
-            const filename = `${invoice?.number ?? invoiceId}.pdf`;
-            triggerBlobDownload(blob, filename);
+        onSuccess: (data) => {
+            window.open(data.invoicePdf, '_blank');
         },
         onError: () => {
             toast.error('Impossible de télécharger la facture.');
