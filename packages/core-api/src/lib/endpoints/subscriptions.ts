@@ -1,4 +1,4 @@
-import { Subscription, SubscriptionStatus } from '@maas/core-api-models';
+import { MySubscriptionStatus, Subscription, SubscriptionStatus } from '@maas/core-api-models';
 import { ApiClient } from '../api-client/api-client';
 import { ApiCollectionResponse, FieldQuery, GetCollectionQueryParams, GetQueryByIdParams } from '../types';
 
@@ -11,10 +11,6 @@ export interface GetSubscriptionsFilter {
     status?: SubscriptionStatus;
     refType?: string;
     refId?: string;
-}
-
-export interface MySubscriptionStatus {
-    isSubscribed: boolean;
 }
 
 export class SubscriptionsEndpoint {

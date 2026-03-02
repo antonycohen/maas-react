@@ -5,4 +5,7 @@ export * from './lib/providers/session-provider';
 export * from './lib/hooks/use-session-is-loading';
 export * from './lib/hooks/use-connected-user';
 export * from './lib/hooks/use-protected-page';
+export * from './lib/hooks/use-subscription-status';
+export * from './lib/hooks/use-quota';
+export * from './lib/hooks/use-refresh-subscription-status';
 export * from './lib/security/protected-page';

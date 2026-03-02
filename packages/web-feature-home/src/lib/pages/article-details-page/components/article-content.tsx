@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { SubscriptionCTA } from './subscription-cta';
 import { useRenderBlocks } from '@maas/web-cms-editor';
-import { Article, CMSBlock } from '@maas/core-api-models';
-import { useSubscriptionStatus } from '@maas/core-api';
+import { Article, CMSBlock, FEATURE_DIGITAL_ACCESS } from '@maas/core-api-models';
 import {
     Dialog,
     DialogContent,
@@ -12,7 +11,7 @@ import {
     DialogDescription,
     useResizedImage,
 } from '@maas/web-components';
-import { useConnectedUser } from '@maas/core-store-session';
+import { useConnectedUser, useSubscriptionStatus, useQuota } from '@maas/core-store-session';
 import { normalizeString } from '@maas/core-utils';
 import { PUBLIC_ROUTES } from '@maas/core-routes';
 
@@ -32,9 +31,12 @@ export const ArticleContent = ({
     customFields?: Article['customFields'];
 }) => {
     const { isUserSubscribed } = useSubscriptionStatus();
+    const { remaining: digitalAccessRemaining } = useQuota(FEATURE_DIGITAL_ACCESS);
     const connectedUser = useConnectedUser();
     const isAdmin = connectedUser?.roles?.includes('ADMIN') ?? false;
     const isProblem = type?.name ? normalizeString(type.name) === 'probleme' : false;
+    const hasDigitalAccess = isUserSubscribed && digitalAccessRemaining > 0;
+    const canViewContent = isAdmin || hasDigitalAccess;
     const blocks = useRenderBlocks(content);
     const solutionBlocks = useRenderBlocks(isProblem ? (customFields?.solution as CMSBlock[] | null) : null);
     const { resizedImage } = useResizedImage({ images: featuredImage?.resizedImages, width: 960 });
@@ -43,9 +45,9 @@ export const ArticleContent = ({
     const [showSolution, setShowSolution] = useState(false);
     const [showSubscribeDialog, setShowSubscribeDialog] = useState(false);
 
-    const showOverlayAndCta = !isProblem && !isUserSubscribed && !isAdmin && visibility !== 'public';
+    const showOverlayAndCta = !canViewContent && visibility !== 'public';
     const handleShowSolution = () => {
-        if (isAdmin || isUserSubscribed) {
+        if (canViewContent) {
             setShowSolution(true);
         } else {
             setShowSubscribeDialog(true);

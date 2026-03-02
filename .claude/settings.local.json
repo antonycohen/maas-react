@@ -41,7 +41,8 @@
             "Bash(/home/jacky/developments/poleditions/maas-app/maas-react/node_modules/.bin/react-router-serve:*)",
             "Bash(ls:*)",
             "Bash(lsof:*)",
-            "Bash(wc:*)"
+            "Bash(wc:*)",
+            "Bash(npx nx:*)"
         ],
         "deny": []
     }

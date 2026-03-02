@@ -1,5 +1,6 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { ApiError, AuthenticationError, maasApi, MySubscriptionStatus } from '../../api';
+import { MySubscriptionStatus } from '@maas/core-api-models';
+import { ApiError, AuthenticationError, maasApi } from '../../api';
 
 export const getMySubscriptionStatus = async (): Promise<MySubscriptionStatus> => {
     return await maasApi.subscriptions.getMySubscriptionStatus();

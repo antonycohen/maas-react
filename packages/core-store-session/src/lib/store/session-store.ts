@@ -9,6 +9,7 @@ const defaultInitialState: SessionState = {
     isLoading: true,
     configuration: null,
     error: null,
+    subscriptionStatus: null,
 };
 
 export const useSessionStore = create<SessionState & SessionActions>()(
@@ -19,6 +20,7 @@ export const useSessionStore = create<SessionState & SessionActions>()(
             setConfiguration: (configuration) => set(() => ({ configuration })),
             setIsLoading: (isLoading) => set(() => ({ isLoading })),
             setError: (error) => set(() => ({ error })),
+            setSubscriptionStatus: (subscriptionStatus) => set(() => ({ subscriptionStatus })),
             resetSession: () => set(defaultInitialState),
         }),
         {
@@ -36,6 +38,10 @@ export const useSessionStore = create<SessionState & SessionActions>()(
                           },
                       }
             ),
+            partialize: (state) => ({
+                connectedUser: state.connectedUser,
+                configuration: state.configuration,
+            }),
         }
     )
 );
