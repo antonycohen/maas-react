@@ -2,28 +2,21 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Subscription, SubscriptionStatus } from '@maas/core-api-models';
 import { Badge, Checkbox } from '@maas/web-components';
 import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collection';
-import { cn } from '@maas/core-utils';
+import { cn, SUBSCRIPTION_STATUS_STYLES } from '@maas/core-utils';
 import { Link } from 'react-router';
 import { IconEye, IconCreditCard } from '@tabler/icons-react';
 import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 
-const getStatusColor = (status: SubscriptionStatus | null): 'default' | 'secondary' | 'destructive' | 'outline' => {
-    switch (status) {
-        case 'active':
-            return 'default';
-        case 'trialing':
-            return 'outline';
-        case 'past_due':
-        case 'unpaid':
-            return 'destructive';
-        case 'canceled':
-        case 'incomplete':
-        case 'incomplete_expired':
-        case 'paused':
-        default:
-            return 'secondary';
-    }
+const STATUS_TRANSLATION_KEYS: Record<string, string> = {
+    active: 'subscriptions.statusActive',
+    trialing: 'subscriptions.statusTrialing',
+    past_due: 'subscriptions.statusPastDue',
+    canceled: 'subscriptions.statusCanceled',
+    unpaid: 'subscriptions.statusUnpaid',
+    incomplete: 'subscriptions.statusIncomplete',
+    incomplete_expired: 'subscriptions.statusExpired',
+    paused: 'subscriptions.statusPaused',
 };
 
 export function useSubscriptionsListColumns(): ColumnDef<Subscription>[] {
@@ -82,7 +75,15 @@ export function useSubscriptionsListColumns(): ColumnDef<Subscription>[] {
             header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.status')} />,
             cell: ({ row }) => {
                 const status = row.getValue('status') as SubscriptionStatus | null;
-                return <Badge variant={getStatusColor(status)}>{status || 'Unknown'}</Badge>;
+                const statusStyle =
+                    SUBSCRIPTION_STATUS_STYLES[status ?? 'incomplete'] ?? SUBSCRIPTION_STATUS_STYLES.incomplete;
+                const translationKey = status ? STATUS_TRANSLATION_KEYS[status] : undefined;
+                const label = translationKey ? t(translationKey) : (status ?? 'Unknown');
+                return (
+                    <Badge variant="outline" className={`rounded-md px-2 py-0.5 text-xs ${statusStyle}`}>
+                        {label}
+                    </Badge>
+                );
             },
             enableSorting: false,
         },

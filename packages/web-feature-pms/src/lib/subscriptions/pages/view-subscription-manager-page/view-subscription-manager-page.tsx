@@ -18,29 +18,21 @@ import {
     useSyncSubscription,
 } from '@maas/core-api';
 import { useRoutes } from '@maas/core-workspace';
-import { SubscriptionStatus } from '@maas/core-api-models';
-import { cn } from '@maas/core-utils';
+import { cn, SUBSCRIPTION_STATUS_STYLES } from '@maas/core-utils';
 import { IconRefresh, IconPlayerPause, IconPlayerPlay, IconX, IconCopy, IconCheck } from '@tabler/icons-react';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { useTranslation } from '@maas/core-translations';
 
-const getStatusColor = (status: SubscriptionStatus | null): 'default' | 'secondary' | 'destructive' | 'outline' => {
-    switch (status) {
-        case 'active':
-            return 'default';
-        case 'trialing':
-            return 'outline';
-        case 'past_due':
-        case 'unpaid':
-            return 'destructive';
-        case 'canceled':
-        case 'incomplete':
-        case 'incomplete_expired':
-        case 'paused':
-        default:
-            return 'secondary';
-    }
+const STATUS_TRANSLATION_KEYS: Record<string, string> = {
+    active: 'subscriptions.statusActive',
+    trialing: 'subscriptions.statusTrialing',
+    past_due: 'subscriptions.statusPastDue',
+    canceled: 'subscriptions.statusCanceled',
+    unpaid: 'subscriptions.statusUnpaid',
+    incomplete: 'subscriptions.statusIncomplete',
+    incomplete_expired: 'subscriptions.statusExpired',
+    paused: 'subscriptions.statusPaused',
 };
 
 function CopyField({ value }: { value: string }) {
@@ -166,7 +158,14 @@ export function ViewSubscriptionManagerPage() {
                 <div className="bg-background sticky top-0 z-10 flex items-center justify-between border-b px-6 py-3">
                     <div className="flex items-center gap-3">
                         <h1 className="font-mono text-xl font-semibold">{subscription.id.slice(0, 8)}...</h1>
-                        <Badge variant={getStatusColor(subscription.status)}>{subscription.status}</Badge>
+                        <Badge
+                            variant="outline"
+                            className={`rounded-md px-2 py-0.5 text-xs ${SUBSCRIPTION_STATUS_STYLES[subscription.status ?? 'incomplete'] ?? SUBSCRIPTION_STATUS_STYLES.incomplete}`}
+                        >
+                            {STATUS_TRANSLATION_KEYS[subscription.status ?? '']
+                                ? t(STATUS_TRANSLATION_KEYS[subscription.status ?? ''])
+                                : subscription.status}
+                        </Badge>
                         {isCancelingAtPeriodEnd && (
                             <Badge variant="destructive">{t('subscriptions.cancelingAtPeriodEnd')}</Badge>
                         )}
@@ -245,8 +244,13 @@ export function ViewSubscriptionManagerPage() {
                                                 <p className="text-muted-foreground text-sm font-medium">
                                                     {t('field.status')}
                                                 </p>
-                                                <Badge variant={getStatusColor(subscription.status)} className="mt-1">
-                                                    {subscription.status}
+                                                <Badge
+                                                    variant="outline"
+                                                    className={`mt-1 rounded-md px-2 py-0.5 text-xs ${SUBSCRIPTION_STATUS_STYLES[subscription.status ?? 'incomplete'] ?? SUBSCRIPTION_STATUS_STYLES.incomplete}`}
+                                                >
+                                                    {STATUS_TRANSLATION_KEYS[subscription.status ?? '']
+                                                        ? t(STATUS_TRANSLATION_KEYS[subscription.status ?? ''])
+                                                        : subscription.status}
                                                 </Badge>
                                             </div>
                                             <div>

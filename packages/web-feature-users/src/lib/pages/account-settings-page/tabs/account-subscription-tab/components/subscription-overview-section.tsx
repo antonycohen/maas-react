@@ -1,30 +1,13 @@
 import { Subscription } from '@maas/core-api-models';
 import { Badge, Card, CardContent, CardHeader, CardTitle, CardDescription } from '@maas/web-components';
+import { useTranslation } from '@maas/core-translations';
+import {
+    SUBSCRIPTION_STATUS_STYLES,
+    SUBSCRIPTION_STATUS_TRANSLATION_KEYS,
+} from '../../../../../constants/status-styles';
 
 type Props = {
     subscription: Subscription | undefined;
-};
-
-const STATUS_STYLES: Record<string, string> = {
-    active: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-    trialing: 'border-blue-200 bg-blue-50 text-blue-700',
-    past_due: 'border-orange-200 bg-orange-50 text-orange-700',
-    canceled: 'border-red-200 bg-red-50 text-red-700',
-    unpaid: 'border-red-200 bg-red-50 text-red-700',
-    incomplete: 'border-gray-200 bg-gray-50 text-gray-700',
-    incomplete_expired: 'border-gray-200 bg-gray-50 text-gray-700',
-    paused: 'border-yellow-200 bg-yellow-50 text-yellow-700',
-};
-
-const STATUS_LABELS: Record<string, string> = {
-    active: 'Actif',
-    trialing: 'Essai',
-    past_due: 'En retard',
-    canceled: 'Annulé',
-    unpaid: 'Impayé',
-    incomplete: 'Incomplet',
-    incomplete_expired: 'Expiré',
-    paused: 'En pause',
 };
 
 const formatDate = (dateStr: string | null): string => {
@@ -37,6 +20,7 @@ const formatDate = (dateStr: string | null): string => {
 };
 
 export const SubscriptionOverviewSection = ({ subscription }: Props) => {
+    const { t } = useTranslation();
     if (!subscription) {
         return (
             <Card className="rounded-2xl">
@@ -49,8 +33,9 @@ export const SubscriptionOverviewSection = ({ subscription }: Props) => {
     }
 
     const status = subscription.status ?? 'incomplete';
-    const statusStyle = STATUS_STYLES[status] ?? STATUS_STYLES.incomplete;
-    const statusLabel = STATUS_LABELS[status] ?? status;
+    const statusStyle = SUBSCRIPTION_STATUS_STYLES[status] ?? SUBSCRIPTION_STATUS_STYLES.incomplete;
+    const statusKey = SUBSCRIPTION_STATUS_TRANSLATION_KEYS[status];
+    const statusLabel = statusKey ? t(statusKey) : status;
 
     return (
         <Card className="rounded-2xl">

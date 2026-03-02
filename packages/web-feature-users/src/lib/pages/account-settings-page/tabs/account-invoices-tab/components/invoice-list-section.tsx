@@ -17,23 +17,9 @@ import {
 } from '@maas/web-components';
 import { Download, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslation } from '@maas/core-translations';
 import { triggerBlobDownload } from '../utils/trigger-blob-download';
-
-const STATUS_STYLES: Record<string, string> = {
-    paid: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-    open: 'border-blue-200 bg-blue-50 text-blue-700',
-    draft: 'border-gray-200 bg-gray-50 text-gray-700',
-    void: 'border-red-200 bg-red-50 text-red-700',
-    uncollectible: 'border-orange-200 bg-orange-50 text-orange-700',
-};
-
-const STATUS_LABELS: Record<string, string> = {
-    paid: 'Payée',
-    open: 'Ouverte',
-    draft: 'Brouillon',
-    void: 'Annulée',
-    uncollectible: 'Irrécouvrable',
-};
+import { INVOICE_STATUS_STYLES, INVOICE_STATUS_TRANSLATION_KEYS } from '../../../../../constants/status-styles';
 
 const numberFormatCache = new Map<string, Intl.NumberFormat>();
 const getCurrencyFormatter = (locale: string, currency: string): Intl.NumberFormat => {
@@ -65,6 +51,7 @@ type Props = {
 };
 
 export const InvoiceListSection = ({ invoices }: Props) => {
+    const { t } = useTranslation();
     const { mutate: download, isPending: isDownloading } = useDownloadMyInvoice({
         onSuccess: (blob, invoiceId) => {
             const invoice = invoices?.find((inv) => inv.id === invoiceId);
@@ -116,8 +103,9 @@ export const InvoiceListSection = ({ invoices }: Props) => {
                     <TableBody>
                         {invoices.map((invoice) => {
                             const status = invoice.status ?? 'draft';
-                            const statusStyle = STATUS_STYLES[status] ?? STATUS_STYLES.draft;
-                            const statusLabel = STATUS_LABELS[status] ?? status;
+                            const statusStyle = INVOICE_STATUS_STYLES[status] ?? INVOICE_STATUS_STYLES.draft;
+                            const statusKey = INVOICE_STATUS_TRANSLATION_KEYS[status];
+                            const statusLabel = statusKey ? t(statusKey) : status;
                             const canPay = status === 'open' || status === 'uncollectible';
 
                             return (

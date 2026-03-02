@@ -32,24 +32,9 @@ import { Download } from 'lucide-react';
 import { IconCreditCardPay, IconDotsVertical, IconExternalLink, IconRefresh } from '@tabler/icons-react';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
+import { INVOICE_STATUS_STYLES, INVOICE_STATUS_TRANSLATION_KEYS } from '../../../../../constants/status-styles';
 
 type PaymentMethod = 'card' | 'cheque' | 'virement' | 'prelevement' | 'bon';
-
-const STATUS_STYLES: Record<string, string> = {
-    paid: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-    open: 'border-blue-200 bg-blue-50 text-blue-700',
-    draft: 'border-gray-200 bg-gray-50 text-gray-700',
-    void: 'border-red-200 bg-red-50 text-red-700',
-    uncollectible: 'border-orange-200 bg-orange-50 text-orange-700',
-};
-
-const STATUS_KEYS: Record<string, string> = {
-    paid: 'customers.invoices.statusPaid',
-    open: 'customers.invoices.statusOpen',
-    draft: 'customers.invoices.statusDraft',
-    void: 'customers.invoices.statusVoid',
-    uncollectible: 'customers.invoices.statusUncollectible',
-};
 
 const numberFormatCache = new Map<string, Intl.NumberFormat>();
 const getCurrencyFormatter = (locale: string, currency: string): Intl.NumberFormat => {
@@ -189,12 +174,15 @@ export const CustomerInvoiceListSection = ({
                     <TableBody>
                         {invoices.map((invoice) => {
                             const status = invoice.status ?? 'draft';
-                            const statusStyle = STATUS_STYLES[status] ?? STATUS_STYLES.draft;
-                            const statusKey = STATUS_KEYS[status];
+                            const statusStyle = INVOICE_STATUS_STYLES[status] ?? INVOICE_STATUS_STYLES.draft;
+                            const statusKey = INVOICE_STATUS_TRANSLATION_KEYS[status];
                             const statusLabel = statusKey ? t(statusKey) : status;
                             const isManual = manualSubscriptionIds?.has(invoice.subscriptionId ?? '');
                             const isCanceled = canceledSubscriptionIds?.has(invoice.subscriptionId ?? '');
-                            const canPay = isManual && !isCanceled && invoice.status !== 'paid';
+                            const canPay =
+                                isManual && !isCanceled && invoice.status !== 'paid' && invoice.status !== 'void';
+                            const invoiceMetadata = invoice.metadata as Record<string, unknown> | null;
+                            const isEarlyRenewal = invoiceMetadata?.type === 'early_renewal';
 
                             return (
                                 <TableRow key={invoice.id}>
@@ -206,12 +194,22 @@ export const CustomerInvoiceListSection = ({
                                         {formatAmount(invoice.amountDue, invoice.currency)}
                                     </TableCell>
                                     <TableCell>
-                                        <Badge
-                                            variant="outline"
-                                            className={`rounded-md px-2 py-0.5 text-xs ${statusStyle}`}
-                                        >
-                                            {statusLabel}
-                                        </Badge>
+                                        <div className="flex items-center gap-1.5">
+                                            <Badge
+                                                variant="outline"
+                                                className={`rounded-md px-2 py-0.5 text-xs ${statusStyle}`}
+                                            >
+                                                {statusLabel}
+                                            </Badge>
+                                            {isEarlyRenewal && (
+                                                <Badge
+                                                    variant="outline"
+                                                    className="rounded-md border-violet-200 bg-violet-50 px-2 py-0.5 text-xs text-violet-700"
+                                                >
+                                                    {t('customers.invoices.earlyRenewal')}
+                                                </Badge>
+                                            )}
+                                        </div>
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <DropdownMenu>

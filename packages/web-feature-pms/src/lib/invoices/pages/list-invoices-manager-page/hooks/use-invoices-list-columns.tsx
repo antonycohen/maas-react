@@ -2,27 +2,11 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Invoice, InvoiceStatus } from '@maas/core-api-models';
 import { Badge, Checkbox } from '@maas/web-components';
 import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collection';
-import { cn } from '@maas/core-utils';
+import { cn, INVOICE_STATUS_STYLES } from '@maas/core-utils';
 import { Link } from 'react-router';
 import { IconFileInvoice, IconExternalLink } from '@tabler/icons-react';
 import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
-
-const getStatusColor = (status: InvoiceStatus | null): 'default' | 'secondary' | 'destructive' | 'outline' => {
-    switch (status) {
-        case 'open':
-            return 'default';
-        case 'paid':
-            return 'secondary';
-        case 'draft':
-            return 'outline';
-        case 'uncollectible':
-        case 'void':
-            return 'destructive';
-        default:
-            return 'secondary';
-    }
-};
 
 const STATUS_TRANSLATION_KEYS: Record<string, string> = {
     draft: 'invoices.statusDraft',
@@ -112,9 +96,14 @@ export function useInvoicesListColumns(): ColumnDef<Invoice>[] {
             header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.status')} />,
             cell: ({ row }) => {
                 const status = row.getValue('status') as InvoiceStatus | null;
+                const statusStyle = INVOICE_STATUS_STYLES[status ?? 'draft'] ?? INVOICE_STATUS_STYLES.draft;
                 const translationKey = status ? STATUS_TRANSLATION_KEYS[status] : undefined;
                 const label = translationKey ? t(translationKey) : (status ?? 'Unknown');
-                return <Badge variant={getStatusColor(status)}>{label}</Badge>;
+                return (
+                    <Badge variant="outline" className={`rounded-md px-2 py-0.5 text-xs ${statusStyle}`}>
+                        {label}
+                    </Badge>
+                );
             },
             enableSorting: false,
         },

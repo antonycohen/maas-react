@@ -45,28 +45,7 @@ import { ViewSubscriptionDialog } from './components/view-subscription-dialog';
 import { UpdateQuotaDialog } from './components/update-quota-dialog';
 import { QuotaTransactionsSection } from './components/quota-transactions-section';
 import { useTranslation } from '@maas/core-translations';
-
-const SUBSCRIPTION_STATUS_STYLES: Record<string, string> = {
-    active: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-    trialing: 'border-blue-200 bg-blue-50 text-blue-700',
-    past_due: 'border-orange-200 bg-orange-50 text-orange-700',
-    canceled: 'border-red-200 bg-red-50 text-red-700',
-    unpaid: 'border-red-200 bg-red-50 text-red-700',
-    incomplete: 'border-gray-200 bg-gray-50 text-gray-700',
-    incomplete_expired: 'border-gray-200 bg-gray-50 text-gray-700',
-    paused: 'border-yellow-200 bg-yellow-50 text-yellow-700',
-};
-
-const SUBSCRIPTION_STATUS_KEYS: Record<string, string> = {
-    active: 'customers.subscriptions.statusActive',
-    trialing: 'customers.subscriptions.statusTrialing',
-    past_due: 'customers.subscriptions.statusPastDue',
-    canceled: 'customers.subscriptions.statusCanceled',
-    unpaid: 'customers.subscriptions.statusUnpaid',
-    incomplete: 'customers.subscriptions.statusIncomplete',
-    incomplete_expired: 'customers.subscriptions.statusExpired',
-    paused: 'customers.subscriptions.statusPaused',
-};
+import { SUBSCRIPTION_STATUS_STYLES, SUBSCRIPTION_STATUS_TRANSLATION_KEYS } from '../../../../constants/status-styles';
 
 const formatDate = (dateStr: string | null): string => {
     if (!dateStr) return '\u2014';
@@ -246,8 +225,19 @@ export const CustomerSubscriptionsTab = () => {
                                             const statusStyle =
                                                 SUBSCRIPTION_STATUS_STYLES[status] ??
                                                 SUBSCRIPTION_STATUS_STYLES.incomplete;
-                                            const statusKey = SUBSCRIPTION_STATUS_KEYS[status];
+                                            const statusKey = SUBSCRIPTION_STATUS_TRANSLATION_KEYS[status];
                                             const statusLabel = statusKey ? t(statusKey) : status;
+                                            const subMetadata = subscription.metadata as Record<string, unknown> | null;
+                                            const renewalPaidUntil = subMetadata?.renewal_paid_until
+                                                ? Number(subMetadata.renewal_paid_until)
+                                                : null;
+                                            const periodEndTimestamp = subscription.currentPeriodEnd
+                                                ? new Date(subscription.currentPeriodEnd).getTime() / 1000
+                                                : null;
+                                            const isAlreadyRenewed =
+                                                renewalPaidUntil !== null &&
+                                                periodEndTimestamp !== null &&
+                                                renewalPaidUntil >= periodEndTimestamp;
 
                                             return (
                                                 <TableRow key={subscription.id}>
@@ -255,12 +245,22 @@ export const CustomerSubscriptionsTab = () => {
                                                         {subscription.plan?.name ?? '\u2014'}
                                                     </TableCell>
                                                     <TableCell>
-                                                        <Badge
-                                                            variant="outline"
-                                                            className={`rounded-md px-2 py-0.5 text-xs ${statusStyle}`}
-                                                        >
-                                                            {statusLabel}
-                                                        </Badge>
+                                                        <div className="flex items-center gap-1.5">
+                                                            <Badge
+                                                                variant="outline"
+                                                                className={`rounded-md px-2 py-0.5 text-xs ${statusStyle}`}
+                                                            >
+                                                                {statusLabel}
+                                                            </Badge>
+                                                            {isAlreadyRenewed && (
+                                                                <Badge
+                                                                    variant="outline"
+                                                                    className="rounded-md border-violet-200 bg-violet-50 px-2 py-0.5 text-xs text-violet-700"
+                                                                >
+                                                                    {t('customers.subscriptions.alreadyRenewed')}
+                                                                </Badge>
+                                                            )}
+                                                        </div>
                                                     </TableCell>
                                                     <TableCell className="text-sm text-gray-600">
                                                         {formatDate(subscription.currentPeriodStart)}
