@@ -1,5 +1,6 @@
 import { Quota } from '@maas/core-api-models';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, Progress } from '@maas/web-components';
+import { useTranslation } from '@maas/core-translations';
 
 type Props = {
     quotas: Quota[] | undefined;
@@ -10,17 +11,18 @@ const formatFeatureKey = (key: string): string => {
 };
 
 export const QuotaUsageSection = ({ quotas }: Props) => {
+    const { t } = useTranslation();
     const activeQuotas = quotas?.filter((q) => q.status === 'active') ?? [];
 
     return (
         <Card className="rounded-2xl">
             <CardHeader>
-                <CardTitle className="text-xl">Utilisation des quotas</CardTitle>
-                <CardDescription>Suivi de votre consommation par rapport aux limites de votre plan.</CardDescription>
+                <CardTitle className="text-xl">{t('account.subscription.quotaTitle')}</CardTitle>
+                <CardDescription>{t('account.subscription.quotaDescription')}</CardDescription>
             </CardHeader>
             <CardContent>
                 {activeQuotas.length === 0 ? (
-                    <p className="text-sm text-gray-500">Aucun quota disponible.</p>
+                    <p className="text-sm text-gray-500">{t('account.subscription.quotaEmpty')}</p>
                 ) : (
                     <div className="flex flex-col gap-4">
                         {activeQuotas.map((quota) => {

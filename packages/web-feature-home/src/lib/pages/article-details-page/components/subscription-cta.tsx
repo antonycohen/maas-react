@@ -2,9 +2,12 @@ import { CheckIcon } from '@radix-ui/react-icons';
 import { useTranslation } from '@maas/core-translations';
 import { Link } from 'react-router';
 import { PUBLIC_ROUTES } from '@maas/core-routes';
+import { useConnectedUser } from '@maas/core-store-session';
 
 export const SubscriptionCTA = () => {
     const { t } = useTranslation();
+    const connectedUser = useConnectedUser();
+
     return (
         <div className="mx-auto mt-10 flex w-full max-w-[600px] flex-col items-center gap-10">
             <h2 className="font-heading text-center text-4xl leading-[47px] font-semibold tracking-[-1.32px] text-black md:text-[48px] md:leading-[52px]">
@@ -31,6 +34,14 @@ export const SubscriptionCTA = () => {
             >
                 {t('home.subscribe')}
             </Link>
+            {!connectedUser && (
+                <p className="text-text-secondary text-sm">
+                    {t('home.alreadySubscribedLogin')}{' '}
+                    <Link to={PUBLIC_ROUTES.LOGIN} className="text-brand-primary font-semibold hover:underline">
+                        {t('home.loginLink')}
+                    </Link>
+                </p>
+            )}
         </div>
     );
 };

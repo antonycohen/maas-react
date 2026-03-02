@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { cn } from '@maas/core-utils';
 import { Checkbox } from '@maas/web-components';
-import { useUpdateMyCustomer } from '@maas/core-api';
+import { ApiError, useUpdateMyCustomer } from '@maas/core-api';
 import { usePublicRoutes } from '@maas/core-routes';
+import { useTranslation } from '@maas/core-translations';
 import { usePricingStore, type AddressFormData } from '../store/pricing-store';
 import { AddressForm, validateAddress } from './address-form';
 
 export function PricingAdresseStep() {
+    const { t } = useTranslation();
     const deliveryAddress = usePricingStore((s) => s.deliveryAddress);
     const billingAddress = usePricingStore((s) => s.billingAddress);
     const useDifferentBillingAddress = usePricingStore((s) => s.useDifferentBillingAddress);
@@ -20,6 +22,7 @@ export function PricingAdresseStep() {
 
     const updateCustomerMutation = useUpdateMyCustomer();
 
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [errors, setErrors] = useState<{
         deliveryAddress: Partial<Record<keyof AddressFormData, string>>;
         billingAddress: Partial<Record<keyof AddressFormData, string>>;
@@ -40,6 +43,7 @@ export function PricingAdresseStep() {
         }
 
         setErrors({ deliveryAddress: {}, billingAddress: {} });
+        setErrorMessage(null);
 
         const billingAddr = useDifferentBillingAddress ? billingAddress : deliveryAddress;
 
@@ -68,6 +72,13 @@ export function PricingAdresseStep() {
                     reset();
                     navigate(publicRoutes.checkoutSuccess);
                 },
+                onError: (error: ApiError) => {
+                    if (error.code === 3000) {
+                        setErrorMessage(t('customers.addressCountryRestriction'));
+                    } else {
+                        setErrorMessage(error.message || t('common.errorSaving'));
+                    }
+                },
             }
         );
     };
@@ -78,7 +89,7 @@ export function PricingAdresseStep() {
                 {/* Header */}
                 <div className="mb-6 flex flex-col gap-1">
                     <p className="text-text-secondary text-xs font-semibold tracking-wide uppercase">
-                        Adresse de livraison
+                        {t('field.address')}
                     </p>
                     <h3 className="font-heading text-foreground text-xl font-semibold">
                         Où souhaitez-vous recevoir votre magazine ?
@@ -117,11 +128,7 @@ export function PricingAdresseStep() {
                         </div>
                     )}
 
-                    {updateCustomerMutation.isError && (
-                        <p className="text-destructive text-sm">
-                            Une erreur est survenue lors de l'enregistrement. Veuillez réessayer.
-                        </p>
-                    )}
+                    {errorMessage && <p className="text-destructive text-sm">{errorMessage}</p>}
 
                     {/* Submit */}
                     <button
@@ -132,7 +139,7 @@ export function PricingAdresseStep() {
                             updateCustomerMutation.isPending && 'cursor-wait opacity-70'
                         )}
                     >
-                        {updateCustomerMutation.isPending ? 'Enregistrement...' : 'Enregistrer mon adresse'}
+                        {updateCustomerMutation.isPending ? t('common.pending') : 'Enregistrer mon adresse'}
                     </button>
                 </form>
             </div>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { SubscriptionCTA } from './subscription-cta';
+import { NoDigitalAccessCTA } from './no-digital-access-cta';
 import { useRenderBlocks } from '@maas/web-cms-editor';
 import { Article, CMSBlock, FEATURE_DIGITAL_ACCESS } from '@maas/core-api-models';
 import {
@@ -14,6 +15,7 @@ import {
 import { useConnectedUser, useSubscriptionStatus, useQuota } from '@maas/core-store-session';
 import { normalizeString } from '@maas/core-utils';
 import { PUBLIC_ROUTES } from '@maas/core-routes';
+import { useTranslation } from '@maas/core-translations';
 
 export const ArticleContent = ({
     title,
@@ -30,6 +32,7 @@ export const ArticleContent = ({
     type?: Article['type'];
     customFields?: Article['customFields'];
 }) => {
+    const { t } = useTranslation();
     const { isUserSubscribed } = useSubscriptionStatus();
     const { remaining: digitalAccessRemaining } = useQuota(FEATURE_DIGITAL_ACCESS);
     const connectedUser = useConnectedUser();
@@ -37,6 +40,7 @@ export const ArticleContent = ({
     const isProblem = type?.name ? normalizeString(type.name) === 'probleme' : false;
     const hasDigitalAccess = isUserSubscribed && digitalAccessRemaining > 0;
     const canViewContent = isAdmin || hasDigitalAccess;
+    const isSubscribedWithoutAccess = isUserSubscribed && !hasDigitalAccess && !isAdmin;
     const blocks = useRenderBlocks(content);
     const solutionBlocks = useRenderBlocks(isProblem ? (customFields?.solution as CMSBlock[] | null) : null);
     const { resizedImage } = useResizedImage({ images: featuredImage?.resizedImages, width: 960 });
@@ -45,7 +49,7 @@ export const ArticleContent = ({
     const [showSolution, setShowSolution] = useState(false);
     const [showSubscribeDialog, setShowSubscribeDialog] = useState(false);
 
-    const showOverlayAndCta = !canViewContent && visibility !== 'public';
+    const showCta = !canViewContent && visibility !== 'public';
     const handleShowSolution = () => {
         if (canViewContent) {
             setShowSolution(true);
@@ -60,20 +64,15 @@ export const ArticleContent = ({
                 <h1 className="font-heading text-3xl leading-tight font-bold tracking-tight md:text-4xl">{title}</h1>
             )}
             {coverUrl && <img src={coverUrl} alt={title ?? ''} className="w-full rounded-lg object-cover" />}
-            <div className="relative flex w-full flex-col items-start gap-5">
-                {blocks}
-                {showOverlayAndCta && (
-                    <div className="pointer-events-none absolute bottom-0 left-0 h-[200px] w-full bg-gradient-to-t from-white to-transparent"></div>
-                )}
-            </div>
-            {showOverlayAndCta && <SubscriptionCTA />}
+            <div className="flex w-full flex-col items-start gap-5">{blocks}</div>
+            {showCta && (isSubscribedWithoutAccess ? <NoDigitalAccessCTA /> : <SubscriptionCTA />)}
             {isProblem &&
                 (!showSolution ? (
                     <button
                         onClick={handleShowSolution}
                         className="font-body flex h-[40px] w-full items-center justify-center rounded-[4px] bg-[#E31B22] px-4 py-2 text-[14px] leading-[20px] font-semibold tracking-[-0.07px] text-white transition-colors hover:bg-[#c4161c]"
                     >
-                        Voir la solution
+                        {t('home.viewSolution')}
                     </button>
                 ) : (
                     <div className="w-full rounded-lg border border-gray-200 bg-gray-50 p-6">
@@ -84,15 +83,23 @@ export const ArticleContent = ({
             <Dialog open={showSubscribeDialog} onOpenChange={setShowSubscribeDialog}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Devenez membre</DialogTitle>
-                        <DialogDescription>Devenez membre pour voir la solution, et tout tangente</DialogDescription>
+                        <DialogTitle>
+                            {isSubscribedWithoutAccess ? t('home.noDigitalAccessTitle') : t('home.solutionDialogTitle')}
+                        </DialogTitle>
+                        <DialogDescription>
+                            {isSubscribedWithoutAccess
+                                ? t('home.noDigitalAccessDescription')
+                                : t('home.solutionDialogDescription')}
+                        </DialogDescription>
                     </DialogHeader>
-                    <Link
-                        to={PUBLIC_ROUTES.PRICING}
-                        className="font-body flex h-[40px] w-full items-center justify-center rounded-[4px] bg-[#E31B22] px-4 py-2 text-[14px] leading-[20px] font-semibold tracking-[-0.07px] text-white transition-colors hover:bg-[#c4161c]"
-                    >
-                        S'abonner
-                    </Link>
+                    {!isSubscribedWithoutAccess && (
+                        <Link
+                            to={PUBLIC_ROUTES.PRICING}
+                            className="font-body flex h-[40px] w-full items-center justify-center rounded-[4px] bg-[#E31B22] px-4 py-2 text-[14px] leading-[20px] font-semibold tracking-[-0.07px] text-white transition-colors hover:bg-[#c4161c]"
+                        >
+                            {t('home.subscribe')}
+                        </Link>
+                    )}
                 </DialogContent>
             </Dialog>
         </article>
