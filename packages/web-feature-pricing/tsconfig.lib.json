@@ -31,6 +31,12 @@
             "path": "../core-seo/tsconfig.lib.json"
         },
         {
+            "path": "../core-translations/tsconfig.lib.json"
+        },
+        {
+            "path": "../core-store-session/tsconfig.lib.json"
+        },
+        {
             "path": "../core-api-models/tsconfig.lib.json"
         },
         {
