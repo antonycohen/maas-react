@@ -12,6 +12,7 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
+    Textarea,
 } from '@maas/web-components';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -117,6 +118,32 @@ export const CreateDiffusionListModal = ({ open, onOpenChange }: Props) => {
                         </Select>
                         {form.formState.errors.type && (
                             <p className="text-destructive text-sm">{form.formState.errors.type.message}</p>
+                        )}
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="number">{t('diffusionLists.number')}</Label>
+                        <Input
+                            id="number"
+                            type="number"
+                            {...form.register('number', { setValueAs: (v) => (v === '' ? null : Number(v)) })}
+                            placeholder={t('diffusionLists.numberPlaceholder')}
+                        />
+                        {form.formState.errors.number && (
+                            <p className="text-destructive text-sm">{form.formState.errors.number.message}</p>
+                        )}
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="comments">{t('diffusionLists.comments')}</Label>
+                        <Textarea
+                            id="comments"
+                            {...form.register('comments')}
+                            placeholder={t('diffusionLists.commentsPlaceholder')}
+                            rows={3}
+                        />
+                        {form.formState.errors.comments && (
+                            <p className="text-destructive text-sm">{form.formState.errors.comments.message}</p>
                         )}
                     </div>
 

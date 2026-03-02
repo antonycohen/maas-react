@@ -31,6 +31,8 @@ export const diffusionListSchema = z.object({
     id: z.string(),
     name: z.string().nullable(),
     type: z.string().nullable(),
+    number: z.number().int().nullable(),
+    comments: z.string().nullable(),
     status: diffusionListStatusEnum.nullable(),
     entryCount: z.number().int().nullable(),
     generatedAt: z.string().nullable(),
@@ -45,6 +47,8 @@ export type DiffusionList = z.infer<typeof diffusionListSchema>;
 export const createDiffusionListSchema = z.object({
     name: z.string().min(1, 'Name is required').max(255),
     type: z.string().min(1, 'Type is required'),
+    number: z.number().int().nullable().optional(),
+    comments: z.string().max(1000).optional(),
 });
 
 export type CreateDiffusionList = z.infer<typeof createDiffusionListSchema>;
@@ -53,6 +57,8 @@ export type CreateDiffusionList = z.infer<typeof createDiffusionListSchema>;
 export const updateDiffusionListSchema = z.object({
     name: z.string().min(1).max(255).optional(),
     type: z.string().min(1).optional(),
+    number: z.number().int().nullable().optional(),
+    comments: z.string().max(1000).optional(),
 });
 
 export type UpdateDiffusionList = z.infer<typeof updateDiffusionListSchema>;
