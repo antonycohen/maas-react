@@ -168,6 +168,7 @@ export const CustomerInvoiceListSection = ({
                             <TableHead>{t('customers.invoices.number')}</TableHead>
                             <TableHead>{t('customers.invoices.amount')}</TableHead>
                             <TableHead>{t('field.status')}</TableHead>
+                            <TableHead>{t('field.comments')}</TableHead>
                             <TableHead className="text-right">{t('field.actions')}</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -210,6 +211,13 @@ export const CustomerInvoiceListSection = ({
                                                 </Badge>
                                             )}
                                         </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        {status === 'void' && invoiceMetadata?.voidReason && (
+                                            <span className="text-xs text-gray-500">
+                                                {String(invoiceMetadata.voidReason)}
+                                            </span>
+                                        )}
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <DropdownMenu>

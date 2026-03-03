@@ -16,6 +16,10 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
     Label,
     Progress,
     Select,
@@ -35,7 +39,14 @@ import {
     TabsList,
     TabsTrigger,
 } from '@maas/web-components';
-import { IconEdit, IconExternalLink, IconPlus, IconRefresh, IconSwitchHorizontal } from '@tabler/icons-react';
+import {
+    IconDotsVertical,
+    IconEdit,
+    IconExternalLink,
+    IconPlus,
+    IconRefresh,
+    IconSwitchHorizontal,
+} from '@tabler/icons-react';
 import { toast } from 'sonner';
 import { LayoutContent } from '@maas/web-layout';
 import { EditCustomerOutletContext } from '../../edit-customer-manager-page';
@@ -130,7 +141,9 @@ export const CustomerSubscriptionsTab = () => {
     const { data: quotas, isLoading: isLoadingQuotas } = useGetCustomerQuotas(customerId);
 
     const subscriptions = subscriptionsData?.data ?? [];
-    const activeSubscription = subscriptions.find((s) => s.status === 'active' || s.status === 'trialing');
+    const currentSubscriptions = subscriptions.filter((s) => s.status !== 'trialing');
+    const trialingSubscriptions = subscriptions.filter((s) => s.status === 'trialing');
+    const activeSubscription = subscriptions.find((s) => s.status === 'active');
     const hasActiveSubscription = !!activeSubscription;
     const manualSubscriptionIds = new Set(
         subscriptions.filter((s) => (s.metadata as Record<string, unknown> | null)?.manual === 'true').map((s) => s.id)
@@ -149,14 +162,14 @@ export const CustomerSubscriptionsTab = () => {
 
                 {/* Subscription Tab */}
                 <TabsContent value="subscription">
-                    <Card className="rounded-2xl">
-                        <CardHeader>
-                            <div className="flex items-center justify-between">
-                                <div className="flex flex-col gap-1.5">
-                                    <CardTitle className="text-xl">{t('customers.subscriptions.title')}</CardTitle>
-                                    <CardDescription>{t('customers.subscriptions.description')}</CardDescription>
-                                </div>
-                                <div className="flex items-center gap-2">
+                    <div className="flex flex-col gap-6">
+                        <Card className="rounded-2xl">
+                            <CardHeader>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex flex-col gap-1.5">
+                                        <CardTitle className="text-xl">{t('customers.subscriptions.title')}</CardTitle>
+                                        <CardDescription>{t('customers.subscriptions.description')}</CardDescription>
+                                    </div>
                                     {!hasActiveSubscription && !isLoadingSubscriptions && (
                                         <Button
                                             type="button"
@@ -168,132 +181,233 @@ export const CustomerSubscriptionsTab = () => {
                                             {t('customers.subscriptions.createSubscription')}
                                         </Button>
                                     )}
-                                    {activeSubscription && (
-                                        <>
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                disabled={isRenewing}
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    setShowRenewConfirm(true);
-                                                }}
-                                            >
-                                                <IconRefresh className="mr-1 h-4 w-4" />
-                                                {t('customers.subscriptions.renewSubscription')}
-                                            </Button>
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={() => setShowChangeSubscription(true)}
-                                            >
-                                                <IconSwitchHorizontal className="mr-1 h-4 w-4" />
-                                                {t('customers.subscriptions.changeSubscription')}
-                                            </Button>
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={() => setViewingSubscriptionId(activeSubscription.id)}
-                                            >
-                                                {t('customers.subscriptions.editSubscriptions')}
-                                            </Button>
-                                        </>
-                                    )}
                                 </div>
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                            {isLoadingSubscriptions ? (
-                                <Skeleton className="h-[100px] w-full rounded-xl" />
-                            ) : subscriptions.length === 0 ? (
-                                <p className="text-sm text-gray-500">{t('customers.subscriptions.noSubscriptions')}</p>
-                            ) : (
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead>{t('customers.subscriptions.plan')}</TableHead>
-                                            <TableHead>{t('field.status')}</TableHead>
-                                            <TableHead>{t('customers.subscriptions.periodStart')}</TableHead>
-                                            <TableHead>{t('customers.subscriptions.periodEnd')}</TableHead>
-                                            <TableHead>{t('customers.info.currency')}</TableHead>
-                                            <TableHead className="text-right">{t('field.actions')}</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {subscriptions.map((subscription: Subscription) => {
-                                            const status = subscription.status ?? 'incomplete';
-                                            const statusStyle =
-                                                SUBSCRIPTION_STATUS_STYLES[status] ??
-                                                SUBSCRIPTION_STATUS_STYLES.incomplete;
-                                            const statusKey = SUBSCRIPTION_STATUS_TRANSLATION_KEYS[status];
-                                            const statusLabel = statusKey ? t(statusKey) : status;
-                                            const subMetadata = subscription.metadata as Record<string, unknown> | null;
-                                            const renewalPaidUntil = subMetadata?.renewal_paid_until
-                                                ? Number(subMetadata.renewal_paid_until)
-                                                : null;
-                                            const periodEndTimestamp = subscription.currentPeriodEnd
-                                                ? new Date(subscription.currentPeriodEnd).getTime() / 1000
-                                                : null;
-                                            const isAlreadyRenewed =
-                                                renewalPaidUntil !== null &&
-                                                periodEndTimestamp !== null &&
-                                                renewalPaidUntil >= periodEndTimestamp;
+                            </CardHeader>
+                            <CardContent>
+                                {isLoadingSubscriptions ? (
+                                    <Skeleton className="h-[100px] w-full rounded-xl" />
+                                ) : currentSubscriptions.length === 0 ? (
+                                    <p className="text-sm text-gray-500">
+                                        {t('customers.subscriptions.noSubscriptions')}
+                                    </p>
+                                ) : (
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>{t('customers.subscriptions.plan')}</TableHead>
+                                                <TableHead>{t('field.status')}</TableHead>
+                                                <TableHead>{t('customers.subscriptions.periodStart')}</TableHead>
+                                                <TableHead>{t('customers.subscriptions.periodEnd')}</TableHead>
+                                                <TableHead>{t('customers.info.currency')}</TableHead>
+                                                <TableHead className="text-right">{t('field.actions')}</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {currentSubscriptions.map((subscription: Subscription) => {
+                                                const status = subscription.status ?? 'incomplete';
+                                                const statusStyle =
+                                                    SUBSCRIPTION_STATUS_STYLES[status] ??
+                                                    SUBSCRIPTION_STATUS_STYLES.incomplete;
+                                                const statusKey = SUBSCRIPTION_STATUS_TRANSLATION_KEYS[status];
+                                                const statusLabel = statusKey ? t(statusKey) : status;
+                                                const subMetadata = subscription.metadata as Record<
+                                                    string,
+                                                    unknown
+                                                > | null;
+                                                const renewalPaidUntil = subMetadata?.renewal_paid_until
+                                                    ? Number(subMetadata.renewal_paid_until)
+                                                    : null;
+                                                const periodEndTimestamp = subscription.currentPeriodEnd
+                                                    ? new Date(subscription.currentPeriodEnd).getTime() / 1000
+                                                    : null;
+                                                const isAlreadyRenewed =
+                                                    renewalPaidUntil !== null &&
+                                                    periodEndTimestamp !== null &&
+                                                    renewalPaidUntil >= periodEndTimestamp;
 
-                                            return (
-                                                <TableRow key={subscription.id}>
-                                                    <TableCell className="text-sm font-medium">
-                                                        {subscription.plan?.name ?? '\u2014'}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <div className="flex items-center gap-1.5">
+                                                return (
+                                                    <TableRow key={subscription.id}>
+                                                        <TableCell className="text-sm font-medium">
+                                                            {subscription.plan?.name ?? '\u2014'}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <div className="flex items-center gap-1.5">
+                                                                <Badge
+                                                                    variant="outline"
+                                                                    className={`rounded-md px-2 py-0.5 text-xs ${statusStyle}`}
+                                                                >
+                                                                    {statusLabel}
+                                                                </Badge>
+                                                                {isAlreadyRenewed && (
+                                                                    <Badge
+                                                                        variant="outline"
+                                                                        className="rounded-md border-violet-200 bg-violet-50 px-2 py-0.5 text-xs text-violet-700"
+                                                                    >
+                                                                        {t('customers.subscriptions.alreadyRenewed')}
+                                                                    </Badge>
+                                                                )}
+                                                            </div>
+                                                        </TableCell>
+                                                        <TableCell className="text-sm text-gray-600">
+                                                            {formatDate(subscription.currentPeriodStart)}
+                                                        </TableCell>
+                                                        <TableCell className="text-sm text-gray-600">
+                                                            {formatDate(subscription.currentPeriodEnd)}
+                                                        </TableCell>
+                                                        <TableCell className="text-sm">
+                                                            {subscription.currency?.toUpperCase() ?? '\u2014'}
+                                                        </TableCell>
+                                                        <TableCell className="text-right">
+                                                            <DropdownMenu>
+                                                                <DropdownMenuTrigger asChild>
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="icon"
+                                                                        className="h-8 w-8"
+                                                                    >
+                                                                        <IconDotsVertical className="h-4 w-4" />
+                                                                    </Button>
+                                                                </DropdownMenuTrigger>
+                                                                <DropdownMenuContent align="end">
+                                                                    <DropdownMenuItem
+                                                                        onClick={() =>
+                                                                            setViewingSubscriptionId(subscription.id)
+                                                                        }
+                                                                    >
+                                                                        <IconExternalLink className="mr-2 h-4 w-4" />
+                                                                        {t('customers.subscriptions.viewSubscription')}
+                                                                    </DropdownMenuItem>
+                                                                    {subscription.status === 'active' &&
+                                                                        (() => {
+                                                                            const hasPendingRenewal =
+                                                                                !!subMetadata?.pendingRenewalInvoiceId;
+                                                                            const hasPendingUpgrade =
+                                                                                !!subMetadata?.pendingUpgradeId;
+                                                                            return (
+                                                                                <>
+                                                                                    {!(
+                                                                                        hasPendingRenewal ||
+                                                                                        hasPendingUpgrade
+                                                                                    ) && (
+                                                                                        <DropdownMenuItem
+                                                                                            disabled={isRenewing}
+                                                                                            onClick={() =>
+                                                                                                setShowRenewConfirm(
+                                                                                                    true
+                                                                                                )
+                                                                                            }
+                                                                                        >
+                                                                                            <IconRefresh className="mr-2 h-4 w-4" />
+                                                                                            {t(
+                                                                                                'customers.subscriptions.renewSubscription'
+                                                                                            )}
+                                                                                        </DropdownMenuItem>
+                                                                                    )}
+                                                                                    {!(
+                                                                                        hasPendingRenewal ||
+                                                                                        hasPendingUpgrade
+                                                                                    ) && (
+                                                                                        <DropdownMenuItem
+                                                                                            onClick={() =>
+                                                                                                setShowChangeSubscription(
+                                                                                                    true
+                                                                                                )
+                                                                                            }
+                                                                                        >
+                                                                                            <IconSwitchHorizontal className="mr-2 h-4 w-4" />
+                                                                                            {t(
+                                                                                                'customers.subscriptions.changeSubscription'
+                                                                                            )}
+                                                                                        </DropdownMenuItem>
+                                                                                    )}
+                                                                                </>
+                                                                            );
+                                                                        })()}
+                                                                </DropdownMenuContent>
+                                                            </DropdownMenu>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                );
+                                            })}
+                                        </TableBody>
+                                    </Table>
+                                )}
+                            </CardContent>
+                        </Card>
+
+                        {!isLoadingSubscriptions && trialingSubscriptions.length > 0 && (
+                            <Card className="rounded-2xl">
+                                <CardHeader>
+                                    <CardTitle className="text-xl">
+                                        {t('customers.subscriptions.upcomingTitle')}
+                                    </CardTitle>
+                                    <CardDescription>
+                                        {t('customers.subscriptions.upcomingDescription')}
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>{t('customers.subscriptions.plan')}</TableHead>
+                                                <TableHead>{t('field.status')}</TableHead>
+                                                <TableHead>{t('customers.subscriptions.periodStart')}</TableHead>
+                                                <TableHead>{t('customers.subscriptions.periodEnd')}</TableHead>
+                                                <TableHead>{t('customers.info.currency')}</TableHead>
+                                                <TableHead className="text-right">{t('field.actions')}</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {trialingSubscriptions.map((subscription: Subscription) => {
+                                                const statusStyle =
+                                                    SUBSCRIPTION_STATUS_STYLES.trialing ??
+                                                    SUBSCRIPTION_STATUS_STYLES.incomplete;
+                                                const statusKey = SUBSCRIPTION_STATUS_TRANSLATION_KEYS.trialing;
+                                                const statusLabel = statusKey ? t(statusKey) : 'trialing';
+
+                                                return (
+                                                    <TableRow key={subscription.id}>
+                                                        <TableCell className="text-sm font-medium">
+                                                            {subscription.plan?.name ?? '\u2014'}
+                                                        </TableCell>
+                                                        <TableCell>
                                                             <Badge
                                                                 variant="outline"
                                                                 className={`rounded-md px-2 py-0.5 text-xs ${statusStyle}`}
                                                             >
                                                                 {statusLabel}
                                                             </Badge>
-                                                            {isAlreadyRenewed && (
-                                                                <Badge
-                                                                    variant="outline"
-                                                                    className="rounded-md border-violet-200 bg-violet-50 px-2 py-0.5 text-xs text-violet-700"
-                                                                >
-                                                                    {t('customers.subscriptions.alreadyRenewed')}
-                                                                </Badge>
-                                                            )}
-                                                        </div>
-                                                    </TableCell>
-                                                    <TableCell className="text-sm text-gray-600">
-                                                        {formatDate(subscription.currentPeriodStart)}
-                                                    </TableCell>
-                                                    <TableCell className="text-sm text-gray-600">
-                                                        {formatDate(subscription.currentPeriodEnd)}
-                                                    </TableCell>
-                                                    <TableCell className="text-sm">
-                                                        {subscription.currency?.toUpperCase() ?? '\u2014'}
-                                                    </TableCell>
-                                                    <TableCell className="text-right">
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="icon"
-                                                            className="h-8 w-8"
-                                                            title={t('customers.subscriptions.viewSubscription')}
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                e.preventDefault();
-                                                                setViewingSubscriptionId(subscription.id);
-                                                            }}
-                                                        >
-                                                            <IconExternalLink className="h-4 w-4" />
-                                                        </Button>
-                                                    </TableCell>
-                                                </TableRow>
-                                            );
-                                        })}
-                                    </TableBody>
-                                </Table>
-                            )}
-                        </CardContent>
-                    </Card>
+                                                        </TableCell>
+                                                        <TableCell className="text-sm text-gray-600">
+                                                            {formatDate(subscription.currentPeriodStart)}
+                                                        </TableCell>
+                                                        <TableCell className="text-sm text-gray-600">
+                                                            {formatDate(subscription.currentPeriodEnd)}
+                                                        </TableCell>
+                                                        <TableCell className="text-sm">
+                                                            {subscription.currency?.toUpperCase() ?? '\u2014'}
+                                                        </TableCell>
+                                                        <TableCell className="text-right">
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="h-8 w-8"
+                                                                onClick={() =>
+                                                                    setViewingSubscriptionId(subscription.id)
+                                                                }
+                                                            >
+                                                                <IconExternalLink className="h-4 w-4" />
+                                                            </Button>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                );
+                                            })}
+                                        </TableBody>
+                                    </Table>
+                                </CardContent>
+                            </Card>
+                        )}
+                    </div>
                 </TabsContent>
 
                 {/* Billing Tab */}
