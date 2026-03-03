@@ -1,4 +1,5 @@
 import { createRequestHandler } from "@react-router/express";
+import { createRequestHandler as createFetchHandler } from "react-router";
 import express from "express";
 
 import * as build from "./build/server/index.js";
@@ -11,8 +12,12 @@ app.use(express.static("build/client"));
 const ssrCache = new Map();
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 const ISR_PATHS = new Set(["/"]);
+const revalidating = new Set();
 
-function isrMiddleware(req, res, next) {
+// Fetch-style handler for ISR rendering (no Express res needed)
+const fetchHandler = createFetchHandler(build);
+
+app.use((req, res, next) => {
     if (req.method !== "GET" || !ISR_PATHS.has(req.path)) {
         return next();
     }
@@ -21,50 +26,78 @@ function isrMiddleware(req, res, next) {
 
     if (cached) {
         const age = Date.now() - cached.timestamp;
+        const status = age < CACHE_TTL_MS ? "HIT" : "STALE";
+        console.log(`[ISR] ${req.path} — ${status} (${Math.round(age / 1000)}s old)`);
 
-        // Serve from cache immediately
-        res.set("Content-Type", "text/html");
-        res.set("X-Cache", age < CACHE_TTL_MS ? "HIT" : "STALE");
-        res.send(cached.html);
+        res.set("X-Cache", status);
+        sendCached(res, cached);
 
         // If stale, revalidate in background
-        if (age >= CACHE_TTL_MS) {
-            renderAndCache(req).catch(() => true); // Ignore errors during background revalidation
+        if (age >= CACHE_TTL_MS && !revalidating.has(req.path)) {
+            revalidating.add(req.path);
+            ssrRender(req)
+                .then((result) => {
+                    if (result) {
+                        ssrCache.set(req.path, { ...result, timestamp: Date.now() });
+                        console.log(`[ISR] Revalidated ${req.path}`);
+                    }
+                })
+                .catch((err) => console.error(`[ISR] Revalidation failed:`, err))
+                .finally(() => revalidating.delete(req.path));
         }
         return;
     }
 
-    // First request — render, cache, and respond
-    renderAndCache(req)
-        .then((html) => {
-            res.set("Content-Type", "text/html");
+    // First request — render, cache, respond
+    console.log(`[ISR] ${req.path} — MISS (first render)`);
+    ssrRender(req)
+        .then((result) => {
+            if (result.statusCode === 200) {
+                ssrCache.set(req.path, { ...result, timestamp: Date.now() });
+                console.log(`[ISR] Cached ${req.path} (${result.body.length} bytes)`);
+            }
             res.set("X-Cache", "MISS");
-            res.send(html);
+            sendCached(res, result);
         })
-        .catch(() => next());
+        .catch((err) => {
+            console.error(`[ISR] Render failed for ${req.path}:`, err);
+            next();
+        });
+});
+
+function sendCached(res, cached) {
+    for (const [key, value] of Object.entries(cached.headers)) {
+        res.set(key, value);
+    }
+    res.status(cached.statusCode).send(cached.body);
 }
 
-async function renderAndCache(req) {
-    const url = new URL(req.url, `http://${req.headers.host}`);
-    // Only forward safe headers — no cookies/auth to avoid caching user-specific content
-    const safeHeaders = {};
-    for (const key of ["accept", "accept-language", "user-agent", "host"]) {
-        if (req.headers[key]) safeHeaders[key] = req.headers[key];
-    }
-    const request = new Request(url.href, {
+async function ssrRender(req) {
+    // Build a Web Request from the Express req
+    const proto = req.protocol || "http";
+    const host = req.get("host") || "localhost";
+    const url = `${proto}://${host}${req.originalUrl}`;
+
+    const request = new Request(url, {
         method: "GET",
-        headers: new Headers(safeHeaders),
+        headers: new Headers({
+            accept: req.get("accept") || "text/html",
+            "accept-language": req.get("accept-language") || "",
+            "user-agent": req.get("user-agent") || "",
+        }),
     });
 
-    const handler = createRequestHandler({ build });
-    const response = await handler(request);
-    const html = await response.text();
+    const response = await fetchHandler(request);
+    const body = await response.text();
 
-    ssrCache.set(req.path, { html, timestamp: Date.now() });
-    return html;
+    const headers = {};
+    for (const [key, value] of response.headers.entries()) {
+        headers[key] = value;
+    }
+
+    return { statusCode: response.status, headers, body };
 }
 
-app.use(isrMiddleware);
 app.all("*splat", createRequestHandler({ build }));
 
 const port = process.env.PORT || 4200;
