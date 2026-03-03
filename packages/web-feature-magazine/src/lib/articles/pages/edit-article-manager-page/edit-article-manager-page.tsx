@@ -133,6 +133,7 @@ export function EditArticleManagerPage() {
         ControlledSwitchInput,
         ControlledCategoriesInput,
         ControlledArticleTypeInput,
+        ControlledDateInput,
     } = createConnectedInputHelpers<Article>();
 
     const pageTitle = isCreateMode ? 'New Article' : (article?.title ?? '');
@@ -353,6 +354,7 @@ export function EditArticleManagerPage() {
                                             className="flex-1"
                                         />
                                     </div>
+                                    <ControlledDateInput name="publishedAt" label={t('field.publishedAt')} />
                                     <ControlledArticleTypeInput
                                         name="type"
                                         label={t('field.articleType')}
