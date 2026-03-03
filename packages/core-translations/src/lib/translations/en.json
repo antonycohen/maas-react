@@ -473,6 +473,8 @@
     "customers.invoices.date": "Date",
     "customers.invoices.number": "Number",
     "customers.invoices.amount": "Amount",
+    "customers.invoices.periodStart": "Period start",
+    "customers.invoices.periodEnd": "Period end",
     "customers.invoices.download": "Download",
     "customers.invoices.downloadError": "Unable to download invoice.",
     "customers.invoices.viewOnStripe": "View on Stripe",

@@ -90,9 +90,10 @@ export const InvoiceListSection = ({ invoices }: Props) => {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Date</TableHead>
                             <TableHead>Numéro</TableHead>
                             <TableHead>Montant</TableHead>
+                            <TableHead>{t('customers.invoices.periodStart')}</TableHead>
+                            <TableHead>{t('customers.invoices.periodEnd')}</TableHead>
                             <TableHead>Statut</TableHead>
                             <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
@@ -107,12 +108,15 @@ export const InvoiceListSection = ({ invoices }: Props) => {
 
                             return (
                                 <TableRow key={invoice.id}>
-                                    <TableCell className="text-sm text-gray-600">
-                                        {formatDate(invoice.createdAt)}
-                                    </TableCell>
                                     <TableCell className="text-sm font-medium">{invoice.number ?? '\u2014'}</TableCell>
                                     <TableCell className="text-sm font-medium">
                                         {formatAmount(invoice.amountDue, invoice.currency)}
+                                    </TableCell>
+                                    <TableCell className="text-sm text-gray-600">
+                                        {formatDate(invoice.periodStart ?? null)}
+                                    </TableCell>
+                                    <TableCell className="text-sm text-gray-600">
+                                        {formatDate(invoice.periodEnd ?? null)}
                                     </TableCell>
                                     <TableCell>
                                         <Badge

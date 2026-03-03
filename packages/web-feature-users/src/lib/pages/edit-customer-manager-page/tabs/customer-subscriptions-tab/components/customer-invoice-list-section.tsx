@@ -167,6 +167,8 @@ export const CustomerInvoiceListSection = ({
                             <TableHead>{t('customers.invoices.date')}</TableHead>
                             <TableHead>{t('customers.invoices.number')}</TableHead>
                             <TableHead>{t('customers.invoices.amount')}</TableHead>
+                            <TableHead>{t('customers.invoices.periodStart')}</TableHead>
+                            <TableHead>{t('customers.invoices.periodEnd')}</TableHead>
                             <TableHead>{t('field.status')}</TableHead>
                             <TableHead>{t('field.comments')}</TableHead>
                             <TableHead className="text-right">{t('field.actions')}</TableHead>
@@ -193,6 +195,12 @@ export const CustomerInvoiceListSection = ({
                                     <TableCell className="text-sm font-medium">{invoice.number ?? '\u2014'}</TableCell>
                                     <TableCell className="text-sm font-medium">
                                         {formatAmount(invoice.amountDue, invoice.currency)}
+                                    </TableCell>
+                                    <TableCell className="text-sm text-gray-600">
+                                        {formatDate(invoice.periodStart ?? null)}
+                                    </TableCell>
+                                    <TableCell className="text-sm text-gray-600">
+                                        {formatDate(invoice.periodEnd ?? null)}
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-1.5">

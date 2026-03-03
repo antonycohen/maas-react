@@ -133,6 +133,8 @@ export const CustomerSubscriptionsTab = () => {
             hostedInvoiceUrl: null,
             metadata: null,
             createdAt: null,
+            periodStart: null,
+            periodEnd: null,
         },
         offset: 0,
         limit: 100,

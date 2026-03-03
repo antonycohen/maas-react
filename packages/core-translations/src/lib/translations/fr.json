@@ -493,6 +493,8 @@
     "customers.invoices.date": "Date",
     "customers.invoices.number": "Numéro",
     "customers.invoices.amount": "Montant",
+    "customers.invoices.periodStart": "Début de période",
+    "customers.invoices.periodEnd": "Fin de période",
     "customers.invoices.download": "Télécharger",
     "customers.invoices.downloadError": "Impossible de télécharger la facture.",
     "customers.invoices.viewOnStripe": "Voir sur Stripe",
