@@ -93,7 +93,7 @@ export function useCollectionQuery<T, Q = undefined>({
         };
     }, [pagination.pageIndex, pagination.pageSize, filters, stableQueryFields, stableStaticParams, sort]);
 
-    const { data, error, isError, isLoading, isFetching } = useQueryFn(params, {
+    const { data, error, isError, isLoading, isFetching, refetch } = useQueryFn(params, {
         placeholderData: keepPreviousData,
     });
 
@@ -104,5 +104,6 @@ export function useCollectionQuery<T, Q = undefined>({
         isError,
         isLoading,
         isFetching,
+        refetch,
     };
 }

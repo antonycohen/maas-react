@@ -4,6 +4,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router';
 import { PUBLIC_ROUTES } from '@maas/core-routes';
 import { useIsClient } from '@maas/core-utils';
+import { ErrorBoundary } from '@maas/web-components';
 
 const AccountRoutes = lazy(() => import('@maas/web-feature-users').then((m) => ({ default: m.AccountRoutes })));
 
@@ -28,8 +29,10 @@ export default function Account() {
     }
 
     return (
-        <Suspense>
-            <AccountRoutes />
-        </Suspense>
+        <ErrorBoundary>
+            <Suspense>
+                <AccountRoutes />
+            </Suspense>
+        </ErrorBoundary>
     );
 }

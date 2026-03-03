@@ -1,5 +1,6 @@
 import { HomePage } from '@maas/web-feature-home';
 import { buildPageMeta } from '@maas/core-seo';
+import { RouteErrorFallback } from '../components/route-error-fallback';
 
 export function meta() {
     return buildPageMeta({
@@ -7,6 +8,10 @@ export function meta() {
         description:
             'Tangente Magazine - La revue des mathématiques accessibles. Découvrez nos articles, dossiers et numéros.',
     });
+}
+
+export function ErrorBoundary() {
+    return <RouteErrorFallback />;
 }
 
 export default function Home() {

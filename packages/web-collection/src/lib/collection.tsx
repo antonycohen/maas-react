@@ -2,6 +2,7 @@ import { ColumnDef, flexRender, RowData, Table as TanstackTable } from '@tanstac
 import { UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { useTranslation } from '@maas/core-translations';
+import { AlertCircle, RefreshCw } from 'lucide-react';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@maas/web-components';
 import { CollectionToolbar, CollectionToolbarProps } from './collection-toolbar';
@@ -40,6 +41,9 @@ export interface CollectionRenderProps<T> {
     state: CollectionState;
     filtersConfiguration: Omit<CollectionToolbarProps<T>, 'table' | 'showColumnSelector'> | undefined;
     isFetching: boolean;
+    isError: boolean;
+    error: ApiError | null;
+    refetch: () => void;
 }
 
 /**
@@ -114,12 +118,36 @@ function DefaultContent<T>({
     table,
     columns,
     isError,
+    refetch,
 }: {
     table: TanstackTable<T>;
     columns: ColumnDef<T>[];
     isError?: boolean;
+    refetch?: () => void;
 }) {
     const { t } = useTranslation();
+
+    if (isError) {
+        return (
+            <div className="rounded-md border">
+                <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
+                    <div className="bg-destructive/10 flex h-10 w-10 items-center justify-center rounded-full">
+                        <AlertCircle className="text-destructive h-5 w-5" />
+                    </div>
+                    <p className="text-destructive text-sm">{t('table.failedToLoad')}</p>
+                    {refetch && (
+                        <button
+                            onClick={() => refetch()}
+                            className="text-primary hover:text-primary/80 inline-flex items-center gap-1.5 text-sm font-medium transition-colors"
+                        >
+                            <RefreshCw className="h-3.5 w-3.5" />
+                            {t('table.retry')}
+                        </button>
+                    )}
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="rounded-md border">
@@ -155,11 +183,7 @@ function DefaultContent<T>({
                     ) : (
                         <TableRow>
                             <TableCell colSpan={columns.length} className="h-24 text-center">
-                                {isError ? (
-                                    <span className="text-destructive">{t('table.failedToLoad')}</span>
-                                ) : (
-                                    t('common.noResults')
-                                )}
+                                {t('common.noResults')}
                             </TableCell>
                         </TableRow>
                     )}
@@ -213,7 +237,7 @@ export function Collection<T, Q = undefined>({
 }: Props<T, Q>) {
     const state = useCollectionState({ useLocationAsState, defaultPageSize });
 
-    const { items, totalCount, isError, isFetching } = useCollectionQuery({
+    const { items, totalCount, isError, error, isFetching, refetch } = useCollectionQuery({
         pagination: state.pagination,
         globalFilter: state.globalFilter,
         debouncedGlobalFilter: state.debouncedGlobalFilter,
@@ -240,6 +264,9 @@ export function Collection<T, Q = undefined>({
         state,
         filtersConfiguration,
         isFetching,
+        isError,
+        error: error ?? null,
+        refetch,
     };
 
     // Render each section (custom or default)
@@ -257,7 +284,7 @@ export function Collection<T, Q = undefined>({
     const content = renderContent ? (
         renderContent(renderProps)
     ) : (
-        <DefaultContent table={table} columns={columns} isError={isError} />
+        <DefaultContent table={table} columns={columns} isError={isError} refetch={refetch} />
     );
 
     const pagination = renderPagination ? renderPagination(renderProps) : <DefaultPagination table={table} />;
