@@ -213,9 +213,9 @@ export const CustomerInvoiceListSection = ({
                                         </div>
                                     </TableCell>
                                     <TableCell>
-                                        {status === 'void' && invoiceMetadata?.voidReason && (
+                                        {status === 'void' && String(invoiceMetadata?.voidReason) && (
                                             <span className="text-xs text-gray-500">
-                                                {String(invoiceMetadata.voidReason)}
+                                                {invoiceMetadata?.voidReason as string}
                                             </span>
                                         )}
                                     </TableCell>
