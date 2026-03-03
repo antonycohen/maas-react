@@ -1,7 +1,7 @@
 import React from 'react';
 import { SEO } from '@maas/core-seo';
 import { Collection, CollectionRenderProps } from '@maas/web-collection';
-import { TitleAndDescriptionHero, Pagination } from '@maas/web-components';
+import { TitleAndDescriptionHero, Pagination, Skeleton } from '@maas/web-components';
 import { useGetIssues } from '@maas/core-api';
 import { Issue } from '@maas/core-api-models';
 import { ColumnDef } from '@tanstack/react-table';
@@ -27,10 +27,25 @@ const columns: ColumnDef<Issue>[] = [
 
 export const MagazinesPage = () => {
     const { t } = useTranslation();
-    const renderContent = ({ items }: CollectionRenderProps<Issue>) => {
+    const renderContent = ({ items, isFetching }: CollectionRenderProps<Issue>) => {
+        if (isFetching && items.length === 0) {
+            return (
+                <div className="grid grid-cols-2 gap-[20px] md:grid-cols-5">
+                    {Array.from({ length: 10 }).map((_, i) => (
+                        <div key={i} className="flex w-full flex-col items-start">
+                            <Skeleton className="mb-5 aspect-[270/380] w-full rounded-t-[4px]" />
+                            <div className="flex w-full flex-col gap-1">
+                                <Skeleton className="h-6 w-3/4" />
+                                <Skeleton className="h-[18px] w-1/2" />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            );
+        }
         if (items.length === 0) {
             return (
-                <div className="flex h-[200px] items-center justify-center">
+                <div className="flex h-50 items-center justify-center">
                     <p className="text-black/50">{t('home.noMagazinesFound')}</p>
                 </div>
             );
@@ -66,7 +81,7 @@ export const MagazinesPage = () => {
         content: React.ReactNode;
         pagination: React.ReactNode;
     }) => (
-        <div className="mx-auto flex w-full max-w-[1220px] flex-col gap-[40px]">
+        <div className="max-w-tangente mx-auto flex w-full flex-col gap-[40px]">
             {toolbar}
             {content}
             <div className="mt-[20px] flex justify-center">{pagination}</div>
@@ -75,7 +90,7 @@ export const MagazinesPage = () => {
     return (
         <div className="flex flex-col gap-[40px] px-5 pb-[40px]">
             <SEO title={t('home.magazine')} description={t('home.magazineDescription')} />
-            <div className="mx-auto w-full max-w-[1220px]">
+            <div className="max-w-tangente mx-auto w-full">
                 <TitleAndDescriptionHero title={t('home.magazine')} description={t('home.magazineDescription')} />
             </div>
 

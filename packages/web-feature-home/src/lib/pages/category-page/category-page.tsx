@@ -48,7 +48,32 @@ export const CategoryPage = () => {
 
     if (categoryNotFound) return <NotFoundPage />;
 
-    const renderContent = ({ items }: CollectionRenderProps<Article>) => {
+    const renderContent = ({ items, isFetching }: CollectionRenderProps<Article>) => {
+        if (isFetching && items.length === 0) {
+            return (
+                <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:grid-cols-4">
+                    {Array.from({ length: 8 }).map((_, i) => (
+                        <div
+                            key={i}
+                            className="flex flex-col gap-3 rounded-[12px] border border-[#e0e0e0] bg-white p-3"
+                        >
+                            <Skeleton className="aspect-[266/188] w-full rounded" />
+                            <div className="flex flex-col gap-5 p-2">
+                                <div className="flex flex-col gap-1">
+                                    <Skeleton className="h-6 w-20 rounded" />
+                                    <Skeleton className="h-[72px] w-full" />
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <Skeleton className="h-5 w-24" />
+                                    <Skeleton className="h-5 w-24" />
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+
         if (items.length === 0) {
             return (
                 <div className="flex h-[400px] items-center justify-center">
