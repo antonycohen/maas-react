@@ -42,6 +42,7 @@
     "common.errorPageTitle": "Something went wrong",
     "common.errorPageMessage": "An unexpected error occurred. Please try again or refresh the page.",
     "common.retry": "Retry",
+    "common.loadMore": "Load more",
     "common.errorSaving": "An error occurred while saving. Please try again.",
     "common.characters": "{count}/{max} characters",
     "common.sync": "Sync",
