@@ -14,6 +14,7 @@ export const mySubscriptionStatusSchema = z.object({
     status: z.string().nullable(),
     subscriptionId: z.string().nullable(),
     quotas: z.array(subscriptionQuotaSchema),
+    hasDeliveryAddress: z.boolean().optional(),
 });
 
 export type MySubscriptionStatus = z.infer<typeof mySubscriptionStatusSchema>;

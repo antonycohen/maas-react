@@ -1060,5 +1060,7 @@
     "checkout.successTitle": "Thank you for subscribing!",
     "checkout.successDescription": "Your payment has been processed. You can now enjoy all your content.",
     "checkout.goToSubscription": "Go to my subscription",
-    "checkout.backToHome": "Back to home"
+    "checkout.backToHome": "Back to home",
+    "banner.deliveryAddress.message": "Your subscription includes paper magazines. Please provide your delivery address to receive them.",
+    "banner.deliveryAddress.action": "Update my address"
 }

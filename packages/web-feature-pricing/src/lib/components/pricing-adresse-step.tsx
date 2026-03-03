@@ -74,7 +74,7 @@ export function PricingAdresseStep() {
                 },
                 onError: (error: ApiError) => {
                     if (error.code === 3000) {
-                        setErrorMessage(t('customers.addressCountryRestriction'));
+                        setErrorMessage(error.message);
                     } else {
                         setErrorMessage(error.message || t('common.errorSaving'));
                     }

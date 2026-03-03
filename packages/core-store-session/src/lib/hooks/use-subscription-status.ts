@@ -8,5 +8,6 @@ export const useSubscriptionStatus = () => {
         status: subscriptionStatus?.status ?? null,
         subscriptionId: subscriptionStatus?.subscriptionId ?? null,
         quotas: subscriptionStatus?.quotas ?? [],
+        hasDeliveryAddress: subscriptionStatus?.hasDeliveryAddress ?? true,
     };
 };

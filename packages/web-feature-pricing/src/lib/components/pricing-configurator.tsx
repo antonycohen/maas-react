@@ -1,9 +1,10 @@
-import { useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { cn } from '@maas/core-utils';
 import { IconMapPin, IconWorld } from '@tabler/icons-react';
 import { useOAuthStore } from '@maas/core-store-oauth';
 import { usePublicRoutes } from '@maas/core-routes';
+import { ConfirmActionDialog } from '@maas/web-components';
 import type { BillingInterval, PricingPlan } from '../hooks/use-pricing-data';
 import { usePricingStore } from '../store/pricing-store';
 import { PricingSummary } from './pricing-summary';
@@ -53,17 +54,27 @@ export function PricingConfigurator({ plan }: PricingConfiguratorProps) {
         }
     }, [plan.planId, plan.prices, selectedInterval, setSelectedInterval]);
 
+    const [showShippingConfirm, setShowShippingConfirm] = useState(false);
+
     const isDigitalPlan = plan.addons.length === 0;
 
     const shippingAddon = plan.addons.find((a) => a.category === 'shipping');
     const shippingValue = shippingSelections[plan.planId] ?? SHIPPING_METRO;
     const isInternational = shippingAddon ? shippingValue === shippingAddon.productId : false;
 
-    const handleSubscribe = () => {
+    const proceedToSubscribe = () => {
         if (accessToken) {
             navigate(publicRoutes.pricingPaiement);
         } else {
             navigate(publicRoutes.pricingAuth);
+        }
+    };
+
+    const handleSubscribe = () => {
+        if (!isDigitalPlan) {
+            setShowShippingConfirm(true);
+        } else {
+            proceedToSubscribe();
         }
     };
 
@@ -192,6 +203,21 @@ export function PricingConfigurator({ plan }: PricingConfiguratorProps) {
                     </div>
                 </div>
             </div>
+
+            <ConfirmActionDialog
+                open={showShippingConfirm}
+                onOpenChange={setShowShippingConfirm}
+                onConfirm={() => {
+                    setShowShippingConfirm(false);
+                    proceedToSubscribe();
+                }}
+                title="Vérifiez votre option de livraison"
+                description={`Vous avez sélectionné la livraison en ${isInternational ? 'Hors Métropole' : 'France Métropolitaine'}. Ce choix détermine la zone d'expédition de vos magazines et ne pourra pas être modifié ultérieurement. Si vous résidez hors de France métropolitaine, assurez-vous d'avoir sélectionné l'option « Hors Métropole » avant de continuer.`}
+                confirmLabel="Confirmer et continuer"
+                cancelLabel="Modifier mon choix"
+                variant="default"
+                countdown={5}
+            />
         </div>
     );
 }

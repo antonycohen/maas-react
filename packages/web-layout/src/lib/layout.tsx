@@ -4,6 +4,7 @@ import { Footer, GlobalSearch } from '@maas/web-components';
 import { User } from '@maas/core-api-models';
 import { PUBLIC_ROUTES } from '@maas/core-routes';
 import { LayoutHeaderBar, MenuItem } from './layout-header-bar';
+import { DeliveryAddressBanner } from './delivery-address-banner';
 
 type LayoutProps = {
     connectedUser: User | null;
@@ -25,6 +26,7 @@ export function Layout(props: LayoutProps) {
                 loginHref={PUBLIC_ROUTES.LOGIN}
                 subscribeHref={PUBLIC_ROUTES.PRICING}
             />
+            <DeliveryAddressBanner />
             <Outlet />
             <Footer />
             <GlobalSearch open={searchOpen} onOpenChange={setSearchOpen} />

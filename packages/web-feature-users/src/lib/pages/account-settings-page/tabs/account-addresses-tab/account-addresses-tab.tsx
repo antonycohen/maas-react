@@ -151,7 +151,7 @@ export const AccountAddressesTab = () => {
         },
         onError: (error: ApiError) => {
             if (error.code === 3000) {
-                toast.error(t('customers.addressCountryRestriction'));
+                toast.error(error.message);
                 return;
             }
             if (error.parametersErrors) {
