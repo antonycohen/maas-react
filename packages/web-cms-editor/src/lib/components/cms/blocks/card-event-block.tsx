@@ -13,7 +13,13 @@ export const CardEventBlock = (props: CardEventBlockProps) => {
         <div className="flex flex-col justify-start gap-6 rounded-lg border border-neutral-200 bg-white p-6 md:flex-row">
             {image && (
                 <div className="hidden md:block md:max-w-[180px]">
-                    <img alt="avatar" className="h-full w-full object-contain" src={getImgSrc(image)} />
+                    <img
+                        alt="avatar"
+                        loading="lazy"
+                        decoding="async"
+                        className="h-full w-full object-contain"
+                        src={getImgSrc(image)}
+                    />
                 </div>
             )}
             <div className="flex w-full flex-col items-center justify-between gap-2 md:flex-row">

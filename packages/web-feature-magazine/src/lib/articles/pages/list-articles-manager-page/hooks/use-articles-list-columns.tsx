@@ -48,7 +48,13 @@ export function useArticlesListColumns(): ColumnDef<Article>[] {
                 const image = row.original.featuredImage || row.original.cover;
                 const imageUrl = image?.url || image?.base64;
                 return imageUrl ? (
-                    <img src={imageUrl} alt={row.original.title} className="h-10 w-10 rounded object-cover" />
+                    <img
+                        src={imageUrl}
+                        alt={row.original.title}
+                        className="h-10 w-10 rounded object-cover"
+                        loading="lazy"
+                        decoding="async"
+                    />
                 ) : (
                     <div className="bg-muted h-10 w-10 rounded" />
                 );

@@ -4,24 +4,20 @@ import { ApiError, maasApi, GetBrandsFilter } from '../../api';
 import { ApiCollectionResponse, GetCollectionQueryParams } from '../../types';
 
 export type GetBrandsParams = GetCollectionQueryParams<Brand> & {
-  filters?: GetBrandsFilter;
+    filters?: GetBrandsFilter;
 };
 
-export const getBrands = async (
-  params: GetBrandsParams
-): Promise<ApiCollectionResponse<Brand>> => {
-  return await maasApi.brands.getBrands(params);
+export const getBrands = async (params: GetBrandsParams): Promise<ApiCollectionResponse<Brand>> => {
+    return await maasApi.brands.getBrands(params);
 };
 
 export const useGetBrands = (
-  params: GetBrandsParams,
-  options?: Omit<
-    UseQueryOptions<ApiCollectionResponse<Brand>, ApiError>,
-    'queryKey'
-  >
+    params: GetBrandsParams,
+    options?: Omit<UseQueryOptions<ApiCollectionResponse<Brand>, ApiError>, 'queryKey'>
 ) =>
-  useQuery({
-    queryKey: ['brands', params],
-    queryFn: () => getBrands(params),
-    ...options,
-  });
+    useQuery({
+        queryKey: ['brands', params],
+        queryFn: () => getBrands(params),
+        staleTime: Infinity,
+        ...options,
+    });

@@ -9,7 +9,10 @@ export const CardsBlock = (props: { block: CMSCardsTextWithImageBlock }) => {
     return (
         <div className="grid grid-cols-1 gap-4 @md:grid-cols-2">
             {block.data.cards.map((card, index) => (
-                <div key={index} className={cn('bg-white', !isPair && index === 0 && 'col-span-1 @md:col-span-2')}>
+                <div
+                    key={card.title || index}
+                    className={cn('bg-white', !isPair && index === 0 && 'col-span-1 @md:col-span-2')}
+                >
                     <CardBlock block={card} />
                 </div>
             ))}

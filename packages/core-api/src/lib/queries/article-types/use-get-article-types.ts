@@ -4,24 +4,20 @@ import { ApiError, maasApi, GetArticleTypesFilter } from '../../api';
 import { ApiCollectionResponse, GetCollectionQueryParams } from '../../types';
 
 export type GetArticleTypesParams = GetCollectionQueryParams<ArticleType> & {
-  filters?: GetArticleTypesFilter;
+    filters?: GetArticleTypesFilter;
 };
 
-export const getArticleTypes = async (
-  params: GetArticleTypesParams,
-): Promise<ApiCollectionResponse<ArticleType>> => {
-  return await maasApi.articleTypes.getArticleTypes(params);
+export const getArticleTypes = async (params: GetArticleTypesParams): Promise<ApiCollectionResponse<ArticleType>> => {
+    return await maasApi.articleTypes.getArticleTypes(params);
 };
 
 export const useGetArticleTypes = (
-  params: GetArticleTypesParams,
-  options?: Omit<
-    UseQueryOptions<ApiCollectionResponse<ArticleType>, ApiError>,
-    'queryKey'
-  >,
+    params: GetArticleTypesParams,
+    options?: Omit<UseQueryOptions<ApiCollectionResponse<ArticleType>, ApiError>, 'queryKey'>
 ) =>
-  useQuery({
-    queryKey: ['articleTypes', params],
-    queryFn: () => getArticleTypes(params),
-    ...options,
-  });
+    useQuery({
+        queryKey: ['articleTypes', params],
+        queryFn: () => getArticleTypes(params),
+        staleTime: Infinity,
+        ...options,
+    });

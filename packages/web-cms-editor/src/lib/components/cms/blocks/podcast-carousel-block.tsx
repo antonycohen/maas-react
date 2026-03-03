@@ -16,8 +16,8 @@ export const PodcastCarouselBlock = ({ block, isDragging }: PodcastCarouselBlock
                 </div>
             )}
             <CarouselContent>
-                {block.data.podcasts.map((podcast, index) => (
-                    <CarouselItem key={index}>
+                {block.data.podcasts.map((podcast) => (
+                    <CarouselItem key={podcast.url}>
                         <PodcastElement
                             url={podcast.url}
                             width={podcast.width}

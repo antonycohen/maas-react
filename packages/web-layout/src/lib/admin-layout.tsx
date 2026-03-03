@@ -69,9 +69,9 @@ export function AdminLayout(props: LayoutProps) {
                     </SidebarHeader>
                     <SidebarContent>
                         {mainNavigationGroups &&
-                            mainNavigationGroups.map((navGroup, index) => (
+                            mainNavigationGroups.map((navGroup) => (
                                 <SidebarNavigation
-                                    key={index}
+                                    key={navGroup.sectionName}
                                     sectionName={navGroup.sectionName}
                                     items={navGroup.items}
                                 />
@@ -79,9 +79,9 @@ export function AdminLayout(props: LayoutProps) {
                     </SidebarContent>
                     <SidebarFooter className={'p-0'}>
                         {footerNavigationGroups &&
-                            footerNavigationGroups.map((navGroup, index) => (
+                            footerNavigationGroups.map((navGroup) => (
                                 <SidebarNavigation
-                                    key={index}
+                                    key={navGroup.sectionName}
                                     sectionName={navGroup.sectionName}
                                     items={navGroup.items}
                                 />

@@ -42,7 +42,7 @@ const NavItemRenderer = ({ item, index }: { item: NavItem; index: number }) => {
     const navigate = useNavigate();
 
     if (item.type === 'separator') {
-        return <DropdownMenuSeparator key={index} />;
+        return <DropdownMenuSeparator />;
     }
 
     if (item.type === 'link') {
@@ -55,7 +55,7 @@ const NavItemRenderer = ({ item, index }: { item: NavItem; index: number }) => {
         };
 
         return (
-            <DropdownMenuItem key={index} onClick={handleClick}>
+            <DropdownMenuItem onClick={handleClick}>
                 {item.icon && <span className="mr-2 size-4">{item.icon}</span>}
                 {item.title}
             </DropdownMenuItem>
@@ -64,14 +64,18 @@ const NavItemRenderer = ({ item, index }: { item: NavItem; index: number }) => {
 
     if (item.type === 'dropdown') {
         return (
-            <DropdownMenuSub key={index}>
+            <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
                     {item.icon && <span className="mr-2 size-4">{item.icon}</span>}
                     {item.title}
                 </DropdownMenuSubTrigger>
                 <DropdownMenuSubContent>
                     {item.items.map((subItem, subIndex) => (
-                        <NavItemRenderer key={subIndex} item={subItem} index={subIndex} />
+                        <NavItemRenderer
+                            key={subItem.type === 'separator' ? `sep-${subIndex}` : subItem.title}
+                            item={subItem}
+                            index={subIndex}
+                        />
                     ))}
                 </DropdownMenuSubContent>
             </DropdownMenuSub>
@@ -145,7 +149,11 @@ export function NavUser({
                             <>
                                 <DropdownMenuSeparator />
                                 {items.map((item, index) => (
-                                    <NavItemRenderer key={index} item={item} index={index} />
+                                    <NavItemRenderer
+                                        key={item.type === 'separator' ? `sep-${index}` : item.title}
+                                        item={item}
+                                        index={index}
+                                    />
                                 ))}
                             </>
                         )}

@@ -96,7 +96,7 @@ export function ControlledSlugValueArrayInput<T extends FieldValues>(props: Cont
 
             <div className="space-y-3">
                 {items.map((item, index) => (
-                    <div key={index} className="flex items-end gap-2">
+                    <div key={item[valuePath] || index} className="flex items-end gap-2">
                         <div className="flex-1">
                             <label className="text-muted-foreground mb-1 block text-xs">{valueLabel}</label>
                             <Input

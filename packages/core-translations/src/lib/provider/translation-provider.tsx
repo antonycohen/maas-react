@@ -1,5 +1,4 @@
 import React, { ReactNode, useCallback, useMemo, useState } from 'react';
-import dayjs from 'dayjs';
 import { IntlProvider, MessageFormatElement } from 'react-intl';
 
 import messages_fr from '../translations/fr.json';
@@ -32,7 +31,6 @@ export function TranslationProvider(props: TranslationProviderProps) {
     const selectLanguage = useCallback((lang: string) => {
         setLocale(lang);
         setTradMessages(messages[lang]);
-        dayjs.locale(lang);
     }, []);
 
     const contextValue = useMemo(() => ({ locale, selectLanguage }), [locale, selectLanguage]);

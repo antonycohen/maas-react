@@ -57,3 +57,6 @@ export * from './lib/queries/permissions';
 
 // Search
 export * from './lib/queries/search';
+
+// Prefetch utilities
+export * from './lib/utils/prefetch';

@@ -2,12 +2,14 @@ import { Issue } from '@maas/core-api-models';
 import { useResizedImage } from '@maas/web-components';
 import { Link } from 'react-router';
 import { publicUrlBuilders } from '@maas/core-routes';
+import { usePrefetchIssue } from '@maas/core-api';
 
 interface MagazineCardProps {
     magazine: Issue;
 }
 
 export function MagazineCard({ magazine }: MagazineCardProps) {
+    const prefetchIssue = usePrefetchIssue();
     const { resizedImage } = useResizedImage({
         images: magazine.cover?.resizedImages,
         width: 960,
@@ -26,6 +28,7 @@ export function MagazineCard({ magazine }: MagazineCardProps) {
     return (
         <Link
             to={publicUrlBuilders.magazine(magazine.slug ?? magazine.id)}
+            onMouseEnter={() => magazine.slug && prefetchIssue(magazine.slug)}
             className="flex w-full flex-col items-start"
         >
             {/* Cover Image */}
@@ -34,6 +37,8 @@ export function MagazineCard({ magazine }: MagazineCardProps) {
                     src={imageUrl}
                     alt={magazine.title}
                     className="absolute inset-0 h-full w-full rounded-t-[4px] object-cover"
+                    loading="lazy"
+                    decoding="async"
                 />
             </div>
 

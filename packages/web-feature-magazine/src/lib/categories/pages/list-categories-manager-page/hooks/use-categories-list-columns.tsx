@@ -47,7 +47,13 @@ export function useCategoriesListColumns(): ColumnDef<Category>[] {
                 const cover = row.original.cover;
                 const imageUrl = cover?.url || cover?.base64;
                 return imageUrl ? (
-                    <img src={imageUrl} alt={row.original.name} className="h-10 w-10 rounded object-cover" />
+                    <img
+                        src={imageUrl}
+                        alt={row.original.name}
+                        className="h-10 w-10 rounded object-cover"
+                        loading="lazy"
+                        decoding="async"
+                    />
                 ) : (
                     <div className="bg-muted h-10 w-10 rounded" />
                 );

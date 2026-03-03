@@ -35,8 +35,8 @@ export function PricingBottomSection() {
                     Ce que chaque formule vous offre :
                 </h3>
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
-                    {FEATURES.map((feature, index) => (
-                        <div key={index} className="flex flex-col gap-3 pt-5 pr-5">
+                    {FEATURES.map((feature) => (
+                        <div key={feature.title} className="flex flex-col gap-3 pt-5 pr-5">
                             <div className="h-10 w-10">
                                 <feature.icon className="text-foreground h-full w-full" strokeWidth={1.5} />
                             </div>

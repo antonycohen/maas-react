@@ -47,7 +47,13 @@ export function useBrandsListColumns(): ColumnDef<Brand>[] {
                 const logo = row.original.logo;
                 const imageUrl = logo?.url || logo?.base64;
                 return imageUrl ? (
-                    <img src={imageUrl} alt={row.original.name} className="rounded object-cover" />
+                    <img
+                        src={imageUrl}
+                        alt={row.original.name}
+                        className="rounded object-cover"
+                        loading="lazy"
+                        decoding="async"
+                    />
                 ) : (
                     <div className="bg-muted h-10 w-10 rounded" />
                 );

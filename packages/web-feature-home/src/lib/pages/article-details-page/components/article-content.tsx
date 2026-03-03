@@ -59,18 +59,26 @@ export const ArticleContent = ({
     };
 
     return (
-        <article className="flex w-full flex-col items-start gap-10 lg:max-w-[600px]">
+        <article className="flex w-full flex-col items-start gap-10 lg:max-w-150">
             {title && (
                 <h1 className="font-heading text-3xl leading-tight font-bold tracking-tight md:text-4xl">{title}</h1>
             )}
-            {coverUrl && <img src={coverUrl} alt={title ?? ''} className="w-full rounded-lg object-cover" />}
+            {coverUrl && (
+                <img
+                    src={coverUrl}
+                    alt={title ?? ''}
+                    className="w-full rounded-lg object-cover"
+                    loading="lazy"
+                    decoding="async"
+                />
+            )}
             <div className="flex w-full flex-col items-start gap-5">{blocks}</div>
             {showCta && (isSubscribedWithoutAccess ? <NoDigitalAccessCTA /> : <SubscriptionCTA />)}
             {isProblem &&
                 (!showSolution ? (
                     <button
                         onClick={handleShowSolution}
-                        className="font-body flex h-[40px] w-full items-center justify-center rounded-[4px] bg-[#E31B22] px-4 py-2 text-[14px] leading-[20px] font-semibold tracking-[-0.07px] text-white transition-colors hover:bg-[#c4161c]"
+                        className="font-body rounded-tangente-xs flex h-[40px] w-full items-center justify-center bg-[#E31B22] px-4 py-2 text-[14px] leading-[20px] font-semibold tracking-[-0.07px] text-white transition-colors hover:bg-[#c4161c]"
                     >
                         {t('home.viewSolution')}
                     </button>

@@ -4,24 +4,20 @@ import { ApiError, maasApi, GetCategoriesFilter } from '../../api';
 import { ApiCollectionResponse, GetCollectionQueryParams } from '../../types';
 
 export type GetCategoriesParams = GetCollectionQueryParams<Category> & {
-  filters?: GetCategoriesFilter;
+    filters?: GetCategoriesFilter;
 };
 
-export const getCategories = async (
-  params: GetCategoriesParams
-): Promise<ApiCollectionResponse<Category>> => {
-  return await maasApi.categories.getCategories(params);
+export const getCategories = async (params: GetCategoriesParams): Promise<ApiCollectionResponse<Category>> => {
+    return await maasApi.categories.getCategories(params);
 };
 
 export const useGetCategories = (
-  params: GetCategoriesParams,
-  options?: Omit<
-    UseQueryOptions<ApiCollectionResponse<Category>, ApiError>,
-    'queryKey'
-  >
+    params: GetCategoriesParams,
+    options?: Omit<UseQueryOptions<ApiCollectionResponse<Category>, ApiError>, 'queryKey'>
 ) =>
-  useQuery({
-    queryKey: ['categories', params],
-    queryFn: () => getCategories(params),
-    ...options,
-  });
+    useQuery({
+        queryKey: ['categories', params],
+        queryFn: () => getCategories(params),
+        staleTime: Infinity,
+        ...options,
+    });

@@ -3,18 +3,17 @@ import { Category } from '@maas/core-api-models';
 import { ApiError, maasApi } from '../../api';
 import { GetQueryByIdParams } from '../../types';
 
-export const getCategoryById = async (
-  params: GetQueryByIdParams<Category>
-): Promise<Category> => {
-  return await maasApi.categories.getCategory(params);
+export const getCategoryById = async (params: GetQueryByIdParams<Category>): Promise<Category> => {
+    return await maasApi.categories.getCategory(params);
 };
 
 export const useGetCategoryById = (
-  params: GetQueryByIdParams<Category>,
-  options?: Omit<UseQueryOptions<Category, ApiError>, 'queryKey'>
+    params: GetQueryByIdParams<Category>,
+    options?: Omit<UseQueryOptions<Category, ApiError>, 'queryKey'>
 ) =>
-  useQuery({
-    queryKey: ['category', params.id, params.fields],
-    queryFn: () => getCategoryById(params),
-    ...options,
-  });
+    useQuery({
+        queryKey: ['category', params.id, params.fields],
+        queryFn: () => getCategoryById(params),
+        staleTime: Infinity,
+        ...options,
+    });
