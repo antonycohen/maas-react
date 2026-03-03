@@ -40,7 +40,7 @@ export const createCookieStorage = <T>(localStorageSyncKey?: string) =>
                 const isCurrentSchmeHttps = window.location.protocol === 'https:';
                 document.cookie = `${name}=${encodeURIComponent(
                     value
-                )}; path=/; domain=${domain}; SameSite=Lax; ${isCurrentSchmeHttps ? 'Secure' : ''}`;
+                )}; path=/; domain=${domain}; max-age=2592000; SameSite=Lax; ${isCurrentSchmeHttps ? 'Secure' : ''}`;
                 if (localStorageSyncKey) {
                     localStorage.setItem(localStorageSyncKey, Date.now().toString());
                 }
