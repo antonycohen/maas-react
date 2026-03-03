@@ -20,6 +20,7 @@ export * from './lib/queries/users/use-change-password';
 export * from './lib/queries/users/use-delete-user';
 export * from './lib/queries/users/use-ban-user';
 export * from './lib/queries/users/use-send-reset-password';
+export * from './lib/queries/users/use-create-user-customer';
 
 export * from './lib/queries/organizations/use-get-organization-by-id';
 export * from './lib/queries/organizations/use-get-organizations';

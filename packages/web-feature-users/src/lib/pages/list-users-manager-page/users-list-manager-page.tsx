@@ -38,28 +38,15 @@ export function UsersListManagerPage() {
                     columns={columns}
                     filtersConfiguration={{
                         textFilter: {
-                            placeholder: 'Search users...',
-                            queryParamName: 'term',
+                            placeholder: 'Search users by email...',
+                            queryParamName: 'email',
                         },
-                        facetedFilters: [
-                            {
-                                columnId: 'roles',
-                                title: 'Roles',
-                                queryParamName: 'roles',
-                                options: [
-                                    { value: 'admin', label: 'Admin' },
-                                    { value: 'editor', label: 'Editor' },
-                                    { value: 'viewer', label: 'Viewer' },
-                                ],
-                            },
-                        ],
                     }}
                     useQueryFn={useGetUsers}
                     queryFields={{
                         id: null,
-                        firstName: null,
-                        lastName: null,
                         email: null,
+                        createdAt: null,
                     }}
                 />
             </LayoutContent>

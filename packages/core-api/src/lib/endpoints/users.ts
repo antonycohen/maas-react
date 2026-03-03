@@ -66,4 +66,8 @@ export class UsersEndpoint {
     async sendResetPasswordLink(userId: string): Promise<void> {
         return this.client.post<void>(`/api/v1/users/${userId}/reset-password-request`, {});
     }
+
+    async createCustomer(userId: string): Promise<User> {
+        return this.client.post<User>(`/api/v1/users/${userId}/customer`, {});
+    }
 }

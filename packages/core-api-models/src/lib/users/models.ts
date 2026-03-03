@@ -50,6 +50,14 @@ export const readUserSchema = z.object({
             }),
         })
         .nullable(),
+    customer: z
+        .object({
+            id: z.string(),
+            name: z.string().nullable().optional(),
+            email: z.string().nullable().optional(),
+        })
+        .nullable()
+        .optional(),
 });
 export type ReadUser = z.infer<typeof readUserSchema>;
 
