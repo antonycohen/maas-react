@@ -17,7 +17,9 @@ export const CardBlock = (props: CardBlockProps) => {
 
     return (
         <div className="flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-neutral-200 bg-white p-6">
-            {imgUrl && <img alt="track record logo" className="max-h-24" src={imgUrl} />}
+            {imgUrl && (
+                <img alt="track record logo" loading="lazy" decoding="async" className="max-h-24" src={imgUrl} />
+            )}
             {title && <p className="font-montserrat font-semibold text-neutral-900">{title}</p>}
             {description && (
                 <p

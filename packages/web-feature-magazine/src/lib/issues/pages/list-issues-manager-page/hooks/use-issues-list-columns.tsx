@@ -48,7 +48,13 @@ export function useIssuesListColumns(): ColumnDef<Issue>[] {
                 const cover = row.original.cover;
                 const imageUrl = cover?.url || cover?.base64;
                 return imageUrl ? (
-                    <img src={imageUrl} alt={row.original.title} className="rounded object-cover" />
+                    <img
+                        src={imageUrl}
+                        alt={row.original.title}
+                        className="rounded object-cover"
+                        loading="lazy"
+                        decoding="async"
+                    />
                 ) : (
                     <div className="bg-muted rounded" />
                 );

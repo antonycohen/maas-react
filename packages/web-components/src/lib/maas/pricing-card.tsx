@@ -32,9 +32,9 @@ export interface PricingCardProps {
 function PricingCardTags({ tags }: { tags?: { label: string; style?: TagStyle }[] }) {
     return (
         <div className="flex min-h-[24px] flex-wrap gap-0.5">
-            {tags?.map((tag, index) => (
+            {tags?.map((tag) => (
                 <div
-                    key={index}
+                    key={tag.label}
                     className={cn(
                         'flex h-6 items-center justify-center rounded px-2 py-0 text-[10px] font-semibold tracking-[0.33px] uppercase',
                         tag.style === 'Light' && 'bg-background border-border text-foreground border',
@@ -80,8 +80,8 @@ function PricingCardHeader({
                     </div>
                     {secondaryPrices && secondaryPrices.length > 0 && (
                         <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5">
-                            {secondaryPrices.map((sp, i) => (
-                                <span key={i} className="text-text-secondary text-xs">
+                            {secondaryPrices.map((sp) => (
+                                <span key={sp.label} className="text-text-secondary text-xs">
                                     {sp.amount}€ {sp.label}
                                 </span>
                             ))}
@@ -110,8 +110,8 @@ function PricingCardButton({ text, isHighlighted }: { text: string; isHighlighte
 function PricingCardFeatures({ features }: { features: PricingFeature[] }) {
     return (
         <div className="flex flex-col gap-3">
-            {features.map((feature, index) => (
-                <div key={index} className="flex items-start gap-2">
+            {features.map((feature) => (
+                <div key={feature.text} className="flex items-start gap-2">
                     <div className="bg-success/10 text-success flex h-5 w-5 shrink-0 items-center justify-center rounded-full">
                         <Check size={12} strokeWidth={3} />
                     </div>

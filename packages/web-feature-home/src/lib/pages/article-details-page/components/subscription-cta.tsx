@@ -19,8 +19,8 @@ export const SubscriptionCTA = () => {
                     t('home.subscribeFeature2'),
                     t('home.subscribeFeature3'),
                     t('home.cancelAnytime'),
-                ].map((text, index) => (
-                    <div key={index} className="flex items-start gap-2">
+                ].map((text) => (
+                    <div key={text} className="flex items-start gap-2">
                         <div className="flex size-5 shrink-0 items-center justify-center">
                             <CheckIcon className={'size-8 stroke-[#079848]'} />
                         </div>

@@ -38,7 +38,13 @@ export function CategoryTreeNodeRow({ node, depth, routes, defaultOpen = true }:
             )}
 
             {imageUrl ? (
-                <img src={imageUrl} alt={category.name} className="h-8 w-8 shrink-0 rounded object-cover" />
+                <img
+                    src={imageUrl}
+                    alt={category.name}
+                    className="h-8 w-8 shrink-0 rounded object-cover"
+                    loading="lazy"
+                    decoding="async"
+                />
             ) : (
                 <div className="bg-muted h-8 w-8 shrink-0 rounded" />
             )}

@@ -103,8 +103,8 @@ export const CategoryArticles = ({ articles, viewAllLink, viewAllLabel = 'Voir t
                     className="w-full"
                 >
                     <CarouselContent>
-                        {articles.map((article, index) => (
-                            <CarouselItem key={index} className="basis-[85%]">
+                        {articles.map((article) => (
+                            <CarouselItem key={article.link} className="basis-[85%]">
                                 <CategoryArticleItem article={article} />
                             </CarouselItem>
                         ))}
@@ -116,8 +116,8 @@ export const CategoryArticles = ({ articles, viewAllLink, viewAllLabel = 'Voir t
             <div className="hidden flex-col gap-5 md:flex">
                 {rows.map((row, rowIndex) => (
                     <div key={rowIndex} className="flex gap-5">
-                        {row.map((article, index) => (
-                            <CategoryArticleItem key={index} article={article} />
+                        {row.map((article) => (
+                            <CategoryArticleItem key={article.link} article={article} />
                         ))}
                     </div>
                 ))}

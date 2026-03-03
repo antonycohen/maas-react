@@ -56,7 +56,13 @@ function CustomFieldValue({ field, value }: CustomFieldValueProps) {
                 if (imageValue.url) {
                     return (
                         <div className="bg-muted relative h-20 w-20 overflow-hidden rounded-md">
-                            <img src={imageValue.url} alt={field.label} className="h-full w-full object-cover" />
+                            <img
+                                src={imageValue.url}
+                                alt={field.label}
+                                className="h-full w-full object-cover"
+                                loading="lazy"
+                                decoding="async"
+                            />
                         </div>
                     );
                 }
@@ -166,6 +172,8 @@ export function ArticlePreviewPanel({ article, isLoading }: ArticlePreviewPanelP
                                 src={article.featuredImage.url}
                                 alt={article.title}
                                 className="h-full w-full object-cover"
+                                loading="lazy"
+                                decoding="async"
                             />
                         </div>
                     ) : (
@@ -258,8 +266,8 @@ export function ArticlePreviewPanel({ article, isLoading }: ArticlePreviewPanelP
                             <div className="text-muted-foreground flex items-start gap-2">
                                 <IconTag className="mt-0.5 h-4 w-4 shrink-0" />
                                 <div className="flex flex-wrap gap-1">
-                                    {article.keywords.map((keyword, idx) => (
-                                        <Badge key={idx} variant="outline" className="text-xs">
+                                    {article.keywords.map((keyword) => (
+                                        <Badge key={keyword} variant="outline" className="text-xs">
                                             {keyword}
                                         </Badge>
                                     ))}

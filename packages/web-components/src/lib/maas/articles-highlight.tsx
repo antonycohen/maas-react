@@ -91,15 +91,15 @@ export const ArticlesHighlight = ({ articles }: ArticlesHighlightProps) => {
                     <div className="flex min-w-0 flex-1 basis-0 gap-3 md:gap-5">
                         {/* First Column */}
                         <div className="flex h-full min-w-0 flex-1 basis-0 flex-col gap-3 md:gap-5">
-                            {gridArticles.slice(0, 2).map((article, index) => (
-                                <ArticleCard key={index} article={article} />
+                            {gridArticles.slice(0, 2).map((article) => (
+                                <ArticleCard key={article.link} article={article} />
                             ))}
                         </div>
 
                         {/* Second Column */}
                         <div className="flex h-full min-w-0 flex-1 basis-0 flex-col gap-3 md:gap-5">
-                            {gridArticles.slice(2, 4).map((article, index) => (
-                                <ArticleCard key={index + 2} article={article} />
+                            {gridArticles.slice(2, 4).map((article) => (
+                                <ArticleCard key={article.link} article={article} />
                             ))}
                         </div>
                     </div>

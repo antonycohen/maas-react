@@ -48,7 +48,9 @@ export function AdminLayoutTopbar(props: LayoutTopbarProps) {
             </div> */}
 
             <div className="flex items-center gap-4">
-                {buttons && buttons.length > 0 && buttons.map((button, index) => <div key={index}>{button}</div>)}
+                {buttons &&
+                    buttons.length > 0 &&
+                    buttons.map((button, index) => <div key={`topbar-btn-${index}`}>{button}</div>)}
             </div>
         </div>
     );

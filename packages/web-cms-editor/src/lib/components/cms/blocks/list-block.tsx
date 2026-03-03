@@ -35,8 +35,8 @@ export function ListBlock(props: ListBlockProps) {
                     'list-decimal': type === 'ordered',
                 })}
             >
-                {content.map((listElement, index) => (
-                    <li key={index}>
+                {content.map((listElement) => (
+                    <li key={listElement}>
                         <span
                             className="text-sm text-neutral-900"
                             dangerouslySetInnerHTML={{ __html: sanitizeHtml(listElement) }}

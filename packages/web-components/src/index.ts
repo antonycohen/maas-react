@@ -40,9 +40,6 @@ export * from './lib/ui/textarea';
 export * from './lib/ui/tooltip';
 
 export * from './lib/pro-blocks/footer';
-export * from './lib/pro-blocks/navbar';
-export * from './lib/pro-blocks/nav-main';
-export * from './lib/pro-blocks/nav-projects';
 export * from './lib/pro-blocks/nav-user';
 export * from './lib/pro-blocks/sidebar-navigation';
 export * from './lib/pro-blocks/team-switcher';

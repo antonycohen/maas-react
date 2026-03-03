@@ -26,7 +26,7 @@ export function LayoutBreadcrumb(props: LayoutBreadcrumbProps) {
                         {items.map((item, index) => {
                             const isLast = index === items.length - 1;
                             return (
-                                <div key={index} className="contents">
+                                <div key={item.to || item.label} className="contents">
                                     <BreadcrumbItem className={index === 0 ? 'hidden md:block' : ''}>
                                         {isLast ? (
                                             <BreadcrumbPage>{item.label}</BreadcrumbPage>

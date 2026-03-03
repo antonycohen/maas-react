@@ -14,8 +14,8 @@ export const QuotesBlock = (props: { block: CMSCardsQuotesBlock }) => {
                 </div>
             )}
             <CarouselContent>
-                {block?.data?.cards.map((card, index) => (
-                    <CarouselItem key={index}>
+                {block?.data?.cards.map((card) => (
+                    <CarouselItem key={card.name}>
                         <article className="border-primary-500 flex h-full border-l-4 bg-neutral-50 py-4 pr-4 pl-5">
                             <div className="flex flex-col gap-3">
                                 <p

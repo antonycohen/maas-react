@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { useResizedImage } from '../hooks';
 import { Skeleton } from '../ui/skeleton';
 import { publicUrlBuilders } from '@maas/core-routes';
+import { usePrefetchFolder, usePrefetchArticle } from '@maas/core-api';
 
 interface FolderCardProps {
     folder: Folder;
@@ -18,6 +19,7 @@ interface ArticleItemProps {
 }
 
 const ArticleItem = ({ article, link }: ArticleItemProps) => {
+    const prefetchArticle = usePrefetchArticle();
     const { resizedImage: image } = useResizedImage({
         images: article.cover?.resizedImages,
         width: 320,
@@ -27,7 +29,13 @@ const ArticleItem = ({ article, link }: ArticleItemProps) => {
             {/* Thumbnail */}
             <div className="h-10 w-[60px] shrink-0 overflow-hidden rounded">
                 {image?.url ? (
-                    <img src={image?.url} alt={article.title} className="h-full w-full object-cover" />
+                    <img
+                        src={image?.url}
+                        alt={article.title}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-full w-full object-cover"
+                    />
                 ) : (
                     <div className="flex h-full w-full items-center justify-center bg-gray-100">
                         <FileText className="h-4 w-4 text-gray-400" />
@@ -56,6 +64,7 @@ const ArticleItem = ({ article, link }: ArticleItemProps) => {
         return (
             <Link
                 to={link}
+                onMouseEnter={() => article.slug && prefetchArticle(article.slug)}
                 className="flex items-center gap-4 border-t border-[#e0e0e0] px-0 py-3 transition-colors hover:bg-gray-50"
             >
                 {content}
@@ -111,6 +120,7 @@ export const FolderCard = ({
     viewAllLabel = 'Voir le dossier complet',
     maxArticles = 2,
 }: FolderCardProps) => {
+    const prefetchFolder = usePrefetchFolder();
     const articles = folder.articles || [];
     const displayedArticles = articles.slice(0, maxArticles);
     const { resizedImage } = useResizedImage({
@@ -126,6 +136,8 @@ export const FolderCard = ({
                     <img
                         src={resizedImage?.url}
                         alt={folder.name}
+                        loading="lazy"
+                        decoding="async"
                         className="absolute inset-0 h-full w-full object-cover"
                     />
                 ) : (
@@ -183,6 +195,7 @@ export const FolderCard = ({
                     {link ? (
                         <Link
                             to={link}
+                            onMouseEnter={() => folder.slug && prefetchFolder(folder.slug)}
                             className="font-body flex h-10 items-center justify-center gap-1 rounded bg-[#141414] px-4 py-2 text-[14px] leading-5 font-semibold tracking-[-0.07px] text-white transition-colors hover:bg-[#2a2a2a]"
                         >
                             {viewAllLabel}

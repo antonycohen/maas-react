@@ -9,7 +9,7 @@ export const HighlightBlock = ({ block }: HighlightBlockProps) => {
         <div>
             <div className="flex flex-col gap-4">
                 {block.data.elements.map((element, index) => (
-                    <div key={index} className="flex items-center gap-2">
+                    <div key={element.content || index} className="flex items-center gap-2">
                         <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-neutral-300">
                             <span className="text-neutral-black text-base font-semibold">{index + 1}</span>
                         </div>

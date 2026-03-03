@@ -129,7 +129,13 @@ const Footer = ({
                 {/* Top Block - Logo, Tagline, Subscribe */}
                 <div className="flex flex-col items-center gap-5">
                     <div className="h-14 w-[150px]">
-                        <img src={logo.src} alt={logo.alt} className="h-full w-full object-contain" />
+                        <img
+                            src={logo.src}
+                            alt={logo.alt}
+                            className="h-full w-full object-contain"
+                            loading="lazy"
+                            decoding="async"
+                        />
                     </div>
                     <p className="font-heading max-w-[596px] text-center text-2xl leading-[40px] font-semibold tracking-[-0.85px] text-white md:text-[34px]">
                         {t('footer.tagline')}

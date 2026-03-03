@@ -76,7 +76,13 @@ export function FolderPreviewPanel({ folder, isLoading }: FolderPreviewPanelProp
                     {/* Cover Image */}
                     {folder?.cover?.url ? (
                         <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg">
-                            <img src={folder.cover.url} alt={folder.name} className="h-full w-full object-cover" />
+                            <img
+                                src={folder.cover.url}
+                                alt={folder.name}
+                                className="h-full w-full object-cover"
+                                loading="lazy"
+                                decoding="async"
+                            />
                         </div>
                     ) : (
                         <div className="bg-muted relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-lg">

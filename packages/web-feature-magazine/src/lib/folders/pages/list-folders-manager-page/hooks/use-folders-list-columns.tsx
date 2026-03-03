@@ -49,7 +49,13 @@ export function useFoldersListColumns(): ColumnDef<Folder>[] {
                     <Link to={routes.folderInfo(row.original.id)} className="flex items-center gap-3">
                         <div className="bg-muted h-10 w-10 shrink-0 overflow-hidden rounded-md">
                             {cover?.url ? (
-                                <img src={cover.url} alt="" className="h-full w-full object-cover" />
+                                <img
+                                    src={cover.url}
+                                    alt=""
+                                    className="h-full w-full object-cover"
+                                    loading="lazy"
+                                    decoding="async"
+                                />
                             ) : (
                                 <div className="text-muted-foreground flex h-full w-full items-center justify-center">
                                     <IconFolder className="h-5 w-5" />

@@ -19,9 +19,9 @@ export const Authors = ({ authors, withSeparator = true }: { authors: AuthorProp
                     {t('home.articleBy')}
                 </h2>
                 <div className={'flex flex-col gap-3'}>
-                    {filteredAuthors.map((author, index) => (
+                    {filteredAuthors.map((author) => (
                         <ArticleAuthor
-                            key={index}
+                            key={`${author.firstName}-${author.lastName}`}
                             imageSrc={getImageUrl(author.profileImage, 48, 48, 'cropped', '')}
                             name={`${author.firstName} ${author.lastName}`}
                             description={author.bio ?? ''}

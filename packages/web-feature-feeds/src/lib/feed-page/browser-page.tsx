@@ -507,9 +507,9 @@ export const BrowserPage = () => {
                                 <div className="mt-6">
                                     <h3 className="mb-3 text-lg font-bold text-gray-900">Keywords</h3>
                                     <div className="flex flex-wrap gap-2">
-                                        {selectedArticle.article_keywords.split(',').map((keyword, i) => (
+                                        {selectedArticle.article_keywords.split(',').map((keyword) => (
                                             <span
-                                                key={i}
+                                                key={keyword.trim()}
                                                 className="rounded-full bg-blue-100 px-3 py-1.5 text-sm font-medium text-blue-800"
                                             >
                                                 {keyword.trim()}

@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 import { FileText } from 'lucide-react';
 import { Article } from '@maas/core-api-models';
 import { publicUrlBuilders } from '@maas/core-routes';
+import { usePrefetchArticle } from '@maas/core-api';
 
 export interface FeedArticleData {
     type: 'article';
@@ -39,10 +40,13 @@ const FeedTag = ({ label, variant = 'default' }: FeedTagProps) => {
 };
 
 export const FeedArticleItem = ({ item, onClick }: FeedArticleItemProps) => {
+    const prefetchArticle = usePrefetchArticle();
+    const slug = item.link.split('/').pop() || '';
     return (
         <Link
             to={item.link}
             onClick={onClick}
+            onMouseEnter={() => slug && prefetchArticle(slug)}
             className="group flex flex-col gap-3 rounded-[12px] border border-[#e0e0e0] bg-white p-3 transition-shadow hover:shadow-md"
         >
             {/* Image */}
@@ -50,6 +54,8 @@ export const FeedArticleItem = ({ item, onClick }: FeedArticleItemProps) => {
                 <img
                     src={item.image}
                     alt={item.title}
+                    loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
             </div>
@@ -139,6 +145,8 @@ export const FeedMagazineItem = ({ item, onClick }: FeedMagazineItemProps) => {
                     <img
                         src={item.image}
                         alt={item.title}
+                        loading="lazy"
+                        decoding="async"
                         className="h-full w-full rounded object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                 </div>
@@ -213,13 +221,13 @@ export const FeedFolderItem = ({ item, onClick }: FeedFolderItemProps) => {
             <div className="relative aspect-[266/188] w-full">
                 {/* Back image (top, darkest overlay) */}
                 <div className="absolute top-0 right-[24px] left-[24px] aspect-[234/164] overflow-hidden rounded-[4px] shadow-[0px_0px_4px_0px_rgba(0,0,0,0.06),2px_4px_8px_0px_rgba(0,0,0,0.04)]">
-                    <img src={backImg} alt="" className="h-full w-full object-cover" />
+                    <img src={backImg} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
                     <div className="absolute inset-0 rounded-[4px] bg-black/70" />
                 </div>
 
                 {/* Middle image (centered, medium overlay) */}
                 <div className="absolute top-[12px] right-[12px] left-[12px] aspect-[250/164] overflow-hidden rounded-[4px] border border-white/15 shadow-[0px_0px_4px_0px_rgba(0,0,0,0.06),2px_6px_16px_0px_rgba(0,0,0,0.08)]">
-                    <img src={midImg} alt="" className="h-full w-full object-cover" />
+                    <img src={midImg} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
                     <div className="absolute inset-0 rounded-[4px] bg-black/50" />
                 </div>
 
@@ -228,6 +236,8 @@ export const FeedFolderItem = ({ item, onClick }: FeedFolderItemProps) => {
                     <img
                         src={frontImg}
                         alt={item.title}
+                        loading="lazy"
+                        decoding="async"
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                 </div>

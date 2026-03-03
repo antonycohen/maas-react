@@ -130,8 +130,8 @@ export function PricingList() {
                             : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
                     )}
                 >
-                    {cards.map((card, index) => (
-                        <PricingCard key={index} {...card} />
+                    {cards.map((card) => (
+                        <PricingCard key={card.title + (card.titleSuffix || '')} {...card} />
                     ))}
                 </div>
             )}
