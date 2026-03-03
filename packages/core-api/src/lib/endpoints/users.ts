@@ -43,8 +43,12 @@ export class UsersEndpoint {
         return this.client.post<void>(`/api/v1/users/${userId}/change-email-request`, body);
     }
 
-    async changePassword(userId: string, body: ChangePasswordRequest): Promise<void> {
-        return this.client.post<void>(`/api/v1/users/${userId}/change-password-request`, body);
+    async changePassword(_userId: string, body: ChangePasswordRequest): Promise<void> {
+        return this.client.post<void>(`/api/v1/users/me/change-password-request`, {
+            oldPassword: body.currentPassword,
+            newPassword: body.newPassword,
+            passwordConfirmation: body.repeatNewPassword,
+        });
     }
 
     async deleteUser(userId: string): Promise<void> {

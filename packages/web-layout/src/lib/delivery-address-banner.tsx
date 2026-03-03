@@ -27,7 +27,7 @@ export function DeliveryAddressBanner() {
 
     return (
         <div className="mx-auto w-full max-w-7xl px-4 pt-4">
-            <Alert className="border-amber-200 bg-amber-50">
+            <Alert className="h-[60px] items-center border-amber-200 bg-amber-50 [&>svg]:translate-y-0">
                 <IconMapPin className="h-4 w-4 text-amber-600" />
                 <AlertDescription className="flex items-center justify-between gap-4">
                     <span className="text-sm text-amber-800">{t('banner.deliveryAddress.message')}</span>

@@ -20,6 +20,8 @@ export function UsersListManagerPage() {
                         { label: 'Users', to: routes.users() },
                     ]}
                 />
+            </header>
+            <LayoutContent>
                 <LayoutHeader
                     pageTitle="Users"
                     actions={
@@ -31,8 +33,6 @@ export function UsersListManagerPage() {
                         </Button>
                     }
                 />
-            </header>
-            <LayoutContent>
                 <Collection
                     useLocationAsState
                     columns={columns}

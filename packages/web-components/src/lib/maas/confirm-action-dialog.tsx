@@ -72,7 +72,7 @@ export function ConfirmActionDialog({
                     <AlertDialogTitle className={variant === 'destructive' ? 'text-destructive' : undefined}>
                         {title}
                     </AlertDialogTitle>
-                    <AlertDialogDescription>{description}</AlertDialogDescription>
+                    <AlertDialogDescription className="text-md">{description}</AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel disabled={isLoading}>{cancelLabel}</AlertDialogCancel>

@@ -14,6 +14,7 @@ import {
     ShoppingCartIcon,
     Tags,
     UserRoundSearch,
+    Users,
 } from 'lucide-react';
 import { useMemo } from 'react';
 import { SidebarNavigationProps } from '@maas/web-components';
@@ -139,6 +140,11 @@ export const useMainNavigation = (): SidebarNavigationProps[] => {
             {
                 sectionName: t('nav.administration'),
                 items: [
+                    {
+                        title: t('nav.users'),
+                        url: routes.users(),
+                        icon: Users,
+                    },
                     {
                         title: t('nav.admins'),
                         url: routes.teams(),
