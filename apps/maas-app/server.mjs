@@ -29,7 +29,7 @@ function isrMiddleware(req, res, next) {
 
         // If stale, revalidate in background
         if (age >= CACHE_TTL_MS) {
-            renderAndCache(req).catch(() => {});
+            renderAndCache(req).catch(() => true); // Ignore errors during background revalidation
         }
         return;
     }
