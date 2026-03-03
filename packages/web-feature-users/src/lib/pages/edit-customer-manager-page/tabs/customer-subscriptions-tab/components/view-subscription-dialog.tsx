@@ -94,6 +94,7 @@ export const ViewSubscriptionDialog = ({ open, onOpenChange, subscriptionId }: P
             canceledAt: null,
             metadata: null,
             plan: null,
+            items: null,
         },
     });
 
@@ -266,6 +267,35 @@ export const ViewSubscriptionDialog = ({ open, onOpenChange, subscriptionId }: P
                                     </div>
                                 )}
                             </div>
+
+                            {/* Items */}
+                            {subscription.items && subscription.items.length > 0 && (
+                                <>
+                                    <Separator />
+                                    <div>
+                                        <p className="text-muted-foreground mb-2 text-sm font-medium">
+                                            {t('subscriptions.items')}
+                                        </p>
+                                        <div className="space-y-2">
+                                            {subscription.items.map((item) => (
+                                                <div
+                                                    key={item.id}
+                                                    className="bg-muted/50 flex items-center justify-between rounded-md border px-3 py-2"
+                                                >
+                                                    <span className="text-sm font-medium">
+                                                        {item.price?.product?.name ?? item.price?.nickname ?? item.id}
+                                                    </span>
+                                                    {item.quantity != null && (
+                                                        <span className="text-muted-foreground text-xs">
+                                                            x{item.quantity}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </>
+                            )}
 
                             {/* Metadata */}
                             {subscription.metadata && Object.keys(subscription.metadata).length > 0 && (

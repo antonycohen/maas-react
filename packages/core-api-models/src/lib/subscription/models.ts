@@ -20,9 +20,28 @@ export type CollectionMethod = z.infer<typeof collectionMethodEnum>;
 // Subscription item schema
 export const subscriptionItemSchema = z.object({
     id: z.string(),
-    priceId: z.string().nullable(),
+    priceId: z.string().nullable().optional(),
+    price: z
+        .object({
+            id: z.string(),
+            nickname: z.string().nullable(),
+            product: z
+                .object({
+                    id: z.string(),
+                    name: z.string().nullable(),
+                    active: z.boolean().nullable(),
+                    createdAt: z.string().nullable(),
+                })
+                .nullable()
+                .optional(),
+            currency: z.string().nullable(),
+            createdAt: z.string().nullable(),
+        })
+        .nullable()
+        .optional(),
     quantity: z.number().nullable(),
-    metadata: z.record(z.string(), z.unknown()).nullable(),
+    metadata: z.record(z.string(), z.unknown()).nullable().optional(),
+    createdAt: z.string().nullable().optional(),
 });
 
 export type SubscriptionItem = z.infer<typeof subscriptionItemSchema>;

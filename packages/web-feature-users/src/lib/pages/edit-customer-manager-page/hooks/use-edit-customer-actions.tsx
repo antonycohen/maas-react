@@ -47,13 +47,15 @@ export const useEditCustomerActions = (
     const routes = useRoutes();
 
     const handleApiError = (error: ApiError) => {
-        if (error.parametersErrors) {
+        if (error.parametersErrors && Object.keys(error.parametersErrors).length > 0) {
             Object.entries(error.parametersErrors).forEach(([field, messages]) => {
                 form.setError(field as keyof CustomerFormValues, {
                     type: 'server',
                     message: messages.join(', '),
                 });
             });
+        } else if (error.message) {
+            toast.error(error.message);
         }
     };
 

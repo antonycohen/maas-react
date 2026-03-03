@@ -113,6 +113,21 @@ export const SubscriptionOverviewSection = ({ subscription, onMutationSuccess }:
                     </div>
                 </div>
 
+                {subscription.items && subscription.items.length > 0 && (
+                    <div className="mt-4">
+                        <p className="text-xs font-semibold tracking-wider text-gray-500 uppercase">
+                            {t('account.subscription.items')}
+                        </p>
+                        <ul className="mt-1 space-y-1">
+                            {subscription.items.map((item) => (
+                                <li key={item.id} className="text-sm font-medium">
+                                    {item.price?.product?.name ?? item.price?.nickname ?? item.id}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+
                 {isCanceling ? (
                     <div className="mt-4 flex flex-col gap-3">
                         <div className="rounded-lg border border-orange-200 bg-orange-50 p-3">

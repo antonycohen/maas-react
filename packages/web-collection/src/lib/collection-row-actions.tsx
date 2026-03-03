@@ -24,6 +24,7 @@ interface CommonAction {
     label: string;
     group?: string;
     icon: ComponentType<{ size?: number }>;
+    disabled?: boolean;
 }
 
 interface LinkAction<T> extends CommonAction {
@@ -74,6 +75,7 @@ export function CollectionRowActions<T>({ row, actions }: Props<T>) {
             <DropdownMenuItem
                 className={cn('', action.className)}
                 key={action.label}
+                disabled={action.disabled}
                 onClick={() => setOpen(action.dialog.id)}
             >
                 <Icon size={16} />
@@ -84,6 +86,14 @@ export function CollectionRowActions<T>({ row, actions }: Props<T>) {
 
     const renderLinkActionMenuItem = (action: LinkAction<T>, _index: number) => {
         const Icon = action.icon;
+        if (action.disabled) {
+            return (
+                <DropdownMenuItem className={action.className} key={action.label} disabled>
+                    <Icon size={16} />
+                    {action.label}
+                </DropdownMenuItem>
+            );
+        }
         return (
             <DropdownMenuItem className={action.className} key={action.label} asChild>
                 <Link to={action.linkTo(row.original)}>
@@ -100,6 +110,7 @@ export function CollectionRowActions<T>({ row, actions }: Props<T>) {
             <DropdownMenuItem
                 className={action.className}
                 key={action.label}
+                disabled={action.disabled}
                 onClick={() => action.onClick(row.original)}
             >
                 <Icon size={16} />

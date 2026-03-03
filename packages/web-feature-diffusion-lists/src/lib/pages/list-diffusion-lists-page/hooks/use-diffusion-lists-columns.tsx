@@ -4,7 +4,7 @@ import { Badge, Checkbox, LongText } from '@maas/web-components';
 import { CollectionColumnHeader, CollectionRowActions } from '@maas/web-collection';
 import { cn } from '@maas/core-utils';
 import { Link } from 'react-router';
-import { IconEye, IconListDetails } from '@tabler/icons-react';
+import { IconEye, IconListDetails, IconTrash } from '@tabler/icons-react';
 import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
 import { statusVariantMap } from '../../detail-diffusion-list-page/components/diffusion-list-status-badge';
@@ -91,18 +91,30 @@ export function useDiffusionListsColumns(): ColumnDef<DiffusionList>[] {
         },
         {
             id: 'actions',
-            cell: ({ row }) => (
-                <CollectionRowActions
-                    row={row}
-                    actions={[
-                        {
-                            label: t('common.view'),
-                            icon: IconEye,
-                            linkTo: (item: DiffusionList) => routes.diffusionListDetail(item.id),
-                        },
-                    ]}
-                />
-            ),
+            cell: ({ row }) => {
+                const status = row.original.status;
+                const isProcessing = status === 'populating' || status === 'generating' || status === 'refreshing';
+                return (
+                    <CollectionRowActions
+                        row={row}
+                        actions={[
+                            {
+                                label: t('common.view'),
+                                icon: IconEye,
+                                linkTo: (item: DiffusionList) => routes.diffusionListDetail(item.id),
+                            },
+                            {
+                                label: t('common.delete'),
+                                icon: IconTrash,
+                                group: 'danger',
+                                className: 'text-red-500!',
+                                disabled: isProcessing,
+                                linkTo: (item: DiffusionList) => routes.diffusionListDetail(item.id),
+                            },
+                        ]}
+                    />
+                );
+            },
         },
     ];
 }
