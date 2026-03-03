@@ -6,7 +6,8 @@ import rehypeKatex from 'rehype-katex';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 
-import 'katex/dist/katex.min.css';
+// @ts-expect-error CSS dynamic import has no type declarations
+import('katex/dist/katex.min.css');
 
 interface Article {
     article_id: number;

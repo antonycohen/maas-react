@@ -46,6 +46,9 @@ const ArticleCard = ({ article, featured = false }: ArticleCardProps) => {
             <img
                 src={article.image}
                 alt={article.title}
+                {...(featured
+                    ? { fetchPriority: 'high' as const }
+                    : { loading: 'lazy' as const, decoding: 'async' as const })}
                 className="absolute inset-0 h-full w-full rounded-[12px] object-cover object-center transition-transform duration-300 group-hover:scale-105"
             />
             {/* Gradient Overlay */}

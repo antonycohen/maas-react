@@ -21,7 +21,6 @@ export class BrandsEndpoint {
         params: GetCollectionQueryParams<Brand> & { filters?: GetBrandsFilter }
     ): Promise<ApiCollectionResponse<Brand>> {
         const { fields, offset, limit, filters } = params;
-        console.log(filters);
         return this.client.getCollection<Brand>(BASE_PATH, fields, {
             offset,
             limit,
