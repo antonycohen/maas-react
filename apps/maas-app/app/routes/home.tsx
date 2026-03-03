@@ -2,6 +2,12 @@ import { HomePage } from '@maas/web-feature-home';
 import { buildPageMeta } from '@maas/core-seo';
 import { RouteErrorFallback } from '../components/route-error-fallback';
 
+export function headers() {
+    return {
+        'Cache-Control': 'public, max-age=60, stale-while-revalidate=240',
+    };
+}
+
 export function meta() {
     return buildPageMeta({
         title: undefined,
