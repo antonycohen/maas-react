@@ -188,7 +188,7 @@ export function ViewSubscriptionManagerPage() {
                                     type="button"
                                     variant="outline"
                                     size="sm"
-                                    onClick={() => cancelAtPeriodEndMutation.mutate(subscriptionId)}
+                                    onClick={() => cancelAtPeriodEndMutation.mutate({ subscriptionId })}
                                     disabled={cancelAtPeriodEndMutation.isPending}
                                 >
                                     <IconPlayerPause className="mr-1.5 h-4 w-4" />

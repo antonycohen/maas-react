@@ -319,7 +319,7 @@ export const ViewSubscriptionDialog = ({ open, onOpenChange, subscriptionId }: P
             <ConfirmActionDialog
                 open={cancelAtEndDialogOpen}
                 onOpenChange={setCancelAtEndDialogOpen}
-                onConfirm={() => cancelAtPeriodEndMutation.mutate(subscriptionId)}
+                onConfirm={() => cancelAtPeriodEndMutation.mutate({ subscriptionId })}
                 title={t('subscriptions.cancelAtPeriodEndConfirm')}
                 description={t('subscriptions.cancelAtPeriodEndDescription')}
                 confirmLabel={t('subscriptions.cancelAtPeriodEnd')}
