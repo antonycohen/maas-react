@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { SubscriptionCTA } from './subscription-cta';
 import { NoDigitalAccessCTA } from './no-digital-access-cta';
+import { PastDueCTA } from './past-due-cta';
 import { useRenderBlocks } from '@maas/web-cms-editor';
-import { Article, CMSBlock, FEATURE_DIGITAL_ACCESS } from '@maas/core-api-models';
+import { Article, CMSBlock, FEATURE_DIGITAL_ACCESS, SUBSCRIPTION_STATUS_PAST_DUE } from '@maas/core-api-models';
 import {
     Dialog,
     DialogContent,
@@ -33,11 +34,12 @@ export const ArticleContent = ({
     customFields?: Article['customFields'];
 }) => {
     const { t } = useTranslation();
-    const { isUserSubscribed } = useSubscriptionStatus();
+    const { isUserSubscribed, status } = useSubscriptionStatus();
     const { remaining: digitalAccessRemaining } = useQuota(FEATURE_DIGITAL_ACCESS);
     const connectedUser = useConnectedUser();
     const isAdmin = connectedUser?.roles?.includes('ADMIN') ?? false;
     const isProblem = type?.name ? normalizeString(type.name) === 'probleme' : false;
+    const isPastDue = status === SUBSCRIPTION_STATUS_PAST_DUE;
     const hasDigitalAccess = isUserSubscribed && digitalAccessRemaining > 0;
     const canViewContent = isAdmin || hasDigitalAccess;
     const isSubscribedWithoutAccess = isUserSubscribed && !hasDigitalAccess && !isAdmin;
@@ -73,7 +75,8 @@ export const ArticleContent = ({
                 />
             )}
             <div className="flex w-full flex-col items-start gap-5">{blocks}</div>
-            {showCta && (isSubscribedWithoutAccess ? <NoDigitalAccessCTA /> : <SubscriptionCTA />)}
+            {showCta &&
+                (isPastDue ? <PastDueCTA /> : isSubscribedWithoutAccess ? <NoDigitalAccessCTA /> : <SubscriptionCTA />)}
             {isProblem &&
                 (!showSolution ? (
                     <button
@@ -92,20 +95,26 @@ export const ArticleContent = ({
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
-                            {isSubscribedWithoutAccess ? t('home.noDigitalAccessTitle') : t('home.solutionDialogTitle')}
+                            {isPastDue
+                                ? t('home.pastDueTitle')
+                                : isSubscribedWithoutAccess
+                                  ? t('home.noDigitalAccessTitle')
+                                  : t('home.solutionDialogTitle')}
                         </DialogTitle>
                         <DialogDescription>
-                            {isSubscribedWithoutAccess
-                                ? t('home.noDigitalAccessDescription')
-                                : t('home.solutionDialogDescription')}
+                            {isPastDue
+                                ? t('home.pastDueDescription')
+                                : isSubscribedWithoutAccess
+                                  ? t('home.noDigitalAccessDescription')
+                                  : t('home.solutionDialogDescription')}
                         </DialogDescription>
                     </DialogHeader>
                     {!isSubscribedWithoutAccess && (
                         <Link
-                            to={PUBLIC_ROUTES.PRICING}
+                            to={isPastDue ? PUBLIC_ROUTES.ACCOUNT_SUBSCRIPTION : PUBLIC_ROUTES.PRICING}
                             className="font-body flex h-[40px] w-full items-center justify-center rounded-[4px] bg-[#E31B22] px-4 py-2 text-[14px] leading-[20px] font-semibold tracking-[-0.07px] text-white transition-colors hover:bg-[#c4161c]"
                         >
-                            {t('home.subscribe')}
+                            {isPastDue ? t('home.renewSubscription') : t('home.subscribe')}
                         </Link>
                     )}
                 </DialogContent>

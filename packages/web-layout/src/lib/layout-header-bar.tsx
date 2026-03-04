@@ -14,6 +14,7 @@ import { Link, NavLink } from 'react-router';
 import { useTranslation } from '@maas/core-translations';
 import { publicUrlBuilders, PUBLIC_ROUTES } from '@maas/core-routes';
 import { useSubscriptionStatus } from '@maas/core-store-session';
+import { SUBSCRIPTION_STATUS_PAST_DUE } from '@maas/core-api-models';
 
 // =============================================================================
 // Types
@@ -197,16 +198,26 @@ function IconButton({
     );
 }
 
-function SubscribeButton({ href, compact = false }: { href?: string; compact?: boolean }) {
+function SubscribeButton({ _href, compact = false }: { _href?: string; compact?: boolean }) {
     const { t } = useTranslation();
-    const { isUserSubscribed } = useSubscriptionStatus();
+    const { isUserSubscribed, status } = useSubscriptionStatus();
+    const isPastDue = status === SUBSCRIPTION_STATUS_PAST_DUE;
 
     if (isUserSubscribed) return null;
 
+    const label = isPastDue
+        ? compact
+            ? t('home.renewSubscriptionShort')
+            : t('home.renewSubscription')
+        : t('home.subscribe');
+
     return (
-        <Link to={href ?? PUBLIC_ROUTES.PRICING} className={cn(styles.subscribeButton, compact ? 'px-3' : 'px-4')}>
+        <Link
+            to={isPastDue ? PUBLIC_ROUTES.ACCOUNT_SUBSCRIPTION : PUBLIC_ROUTES.PRICING}
+            className={cn(styles.subscribeButton, compact ? 'px-3' : 'px-4', 'whitespace-nowrap')}
+        >
             <span className={cn(styles.subscribeText, compact ? 'text-[10px] md:text-[14px]' : 'text-[14px]')}>
-                {t('home.subscribe')}
+                {label}
             </span>
         </Link>
     );
@@ -495,7 +506,7 @@ export function LayoutHeaderBar({
 
                             <UserButton connectedUser={connectedUser} loginHref={loginHref} showLabel />
 
-                            <SubscribeButton href={subscribeHref} compact />
+                            <SubscribeButton _href={subscribeHref} compact />
                         </div>
                     </div>
                 </div>
@@ -518,7 +529,7 @@ export function LayoutHeaderBar({
                         <DesktopNavMenu items={resolvedMenuItems} className="flex-1 justify-center" />
 
                         <div className="flex shrink-0 items-center gap-2">
-                            <SubscribeButton href={subscribeHref} />
+                            <SubscribeButton _href={subscribeHref} />
                         </div>
                     </div>
                 </div>
