@@ -43,7 +43,7 @@ export const AccountSubscriptionTab = () => {
     return (
         <div className="flex flex-col gap-6">
             <SubscriptionOverviewSection subscription={subscription} onMutationSuccess={() => refetchSubscription()} />
-            {subscription && <QuotaUsageSection quotas={quotas} />}
+            {quotas && <QuotaUsageSection quotas={quotas} />}
             {subscription && <PaymentMethodSection />}
         </div>
     );

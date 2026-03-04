@@ -15,13 +15,12 @@ export function DeliveryAddressBanner() {
     const { pathname } = useLocation();
     const { isUserSubscribed, quotas, hasDeliveryAddress } = useSubscriptionStatus();
 
-    if (!isUserSubscribed || hasDeliveryAddress) return null;
-
     const hasPaperQuotaWithRemaining = quotas.some(
         (q) => PAPER_MAGAZINE_FEATURES.includes(q.featureKey) && q.remaining > 0
     );
+    if (hasDeliveryAddress) return null;
 
-    if (!hasPaperQuotaWithRemaining) return null;
+    if (!isUserSubscribed && !hasPaperQuotaWithRemaining) return null;
 
     const isOnAddressPage = ADDRESS_PAGES.some((route) => pathname.startsWith(route));
 
