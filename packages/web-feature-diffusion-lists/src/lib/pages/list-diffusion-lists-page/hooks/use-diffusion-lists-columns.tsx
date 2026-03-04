@@ -10,7 +10,7 @@ import { useTranslation } from '@maas/core-translations';
 import { statusVariantMap } from '../../detail-diffusion-list-page/components/diffusion-list-status-badge';
 
 export function useDiffusionListsColumns(): ColumnDef<DiffusionList>[] {
-    const { t } = useTranslation();
+    const { t, isKeyExist } = useTranslation();
     const routes = useRoutes();
 
     return [
@@ -59,7 +59,12 @@ export function useDiffusionListsColumns(): ColumnDef<DiffusionList>[] {
         {
             accessorKey: 'type',
             header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.type')} />,
-            cell: ({ row }) => <Badge variant="outline">{row.getValue('type')}</Badge>,
+            cell: ({ row }) => {
+                const type = row.getValue('type') as string | null;
+                if (!type) return '-';
+                const key = `diffusionLists.type.${type}`;
+                return <Badge variant="outline">{isKeyExist(key) ? t(key) : type}</Badge>;
+            },
             enableSorting: false,
         },
         {

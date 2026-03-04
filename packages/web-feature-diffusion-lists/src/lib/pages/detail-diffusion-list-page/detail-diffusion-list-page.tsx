@@ -30,8 +30,10 @@ export default function DetailDiffusionListPage() {
                 id: null,
                 name: null,
                 type: null,
+                number: null,
                 status: null,
                 entryCount: null,
+                needsAttentionCount: null,
                 generatedAt: null,
                 pdfDocumentId: null,
                 createdAt: null,
@@ -42,7 +44,9 @@ export default function DetailDiffusionListPage() {
         { enabled: !!diffusionListId }
     );
 
-    const actions = useDiffusionListActions(diffusionListId, refetch);
+    const actions = useDiffusionListActions(diffusionListId, refetch, {
+        needsAttentionCount: diffusionList?.needsAttentionCount ?? 0,
+    });
     const confirmActionProps = actions.getConfirmActionProps();
 
     if (isLoading) {
@@ -61,7 +65,7 @@ export default function DetailDiffusionListPage() {
     const populateError = diffusionList.metadata?.populateError;
     const populateStats = diffusionList.metadata?.populateStats;
     const generateError = diffusionList.metadata?.generateError;
-    const refreshStats = diffusionList.metadata?.refreshStats;
+    const needsAttentionCount = diffusionList.needsAttentionCount ?? 0;
 
     return (
         <div>
@@ -87,7 +91,7 @@ export default function DetailDiffusionListPage() {
                 isActionPending={actions.isActionPending}
             />
 
-            {(populateError || populateStats || generateError || (refreshStats && refreshStats.needsAttention > 0)) && (
+            {(populateError || populateStats || generateError || needsAttentionCount > 0) && (
                 <div className="flex flex-col gap-3 px-6 pt-4">
                     {populateError && (
                         <Alert variant="destructive">
@@ -107,13 +111,13 @@ export default function DetailDiffusionListPage() {
 
                     {populateStats && <PopulateStatsBanner stats={populateStats} />}
 
-                    {refreshStats && refreshStats.needsAttention > 0 && (
+                    {needsAttentionCount > 0 && (
                         <Alert>
                             <IconAlertTriangle className="h-4 w-4" />
-                            <AlertTitle>{t('diffusionLists.refreshStatsTitle')}</AlertTitle>
+                            <AlertTitle>{t('diffusionLists.needsAttentionTitle')}</AlertTitle>
                             <AlertDescription>
-                                {t('diffusionLists.stats.needsAttentionAfterRefresh', {
-                                    count: refreshStats.needsAttention,
+                                {t('diffusionLists.needsAttentionDescription', {
+                                    count: needsAttentionCount,
                                 })}
                             </AlertDescription>
                         </Alert>

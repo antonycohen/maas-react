@@ -22,7 +22,7 @@ export const useGetDiffusionListEntries = (
     options?: Omit<UseQueryOptions<ApiCollectionResponse<DiffusionListEntry>, ApiError>, 'queryKey'>
 ) =>
     useQuery({
-        queryKey: ['diffusion-list-entries', params.staticParams?.diffusionListId, params],
+        queryKey: ['diffusion-list-entries', params.diffusionListId ?? params.staticParams?.diffusionListId, params],
         queryFn: () => getDiffusionListEntries(params),
         ...options,
     });

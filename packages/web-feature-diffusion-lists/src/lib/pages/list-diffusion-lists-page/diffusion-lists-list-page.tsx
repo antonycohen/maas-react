@@ -39,7 +39,7 @@ export default function DiffusionListsListPage() {
                     filtersConfiguration={{
                         textFilter: {
                             placeholder: t('diffusionLists.search'),
-                            queryParamName: 'term',
+                            queryParamName: 'query',
                         },
                         facetedFilters: [
                             {

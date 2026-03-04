@@ -20,7 +20,11 @@ export interface DiffusionListConfirmState {
     action?: DiffusionListActionType;
 }
 
-export const useDiffusionListActions = (diffusionListId: string, refetch: () => void) => {
+export const useDiffusionListActions = (
+    diffusionListId: string,
+    refetch: () => void,
+    options?: { needsAttentionCount?: number }
+) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const routes = useRoutes();
@@ -147,15 +151,21 @@ export const useDiffusionListActions = (diffusionListId: string, refetch: () => 
 
     const getConfirmActionProps = () => {
         switch (confirmAction.action) {
-            case 'confirm':
+            case 'confirm': {
+                const attentionCount = options?.needsAttentionCount ?? 0;
+                const description =
+                    attentionCount > 0
+                        ? t('diffusionLists.confirmDescriptionWithWarning', { count: attentionCount })
+                        : t('diffusionLists.confirmDescription');
                 return {
                     title: t('diffusionLists.confirmPrompt'),
-                    description: t('diffusionLists.confirmDescription'),
+                    description,
                     confirmLabel: t('diffusionLists.confirm'),
                     variant: 'default' as const,
                     countdown: 0,
                     isLoading: confirmMutation.isPending,
                 };
+            }
             case 'revert':
                 return {
                     title: t('diffusionLists.revertPrompt'),

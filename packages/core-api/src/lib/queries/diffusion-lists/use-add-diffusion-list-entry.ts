@@ -19,6 +19,7 @@ export const useAddDiffusionListEntry = (
         onSuccess: (data, variables, onMutateResult, context) => {
             queryClient.invalidateQueries({ queryKey: ['diffusion-list', variables.diffusionListId] });
             queryClient.invalidateQueries({ queryKey: ['diffusion-list-entries', variables.diffusionListId] });
+            queryClient.invalidateQueries({ queryKey: ['diffusion-list-available-customers'] });
             queryClient.invalidateQueries({ queryKey: ['diffusion-lists'] });
             onSuccess?.(data, variables, onMutateResult, context);
         },

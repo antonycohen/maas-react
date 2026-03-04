@@ -64,6 +64,8 @@ export const AddEntryModal = ({ open, onOpenChange, diffusionListId }: Props) =>
         addMutation.mutate({
             diffusionListId,
             data: {
+                userId: customer.refId ?? undefined,
+                customerId: customer.id ?? undefined,
                 firstName: firstName || undefined,
                 lastName: lastName || undefined,
                 email: customer.email ?? undefined,

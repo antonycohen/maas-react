@@ -1,5 +1,5 @@
 import { DiffusionList } from '@maas/core-api-models';
-import { Button } from '@maas/web-components';
+import { Badge, Button } from '@maas/web-components';
 import {
     IconCheck,
     IconArrowBack,
@@ -36,7 +36,7 @@ export const DiffusionListHeader = ({
     onRefreshEntries,
     isActionPending,
 }: Props) => {
-    const { t } = useTranslation();
+    const { t, isKeyExist } = useTranslation();
 
     return (
         <div className="bg-background sticky top-0 z-10 flex items-center justify-between border-b px-6 py-3">
@@ -44,6 +44,16 @@ export const DiffusionListHeader = ({
                 <h1 className="max-w-md truncate text-xl font-semibold">
                     {diffusionList.name ?? t('diffusionLists.untitled')}
                 </h1>
+                {diffusionList.type && (
+                    <Badge variant="outline">
+                        {isKeyExist(`diffusionLists.type.${diffusionList.type}`)
+                            ? t(`diffusionLists.type.${diffusionList.type}`)
+                            : diffusionList.type}
+                    </Badge>
+                )}
+                {diffusionList.number != null && (
+                    <span className="text-muted-foreground text-sm">#{diffusionList.number}</span>
+                )}
                 {diffusionList.status && <DiffusionListStatusBadge status={diffusionList.status} />}
             </div>
 

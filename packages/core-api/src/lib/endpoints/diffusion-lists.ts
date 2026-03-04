@@ -12,7 +12,7 @@ import { ApiCollectionResponse, GetCollectionQueryParams, GetQueryByIdParams } f
 export interface GetDiffusionListsFilter {
     status?: string;
     type?: string;
-    term?: string;
+    query?: string;
 }
 
 export interface GetDiffusionListsStaticParams {

@@ -1,8 +1,15 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { DiffusionListEntry } from '@maas/core-api-models';
-import { Badge, Button } from '@maas/web-components';
+import {
+    Badge,
+    Button,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@maas/web-components';
 import { CollectionColumnHeader } from '@maas/web-collection';
-import { IconTrash, IconAlertTriangle, IconRefresh } from '@tabler/icons-react';
+import { IconTrash, IconAlertTriangle, IconRefresh, IconDotsVertical } from '@tabler/icons-react';
 import { useTranslation } from '@maas/core-translations';
 import { useRoutes } from '@maas/core-workspace';
 import { Link } from 'react-router';
@@ -99,33 +106,40 @@ export function useEntriesColumns(options?: {
             cell: ({ row }) => {
                 const entry = row.original;
                 const isRefreshing = isRefreshingEntryId === entry.id;
+                const showRefresh = isDraft && onRefreshEntry;
+                const showRemove = isDraft && onRemove;
+
+                if (!showRefresh && !showRemove) return null;
+
                 return (
-                    <div className="flex items-center gap-1">
-                        {onRefreshEntry && entry.needsAttention && (
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => onRefreshEntry(entry)}
-                                disabled={isRefreshing}
-                            >
-                                <IconRefresh className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <IconDotsVertical className="h-4 w-4" />
                             </Button>
-                        )}
-                        {isDraft && onRemove && (
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => onRemove(entry)}
-                                disabled={isRemoving}
-                                className="text-destructive hover:text-destructive"
-                            >
-                                <IconTrash className="h-4 w-4" />
-                            </Button>
-                        )}
-                    </div>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            {showRefresh && (
+                                <DropdownMenuItem onClick={() => onRefreshEntry(entry)} disabled={isRefreshing}>
+                                    <IconRefresh className={`mr-2 h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                                    {t('diffusionLists.refreshEntry')}
+                                </DropdownMenuItem>
+                            )}
+                            {showRemove && (
+                                <DropdownMenuItem
+                                    onClick={() => onRemove(entry)}
+                                    disabled={isRemoving}
+                                    className="text-destructive focus:text-destructive"
+                                >
+                                    <IconTrash className="mr-2 h-4 w-4" />
+                                    {t('common.remove')}
+                                </DropdownMenuItem>
+                            )}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 );
             },
-            meta: { className: 'w-24' },
+            meta: { className: 'w-12' },
         });
     }
 

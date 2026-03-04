@@ -35,6 +35,7 @@ export const diffusionListSchema = z.object({
     comments: z.string().nullable(),
     status: diffusionListStatusEnum.nullable(),
     entryCount: z.number().int().nullable(),
+    needsAttentionCount: z.number().int().nullable(),
     generatedAt: z.string().nullable(),
     pdfDocumentId: z.string().nullable(),
     createdAt: z.string().nullable(),
@@ -56,14 +57,6 @@ export const diffusionListSchema = z.object({
                     skippedNoQuota: z.number().int(),
                     skippedExhausted: z.number().int(),
                     skippedDuplicate: z.number().int(),
-                    needsAttention: z.number().int(),
-                })
-                .nullable()
-                .optional(),
-            refreshStats: z
-                .object({
-                    needsAttention: z.number().int(),
-                    refreshedAt: z.string(),
                 })
                 .nullable()
                 .optional(),
@@ -123,6 +116,8 @@ export type DiffusionListEntry = z.infer<typeof diffusionListEntrySchema>;
 // Create entry schema (manual entry)
 export const createDiffusionListEntrySchema = z
     .object({
+        userId: z.string().optional(),
+        customerId: z.string().optional(),
         firstName: z.string().max(255).optional(),
         lastName: z.string().max(255).optional(),
         email: z.string().email().optional(),
