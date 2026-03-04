@@ -970,7 +970,7 @@
     "diffusionLists.stats.skippedDuplicate": "Doublons",
     "diffusionLists.stats.needsAttention": "À vérifier",
     "diffusionLists.refreshStatsTitle": "Rafraîchissement terminé",
-    "diffusionLists.stats.needsAttentionAfterRefresh": "{{count}} entrées nécessitent une vérification en raison d'adresses incomplètes.",
+    "diffusionLists.stats.needsAttentionAfterRefresh": "{count} entrées nécessitent une vérification en raison d'adresses incomplètes.",
     "dashboard.title": "Tableau de bord",
     "dashboard.description": "Vue d'ensemble de votre activité d'abonnements",
     "dashboard.totalSubscriptions": "Total abonnements",
