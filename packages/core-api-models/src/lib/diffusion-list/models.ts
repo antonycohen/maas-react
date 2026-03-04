@@ -49,6 +49,31 @@ export const diffusionListSchema = z.object({
                 })
                 .nullable()
                 .optional(),
+            populateStats: z
+                .object({
+                    customersProcessed: z.number().int(),
+                    entriesInserted: z.number().int(),
+                    skippedNoQuota: z.number().int(),
+                    skippedExhausted: z.number().int(),
+                    skippedDuplicate: z.number().int(),
+                    needsAttention: z.number().int(),
+                })
+                .nullable()
+                .optional(),
+            refreshStats: z
+                .object({
+                    needsAttention: z.number().int(),
+                    refreshedAt: z.string(),
+                })
+                .nullable()
+                .optional(),
+            generateError: z
+                .object({
+                    message: z.string(),
+                    occurredAt: z.string(),
+                })
+                .nullable()
+                .optional(),
         })
         .nullable()
         .optional(),

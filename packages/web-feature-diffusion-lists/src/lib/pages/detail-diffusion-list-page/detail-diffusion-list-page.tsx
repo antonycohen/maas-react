@@ -6,6 +6,7 @@ import { useTranslation } from '@maas/core-translations';
 import { Alert, AlertDescription, AlertTitle, ConfirmActionDialog } from '@maas/web-components';
 import { IconAlertTriangle } from '@tabler/icons-react';
 import { DiffusionListHeader } from './components/diffusion-list-header';
+import { PopulateStatsBanner } from './components/populate-stats-banner';
 import { EntriesTable } from './components/entries-table';
 import { useDiffusionListActions } from './hooks/use-diffusion-list-actions';
 import { useState } from 'react';
@@ -58,6 +59,9 @@ export default function DetailDiffusionListPage() {
     const isGenerated = status === 'generated';
     const hasEntries = (diffusionList.entryCount ?? 0) > 0;
     const populateError = diffusionList.metadata?.populateError;
+    const populateStats = diffusionList.metadata?.populateStats;
+    const generateError = diffusionList.metadata?.generateError;
+    const refreshStats = diffusionList.metadata?.refreshStats;
 
     return (
         <div>
@@ -83,13 +87,37 @@ export default function DetailDiffusionListPage() {
                 isActionPending={actions.isActionPending}
             />
 
-            {populateError && (
-                <div className="px-6 pt-4">
-                    <Alert variant="destructive">
-                        <IconAlertTriangle className="h-4 w-4" />
-                        <AlertTitle>{t('diffusionLists.populateErrorTitle')}</AlertTitle>
-                        <AlertDescription>{populateError.message}</AlertDescription>
-                    </Alert>
+            {(populateError || populateStats || generateError || (refreshStats && refreshStats.needsAttention > 0)) && (
+                <div className="flex flex-col gap-3 px-6 pt-4">
+                    {populateError && (
+                        <Alert variant="destructive">
+                            <IconAlertTriangle className="h-4 w-4" />
+                            <AlertTitle>{t('diffusionLists.populateErrorTitle')}</AlertTitle>
+                            <AlertDescription>{populateError.message}</AlertDescription>
+                        </Alert>
+                    )}
+
+                    {generateError && (
+                        <Alert variant="destructive">
+                            <IconAlertTriangle className="h-4 w-4" />
+                            <AlertTitle>{t('diffusionLists.generateErrorTitle')}</AlertTitle>
+                            <AlertDescription>{generateError.message}</AlertDescription>
+                        </Alert>
+                    )}
+
+                    {populateStats && <PopulateStatsBanner stats={populateStats} />}
+
+                    {refreshStats && refreshStats.needsAttention > 0 && (
+                        <Alert>
+                            <IconAlertTriangle className="h-4 w-4" />
+                            <AlertTitle>{t('diffusionLists.refreshStatsTitle')}</AlertTitle>
+                            <AlertDescription>
+                                {t('diffusionLists.stats.needsAttentionAfterRefresh', {
+                                    count: refreshStats.needsAttention,
+                                })}
+                            </AlertDescription>
+                        </Alert>
+                    )}
                 </div>
             )}
 
