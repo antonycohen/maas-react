@@ -13,6 +13,7 @@ export const useRevertDiffusionList = (
         onSuccess: (data, id, onMutateResult, context) => {
             queryClient.invalidateQueries({ queryKey: ['diffusion-lists'] });
             queryClient.invalidateQueries({ queryKey: ['diffusion-list', id] });
+            queryClient.invalidateQueries({ queryKey: ['diffusion-list-entries', id] });
             onSuccess?.(data, id, onMutateResult, context);
         },
         ...restOptions,

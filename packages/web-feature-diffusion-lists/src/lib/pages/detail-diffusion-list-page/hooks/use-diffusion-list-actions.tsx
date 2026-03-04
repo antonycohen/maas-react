@@ -170,7 +170,7 @@ export const useDiffusionListActions = (
                 return {
                     title: t('diffusionLists.revertPrompt'),
                     description: t('diffusionLists.revertDescription'),
-                    confirmLabel: t('diffusionLists.revert'),
+                    confirmLabel: t('diffusionLists.revertToDraft'),
                     variant: 'default' as const,
                     countdown: 0,
                     isLoading: revertMutation.isPending,
