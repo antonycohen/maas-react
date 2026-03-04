@@ -490,7 +490,7 @@
     "customers.invoices.statusOpen": "Open",
     "customers.invoices.statusDraft": "Draft",
     "customers.invoices.statusVoid": "Void",
-    "customers.invoices.statusUncollectible": "Uncollectible",
+    "customers.invoices.statusUncollectible": "Non paid",
     "customers.invoices.pay": "Pay",
     "customers.invoices.payConfirmTitle": "Pay this invoice?",
     "customers.invoices.payConfirmDescription": "This will mark the invoice as paid.",

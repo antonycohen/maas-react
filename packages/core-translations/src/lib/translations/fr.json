@@ -510,7 +510,7 @@
     "customers.invoices.statusOpen": "Ouverte",
     "customers.invoices.statusDraft": "Brouillon",
     "customers.invoices.statusVoid": "Annulée",
-    "customers.invoices.statusUncollectible": "Irrécouvrable",
+    "customers.invoices.statusUncollectible": "Non payée",
     "customers.invoices.pay": "Payer",
     "customers.invoices.payConfirmTitle": "Payer cette facture ?",
     "customers.invoices.payConfirmDescription": "Cette action marquera la facture comme payée.",
