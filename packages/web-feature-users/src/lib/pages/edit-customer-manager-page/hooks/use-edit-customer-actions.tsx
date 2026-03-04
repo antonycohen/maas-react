@@ -80,8 +80,21 @@ export const useEditCustomerActions = (
     });
 
     function onSubmit(data: CustomerFormValues) {
+        // Auto-fill customer name from address if empty
+        let resolvedName = data.name;
+        console.log(data.name);
+        if (!resolvedName?.trim()) {
+            const shipping = data.shippingAddress;
+            const billing = data.billingAddress;
+            if (shipping?.firstName || shipping?.lastName) {
+                resolvedName = [shipping.firstName, shipping.lastName].filter(Boolean).join(' ');
+            } else if (billing?.name) {
+                resolvedName = billing.name;
+            }
+        }
+
         const payload = {
-            name: data.name,
+            name: resolvedName,
             email: data.email,
             ...(data.phone ? { phone: data.phone } : {}),
             ...(data.description ? { description: data.description } : {}),

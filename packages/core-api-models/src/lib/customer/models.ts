@@ -63,7 +63,7 @@ export type ReadCustomer = z.infer<typeof readCustomerSchema>;
 
 // 4. Create schema
 export const createCustomerSchema = z.object({
-    name: z.string().min(1, 'Name is required'),
+    name: z.string().optional(),
     email: z.string().email('Invalid email format'),
     phone: z.string().nullable().optional(),
     description: z.string().nullable().optional(),

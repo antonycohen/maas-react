@@ -145,7 +145,9 @@ export const CustomerSubscriptionsTab = () => {
     const subscriptions = subscriptionsData?.data ?? [];
     const currentSubscriptions = subscriptions.filter((s) => s.status !== 'trialing');
     const trialingSubscriptions = subscriptions.filter((s) => s.status === 'trialing');
-    const activeSubscription = subscriptions.find((s) => s.status === 'active');
+    const activeSubscription = subscriptions.find(
+        (s) => s.status === 'active' || s.status === 'past_due' || s.status === 'trialing'
+    );
     const hasActiveSubscription = !!activeSubscription;
     const manualSubscriptionIds = new Set(
         subscriptions.filter((s) => (s.metadata as Record<string, unknown> | null)?.manual === 'true').map((s) => s.id)

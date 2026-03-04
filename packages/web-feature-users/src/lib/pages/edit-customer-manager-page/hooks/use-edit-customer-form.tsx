@@ -34,7 +34,7 @@ export const customerTypeEnum = z.enum([
 export type CustomerType = z.infer<typeof customerTypeEnum>;
 
 export const customerFormSchema = z.object({
-    name: z.string().min(1, 'Name is required'),
+    name: z.string().optional(),
     email: z.email('Invalid email format'),
     phone: z.string().nullable().optional(),
     description: z.string().nullable().optional(),

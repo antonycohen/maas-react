@@ -31,7 +31,6 @@ export function ControlledTextInput<T extends FieldValues>(props: ControlledText
         control: control,
     });
     const id = useId();
-
     const inputElement = inputPrefix ? (
         <InputGroup>
             <InputGroupAddon align="inline-start">

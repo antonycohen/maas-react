@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router';
 import { LayoutBreadcrumb, LayoutContent, LayoutHeader } from '@maas/web-layout';
 import { useRoutes } from '@maas/core-workspace';
-import { ControlledTextareaInput, createConnectedInputHelpers } from '@maas/web-form';
+import { createConnectedInputHelpers } from '@maas/web-form';
 import { Button, Field, FieldGroup } from '@maas/web-components';
 import { useGetUserById, useCreateUserCustomer } from '@maas/core-api';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -86,7 +86,7 @@ export function EditUserManagerPage() {
                         <FieldGroup>
                             <ControlledTextInput name={'email'} label={t('users.email')} readOnly />
                             <ControlledTextInput name={'firstName'} label={t('users.firstName')} />
-                            <ControlledTextareaInput name={'lastName'} label={t('users.lastName')} />
+                            <ControlledTextInput name={'lastName'} label={t('users.lastName')} />
                             <ControlledImageInput name={'profileImage'} label={'Image'} />
                             <Field orientation="horizontal">
                                 <Button type="button" variant="outline" onClick={() => form.reset()}>
