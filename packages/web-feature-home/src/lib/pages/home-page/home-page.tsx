@@ -14,7 +14,7 @@ import {
 } from '@maas/web-components';
 import { useTranslation } from '@maas/core-translations';
 import { useGetHomepage } from '@maas/core-api';
-import { HomepageArticle, HomepageNewsItem, ReadResizedImage } from '@maas/core-api-models';
+import { HomepageArticle, HomepageNewsItem, HomepageResponse, ReadResizedImage } from '@maas/core-api-models';
 import { publicUrlBuilders } from '@maas/core-routes';
 
 function getResizedImageUrl(images: ReadResizedImage[] | null | undefined, width = 640): string {
@@ -164,12 +164,15 @@ const CategoryArticlesSkeleton = () => (
     </div>
 );
 
-export const HomePage = () => {
+export const HomePage = ({ initialData }: { initialData?: HomepageResponse | null }) => {
     const { t } = useTranslation();
-    const { data: homepage, isPending } = useGetHomepage({
-        issueFields: 'id,title,slug,cover,published_at,issue_number',
-        articleFields: 'id,title,cover,categories,slug,published_at,author,description',
-    });
+    const { data: homepage, isPending } = useGetHomepage(
+        {
+            issueFields: 'id,title,slug,cover,published_at,issue_number',
+            articleFields: 'id,title,cover,categories,slug,published_at,author,description',
+        },
+        { initialData: initialData ?? undefined, staleTime: initialData ? 5 * 60 * 1000 : 0 }
+    );
 
     const { resizedImage: issueCover } = useResizedImage({
         images: homepage?.latestIssue?.cover?.resizedImages,
