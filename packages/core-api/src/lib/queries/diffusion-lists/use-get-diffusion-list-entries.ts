@@ -9,6 +9,7 @@ export type GetDiffusionListEntriesParams = GetCollectionQueryParams<
     GetDiffusionListEntriesStaticParams
 > & {
     filters?: GetDiffusionListEntriesFilter;
+    diffusionListId?: string;
 };
 
 export const getDiffusionListEntries = async (
