@@ -3,7 +3,8 @@ import { useGetDiffusionListById } from '@maas/core-api';
 import { LayoutBreadcrumb, LayoutContent } from '@maas/web-layout';
 import { useRoutes } from '@maas/core-workspace';
 import { useTranslation } from '@maas/core-translations';
-import { ConfirmActionDialog } from '@maas/web-components';
+import { Alert, AlertDescription, AlertTitle, ConfirmActionDialog } from '@maas/web-components';
+import { IconAlertTriangle } from '@tabler/icons-react';
 import { DiffusionListHeader } from './components/diffusion-list-header';
 import { EntriesTable } from './components/entries-table';
 import { useDiffusionListActions } from './hooks/use-diffusion-list-actions';
@@ -34,6 +35,7 @@ export default function DetailDiffusionListPage() {
                 pdfDocumentId: null,
                 createdAt: null,
                 updatedAt: null,
+                metadata: null,
             },
         },
         { enabled: !!diffusionListId }
@@ -55,6 +57,7 @@ export default function DetailDiffusionListPage() {
     const isConfirmed = status === 'confirmed';
     const isGenerated = status === 'generated';
     const hasEntries = (diffusionList.entryCount ?? 0) > 0;
+    const populateError = diffusionList.metadata?.populateError;
 
     return (
         <div>
@@ -79,6 +82,16 @@ export default function DetailDiffusionListPage() {
                 onRefreshEntries={hasEntries && isDraft ? actions.handleRefreshEntries : undefined}
                 isActionPending={actions.isActionPending}
             />
+
+            {populateError && (
+                <div className="px-6 pt-4">
+                    <Alert variant="destructive">
+                        <IconAlertTriangle className="h-4 w-4" />
+                        <AlertTitle>{t('diffusionLists.populateErrorTitle')}</AlertTitle>
+                        <AlertDescription>{populateError.message}</AlertDescription>
+                    </Alert>
+                </div>
+            )}
 
             <LayoutContent>
                 <EntriesTable

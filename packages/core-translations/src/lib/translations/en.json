@@ -961,6 +961,7 @@
     "diffusionLists.numberPlaceholder": "Enter list number...",
     "diffusionLists.comments": "Comments",
     "diffusionLists.commentsPlaceholder": "Enter comments...",
+    "diffusionLists.populateErrorTitle": "Population failed",
     "dashboard.title": "Dashboard",
     "dashboard.description": "Overview of your subscription business",
     "dashboard.totalSubscriptions": "Total Subscriptions",

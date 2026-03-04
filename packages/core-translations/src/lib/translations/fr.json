@@ -961,6 +961,7 @@
     "diffusionLists.numberPlaceholder": "Numéro de la liste...",
     "diffusionLists.comments": "Commentaires",
     "diffusionLists.commentsPlaceholder": "Saisir des commentaires...",
+    "diffusionLists.populateErrorTitle": "La population a échoué",
     "dashboard.title": "Tableau de bord",
     "dashboard.description": "Vue d'ensemble de votre activité d'abonnements",
     "dashboard.totalSubscriptions": "Total abonnements",

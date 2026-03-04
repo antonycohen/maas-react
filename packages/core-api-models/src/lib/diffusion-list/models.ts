@@ -39,6 +39,19 @@ export const diffusionListSchema = z.object({
     pdfDocumentId: z.string().nullable(),
     createdAt: z.string().nullable(),
     updatedAt: z.string().nullable(),
+    metadata: z
+        .object({
+            populateError: z
+                .object({
+                    message: z.string(),
+                    offset: z.number().int(),
+                    occurredAt: z.string(),
+                })
+                .nullable()
+                .optional(),
+        })
+        .nullable()
+        .optional(),
 });
 
 export type DiffusionList = z.infer<typeof diffusionListSchema>;
