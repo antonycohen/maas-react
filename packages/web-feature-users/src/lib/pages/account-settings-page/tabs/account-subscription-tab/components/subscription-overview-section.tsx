@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Subscription } from '@maas/core-api-models';
 import { useCancelSubscriptionAtPeriodEnd, useUncancelSubscription } from '@maas/core-api';
 import { useRefreshSubscriptionStatus } from '@maas/core-store-session';
@@ -9,16 +10,19 @@ import {
     CardHeader,
     CardTitle,
     CardDescription,
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
+    Collapsible,
+    CollapsibleTrigger,
+    CollapsibleContent,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    Label,
+    Textarea,
 } from '@maas/web-components';
+import { ChevronRight } from 'lucide-react';
 import { useTranslation } from '@maas/core-translations';
 import {
     SUBSCRIPTION_STATUS_STYLES,
@@ -39,14 +43,23 @@ const formatDate = (dateStr: string | null): string => {
     });
 };
 
+const CANCEL_REASONS = ['too_expensive', 'not_using', 'missing_features', 'switching_provider', 'other'] as const;
+
+type CancelStep = 'reason' | 'confirm';
+
 export const SubscriptionOverviewSection = ({ subscription, onMutationSuccess }: Props) => {
     const { t } = useTranslation();
     const { refresh } = useRefreshSubscriptionStatus();
+    const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+    const [cancelStep, setCancelStep] = useState<CancelStep>('reason');
+    const [selectedReason, setSelectedReason] = useState('');
+    const [otherReason, setOtherReason] = useState('');
 
     const cancelMutation = useCancelSubscriptionAtPeriodEnd({
         onSuccess: async () => {
             await refresh();
             onMutationSuccess?.();
+            closeCancelDialog();
         },
     });
 
@@ -56,6 +69,28 @@ export const SubscriptionOverviewSection = ({ subscription, onMutationSuccess }:
             onMutationSuccess?.();
         },
     });
+
+    const closeCancelDialog = () => {
+        setCancelDialogOpen(false);
+        setCancelStep('reason');
+        setSelectedReason('');
+        setOtherReason('');
+    };
+
+    const handleReasonNext = () => {
+        setCancelStep('confirm');
+    };
+
+    const handleConfirmCancel = () => {
+        if (!subscription) return;
+        const reason = selectedReason === 'other' ? otherReason : selectedReason;
+        cancelMutation.mutate({
+            subscriptionId: subscription.id,
+            cancelReason: reason,
+        });
+    };
+
+    const isReasonValid = selectedReason !== '' && (selectedReason !== 'other' || otherReason.trim() !== '');
 
     if (!subscription) {
         return (
@@ -73,7 +108,7 @@ export const SubscriptionOverviewSection = ({ subscription, onMutationSuccess }:
     const statusKey = SUBSCRIPTION_STATUS_TRANSLATION_KEYS[status];
     const statusLabel = statusKey ? t(statusKey) : status;
     const isCanceling = subscription.cancelAtPeriodEnd;
-    console.log(subscription, formatDate(subscription.cancelAt));
+
     return (
         <Card className="rounded-2xl">
             <CardHeader>
@@ -146,36 +181,115 @@ export const SubscriptionOverviewSection = ({ subscription, onMutationSuccess }:
                         </Button>
                     </div>
                 ) : (
-                    <div className="mt-4 flex flex-col gap-3">
-                        <p className="text-sm text-gray-500">{t('account.subscription.autoRenewal')}</p>
-                        <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                                <Button variant="outline" className="text-red-600 hover:text-red-700">
-                                    {t('account.subscription.cancelButton')}
-                                </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle>{t('account.subscription.cancelDialogTitle')}</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                        {t('account.subscription.cancelDialogDescription')}
-                                    </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel>
-                                        {t('account.subscription.cancelDialogCancel')}
-                                    </AlertDialogCancel>
-                                    <AlertDialogAction
-                                        className="bg-red-600 hover:bg-red-700"
-                                        onClick={() => cancelMutation.mutate(subscription.id)}
-                                        disabled={cancelMutation.isPending}
-                                    >
-                                        {t('account.subscription.cancelDialogConfirm')}
-                                    </AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
-                    </div>
+                    <Collapsible className="mt-6 border-t pt-4">
+                        <CollapsibleTrigger className="flex w-full items-center gap-2 text-sm text-gray-500 transition-colors hover:text-gray-700 [&[data-state=open]>svg]:rotate-90">
+                            <ChevronRight className="h-4 w-4 transition-transform" />
+                            {t('account.subscription.manageSubscription')}
+                        </CollapsibleTrigger>
+                        <CollapsibleContent className="pt-4">
+                            <p className="mb-3 text-sm text-gray-500">{t('account.subscription.autoRenewal')}</p>
+                            <button
+                                className="text-sm text-red-500 underline underline-offset-2 transition-colors hover:text-red-600"
+                                onClick={() => setCancelDialogOpen(true)}
+                            >
+                                {t('account.subscription.cancelButton')}
+                            </button>
+
+                            <Dialog
+                                open={cancelDialogOpen}
+                                onOpenChange={(open) => {
+                                    if (!open) closeCancelDialog();
+                                }}
+                            >
+                                <DialogContent>
+                                    {cancelStep === 'reason' ? (
+                                        <>
+                                            <DialogHeader>
+                                                <DialogTitle>{t('account.subscription.cancelReasonTitle')}</DialogTitle>
+                                                <DialogDescription>
+                                                    {t('account.subscription.cancelReasonDescription')}
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <div className="flex flex-col gap-2 py-4">
+                                                {CANCEL_REASONS.map((reason) => (
+                                                    <label
+                                                        key={reason}
+                                                        className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors ${
+                                                            selectedReason === reason
+                                                                ? 'border-primary bg-primary/5'
+                                                                : 'border-gray-200 hover:border-gray-300'
+                                                        }`}
+                                                    >
+                                                        <input
+                                                            type="radio"
+                                                            name="cancelReason"
+                                                            value={reason}
+                                                            checked={selectedReason === reason}
+                                                            onChange={(e) => setSelectedReason(e.target.value)}
+                                                            className="accent-primary"
+                                                        />
+                                                        <span className="text-sm">
+                                                            {t(`account.subscription.cancelReasons.${reason}`)}
+                                                        </span>
+                                                    </label>
+                                                ))}
+                                                {selectedReason === 'other' && (
+                                                    <div className="mt-2">
+                                                        <Label htmlFor="otherReason">
+                                                            {t('account.subscription.cancelReasonOtherLabel')}
+                                                        </Label>
+                                                        <Textarea
+                                                            id="otherReason"
+                                                            value={otherReason}
+                                                            onChange={(e) => setOtherReason(e.target.value)}
+                                                            placeholder={t(
+                                                                'account.subscription.cancelReasonOtherPlaceholder'
+                                                            )}
+                                                            className="mt-1"
+                                                            rows={3}
+                                                        />
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <DialogFooter>
+                                                <Button variant="outline" onClick={closeCancelDialog}>
+                                                    {t('account.subscription.cancelDialogCancel')}
+                                                </Button>
+                                                <Button
+                                                    variant="destructive"
+                                                    onClick={handleReasonNext}
+                                                    disabled={!isReasonValid}
+                                                >
+                                                    {t('account.subscription.cancelReasonNext')}
+                                                </Button>
+                                            </DialogFooter>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <DialogHeader>
+                                                <DialogTitle>{t('account.subscription.cancelDialogTitle')}</DialogTitle>
+                                                <DialogDescription>
+                                                    {t('account.subscription.cancelDialogDescription')}
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <DialogFooter>
+                                                <Button variant="outline" onClick={() => setCancelStep('reason')}>
+                                                    {t('account.subscription.cancelDialogBack')}
+                                                </Button>
+                                                <Button
+                                                    variant="destructive"
+                                                    onClick={handleConfirmCancel}
+                                                    disabled={cancelMutation.isPending}
+                                                >
+                                                    {t('account.subscription.cancelDialogConfirm')}
+                                                </Button>
+                                            </DialogFooter>
+                                        </>
+                                    )}
+                                </DialogContent>
+                            </Dialog>
+                        </CollapsibleContent>
+                    </Collapsible>
                 )}
             </CardContent>
         </Card>

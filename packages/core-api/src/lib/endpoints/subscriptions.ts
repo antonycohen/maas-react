@@ -47,8 +47,10 @@ export class SubscriptionsEndpoint {
      * Cancel a subscription at period end
      * POST /api/v1/pms/subscriptions/{subscriptionId}/cancel
      */
-    async cancelSubscriptionAtPeriodEnd(subscriptionId: string): Promise<Subscription> {
-        return this.client.post<Subscription>(`${BASE_PATH}/${subscriptionId}/cancel`, {});
+    async cancelSubscriptionAtPeriodEnd(subscriptionId: string, cancelReason?: string): Promise<Subscription> {
+        return this.client.post<Subscription>(`${BASE_PATH}/${subscriptionId}/cancel`, {
+            ...(cancelReason && { cancelReason }),
+        });
     }
 
     /**
