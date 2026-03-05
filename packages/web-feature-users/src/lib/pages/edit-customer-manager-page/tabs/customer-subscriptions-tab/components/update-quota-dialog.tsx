@@ -90,7 +90,7 @@ export const UpdateQuotaDialog = ({ open, onOpenChange, customerId, quota }: Pro
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="add">{t('customers.quotas.operationAdd')}</SelectItem>
-                                <SelectItem value="consume">{t('customers.quotas.operationConsume')}</SelectItem>
+                                <SelectItem value="remove">{t('customers.quotas.operationConsume')}</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>

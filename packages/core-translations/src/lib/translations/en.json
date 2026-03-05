@@ -542,7 +542,7 @@
     "customers.quotas.amount": "Amount",
     "customers.quotas.operation": "Operation",
     "customers.quotas.operationAdd": "Add",
-    "customers.quotas.operationConsume": "Consume",
+    "customers.quotas.operationConsume": "Remove",
     "customers.quotas.description_field": "Description",
     "customers.quotas.periodStart": "Period start",
     "customers.quotas.periodEnd": "Period end",
