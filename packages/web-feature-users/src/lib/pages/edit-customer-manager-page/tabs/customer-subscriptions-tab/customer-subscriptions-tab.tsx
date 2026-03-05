@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useOutletContext } from 'react-router';
 import { useGetSubscriptions, useGetInvoices, useGetCustomerQuotas, useRenewSubscription } from '@maas/core-api';
 import { Quota, Subscription } from '@maas/core-api-models';
@@ -66,7 +66,7 @@ const formatFeatureKey = (key: string): string => {
 };
 
 export const CustomerSubscriptionsTab = () => {
-    const { customerId } = useOutletContext<EditCustomerOutletContext>();
+    const { customerId, customer } = useOutletContext<EditCustomerOutletContext>();
     const { t } = useTranslation();
     const [showCreateSubscription, setShowCreateSubscription] = useState(false);
     const [showChangeSubscription, setShowChangeSubscription] = useState(false);
@@ -140,6 +140,12 @@ export const CustomerSubscriptionsTab = () => {
             .filter((id): id is string => typeof id === 'string')
     );
     const invoices = invoicesData?.data ?? [];
+
+    const deliveryCountry = useMemo(() => {
+        const meta = customer?.metadata as Record<string, unknown> | null;
+        const delivery = meta?.deliveryAddress as Record<string, unknown> | null;
+        return (delivery?.country as string) ?? null;
+    }, [customer?.metadata]);
 
     return (
         <LayoutContent>
@@ -519,6 +525,7 @@ export const CustomerSubscriptionsTab = () => {
                 open={showCreateSubscription}
                 onOpenChange={setShowCreateSubscription}
                 customerId={customerId}
+                deliveryCountry={deliveryCountry}
             />
 
             {activeSubscription && (
@@ -526,6 +533,7 @@ export const CustomerSubscriptionsTab = () => {
                     open={showChangeSubscription}
                     onOpenChange={setShowChangeSubscription}
                     customerId={customerId}
+                    deliveryCountry={deliveryCountry}
                     mode="change"
                     subscriptionId={activeSubscription.id}
                     currentPlanId={activeSubscription.plan?.id ?? null}

@@ -18,7 +18,15 @@ import {
 import { Download, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
-import { INVOICE_STATUS_STYLES, INVOICE_STATUS_TRANSLATION_KEYS } from '../../../../../constants/status-styles';
+import { INVOICE_STATUS_STYLES } from '../../../../../constants/status-styles';
+
+const USER_INVOICE_STATUS_LABELS: Record<string, string> = {
+    paid: 'Payée',
+    open: 'À payer',
+    draft: 'Brouillon',
+    void: 'Annulée',
+    uncollectible: 'Non payée',
+};
 
 const numberFormatCache = new Map<string, Intl.NumberFormat>();
 const getCurrencyFormatter = (locale: string, currency: string): Intl.NumberFormat => {
@@ -106,8 +114,7 @@ export const InvoiceListSection = ({ invoices }: Props) => {
                         {invoices.map((invoice) => {
                             const status = invoice.status ?? 'draft';
                             const statusStyle = INVOICE_STATUS_STYLES[status] ?? INVOICE_STATUS_STYLES.draft;
-                            const statusKey = INVOICE_STATUS_TRANSLATION_KEYS[status];
-                            const statusLabel = statusKey ? t(statusKey) : status;
+                            const statusLabel = USER_INVOICE_STATUS_LABELS[status] ?? status;
                             const canPay = status === 'open' || status === 'uncollectible';
 
                             return (

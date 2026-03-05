@@ -28,7 +28,7 @@ export class InvoicesEndpoint {
     async getMyInvoices(filters?: GetMyInvoicesFilter): Promise<InvoiceListResponse> {
         return this.client.getById<InvoiceListResponse>(ME_PATH, undefined, {
             params: {
-                ...(filters?.status && { status: filters.status }),
+                ...(filters?.status && { 'status[]': filters.status }),
                 ...(filters?.cursor && { cursor: filters.cursor }),
             },
         });

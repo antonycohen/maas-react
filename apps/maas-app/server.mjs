@@ -10,7 +10,7 @@ app.use(express.static("build/client"));
 
 // ISR-like cache: serves stale HTML instantly, revalidates in background
 const ssrCache = new Map();
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+const CACHE_TTL_MS = 60 * 1000; // 1 minute — aligned with route Cache-Control max-age
 const ISR_PATHS = new Set(["/"]);
 const revalidating = new Set();
 
@@ -33,7 +33,7 @@ app.use((req, res, next) => {
                     console.log(`[ISR] Rebuilt and cached ${req.path} (${result.body.length} bytes)`);
                 }
                 res.set("X-Cache", "PURGE");
-                sendCached(res, result);
+                sendCached(res, result, 0);
             })
             .catch((err) => {
                 console.error(`[ISR] Purge render failed for ${req.path}:`, err);
@@ -44,21 +44,24 @@ app.use((req, res, next) => {
     const cached = ssrCache.get(req.path);
 
     if (cached) {
-        const age = Date.now() - cached.timestamp;
-        const status = age < CACHE_TTL_MS ? "HIT" : "STALE";
-        console.log(`[ISR] ${req.path} — ${status} (${Math.round(age / 1000)}s old)`);
+        const ageMs = Date.now() - cached.timestamp;
+        const ageSec = Math.round(ageMs / 1000);
+        const status = ageMs < CACHE_TTL_MS ? "HIT" : "STALE";
+        console.log(`[ISR] ${req.path} — ${status} (${ageSec}s old)`);
 
         res.set("X-Cache", status);
-        sendCached(res, cached);
+        sendCached(res, cached, ageSec);
 
         // If stale, revalidate in background
-        if (age >= CACHE_TTL_MS && !revalidating.has(req.path)) {
+        if (ageMs >= CACHE_TTL_MS && !revalidating.has(req.path)) {
             revalidating.add(req.path);
             ssrRender(req)
                 .then((result) => {
-                    if (result) {
+                    if (result.statusCode === 200) {
                         ssrCache.set(req.path, { ...result, timestamp: Date.now() });
                         console.log(`[ISR] Revalidated ${req.path}`);
+                    } else {
+                        console.warn(`[ISR] Revalidation returned ${result.statusCode} for ${req.path} — keeping old cache`);
                     }
                 })
                 .catch((err) => console.error(`[ISR] Revalidation failed:`, err))
@@ -76,7 +79,7 @@ app.use((req, res, next) => {
                 console.log(`[ISR] Cached ${req.path} (${result.body.length} bytes)`);
             }
             res.set("X-Cache", "MISS");
-            sendCached(res, result);
+            sendCached(res, result, 0);
         })
         .catch((err) => {
             console.error(`[ISR] Render failed for ${req.path}:`, err);
@@ -84,9 +87,13 @@ app.use((req, res, next) => {
         });
 });
 
-function sendCached(res, cached) {
+function sendCached(res, cached, ageSec) {
     for (const [key, value] of Object.entries(cached.headers)) {
         res.set(key, value);
+    }
+    // Tell browsers/CDNs how old this response actually is
+    if (ageSec > 0) {
+        res.set("Age", String(ageSec));
     }
     res.status(cached.statusCode).send(cached.body);
 }

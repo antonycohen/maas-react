@@ -10,6 +10,8 @@ import {
     useUpgradeSubscription,
 } from '@maas/core-api';
 import {
+    Alert,
+    AlertDescription,
     Badge,
     Button,
     Dialog,
@@ -28,7 +30,7 @@ import {
     TooltipTrigger,
 } from '@maas/web-components';
 import { cn } from '@maas/core-utils';
-import { IconArrowLeft, IconCheck, IconInfoCircle } from '@tabler/icons-react';
+import { IconAlertTriangle, IconArrowLeft, IconCheck, IconInfoCircle } from '@tabler/icons-react';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
 
@@ -266,6 +268,7 @@ type Props = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     customerId: string;
+    deliveryCountry?: string | null;
     mode?: 'create' | 'change';
     subscriptionId?: string;
     currentPlanId?: string | null;
@@ -277,6 +280,7 @@ export const CreateSubscriptionDialog = ({
     open,
     onOpenChange,
     customerId,
+    deliveryCountry,
     mode = 'create',
     subscriptionId,
     currentPlanId,
@@ -352,7 +356,7 @@ export const CreateSubscriptionDialog = ({
         const priceIds = [basePrice.priceId];
 
         for (const addon of selectedPlan.addons) {
-            if (addon.category === 'addon' && addonToggles[addon.productId]) {
+            if ((addon.category === 'addon' || addon.category === 'shipping') && addonToggles[addon.productId]) {
                 const addonPrice = addon.prices.find((p) => p.interval === selectedInterval);
                 if (addonPrice) priceIds.push(addonPrice.priceId);
             }
@@ -378,13 +382,33 @@ export const CreateSubscriptionDialog = ({
         }
     };
 
+    // Address validation — only for paper plans (plans that have a shipping addon)
+    const isPaperPlan = useMemo(() => {
+        if (!selectedPlan) return false;
+        return selectedPlan.addons.some((a) => a.category === 'shipping');
+    }, [selectedPlan]);
+
+    const hasShippingAddonSelected = useMemo(() => {
+        if (!selectedPlan) return false;
+        return selectedPlan.addons.some((a) => a.category === 'shipping' && addonToggles[a.productId]);
+    }, [selectedPlan, addonToggles]);
+
+    const hasNoDeliveryAddress = !deliveryCountry || deliveryCountry.trim() === '';
+    const isDeliveryHorsMetropole = !!deliveryCountry && deliveryCountry.toUpperCase() !== 'FR';
+    const isDeliveryMetropole = !!deliveryCountry && deliveryCountry.toUpperCase() === 'FR';
+
+    const isMissingAddress = isPaperPlan && hasNoDeliveryAddress;
+    const isHorsMetropoleBlocked = isPaperPlan && isDeliveryHorsMetropole && !hasShippingAddonSelected;
+    const isMetropoleWithHorsMetro = isPaperPlan && isDeliveryMetropole && hasShippingAddonSelected;
+    const isAddressBlocked = isMissingAddress || isHorsMetropoleBlocked || isMetropoleWithHorsMetro;
+
     // Calculate total
     const totalCents = useMemo(() => {
         if (!selectedPlan || !selectedInterval) return 0;
         const base = selectedPlan.prices.find((p) => p.interval === selectedInterval)?.unitAmountInCents ?? 0;
         let addonsTotal = 0;
         for (const addon of selectedPlan.addons) {
-            if (addon.category === 'addon' && addonToggles[addon.productId]) {
+            if ((addon.category === 'addon' || addon.category === 'shipping') && addonToggles[addon.productId]) {
                 addonsTotal += addon.prices.find((p) => p.interval === selectedInterval)?.unitAmountInCents ?? 0;
             }
         }
@@ -503,6 +527,30 @@ export const CreateSubscriptionDialog = ({
                             {t('common.back')}
                         </button>
 
+                        {/* Address validation warnings (paper plans only) */}
+                        {isMissingAddress && (
+                            <Alert variant="destructive">
+                                <IconAlertTriangle className="h-4 w-4" />
+                                <AlertDescription>
+                                    {t('customers.subscriptions.missingDeliveryAddress')}
+                                </AlertDescription>
+                            </Alert>
+                        )}
+                        {isHorsMetropoleBlocked && (
+                            <Alert variant="destructive">
+                                <IconAlertTriangle className="h-4 w-4" />
+                                <AlertDescription>{t('customers.subscriptions.horsMetropoleBlocked')}</AlertDescription>
+                            </Alert>
+                        )}
+                        {isMetropoleWithHorsMetro && (
+                            <Alert variant="destructive">
+                                <IconAlertTriangle className="h-4 w-4" />
+                                <AlertDescription>
+                                    {t('customers.subscriptions.metropoleWithHorsMetro')}
+                                </AlertDescription>
+                            </Alert>
+                        )}
+
                         {/* Plan name */}
                         <div>
                             <h4 className="text-sm font-semibold">
@@ -537,12 +585,13 @@ export const CreateSubscriptionDialog = ({
                             </div>
                         </div>
 
-                        {/* Addons */}
-                        {selectedPlan.addons.filter((a) => a.category === 'addon').length > 0 && (
+                        {/* Addons & Shipping */}
+                        {selectedPlan.addons.filter((a) => a.category === 'addon' || a.category === 'shipping').length >
+                            0 && (
                             <div className="flex flex-col gap-2">
                                 <Label className="text-sm font-medium">{t('customers.subscriptions.addons')}</Label>
                                 {selectedPlan.addons
-                                    .filter((a) => a.category === 'addon')
+                                    .filter((a) => a.category === 'addon' || a.category === 'shipping')
                                     .map((addon) => {
                                         const addonPrice = addon.prices.find((p) => p.interval === selectedInterval);
                                         const checked = addonToggles[addon.productId] ?? false;
@@ -624,7 +673,11 @@ export const CreateSubscriptionDialog = ({
                                     </div>
                                 )}
                                 {selectedPlan.addons
-                                    .filter((a) => a.category === 'addon' && addonToggles[a.productId])
+                                    .filter(
+                                        (a) =>
+                                            (a.category === 'addon' || a.category === 'shipping') &&
+                                            addonToggles[a.productId]
+                                    )
                                     .map((addon) => {
                                         const price = addon.prices.find((p) => p.interval === selectedInterval);
                                         return (
@@ -668,7 +721,7 @@ export const CreateSubscriptionDialog = ({
                             </Button>
                             <Button
                                 onClick={handleSubmit}
-                                disabled={isPending || !selectedInterval}
+                                disabled={isPending || !selectedInterval || isAddressBlocked}
                                 isLoading={isPending}
                             >
                                 {isChangeMode

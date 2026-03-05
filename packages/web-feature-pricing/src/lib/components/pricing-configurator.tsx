@@ -1,10 +1,11 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { cn } from '@maas/core-utils';
-import { IconMapPin, IconWorld } from '@tabler/icons-react';
+import { IconAlertTriangle, IconMapPin, IconWorld } from '@tabler/icons-react';
 import { useOAuthStore } from '@maas/core-store-oauth';
 import { usePublicRoutes } from '@maas/core-routes';
-import { ConfirmActionDialog } from '@maas/web-components';
+import { useGetMyCustomer } from '@maas/core-api';
+import { Alert, AlertDescription, ConfirmActionDialog } from '@maas/web-components';
 import type { BillingInterval, PricingPlan } from '../hooks/use-pricing-data';
 import { usePricingStore } from '../store/pricing-store';
 import { PricingSummary } from './pricing-summary';
@@ -37,6 +38,8 @@ interface PricingConfiguratorProps {
 export function PricingConfigurator({ plan }: PricingConfiguratorProps) {
     const selectedInterval = usePricingStore((s) => s.selectedInterval);
     const setSelectedInterval = usePricingStore((s) => s.setSelectedInterval);
+    const addonToggles = usePricingStore((s) => s.addonToggles);
+    const toggleAddon = usePricingStore((s) => s.toggleAddon);
     const shippingSelections = usePricingStore((s) => s.shippingSelections);
     const setShipping = usePricingStore((s) => s.setShipping);
     const accessToken = useOAuthStore((s) => s.accessToken);
@@ -54,13 +57,47 @@ export function PricingConfigurator({ plan }: PricingConfiguratorProps) {
         }
     }, [plan.planId, plan.prices, selectedInterval, setSelectedInterval]);
 
+    // Pre-toggle addons that have default_checked in their metadata
+    useEffect(() => {
+        for (const addon of plan.addons) {
+            if (
+                addon.category === 'addon' &&
+                (addon.metadata?.defaultChecked === true || addon.metadata?.defaultChecked === 'true') &&
+                !addonToggles[addon.productId]
+            ) {
+                toggleAddon(addon.productId, true);
+            }
+        }
+         
+    }, [plan.planId]);
+
     const [showShippingConfirm, setShowShippingConfirm] = useState(false);
+
+    // Fetch customer data to check existing delivery address
+    const { data: customer } = useGetMyCustomer({ metadata: null }, { enabled: !!accessToken, retry: false });
 
     const isDigitalPlan = plan.addons.length === 0;
 
     const shippingAddon = plan.addons.find((a) => a.category === 'shipping');
     const shippingValue = shippingSelections[plan.planId] ?? SHIPPING_METRO;
     const isInternational = shippingAddon ? shippingValue === shippingAddon.productId : false;
+
+    // Address/shipping mismatch validation (only if customer already has a delivery address)
+    const customerDeliveryCountry = useMemo(() => {
+        const meta = customer?.metadata as Record<string, unknown> | null;
+        const delivery = meta?.deliveryAddress as Record<string, unknown> | null;
+        return (delivery?.country as string) ?? null;
+    }, [customer?.metadata]);
+
+    const hasExistingAddress = !!customerDeliveryCountry && customerDeliveryCountry.trim() !== '';
+    const isCustomerHorsMetropole = hasExistingAddress && customerDeliveryCountry.toUpperCase() !== 'FR';
+    const isCustomerMetropole = hasExistingAddress && customerDeliveryCountry.toUpperCase() === 'FR';
+
+    // Mismatch: customer has FR address but selected Hors Métropole, or vice versa
+    const isShippingMismatch =
+        !isDigitalPlan &&
+        hasExistingAddress &&
+        ((isCustomerMetropole && isInternational) || (isCustomerHorsMetropole && !isInternational));
 
     const proceedToSubscribe = () => {
         if (accessToken) {
@@ -71,7 +108,8 @@ export function PricingConfigurator({ plan }: PricingConfiguratorProps) {
     };
 
     const handleSubscribe = () => {
-        if (!isDigitalPlan) {
+        if (!isDigitalPlan && !hasExistingAddress) {
+            // No address on file — show confirmation dialog so user double-checks their shipping choice
             setShowShippingConfirm(true);
         } else {
             proceedToSubscribe();
@@ -186,6 +224,18 @@ export function PricingConfigurator({ plan }: PricingConfiguratorProps) {
                             </div>
                         )}
 
+                        {/* Shipping mismatch alert */}
+                        {isShippingMismatch && (
+                            <Alert variant="destructive">
+                                <IconAlertTriangle className="h-4 w-4" />
+                                <AlertDescription>
+                                    {isCustomerMetropole
+                                        ? "Votre adresse de livraison est en France métropolitaine. Veuillez sélectionner l'option « Métropole »."
+                                        : "Votre adresse de livraison est hors de France métropolitaine. Veuillez sélectionner l'option « Hors Métropole »."}
+                                </AlertDescription>
+                            </Alert>
+                        )}
+
                         {/* Savings hint */}
                         {savingsText && <p className="text-success mt-1 text-sm font-medium">{savingsText}</p>}
                     </div>
@@ -195,9 +245,15 @@ export function PricingConfigurator({ plan }: PricingConfiguratorProps) {
                         <PricingSummary containerClassName="lg:w-72" plan={plan}>
                             <button
                                 onClick={handleSubscribe}
-                                className="bg-brand-primary hover:bg-brand-primary/90 flex h-11 w-full cursor-pointer items-center justify-center rounded-lg px-6 text-sm font-semibold text-white transition-colors"
+                                disabled={isShippingMismatch}
+                                className={cn(
+                                    'flex h-11 w-full items-center justify-center rounded-lg px-6 text-sm font-semibold text-white transition-colors',
+                                    isShippingMismatch
+                                        ? 'cursor-not-allowed bg-gray-400'
+                                        : 'bg-brand-primary hover:bg-brand-primary/90 cursor-pointer'
+                                )}
                             >
-                                Je m&rsquo;abonne
+                                {`Je m'abonne`}
                             </button>
                         </PricingSummary>
                     </div>
@@ -211,12 +267,12 @@ export function PricingConfigurator({ plan }: PricingConfiguratorProps) {
                     setShowShippingConfirm(false);
                     proceedToSubscribe();
                 }}
-                title="Vérifiez votre option de livraison"
-                description={`Vous avez sélectionné la livraison en ${isInternational ? 'Hors Métropole' : 'France Métropolitaine'}. Ce choix détermine la zone d'expédition de vos magazines et ne pourra pas être modifié ultérieurement. Si vous résidez hors de France métropolitaine, assurez-vous d'avoir sélectionné l'option « Hors Métropole » avant de continuer.`}
+                title="Confirmez votre zone de livraison"
+                description={`Vous avez sélectionné : ${isInternational ? '« Hors Métropole »' : '« France Métropolitaine »'}. Ce choix ne pourra pas être modifié après souscription.`}
                 confirmLabel="Confirmer et continuer"
                 cancelLabel="Modifier mon choix"
                 variant="default"
-                countdown={5}
+                countdown={0}
             />
         </div>
     );
