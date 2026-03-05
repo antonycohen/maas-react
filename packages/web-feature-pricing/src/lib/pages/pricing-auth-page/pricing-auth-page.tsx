@@ -16,14 +16,14 @@ export const PricingAuthPage = () => {
         if (!selectedPlanId) {
             navigate(publicRoutes.pricing);
         }
-    }, [selectedPlanId, navigate]);
+    }, [selectedPlanId, navigate, publicRoutes.pricing]);
 
     // If already logged in, skip to paiement
     useEffect(() => {
         if (accessToken) {
             navigate(publicRoutes.pricingPaiement, { replace: true });
         }
-    }, [accessToken, navigate]);
+    }, [accessToken, navigate, publicRoutes.pricingPaiement]);
 
     if (!selectedPlanId || accessToken) {
         return null;

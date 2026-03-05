@@ -24,13 +24,13 @@ export const PricingPaiementPage = () => {
         if (!isLoading && !selectedPlanId) {
             navigate(publicRoutes.pricing);
         }
-    }, [isLoading, selectedPlanId, navigate]);
+    }, [isLoading, selectedPlanId, navigate, publicRoutes.pricing]);
 
     useEffect(() => {
         if (isHydrated && !accessToken) {
             navigate(publicRoutes.pricingAuth);
         }
-    }, [isHydrated, accessToken, navigate]);
+    }, [isHydrated, accessToken, navigate, publicRoutes.pricingAuth]);
 
     if (!isHydrated || isLoading || !selectedPlan || !accessToken) {
         return null;

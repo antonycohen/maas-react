@@ -17,7 +17,7 @@ export const PricingAdressePage = () => {
         if (isHydrated && !accessToken) {
             navigate(publicRoutes.pricingAuth);
         }
-    }, [isHydrated, accessToken, navigate]);
+    }, [isHydrated, accessToken, navigate, publicRoutes.pricingAuth]);
 
     if (!isHydrated || !accessToken) {
         return null;

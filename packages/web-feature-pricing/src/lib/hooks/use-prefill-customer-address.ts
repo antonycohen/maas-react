@@ -8,8 +8,6 @@ export function usePrefillCustomerAddress() {
     const accessToken = useOAuthStore((s) => s.accessToken);
     const setDeliveryAddress = usePricingStore((s) => s.setDeliveryAddress);
     const setBillingAddress = usePricingStore((s) => s.setBillingAddress);
-    const deliveryAddress = usePricingStore((s) => s.deliveryAddress);
-    const billingAddress = usePricingStore((s) => s.billingAddress);
 
     const [searchParams] = useSearchParams();
     const sessionId = searchParams.get('session_id');
@@ -59,7 +57,7 @@ export function usePrefillCustomerAddress() {
             setBillingAddress(DEFAULT_ADDRESS);
             hasPrefilled.current = true;
         }
-    }, [isError]);
+    }, [isError, setDeliveryAddress, setBillingAddress]);
 
     // Prefill from checkout session address (no country)
     useEffect(() => {
@@ -79,7 +77,7 @@ export function usePrefillCustomerAddress() {
         setDeliveryAddress(sessionAddr);
         setBillingAddress(sessionAddr);
         hasPrefilled.current = true;
-    }, [sessionAddress]);
+    }, [sessionAddress, setDeliveryAddress, setBillingAddress]);
 
     // Fallback: prefill from customer data (only if session address didn't fill)
     useEffect(() => {
@@ -135,11 +133,11 @@ export function usePrefillCustomerAddress() {
         }
 
         hasPrefilled.current = true;
-    }, [isSessionError, customer, deliveryAddress, billingAddress]);
-    const isPrefilling =
-        !hasPrefilled.current &&
-        !!accessToken &&
-        ((!!sessionId && !sessionAddress && !isSessionError) || (!sessionId && isLoading));
+    }, [sessionId, isSessionError, customer, setDeliveryAddress, setBillingAddress]);
+
+    // Derive loading state from data/query states only (no ref access during render)
+    const hasData = !!sessionAddress || !!customer || isError;
+    const isPrefilling = !!accessToken && !hasData && ((!!sessionId && !isSessionError) || (!sessionId && isLoading));
 
     return { customer, isLoading: isPrefilling, isError };
 }

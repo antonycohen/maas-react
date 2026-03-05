@@ -24,7 +24,7 @@ export const PricingInformationsPage = () => {
         if (!isLoading && !selectedPlanId) {
             navigate(publicRoutes.pricing);
         }
-    }, [isLoading, selectedPlanId, navigate]);
+    }, [isLoading, selectedPlanId, navigate, publicRoutes.pricing]);
 
     if (isLoading || !selectedPlan) {
         return null;
