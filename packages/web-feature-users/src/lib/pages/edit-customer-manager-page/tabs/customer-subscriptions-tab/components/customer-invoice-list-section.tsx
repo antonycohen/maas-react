@@ -21,6 +21,11 @@ import {
     DropdownMenuTrigger,
     Input,
     Label,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
     Table,
     TableBody,
     TableCell,
@@ -35,6 +40,16 @@ import { useTranslation } from '@maas/core-translations';
 import { INVOICE_STATUS_STYLES, INVOICE_STATUS_TRANSLATION_KEYS } from '../../../../../constants/status-styles';
 
 type PaymentMethod = 'card' | 'cheque' | 'virement' | 'prelevement' | 'bon';
+
+const PAYMENT_METHODS: PaymentMethod[] = ['card', 'cheque', 'virement', 'prelevement', 'bon'];
+
+const PAYMENT_METHOD_TRANSLATION_KEYS: Record<PaymentMethod, string> = {
+    card: 'customers.subscriptions.paymentMethodCard',
+    cheque: 'customers.subscriptions.paymentMethodCheque',
+    virement: 'customers.subscriptions.paymentMethodVirement',
+    prelevement: 'customers.subscriptions.paymentMethodPrelevement',
+    bon: 'customers.subscriptions.paymentMethodBon',
+};
 
 const numberFormatCache = new Map<string, Intl.NumberFormat>();
 const getCurrencyFormatter = (locale: string, currency: string): Intl.NumberFormat => {
@@ -76,13 +91,9 @@ export const CustomerInvoiceListSection = ({
 }: Props) => {
     const { t } = useTranslation();
     const [payingInvoice, setPayingInvoice] = useState<Invoice | null>(null);
+    const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cheque');
     const [payReference, setPayReference] = useState('');
     const [payReferenceError, setPayReferenceError] = useState(false);
-
-    const paymentMethod = payingInvoice
-        ? (((payingInvoice.metadata as Record<string, unknown> | null)?.paymentMethod as PaymentMethod | undefined) ??
-          null)
-        : null;
 
     const { mutate: download, isPending: isDownloading } = useDownloadInvoice({
         onSuccess: (data) => {
@@ -108,19 +119,21 @@ export const CustomerInvoiceListSection = ({
         onSuccess: () => {
             toast.success(t('customers.invoices.paySuccess'));
             setPayingInvoice(null);
+            setPaymentMethod('cheque');
             setPayReference('');
             setPayReferenceError(false);
         },
         onError: () => {
             toast.error(t('customers.invoices.payError'));
             setPayingInvoice(null);
+            setPaymentMethod('cheque');
             setPayReference('');
             setPayReferenceError(false);
         },
     });
 
     const handlePay = () => {
-        if (!payingInvoice || !paymentMethod) return;
+        if (!payingInvoice) return;
 
         if (!payReference.trim()) {
             setPayReferenceError(true);
@@ -289,6 +302,7 @@ export const CustomerInvoiceListSection = ({
                 onOpenChange={(open) => {
                     if (!open) {
                         setPayingInvoice(null);
+                        setPaymentMethod('cheque');
                         setPayReference('');
                         setPayReferenceError(false);
                     }
@@ -300,7 +314,23 @@ export const CustomerInvoiceListSection = ({
                         <DialogDescription>{t('customers.invoices.payConfirmDescription')}</DialogDescription>
                     </DialogHeader>
 
-                    {paymentMethod && (
+                    <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-2">
+                            <Label className="text-sm font-medium">{t('customers.subscriptions.paymentMethod')}</Label>
+                            <Select value={paymentMethod} onValueChange={(v) => setPaymentMethod(v as PaymentMethod)}>
+                                <SelectTrigger>
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {PAYMENT_METHODS.map((method) => (
+                                        <SelectItem key={method} value={method}>
+                                            {t(PAYMENT_METHOD_TRANSLATION_KEYS[method])}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
                         <div className="flex flex-col gap-2">
                             <Label className="text-sm font-medium">
                                 {t(`customers.invoices.payReferenceLabel.${paymentMethod}`)}
@@ -320,13 +350,14 @@ export const CustomerInvoiceListSection = ({
                                 </p>
                             )}
                         </div>
-                    )}
+                    </div>
 
                     <DialogFooter>
                         <Button
                             variant="outline"
                             onClick={() => {
                                 setPayingInvoice(null);
+                                setPaymentMethod('cheque');
                                 setPayReference('');
                                 setPayReferenceError(false);
                             }}

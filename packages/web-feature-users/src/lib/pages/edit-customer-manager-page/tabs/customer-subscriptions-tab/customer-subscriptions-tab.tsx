@@ -20,13 +20,7 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-    Label,
     Progress,
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
     Skeleton,
     Table,
     TableBody,
@@ -71,18 +65,6 @@ const formatFeatureKey = (key: string): string => {
     return key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 };
 
-type PaymentMethod = 'card' | 'cheque' | 'virement' | 'prelevement' | 'bon';
-
-const PAYMENT_METHODS: PaymentMethod[] = ['card', 'cheque', 'virement', 'prelevement', 'bon'];
-
-const PAYMENT_METHOD_TRANSLATION_KEYS: Record<PaymentMethod, string> = {
-    card: 'customers.subscriptions.paymentMethodCard',
-    cheque: 'customers.subscriptions.paymentMethodCheque',
-    virement: 'customers.subscriptions.paymentMethodVirement',
-    prelevement: 'customers.subscriptions.paymentMethodPrelevement',
-    bon: 'customers.subscriptions.paymentMethodBon',
-};
-
 export const CustomerSubscriptionsTab = () => {
     const { customerId } = useOutletContext<EditCustomerOutletContext>();
     const { t } = useTranslation();
@@ -91,13 +73,11 @@ export const CustomerSubscriptionsTab = () => {
     const [viewingSubscriptionId, setViewingSubscriptionId] = useState<string | null>(null);
     const [editingQuota, setEditingQuota] = useState<Quota | null>(null);
     const [showRenewConfirm, setShowRenewConfirm] = useState(false);
-    const [renewPaymentMethod, setRenewPaymentMethod] = useState<PaymentMethod>('card');
 
     const { mutate: renewSubscription, isPending: isRenewing } = useRenewSubscription({
         onSuccess: () => {
             toast.success(t('customers.subscriptions.subscriptionRenewed'));
             setShowRenewConfirm(false);
-            setRenewPaymentMethod('card');
         },
         onError: () => {
             toast.error(t('customers.subscriptions.renewError'));
@@ -573,15 +553,7 @@ export const CustomerSubscriptionsTab = () => {
                 />
             )}
 
-            <Dialog
-                open={showRenewConfirm}
-                onOpenChange={(open) => {
-                    if (!open) {
-                        setRenewPaymentMethod('card');
-                    }
-                    setShowRenewConfirm(open);
-                }}
-            >
+            <Dialog open={showRenewConfirm} onOpenChange={setShowRenewConfirm}>
                 <DialogContent className="sm:max-w-md">
                     <DialogHeader>
                         <DialogTitle>{t('customers.subscriptions.renewConfirmTitle')}</DialogTitle>
@@ -593,25 +565,6 @@ export const CustomerSubscriptionsTab = () => {
                         </DialogDescription>
                     </DialogHeader>
 
-                    <div className="flex flex-col gap-2">
-                        <Label className="text-sm font-medium">{t('customers.subscriptions.paymentMethod')}</Label>
-                        <Select
-                            value={renewPaymentMethod}
-                            onValueChange={(v) => setRenewPaymentMethod(v as PaymentMethod)}
-                        >
-                            <SelectTrigger>
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {PAYMENT_METHODS.map((method) => (
-                                    <SelectItem key={method} value={method}>
-                                        {t(PAYMENT_METHOD_TRANSLATION_KEYS[method])}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
-
                     <DialogFooter>
                         <Button variant="outline" onClick={() => setShowRenewConfirm(false)} disabled={isRenewing}>
                             {t('common.cancel')}
@@ -621,7 +574,6 @@ export const CustomerSubscriptionsTab = () => {
                                 if (activeSubscription) {
                                     renewSubscription({
                                         subscriptionId: activeSubscription.id,
-                                        paymentMethod: renewPaymentMethod,
                                     });
                                 }
                             }}

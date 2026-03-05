@@ -20,11 +20,6 @@ import {
     DialogTitle,
     Checkbox,
     Label,
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
     Separator,
     Skeleton,
     Switch,
@@ -278,18 +273,6 @@ type Props = {
 
 type Step = 'plan' | 'configure';
 
-type PaymentMethod = 'card' | 'cheque' | 'virement' | 'prelevement' | 'bon';
-
-const PAYMENT_METHODS: PaymentMethod[] = ['card', 'cheque', 'virement', 'prelevement', 'bon'];
-
-const PAYMENT_METHOD_TRANSLATION_KEYS: Record<PaymentMethod, string> = {
-    card: 'customers.subscriptions.paymentMethodCard',
-    cheque: 'customers.subscriptions.paymentMethodCheque',
-    virement: 'customers.subscriptions.paymentMethodVirement',
-    prelevement: 'customers.subscriptions.paymentMethodPrelevement',
-    bon: 'customers.subscriptions.paymentMethodBon',
-};
-
 export const CreateSubscriptionDialog = ({
     open,
     onOpenChange,
@@ -308,7 +291,6 @@ export const CreateSubscriptionDialog = ({
     const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
     const [selectedInterval, setSelectedInterval] = useState<BillingInterval | null>(null);
     const [addonToggles, setAddonToggles] = useState<Record<string, boolean>>({});
-    const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
     const [defaultComplete, setDefaultComplete] = useState(false);
 
     const selectedPlan = pricingPlans.find((p) => p.planId === selectedPlanId) ?? null;
@@ -342,7 +324,6 @@ export const CreateSubscriptionDialog = ({
         setSelectedPlanId(null);
         setSelectedInterval(null);
         setAddonToggles({});
-        setPaymentMethod('card');
         setDefaultComplete(false);
     };
 
@@ -382,7 +363,6 @@ export const CreateSubscriptionDialog = ({
                 subscriptionId,
                 data: {
                     priceIds,
-                    paymentMethod,
                     metadata: { manual: true },
                 },
             });
@@ -391,7 +371,6 @@ export const CreateSubscriptionDialog = ({
                 customerId,
                 data: {
                     priceIds,
-                    paymentMethod,
                     defaultComplete,
                     metadata: { manual: true },
                 },
@@ -604,23 +583,6 @@ export const CreateSubscriptionDialog = ({
                         )}
 
                         <Separator />
-
-                        {/* Payment Method */}
-                        <div className="flex flex-col gap-2">
-                            <Label className="text-sm font-medium">{t('customers.subscriptions.paymentMethod')}</Label>
-                            <Select value={paymentMethod} onValueChange={(v) => setPaymentMethod(v as PaymentMethod)}>
-                                <SelectTrigger>
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {PAYMENT_METHODS.map((method) => (
-                                        <SelectItem key={method} value={method}>
-                                            {t(PAYMENT_METHOD_TRANSLATION_KEYS[method])}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
 
                         {/* Activate Now (create mode only) */}
                         {!isChangeMode && (
