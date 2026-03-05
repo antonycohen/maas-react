@@ -939,6 +939,7 @@
     "diffusionLists.createDescription": "Create a new diffusion list.",
     "diffusionLists.namePlaceholder": "Enter diffusion list name...",
     "diffusionLists.manualEntry": "Manual",
+    "diffusionLists.freeEntry": "Free entry",
     "diffusionLists.removeEntry": "Remove entry",
     "diffusionLists.removeEntryPrompt": "Are you sure you want to remove this entry?",
     "diffusionLists.selectType": "Select type...",

@@ -30,7 +30,7 @@ type Props = {
 export const UpdateQuotaDialog = ({ open, onOpenChange, customerId, quota }: Props) => {
     const { t } = useTranslation();
     const [amount, setAmount] = useState(1);
-    const [operation, setOperation] = useState<'consume' | 'add'>('add');
+    const [operation, setOperation] = useState<'remove' | 'add'>('add');
     const [description, setDescription] = useState('');
 
     const { mutate: updateQuota, isPending } = useUpdateQuotaUsage({
@@ -84,7 +84,7 @@ export const UpdateQuotaDialog = ({ open, onOpenChange, customerId, quota }: Pro
                     {/* Operation */}
                     <div className="flex flex-col gap-2">
                         <Label>{t('customers.quotas.operation')}</Label>
-                        <Select value={operation} onValueChange={(v) => setOperation(v as 'consume' | 'add')}>
+                        <Select value={operation} onValueChange={(v) => setOperation(v as 'remove' | 'add')}>
                             <SelectTrigger>
                                 <SelectValue />
                             </SelectTrigger>

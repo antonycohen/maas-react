@@ -939,6 +939,7 @@
     "diffusionLists.createDescription": "Créer une nouvelle liste de diffusion.",
     "diffusionLists.namePlaceholder": "Nom de la liste de diffusion...",
     "diffusionLists.manualEntry": "Manuelle",
+    "diffusionLists.freeEntry": "Entrée gratuite",
     "diffusionLists.removeEntry": "Supprimer l'entrée",
     "diffusionLists.removeEntryPrompt": "Êtes-vous sûr de vouloir supprimer cette entrée ?",
     "diffusionLists.selectType": "Sélectionner le type...",

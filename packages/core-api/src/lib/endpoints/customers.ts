@@ -38,7 +38,7 @@ export interface UpdateMyCustomerData {
 export interface UpdateQuotaUsageData {
     featureKey: string;
     amount: number;
-    operation: 'consume' | 'add';
+    operation: 'remove' | 'add';
     description?: string;
 }
 

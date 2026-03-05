@@ -85,8 +85,9 @@ export function useEntriesColumns(options?: {
         },
         {
             accessorKey: 'isManual',
-            header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.manual')} />,
-            cell: ({ row }) => (row.original.isManual ? <Badge variant="outline">{t('field.manual')}</Badge> : null),
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('diffusionLists.freeEntry')} />,
+            cell: ({ row }) =>
+                row.original.isManual ? <Badge variant="outline">{t('diffusionLists.freeEntry')}</Badge> : null,
             enableSorting: false,
         },
     ];

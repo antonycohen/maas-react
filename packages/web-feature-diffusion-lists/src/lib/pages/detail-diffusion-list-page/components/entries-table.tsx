@@ -69,7 +69,7 @@ export const EntriesTable = ({ diffusionListId, isDraft, onAddEntry }: Props) =>
                         {
                             columnId: 'isManual',
                             queryParamName: 'isManual',
-                            title: t('field.manual'),
+                            title: t('diffusionLists.freeEntry'),
                             options: [
                                 { label: t('common.yes'), value: 'true' },
                                 { label: t('common.no'), value: 'false' },
