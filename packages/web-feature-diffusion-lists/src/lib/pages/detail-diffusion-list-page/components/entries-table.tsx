@@ -1,8 +1,16 @@
 import { useGetDiffusionListEntries, useRemoveDiffusionListEntry } from '@maas/core-api';
 import { DiffusionListEntry } from '@maas/core-api-models';
-import { Button, ConfirmActionDialog } from '@maas/web-components';
+import {
+    Badge,
+    Button,
+    ConfirmActionDialog,
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from '@maas/web-components';
 import { Collection } from '@maas/web-collection';
-import { IconPlus } from '@tabler/icons-react';
+import { IconAlertTriangle, IconPlus } from '@tabler/icons-react';
 import { useTranslation } from '@maas/core-translations';
 import { toast } from 'sonner';
 import { useState } from 'react';
@@ -17,6 +25,7 @@ interface Props {
 export const EntriesTable = ({ diffusionListId, isDraft, onAddEntry }: Props) => {
     const { t } = useTranslation();
     const [removeDialog, setRemoveDialog] = useState<{ open: boolean; entryId?: string }>({ open: false });
+    const [previewEntry, setPreviewEntry] = useState<DiffusionListEntry | null>(null);
 
     const removeMutation = useRemoveDiffusionListEntry({
         onSuccess: () => {
@@ -41,6 +50,7 @@ export const EntriesTable = ({ diffusionListId, isDraft, onAddEntry }: Props) =>
     const columns = useEntriesColumns({
         isDraft,
         onRemove: handleRemove,
+        onPreview: setPreviewEntry,
         isRemoving: removeMutation.isPending,
     });
 
@@ -102,6 +112,59 @@ export const EntriesTable = ({ diffusionListId, isDraft, onAddEntry }: Props) =>
                 countdown={0}
                 isLoading={removeMutation.isPending}
             />
+
+            <Dialog open={previewEntry !== null} onOpenChange={(open) => !open && setPreviewEntry(null)}>
+                <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                        <DialogTitle>{previewEntry?.name || t('common.preview')}</DialogTitle>
+                    </DialogHeader>
+                    {previewEntry && (
+                        <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-3 text-sm">
+                            <span className="text-muted-foreground font-medium">{t('field.name')}</span>
+                            <span>{previewEntry.name || '-'}</span>
+
+                            <span className="text-muted-foreground font-medium">{t('field.email')}</span>
+                            <span>{previewEntry.email || '-'}</span>
+
+                            <span className="text-muted-foreground font-medium">{t('field.phone')}</span>
+                            <span>{previewEntry.phone || '-'}</span>
+
+                            <span className="text-muted-foreground font-medium">{t('field.address')}</span>
+                            <span className="whitespace-pre-wrap">{previewEntry.address || '-'}</span>
+
+                            {previewEntry.isManual && (
+                                <>
+                                    <span className="text-muted-foreground font-medium">
+                                        {t('diffusionLists.freeEntry')}
+                                    </span>
+                                    <Badge variant="outline" className="w-fit">
+                                        {t('diffusionLists.freeEntry')}
+                                    </Badge>
+                                </>
+                            )}
+
+                            {previewEntry.needsAttention && (
+                                <>
+                                    <span className="text-muted-foreground font-medium">
+                                        {t('diffusionLists.needsAttention')}
+                                    </span>
+                                    <div className="flex flex-col gap-1">
+                                        <Badge variant="destructive" className="w-fit gap-1">
+                                            <IconAlertTriangle className="h-3 w-3" />
+                                            {t('diffusionLists.needsAttention')}
+                                        </Badge>
+                                        {previewEntry.attentionReason && (
+                                            <span className="text-muted-foreground text-xs">
+                                                {previewEntry.attentionReason}
+                                            </span>
+                                        )}
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    )}
+                </DialogContent>
+            </Dialog>
         </div>
     );
 };

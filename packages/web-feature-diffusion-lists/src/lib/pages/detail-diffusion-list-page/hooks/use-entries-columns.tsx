@@ -9,7 +9,7 @@ import {
     DropdownMenuTrigger,
 } from '@maas/web-components';
 import { CollectionColumnHeader } from '@maas/web-collection';
-import { IconTrash, IconAlertTriangle, IconDotsVertical } from '@tabler/icons-react';
+import { IconTrash, IconAlertTriangle, IconDotsVertical, IconEye } from '@tabler/icons-react';
 import { useTranslation } from '@maas/core-translations';
 import { useRoutes } from '@maas/core-workspace';
 import { Link } from 'react-router';
@@ -17,11 +17,12 @@ import { Link } from 'react-router';
 export function useEntriesColumns(options?: {
     isDraft: boolean;
     onRemove?: (entry: DiffusionListEntry) => void;
+    onPreview?: (entry: DiffusionListEntry) => void;
     isRemoving?: boolean;
 }): ColumnDef<DiffusionListEntry>[] {
     const { t } = useTranslation();
     const routes = useRoutes();
-    const { isDraft = false, onRemove, isRemoving } = options ?? {};
+    const { isDraft = false, onRemove, onPreview, isRemoving } = options ?? {};
 
     const columns: ColumnDef<DiffusionListEntry>[] = [
         {
@@ -58,7 +59,15 @@ export function useEntriesColumns(options?: {
         {
             accessorKey: 'address',
             header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.address')} />,
-            cell: ({ row }) => row.original.address || '-',
+            cell: ({ row }) => {
+                const address = row.original.address;
+                if (!address) return '-';
+                return (
+                    <span className="block max-w-[200px] truncate" title={address}>
+                        {address}
+                    </span>
+                );
+            },
             enableSorting: false,
         },
         {
@@ -90,10 +99,7 @@ export function useEntriesColumns(options?: {
                 row.original.isManual ? <Badge variant="outline">{t('diffusionLists.freeEntry')}</Badge> : null,
             enableSorting: false,
         },
-    ];
-
-    if (isDraft && onRemove) {
-        columns.push({
+        {
             id: 'actions',
             cell: ({ row }) => {
                 const entry = row.original;
@@ -106,21 +112,29 @@ export function useEntriesColumns(options?: {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                                onClick={() => onRemove(entry)}
-                                disabled={isRemoving}
-                                className="text-destructive focus:text-destructive"
-                            >
-                                <IconTrash className="mr-2 h-4 w-4" />
-                                {t('common.remove')}
-                            </DropdownMenuItem>
+                            {onPreview && (
+                                <DropdownMenuItem onClick={() => onPreview(entry)}>
+                                    <IconEye className="mr-2 h-4 w-4" />
+                                    {t('common.preview')}
+                                </DropdownMenuItem>
+                            )}
+                            {isDraft && onRemove && (
+                                <DropdownMenuItem
+                                    onClick={() => onRemove(entry)}
+                                    disabled={isRemoving}
+                                    className="text-destructive focus:text-destructive"
+                                >
+                                    <IconTrash className="mr-2 h-4 w-4" />
+                                    {t('common.remove')}
+                                </DropdownMenuItem>
+                            )}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );
             },
             meta: { className: 'w-12' },
-        });
-    }
+        },
+    ];
 
     return columns;
 }
