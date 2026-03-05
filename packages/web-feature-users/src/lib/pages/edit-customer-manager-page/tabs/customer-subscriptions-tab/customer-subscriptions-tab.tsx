@@ -153,6 +153,12 @@ export const CustomerSubscriptionsTab = () => {
         subscriptions.filter((s) => (s.metadata as Record<string, unknown> | null)?.manual === 'true').map((s) => s.id)
     );
     const canceledSubscriptionIds = new Set(subscriptions.filter((s) => s.status === 'canceled').map((s) => s.id));
+    // Subscriptions that have a pending upgrade (a trialing subscription references them as upgradeSource)
+    const upgradeSourceIds = new Set(
+        trialingSubscriptions
+            .map((s) => (s.metadata as Record<string, unknown> | null)?.upgradeSource)
+            .filter((id): id is string => typeof id === 'string')
+    );
     const invoices = invoicesData?.data ?? [];
 
     return (
@@ -284,9 +290,11 @@ export const CustomerSubscriptionsTab = () => {
                                                                     {subscription.status === 'active' &&
                                                                         (() => {
                                                                             const hasPendingRenewal =
-                                                                                !!subMetadata?.pendingRenewalInvoiceId;
+                                                                                isAlreadyRenewed ||
+                                                                                !!subMetadata?.renewalPaidUntil;
                                                                             const hasPendingUpgrade =
-                                                                                !!subMetadata?.pendingUpgradeId;
+                                                                                !!subMetadata?.pendingUpgradeId ||
+                                                                                upgradeSourceIds.has(subscription.id);
                                                                             return (
                                                                                 <>
                                                                                     {!(
