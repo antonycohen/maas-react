@@ -87,7 +87,6 @@ export default function DetailDiffusionListPage() {
                 onGenerate={isConfirmed ? actions.handleGenerate : undefined}
                 onDelete={!isGenerated ? actions.handleDelete : undefined}
                 onDownloadPdf={isGenerated ? actions.handleDownloadPdf : undefined}
-                onRefreshEntries={hasEntries && isDraft ? actions.handleRefreshEntries : undefined}
                 isActionPending={actions.isActionPending}
             />
 

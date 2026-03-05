@@ -1,4 +1,4 @@
-import { useGetDiffusionListEntries, useRemoveDiffusionListEntry, useRefreshDiffusionListEntry } from '@maas/core-api';
+import { useGetDiffusionListEntries, useRemoveDiffusionListEntry } from '@maas/core-api';
 import { DiffusionListEntry } from '@maas/core-api-models';
 import { Button, ConfirmActionDialog } from '@maas/web-components';
 import { Collection } from '@maas/web-collection';
@@ -28,21 +28,8 @@ export const EntriesTable = ({ diffusionListId, isDraft, onAddEntry }: Props) =>
         },
     });
 
-    const refreshEntryMutation = useRefreshDiffusionListEntry({
-        onSuccess: () => {
-            toast.success(t('diffusionLists.entryRefreshed'));
-        },
-        onError: (error) => {
-            toast.error(error.message);
-        },
-    });
-
     const handleRemove = (entry: DiffusionListEntry) => {
         setRemoveDialog({ open: true, entryId: entry.id });
-    };
-
-    const handleRefreshEntry = (entry: DiffusionListEntry) => {
-        refreshEntryMutation.mutate({ diffusionListId, entryId: entry.id });
     };
 
     const handleConfirmRemove = () => {
@@ -55,8 +42,6 @@ export const EntriesTable = ({ diffusionListId, isDraft, onAddEntry }: Props) =>
         isDraft,
         onRemove: handleRemove,
         isRemoving: removeMutation.isPending,
-        onRefreshEntry: handleRefreshEntry,
-        isRefreshingEntryId: refreshEntryMutation.isPending ? (refreshEntryMutation.variables?.entryId ?? null) : null,
     });
 
     return (
@@ -94,18 +79,15 @@ export const EntriesTable = ({ diffusionListId, isDraft, onAddEntry }: Props) =>
                 }}
                 queryFields={{
                     id: null,
-                    firstName: null,
-                    lastName: null,
+                    refType: null,
+                    refId: null,
+                    name: null,
+                    address: null,
                     email: null,
                     phone: null,
-                    customerId: null,
+                    isManual: null,
                     needsAttention: null,
                     attentionReason: null,
-                    addressLine1: null,
-                    addressCity: null,
-                    addressPostalCode: null,
-                    addressCountry: null,
-                    isManual: null,
                 }}
             />
 

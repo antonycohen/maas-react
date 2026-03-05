@@ -9,7 +9,7 @@ import {
     DropdownMenuTrigger,
 } from '@maas/web-components';
 import { CollectionColumnHeader } from '@maas/web-collection';
-import { IconTrash, IconAlertTriangle, IconRefresh, IconDotsVertical } from '@tabler/icons-react';
+import { IconTrash, IconAlertTriangle, IconDotsVertical } from '@tabler/icons-react';
 import { useTranslation } from '@maas/core-translations';
 import { useRoutes } from '@maas/core-workspace';
 import { Link } from 'react-router';
@@ -18,21 +18,16 @@ export function useEntriesColumns(options?: {
     isDraft: boolean;
     onRemove?: (entry: DiffusionListEntry) => void;
     isRemoving?: boolean;
-    onRefreshEntry?: (entry: DiffusionListEntry) => void;
-    isRefreshingEntryId?: string | null;
 }): ColumnDef<DiffusionListEntry>[] {
     const { t } = useTranslation();
     const routes = useRoutes();
-    const { isDraft = false, onRemove, isRemoving, onRefreshEntry, isRefreshingEntryId } = options ?? {};
+    const { isDraft = false, onRemove, isRemoving } = options ?? {};
 
     const columns: ColumnDef<DiffusionListEntry>[] = [
         {
-            accessorKey: 'firstName',
-            header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.firstName')} />,
-            cell: ({ row }) => {
-                const name = [row.original.firstName, row.original.lastName].filter(Boolean).join(' ');
-                return name || '-';
-            },
+            accessorKey: 'name',
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.name')} />,
+            cell: ({ row }) => row.original.name || '-',
             meta: { className: 'w-48' },
         },
         {
@@ -40,12 +35,13 @@ export function useEntriesColumns(options?: {
             header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.email')} />,
             cell: ({ row }) => {
                 const email = row.getValue('email') as string | null;
-                const customerId = row.original.customerId;
+                const refId = row.original.refId;
+                const refType = row.original.refType;
                 if (!email) return '-';
-                if (!customerId) return email;
+                if (!refId || refType !== 'customer') return email;
                 return (
                     <Link
-                        to={routes.customerEdit(customerId)}
+                        to={routes.customerEdit(refId)}
                         className="text-primary underline underline-offset-4 hover:opacity-80"
                     >
                         {email}
@@ -60,13 +56,9 @@ export function useEntriesColumns(options?: {
             enableSorting: false,
         },
         {
-            id: 'address',
+            accessorKey: 'address',
             header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.address')} />,
-            cell: ({ row }) => {
-                const entry = row.original;
-                const parts = [entry.addressLine1, entry.addressPostalCode, entry.addressCity, entry.addressCountry];
-                return parts.filter(Boolean).join(', ') || '-';
-            },
+            cell: ({ row }) => row.original.address || '-',
             enableSorting: false,
         },
         {
@@ -99,17 +91,11 @@ export function useEntriesColumns(options?: {
         },
     ];
 
-    const hasActions = (isDraft && onRemove) || onRefreshEntry;
-    if (hasActions) {
+    if (isDraft && onRemove) {
         columns.push({
             id: 'actions',
             cell: ({ row }) => {
                 const entry = row.original;
-                const isRefreshing = isRefreshingEntryId === entry.id;
-                const showRefresh = isDraft && onRefreshEntry;
-                const showRemove = isDraft && onRemove;
-
-                if (!showRefresh && !showRemove) return null;
 
                 return (
                     <DropdownMenu>
@@ -119,22 +105,14 @@ export function useEntriesColumns(options?: {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            {showRefresh && (
-                                <DropdownMenuItem onClick={() => onRefreshEntry(entry)} disabled={isRefreshing}>
-                                    <IconRefresh className={`mr-2 h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-                                    {t('diffusionLists.refreshEntry')}
-                                </DropdownMenuItem>
-                            )}
-                            {showRemove && (
-                                <DropdownMenuItem
-                                    onClick={() => onRemove(entry)}
-                                    disabled={isRemoving}
-                                    className="text-destructive focus:text-destructive"
-                                >
-                                    <IconTrash className="mr-2 h-4 w-4" />
-                                    {t('common.remove')}
-                                </DropdownMenuItem>
-                            )}
+                            <DropdownMenuItem
+                                onClick={() => onRemove(entry)}
+                                disabled={isRemoving}
+                                className="text-destructive focus:text-destructive"
+                            >
+                                <IconTrash className="mr-2 h-4 w-4" />
+                                {t('common.remove')}
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );

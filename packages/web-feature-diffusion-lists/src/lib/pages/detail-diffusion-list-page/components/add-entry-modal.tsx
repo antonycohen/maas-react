@@ -8,7 +8,7 @@ import {
     Input,
 } from '@maas/web-components';
 import { useGetAvailableCustomers, useAddDiffusionListEntry } from '@maas/core-api';
-import { ReadCustomer } from '@maas/core-api-models';
+import type { ReadCustomer } from '@maas/core-api-models';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
 import { IconLoader2, IconPlus, IconSearch } from '@tabler/icons-react';
@@ -57,23 +57,10 @@ export const AddEntryModal = ({ open, onOpenChange, diffusionListId }: Props) =>
     });
 
     const handleAddCustomer = (customer: ReadCustomer) => {
-        const nameParts = (customer.name ?? '').split(' ');
-        const firstName = nameParts[0] ?? '';
-        const lastName = nameParts.slice(1).join(' ') || '';
-
         addMutation.mutate({
             diffusionListId,
             data: {
-                userId: customer.refId ?? undefined,
-                customerId: customer.id ?? undefined,
-                firstName: firstName || undefined,
-                lastName: lastName || undefined,
-                email: customer.email ?? undefined,
-                phone: customer.phone ?? undefined,
-                addressLine1: customer.addressLine1 ?? undefined,
-                addressCity: customer.addressCity ?? undefined,
-                addressPostalCode: customer.addressPostalCode ?? undefined,
-                addressCountry: customer.addressCountry ?? undefined,
+                customerId: customer.id,
             },
         });
     };

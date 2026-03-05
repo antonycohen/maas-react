@@ -4,7 +4,6 @@ import {
     useRevertDiffusionList,
     useGenerateDiffusionList,
     useDeleteDiffusionList,
-    useRefreshDiffusionListEntries,
     maasApi,
 } from '@maas/core-api';
 import { useNavigate } from 'react-router';
@@ -88,16 +87,6 @@ export const useDiffusionListActions = (
         },
     });
 
-    const refreshEntriesMutation = useRefreshDiffusionListEntries({
-        onSuccess: () => {
-            toast.success(t('diffusionLists.refreshEntriesSuccess'));
-            refetch();
-        },
-        onError: (error) => {
-            toast.error(error.message);
-        },
-    });
-
     const handlePopulate = () => {
         populateMutation.mutate(diffusionListId);
     };
@@ -116,10 +105,6 @@ export const useDiffusionListActions = (
 
     const handleDelete = () => {
         setConfirmAction({ open: true, action: 'delete' });
-    };
-
-    const handleRefreshEntries = () => {
-        refreshEntriesMutation.mutate(diffusionListId);
     };
 
     const handleDownloadPdf = async () => {
@@ -210,8 +195,7 @@ export const useDiffusionListActions = (
         confirmMutation.isPending ||
         revertMutation.isPending ||
         generateMutation.isPending ||
-        deleteMutation.isPending ||
-        refreshEntriesMutation.isPending;
+        deleteMutation.isPending;
 
     return {
         handlePopulate,
@@ -220,7 +204,6 @@ export const useDiffusionListActions = (
         handleGenerate,
         handleDelete,
         handleDownloadPdf,
-        handleRefreshEntries,
         isActionPending,
         confirmAction,
         setConfirmAction,

@@ -11,5 +11,3 @@ export * from './use-populate-diffusion-list';
 export * from './use-add-diffusion-list-entry';
 export * from './use-remove-diffusion-list-entry';
 export * from './use-get-available-customers';
-export * from './use-refresh-diffusion-list-entries';
-export * from './use-refresh-diffusion-list-entry';

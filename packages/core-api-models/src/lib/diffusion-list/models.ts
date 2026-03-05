@@ -97,38 +97,22 @@ export type UpdateDiffusionList = z.infer<typeof updateDiffusionListSchema>;
 // Entry read schema
 export const diffusionListEntrySchema = z.object({
     id: z.string(),
-    firstName: z.string().nullable(),
-    needsAttention: z.boolean().nullable(),
-    attentionReason: z.string().nullable(),
-    customerId: z.string().nullable(),
-    lastName: z.string().nullable(),
+    refType: z.string().nullable(),
+    refId: z.string().nullable(),
+    name: z.string().nullable(),
+    address: z.string().nullable(),
     email: z.string().nullable(),
     phone: z.string().nullable(),
-    addressLine1: z.string().nullable(),
-    addressCity: z.string().nullable(),
-    addressPostalCode: z.string().nullable(),
-    addressCountry: z.string().nullable(),
     isManual: z.boolean().nullable(),
+    needsAttention: z.boolean().nullable(),
+    attentionReason: z.string().nullable(),
 });
 
 export type DiffusionListEntry = z.infer<typeof diffusionListEntrySchema>;
 
-// Create entry schema (manual entry)
-export const createDiffusionListEntrySchema = z
-    .object({
-        userId: z.string().optional(),
-        customerId: z.string().optional(),
-        firstName: z.string().max(255).optional(),
-        lastName: z.string().max(255).optional(),
-        email: z.string().email().optional(),
-        phone: z.string().max(50).optional(),
-        addressLine1: z.string().max(500).optional(),
-        addressCity: z.string().max(255).optional(),
-        addressPostalCode: z.string().max(20).optional(),
-        addressCountry: z.string().max(2).optional(),
-    })
-    .refine((data) => Object.values(data).some((v) => v !== undefined && v !== ''), {
-        message: 'At least one field is required',
-    });
+// Create entry schema (manual entry — just a customer reference)
+export const createDiffusionListEntrySchema = z.object({
+    customerId: z.string().min(1, 'Customer is required'),
+});
 
 export type CreateDiffusionListEntry = z.infer<typeof createDiffusionListEntrySchema>;
