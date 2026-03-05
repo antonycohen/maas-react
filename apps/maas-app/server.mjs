@@ -22,6 +22,25 @@ app.use((req, res, next) => {
         return next();
     }
 
+    // ?purge=1 clears the cache for this path and forces a fresh render
+    if (req.query.purge === "1") {
+        console.log(`[ISR] ${req.path} — PURGE (forced rebuild)`);
+        ssrCache.delete(req.path);
+        return ssrRender(req)
+            .then((result) => {
+                if (result.statusCode === 200) {
+                    ssrCache.set(req.path, { ...result, timestamp: Date.now() });
+                    console.log(`[ISR] Rebuilt and cached ${req.path} (${result.body.length} bytes)`);
+                }
+                res.set("X-Cache", "PURGE");
+                sendCached(res, result);
+            })
+            .catch((err) => {
+                console.error(`[ISR] Purge render failed for ${req.path}:`, err);
+                next();
+            });
+    }
+
     const cached = ssrCache.get(req.path);
 
     if (cached) {
