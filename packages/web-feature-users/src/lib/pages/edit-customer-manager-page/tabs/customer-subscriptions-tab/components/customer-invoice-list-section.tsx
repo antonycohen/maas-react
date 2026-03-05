@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Invoice } from '@maas/core-api-models';
-import { useDownloadInvoice, usePayInvoice, useSyncInvoice } from '@maas/core-api';
+import { useDownloadInvoice, usePayInvoice, useSendInvoice, useSyncInvoice } from '@maas/core-api';
 import {
     Badge,
     Button,
@@ -34,7 +34,13 @@ import {
     TableRow,
 } from '@maas/web-components';
 import { Download } from 'lucide-react';
-import { IconCreditCardPay, IconDotsVertical, IconExternalLink, IconRefresh } from '@tabler/icons-react';
+import {
+    IconCreditCardPay,
+    IconDotsVertical,
+    IconExternalLink,
+    IconMailForward,
+    IconRefresh,
+} from '@tabler/icons-react';
 import { toast } from 'sonner';
 import { useTranslation } from '@maas/core-translations';
 import { INVOICE_STATUS_STYLES, INVOICE_STATUS_TRANSLATION_KEYS } from '../../../../../constants/status-styles';
@@ -129,6 +135,15 @@ export const CustomerInvoiceListSection = ({
             setPaymentMethod('cheque');
             setPayReference('');
             setPayReferenceError(false);
+        },
+    });
+
+    const { mutate: sendInvoice, isPending: isSending } = useSendInvoice({
+        onSuccess: () => {
+            toast.success(t('customers.invoices.sendSuccess'));
+        },
+        onError: () => {
+            toast.error(t('customers.invoices.sendError'));
         },
     });
 
@@ -260,6 +275,15 @@ export const CustomerInvoiceListSection = ({
                                                     >
                                                         <IconCreditCardPay className="mr-2 h-4 w-4" />
                                                         {t('customers.invoices.pay')}
+                                                    </DropdownMenuItem>
+                                                )}
+                                                {invoice.status === 'open' && (
+                                                    <DropdownMenuItem
+                                                        onClick={() => sendInvoice(invoice.id)}
+                                                        disabled={isSending}
+                                                    >
+                                                        <IconMailForward className="mr-2 h-4 w-4" />
+                                                        {t('customers.invoices.send')}
                                                     </DropdownMenuItem>
                                                 )}
                                                 {!isManual && invoice.hostedInvoiceUrl && (

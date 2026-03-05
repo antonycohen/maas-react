@@ -6,3 +6,4 @@ export * from './use-get-invoice-by-id';
 export * from './use-download-invoice';
 export * from './use-pay-invoice';
 export * from './use-sync-invoice';
+export * from './use-send-invoice';

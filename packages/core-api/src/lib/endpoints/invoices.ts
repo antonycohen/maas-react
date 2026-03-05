@@ -114,6 +114,14 @@ export class InvoicesEndpoint {
     }
 
     /**
+     * Send an invoice email to the customer (admin)
+     * POST /api/v1/pms/invoices/{invoiceId}/send
+     */
+    async sendInvoice(invoiceId: string): Promise<{ success: boolean }> {
+        return this.client.post<{ success: boolean }>(`${ADMIN_PATH}/${invoiceId}/send`, {});
+    }
+
+    /**
      * Pay an invoice (admin)
      * POST /api/v1/pms/invoices/{invoiceId}/pay
      */
