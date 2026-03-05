@@ -64,8 +64,9 @@ export class DiffusionListsEndpoint {
         return this.client.delete<void>(`/api/v1/diffusion-lists/${id}`);
     }
 
-    async populateDiffusionList(id: string): Promise<DiffusionListEntry[]> {
-        return this.client.post<DiffusionListEntry[]>(`/api/v1/diffusion-lists/${id}/populate`);
+    async populateDiffusionList(id: string, options?: { keepManual?: boolean }): Promise<DiffusionListEntry[]> {
+        const params = options?.keepManual ? '?keep_manual=true' : '';
+        return this.client.post<DiffusionListEntry[]>(`/api/v1/diffusion-lists/${id}/populate${params}`);
     }
 
     async confirmDiffusionList(id: string): Promise<DiffusionList> {

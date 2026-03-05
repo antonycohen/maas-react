@@ -80,8 +80,8 @@ export const AddEntryModal = ({ open, onOpenChange, diffusionListId }: Props) =>
         >
             <DialogContent className="max-w-lg">
                 <DialogHeader>
-                    <DialogTitle>{t('diffusionLists.addEntryTitle')}</DialogTitle>
-                    <DialogDescription>{t('diffusionLists.addEntryDescription')}</DialogDescription>
+                    <DialogTitle>{t('diffusionLists.addFreeEntryTitle')}</DialogTitle>
+                    <DialogDescription>{t('diffusionLists.addFreeEntryDescription')}</DialogDescription>
                 </DialogHeader>
 
                 <div className="relative">

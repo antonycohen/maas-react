@@ -82,6 +82,7 @@ export default function DetailDiffusionListPage() {
             <DiffusionListHeader
                 diffusionList={diffusionList}
                 onPopulate={isDraft && !hasEntries ? actions.handlePopulate : undefined}
+                onRepopulate={isDraft && hasEntries ? actions.handleRepopulate : undefined}
                 onConfirm={isDraft ? actions.handleConfirm : undefined}
                 onRevertToDraft={isConfirmed ? actions.handleRevert : undefined}
                 onGenerate={isConfirmed ? actions.handleGenerate : undefined}

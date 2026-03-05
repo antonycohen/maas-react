@@ -51,7 +51,7 @@ export const EntriesTable = ({ diffusionListId, isDraft, onAddEntry }: Props) =>
                 {isDraft && (
                     <Button variant="outline" size="sm" onClick={onAddEntry}>
                         <IconPlus className="mr-1.5 h-4 w-4" />
-                        {t('diffusionLists.addEntry')}
+                        {t('diffusionLists.addFreeEntry')}
                     </Button>
                 )}
             </div>

@@ -2,19 +2,26 @@ import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react
 import { DiffusionListEntry } from '@maas/core-api-models';
 import { ApiError, maasApi } from '../../api';
 
+export type PopulateDiffusionListParams = {
+    id: string;
+    keepManual?: boolean;
+};
+
 export const usePopulateDiffusionList = (
-    options?: Omit<UseMutationOptions<DiffusionListEntry[], ApiError, string>, 'mutationFn'>
+    options?: Omit<UseMutationOptions<DiffusionListEntry[], ApiError, PopulateDiffusionListParams>, 'mutationFn'>
 ) => {
     const { onSuccess, ...restOptions } = options || {};
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (id: string) => maasApi.diffusionLists.populateDiffusionList(id),
-        onSuccess: (data, id, onMutateResult, context) => {
-            queryClient.invalidateQueries({ queryKey: ['diffusion-list', id] });
-            queryClient.invalidateQueries({ queryKey: ['diffusion-list-entries', id] });
+        mutationFn: ({ id, keepManual }: PopulateDiffusionListParams) =>
+            maasApi.diffusionLists.populateDiffusionList(id, { keepManual }),
+        onSuccess: (data, params, onMutateResult, context) => {
+            queryClient.invalidateQueries({ queryKey: ['diffusion-list', params.id] });
+            queryClient.invalidateQueries({ queryKey: ['diffusion-list-entries', params.id] });
             queryClient.invalidateQueries({ queryKey: ['diffusion-lists'] });
-            onSuccess?.(data, id, onMutateResult, context);
+            queryClient.invalidateQueries({ queryKey: ['diffusion-list-available-customers'] });
+            onSuccess?.(data, params, onMutateResult, context);
         },
         ...restOptions,
     });

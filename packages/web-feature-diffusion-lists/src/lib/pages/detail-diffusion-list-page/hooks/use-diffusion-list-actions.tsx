@@ -88,7 +88,11 @@ export const useDiffusionListActions = (
     });
 
     const handlePopulate = () => {
-        populateMutation.mutate(diffusionListId);
+        populateMutation.mutate({ id: diffusionListId });
+    };
+
+    const handleRepopulate = () => {
+        populateMutation.mutate({ id: diffusionListId, keepManual: true });
     };
 
     const handleConfirm = () => {
@@ -199,6 +203,7 @@ export const useDiffusionListActions = (
 
     return {
         handlePopulate,
+        handleRepopulate,
         handleConfirm,
         handleRevert,
         handleGenerate,

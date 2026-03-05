@@ -8,6 +8,7 @@ import {
     IconEye,
     IconDownload,
     IconLoader2,
+    IconRefresh,
 } from '@tabler/icons-react';
 import { DiffusionListStatusBadge } from './diffusion-list-status-badge';
 import { useTranslation } from '@maas/core-translations';
@@ -15,6 +16,7 @@ import { useTranslation } from '@maas/core-translations';
 interface Props {
     diffusionList: DiffusionList;
     onPopulate?: () => void;
+    onRepopulate?: () => void;
     onConfirm?: () => void;
     onRevertToDraft?: () => void;
     onGenerate?: () => void;
@@ -26,6 +28,7 @@ interface Props {
 export const DiffusionListHeader = ({
     diffusionList,
     onPopulate,
+    onRepopulate,
     onConfirm,
     onRevertToDraft,
     onGenerate,
@@ -61,6 +64,13 @@ export const DiffusionListHeader = ({
                     <Button type="button" variant="outline" size="sm" onClick={onPopulate} disabled={isActionPending}>
                         <IconEye className="mr-1.5 h-4 w-4" />
                         {t('diffusionLists.populate')}
+                    </Button>
+                )}
+
+                {onRepopulate && (
+                    <Button type="button" variant="outline" size="sm" onClick={onRepopulate} disabled={isActionPending}>
+                        <IconRefresh className="mr-1.5 h-4 w-4" />
+                        {t('diffusionLists.repopulate')}
                     </Button>
                 )}
 
