@@ -135,7 +135,7 @@ export function PricingCard({
     isHighlighted,
     isSelected,
     onSelect,
-    buttonText = "Je m'abonne",
+    buttonText = 'Choisir',
 }: PricingCardProps) {
     return (
         <div
