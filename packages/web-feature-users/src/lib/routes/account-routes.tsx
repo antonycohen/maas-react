@@ -49,7 +49,7 @@ export const AccountRoutes = ({ baseUrl = '' }: { baseUrl?: string }) => {
                     <Route path="addresses" element={<AccountAddressesTab />} />
                     <Route path="subscription" element={<AccountSubscriptionTab />} />
                     <Route path="invoices" element={<AccountInvoicesTab />} />
-                    <Route path="*" element={<Navigate to="profile" replace />} />
+                    <Route path="*" element={<Navigate to="connexion" replace />} />
                 </Route>
             </Routes>
         </Suspense>

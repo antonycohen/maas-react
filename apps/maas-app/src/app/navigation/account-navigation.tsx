@@ -6,7 +6,7 @@ export const accountNavigation: NavItem[] = [
     {
         type: 'link',
         title: 'Profile',
-        to: PUBLIC_ROUTES.ACCOUNT_PROFILE,
+        to: PUBLIC_ROUTES.ACCOUNT_CONNEXION,
         icon: <CircleUserIcon />,
     },
     {

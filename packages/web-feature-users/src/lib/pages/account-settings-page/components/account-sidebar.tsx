@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router';
-import { User, Lock, LogOut, CreditCard, FileText, MapPin } from 'lucide-react';
+import { Lock, LogOut, CreditCard, FileText, MapPin } from 'lucide-react';
 
 interface AccountSidebarProps {
     baseUrl: string;
@@ -7,7 +7,6 @@ interface AccountSidebarProps {
 
 export function AccountSidebar({ baseUrl }: AccountSidebarProps) {
     const navItems = [
-        { title: 'Mon compte', url: `${baseUrl}/account/profile`, icon: User },
         { title: 'Connexion', url: `${baseUrl}/account/connexion`, icon: Lock },
         // { title: 'Préférences', url: `${baseUrl}/account/preferences`, icon: Settings },
         { title: 'Adresses', url: `${baseUrl}/account/addresses`, icon: MapPin },

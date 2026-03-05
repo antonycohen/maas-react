@@ -1,11 +1,10 @@
 import { NavLink } from 'react-router';
-import { User, Lock, LogOut, CreditCard, FileText, MapPin } from 'lucide-react';
+import { Lock, LogOut, CreditCard, FileText, MapPin } from 'lucide-react';
 interface AccountMobileNavProps {
     baseUrl: string;
 }
 export function AccountMobileNav({ baseUrl }: AccountMobileNavProps) {
     const navItems = [
-        { title: 'Mon compte', url: `${baseUrl}/account/profile`, icon: User },
         { title: 'Connexion', url: `${baseUrl}/account/connexion`, icon: Lock },
         { title: 'Adresses', url: `${baseUrl}/account/addresses`, icon: MapPin },
         // { title: 'Préférences', url: `${baseUrl}/account/preferences`, icon: Settings },
