@@ -52,8 +52,9 @@ export const ArticleContent = ({
     const [showSubscribeDialog, setShowSubscribeDialog] = useState(false);
 
     const showCta = !canViewContent && visibility !== 'public' && !isProblem;
+    const isPublic = visibility === 'public';
     const handleShowSolution = () => {
-        if (canViewContent) {
+        if (canViewContent || isPublic) {
             setShowSolution(true);
         } else {
             setShowSubscribeDialog(true);
