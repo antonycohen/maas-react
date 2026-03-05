@@ -53,7 +53,9 @@ export const InvoiceListSection = ({ invoices }: Props) => {
     const { t } = useTranslation();
     const { mutate: download, isPending: isDownloading } = useDownloadMyInvoice({
         onSuccess: (data) => {
-            window.open(data.invoicePdf, '_blank');
+            if (data.invoicePdf) {
+                window.location.assign(data.invoicePdf);
+            }
         },
         onError: () => {
             toast.error('Impossible de télécharger la facture.');
@@ -62,7 +64,9 @@ export const InvoiceListSection = ({ invoices }: Props) => {
 
     const { mutate: pay, isPending: isPaying } = useGetInvoicePaymentUrl({
         onSuccess: (data) => {
-            window.open(data.paymentUrl, '_blank');
+            if (data.paymentUrl) {
+                window.location.assign(data.paymentUrl);
+            }
         },
         onError: () => {
             toast.error('Impossible de récupérer le lien de paiement.');

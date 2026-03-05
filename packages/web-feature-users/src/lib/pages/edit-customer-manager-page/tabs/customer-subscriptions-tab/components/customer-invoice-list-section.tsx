@@ -86,7 +86,9 @@ export const CustomerInvoiceListSection = ({
 
     const { mutate: download, isPending: isDownloading } = useDownloadInvoice({
         onSuccess: (data) => {
-            window.open(data.invoicePdf, '_blank');
+            if (data.invoicePdf) {
+                window.location.assign(data.invoicePdf);
+            }
         },
         onError: () => {
             toast.error(t('customers.invoices.downloadError'));
