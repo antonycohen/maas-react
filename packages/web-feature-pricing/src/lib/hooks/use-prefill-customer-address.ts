@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router';
 import { useOAuthStore } from '@maas/core-store-oauth';
-import { useGetMyCustomer } from '@maas/core-api';
+import { useGetMyCustomer, useGetCheckoutSessionAddress } from '@maas/core-api';
 import { usePricingStore, DEFAULT_ADDRESS, type AddressFormData } from '../store/pricing-store';
 
 export function usePrefillCustomerAddress() {
@@ -10,12 +11,21 @@ export function usePrefillCustomerAddress() {
     const deliveryAddress = usePricingStore((s) => s.deliveryAddress);
     const billingAddress = usePricingStore((s) => s.billingAddress);
 
+    const [searchParams] = useSearchParams();
+    const sessionId = searchParams.get('session_id');
+
     const hasPrefilled = useRef(false);
 
+    // Fetch address from the Stripe checkout session (preferred source)
+    const { data: sessionAddress, isError: isSessionError } = useGetCheckoutSessionAddress(sessionId, {
+        enabled: !!sessionId && !!accessToken,
+    });
+
+    // Fallback: fetch from stored customer data
     const {
         data: customer,
         isLoading,
-        isError,
+        isError: isCustomerError,
     } = useGetMyCustomer(
         {
             id: null,
@@ -40,6 +50,8 @@ export function usePrefillCustomerAddress() {
         }
     );
 
+    const isError = isCustomerError && (!sessionId || isSessionError);
+
     // On error (404, etc.), reset addresses to blank and stop retrying
     useEffect(() => {
         if (isError && !hasPrefilled.current) {
@@ -47,11 +59,32 @@ export function usePrefillCustomerAddress() {
             setBillingAddress(DEFAULT_ADDRESS);
             hasPrefilled.current = true;
         }
-         
     }, [isError]);
 
+    // Prefill from checkout session address (no country)
     useEffect(() => {
         if (hasPrefilled.current) return;
+        if (!sessionAddress) return;
+
+        const addr = sessionAddress.address;
+        const sessionAddr: Partial<AddressFormData> = {
+            firstName: addr.firstName ?? '',
+            lastName: addr.lastName ?? '',
+            line1: addr.line1 ?? '',
+            line2: addr.line2 ?? '',
+            city: addr.city ?? '',
+            postalCode: addr.postalCode ?? '',
+        };
+
+        setDeliveryAddress(sessionAddr);
+        setBillingAddress(sessionAddr);
+        hasPrefilled.current = true;
+    }, [sessionAddress]);
+
+    // Fallback: prefill from customer data (only if session address didn't fill)
+    useEffect(() => {
+        if (hasPrefilled.current) return;
+        if (sessionId && !isSessionError) return; // still waiting for session address
         if (!customer) return;
 
         // Customer address_* fields = billing
@@ -102,7 +135,11 @@ export function usePrefillCustomerAddress() {
         }
 
         hasPrefilled.current = true;
-         
-    }, [isError, customer, deliveryAddress, billingAddress]);
-    return { customer, isLoading: isLoading && !!accessToken, isError };
+    }, [isSessionError, customer, deliveryAddress, billingAddress]);
+    const isPrefilling =
+        !hasPrefilled.current &&
+        !!accessToken &&
+        ((!!sessionId && !sessionAddress && !isSessionError) || (!sessionId && isLoading));
+
+    return { customer, isLoading: isPrefilling, isError };
 }

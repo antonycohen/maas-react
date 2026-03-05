@@ -8,7 +8,11 @@ import { useTranslation } from '@maas/core-translations';
 import { usePricingStore, type AddressFormData } from '../store/pricing-store';
 import { AddressForm, validateAddress } from './address-form';
 
-export function PricingAdresseStep() {
+interface PricingAdresseStepProps {
+    isPrefilling?: boolean;
+}
+
+export function PricingAdresseStep({ isPrefilling = false }: PricingAdresseStepProps) {
     const { t } = useTranslation();
     const deliveryAddress = usePricingStore((s) => s.deliveryAddress);
     const billingAddress = usePricingStore((s) => s.billingAddress);
@@ -97,46 +101,62 @@ export function PricingAdresseStep() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                    {/* Delivery Address */}
-                    <div className="flex flex-col gap-4">
-                        <h4 className="text-foreground text-base font-semibold">Adresse de livraison</h4>
-                        <AddressForm
-                            address={deliveryAddress}
-                            onChange={setDeliveryAddress}
-                            errors={errors.deliveryAddress}
-                        />
-                    </div>
-
-                    {/* Different billing address checkbox */}
-                    <label className="flex cursor-pointer items-center gap-2">
-                        <Checkbox
-                            checked={useDifferentBillingAddress}
-                            onCheckedChange={(checked) => setUseDifferentBillingAddress(checked === true)}
-                        />
-                        <span className="text-foreground text-sm font-medium">Adresse de facturation différente</span>
-                    </label>
-
-                    {/* Billing Address (conditional) */}
-                    {useDifferentBillingAddress && (
-                        <div className="animate-in fade-in slide-in-from-top-2 flex flex-col gap-4 duration-200">
-                            <h4 className="text-foreground text-base font-semibold">Adresse de facturation</h4>
-                            <AddressForm
-                                address={billingAddress}
-                                onChange={setBillingAddress}
-                                errors={errors.billingAddress}
-                            />
+                    {isPrefilling ? (
+                        <div className="flex flex-col gap-4">
+                            <div className="bg-muted h-10 w-full animate-pulse rounded-lg" />
+                            <div className="bg-muted h-10 w-full animate-pulse rounded-lg" />
+                            <div className="bg-muted h-10 w-full animate-pulse rounded-lg" />
+                            <div className="flex gap-4">
+                                <div className="bg-muted h-10 w-1/2 animate-pulse rounded-lg" />
+                                <div className="bg-muted h-10 w-1/2 animate-pulse rounded-lg" />
+                            </div>
                         </div>
-                    )}
+                    ) : (
+                        <>
+                            {/* Delivery Address */}
+                            <div className="flex flex-col gap-4">
+                                <h4 className="text-foreground text-base font-semibold">Adresse de livraison</h4>
+                                <AddressForm
+                                    address={deliveryAddress}
+                                    onChange={setDeliveryAddress}
+                                    errors={errors.deliveryAddress}
+                                />
+                            </div>
 
-                    {errorMessage && <p className="text-destructive text-sm">{errorMessage}</p>}
+                            {/* Different billing address checkbox */}
+                            <label className="flex cursor-pointer items-center gap-2">
+                                <Checkbox
+                                    checked={useDifferentBillingAddress}
+                                    onCheckedChange={(checked) => setUseDifferentBillingAddress(checked === true)}
+                                />
+                                <span className="text-foreground text-sm font-medium">
+                                    Adresse de facturation différente
+                                </span>
+                            </label>
+
+                            {/* Billing Address (conditional) */}
+                            {useDifferentBillingAddress && (
+                                <div className="animate-in fade-in slide-in-from-top-2 flex flex-col gap-4 duration-200">
+                                    <h4 className="text-foreground text-base font-semibold">Adresse de facturation</h4>
+                                    <AddressForm
+                                        address={billingAddress}
+                                        onChange={setBillingAddress}
+                                        errors={errors.billingAddress}
+                                    />
+                                </div>
+                            )}
+
+                            {errorMessage && <p className="text-destructive text-sm">{errorMessage}</p>}
+                        </>
+                    )}
 
                     {/* Submit */}
                     <button
                         type="submit"
-                        disabled={updateCustomerMutation.isPending}
+                        disabled={isPrefilling || updateCustomerMutation.isPending}
                         className={cn(
                             'bg-brand-primary hover:bg-brand-primary/90 flex h-12 w-full cursor-pointer items-center justify-center rounded-lg px-6 text-sm font-semibold text-white transition-colors',
-                            updateCustomerMutation.isPending && 'cursor-wait opacity-70'
+                            (isPrefilling || updateCustomerMutation.isPending) && 'cursor-wait opacity-70'
                         )}
                     >
                         {updateCustomerMutation.isPending ? t('common.pending') : 'Enregistrer mon adresse'}

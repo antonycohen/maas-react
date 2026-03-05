@@ -26,6 +26,17 @@ export interface CheckoutSession {
     };
 }
 
+export interface CheckoutSessionAddress {
+    address: {
+        firstName: string;
+        lastName: string;
+        line1: string | null;
+        line2: string | null;
+        city: string | null;
+        postalCode: string | null;
+    };
+}
+
 export class CheckoutSessionsEndpoint {
     constructor(private client: ApiClient) {}
 
@@ -35,5 +46,13 @@ export class CheckoutSessionsEndpoint {
      */
     async createCheckoutSession(data: CreateCheckoutSession): Promise<CheckoutSession> {
         return this.client.post<CheckoutSession>(BASE_PATH, data);
+    }
+
+    /**
+     * Get billing address from a completed checkout session
+     * GET /api/v1/pms/checkout-sessions/{sessionId}/address
+     */
+    async getCheckoutSessionAddress(sessionId: string): Promise<CheckoutSessionAddress> {
+        return this.client.getById<CheckoutSessionAddress>(`${BASE_PATH}/${sessionId}/address`);
     }
 }

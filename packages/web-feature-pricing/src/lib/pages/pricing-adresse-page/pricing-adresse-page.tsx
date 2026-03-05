@@ -11,7 +11,7 @@ export const PricingAdressePage = () => {
     const publicRoutes = usePublicRoutes();
     const accessToken = useOAuthStore((s) => s.accessToken);
     const isHydrated = useOAuthHydrated();
-    usePrefillCustomerAddress();
+    const { isLoading: isPrefilling } = usePrefillCustomerAddress();
 
     useEffect(() => {
         if (isHydrated && !accessToken) {
@@ -27,7 +27,7 @@ export const PricingAdressePage = () => {
         <PricingStepperLayout currentStepName="adresse">
             <div className="flex w-full flex-col items-center">
                 <div className="w-full max-w-2xl">
-                    <PricingAdresseStep />
+                    <PricingAdresseStep isPrefilling={isPrefilling} />
                 </div>
             </div>
         </PricingStepperLayout>
