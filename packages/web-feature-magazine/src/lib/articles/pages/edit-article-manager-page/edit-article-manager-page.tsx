@@ -56,7 +56,7 @@ const useVisibilityOptions = () => {
     const { t } = useTranslation();
     return [
         { value: 'public', label: t('status.public') },
-        { value: 'private', label: t('status.private') },
+        // { value: 'private', label: t('status.private') },
         { value: 'draft', label: t('status.draft') },
         { value: 'subscribers', label: t('status.subscribers') },
     ];
