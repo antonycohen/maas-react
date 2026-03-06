@@ -1,17 +1,22 @@
 import { NavLink } from 'react-router';
-import { Lock, LogOut, CreditCard, FileText, MapPin } from 'lucide-react';
+import { Lock, LogOut, CreditCard, FileText, MapPin, ShieldCheck } from 'lucide-react';
+import { useConnectedUser } from '@maas/core-store-session';
 
 interface AccountSidebarProps {
     baseUrl: string;
 }
 
 export function AccountSidebar({ baseUrl }: AccountSidebarProps) {
+    const connectedUser = useConnectedUser();
+    const isAdmin = connectedUser?.isAdmin ?? false;
+
     const navItems = [
         { title: 'Connexion', url: `${baseUrl}/account/connexion`, icon: Lock },
         // { title: 'Préférences', url: `${baseUrl}/account/preferences`, icon: Settings },
         { title: 'Adresses', url: `${baseUrl}/account/addresses`, icon: MapPin },
         { title: 'Abonnement', url: `${baseUrl}/account/subscription`, icon: CreditCard },
         { title: 'Factures', url: `${baseUrl}/account/invoices`, icon: FileText },
+        ...(isAdmin ? [{ title: 'Administration', url: '/admin', icon: ShieldCheck }] : []),
     ];
 
     return (

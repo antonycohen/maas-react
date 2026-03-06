@@ -37,7 +37,7 @@ export const ArticleContent = ({
     const { isUserSubscribed, status } = useSubscriptionStatus();
     const { remaining: digitalAccessRemaining } = useQuota(FEATURE_DIGITAL_ACCESS);
     const connectedUser = useConnectedUser();
-    const isAdmin = connectedUser?.roles?.includes('ADMIN') ?? false;
+    const isAdmin = connectedUser?.isAdmin ?? false;
     const isProblem = type?.name ? normalizeString(type.name) === 'probleme' : false;
     const isPastDue = status === SUBSCRIPTION_STATUS_PAST_DUE;
     const hasDigitalAccess = isUserSubscribed && digitalAccessRemaining > 0;

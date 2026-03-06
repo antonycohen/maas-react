@@ -6,12 +6,14 @@ interface UseCollectionStateProps {
     useLocationAsState?: boolean;
     searchDebounceMs?: number;
     defaultPageSize?: number;
+    defaultColumnFilters?: ColumnFiltersState;
 }
 
 export function useCollectionState({
     useLocationAsState = false,
     searchDebounceMs = 300,
     defaultPageSize = 10,
+    defaultColumnFilters = [],
 }: UseCollectionStateProps = {}) {
     const [searchParams, setSearchParams] = useSearchParams();
     const { pathname } = useLocation();
@@ -38,9 +40,9 @@ export function useCollectionState({
     });
 
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() => {
-        if (!useLocationAsState) return [];
+        if (!useLocationAsState) return defaultColumnFilters;
         const filters = searchParams.get('filters');
-        return filters ? JSON.parse(filters) : [];
+        return filters ? JSON.parse(filters) : defaultColumnFilters;
     });
 
     const [sorting, setSorting] = useState<SortingState>(() => {
@@ -62,9 +64,9 @@ export function useCollectionState({
         if (!useLocationAsState) return;
         setPagination({ pageIndex: 0, pageSize: defaultPageSize });
         setGlobalFilter('');
-        setColumnFilters([]);
+        setColumnFilters(defaultColumnFilters);
         setSorting([]);
-    }, [pathname, useLocationAsState, defaultPageSize]);
+    }, [pathname, useLocationAsState, defaultPageSize, defaultColumnFilters]);
 
     // Sync state to URL
     useEffect(() => {

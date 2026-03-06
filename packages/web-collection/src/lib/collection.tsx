@@ -64,6 +64,7 @@ interface Props<T, S> {
     staticParams?: S;
     showColumnSelector?: boolean;
     defaultPageSize?: number;
+    defaultColumnFilters?: import('@tanstack/react-table').ColumnFiltersState;
     /**
      * Custom toolbar renderer. Receives items, table instance, and state.
      * Default: CollectionToolbar with search and faceted filters
@@ -230,12 +231,13 @@ export function Collection<T, Q = undefined>({
     staticParams = undefined as Q,
     showColumnSelector = false,
     defaultPageSize,
+    defaultColumnFilters,
     renderToolbar,
     renderContent,
     renderPagination,
     renderLayout,
 }: Props<T, Q>) {
-    const state = useCollectionState({ useLocationAsState, defaultPageSize });
+    const state = useCollectionState({ useLocationAsState, defaultPageSize, defaultColumnFilters });
 
     const { items, totalCount, isError, error, isFetching, refetch } = useCollectionQuery({
         pagination: state.pagination,

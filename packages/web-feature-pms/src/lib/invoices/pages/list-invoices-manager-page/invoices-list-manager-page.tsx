@@ -7,6 +7,8 @@ import { useTranslation } from '@maas/core-translations';
 import { useRoutes } from '@maas/core-workspace';
 import { AsyncCombobox, AsyncComboboxOption, Checkbox, Label } from '@maas/web-components';
 
+const defaultStatusFilters = [{ id: 'status', value: ['open', 'paid'] }];
+
 const useInvoiceStatusOptions = () => {
     const { t } = useTranslation();
     return [
@@ -92,6 +94,7 @@ export function InvoicesListManagerPage() {
                 <Collection
                     useLocationAsState
                     columns={columns}
+                    defaultColumnFilters={defaultStatusFilters}
                     filtersConfiguration={{
                         facetedFilters: [
                             {
