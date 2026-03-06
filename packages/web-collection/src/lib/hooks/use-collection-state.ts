@@ -1,5 +1,5 @@
 import { ColumnFiltersState, PaginationState, SortingState, VisibilityState } from '@tanstack/react-table';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router';
 
 const EMPTY_FILTERS: ColumnFiltersState = [];
