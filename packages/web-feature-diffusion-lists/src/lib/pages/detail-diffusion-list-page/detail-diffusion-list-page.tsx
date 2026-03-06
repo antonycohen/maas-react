@@ -91,7 +91,7 @@ export default function DetailDiffusionListPage() {
                 isActionPending={actions.isActionPending}
             />
 
-            {(populateError || populateStats || generateError || needsAttentionCount > 0) && (
+            {!isGenerated && (populateError || populateStats || generateError || needsAttentionCount > 0) && (
                 <div className="flex flex-col gap-3 px-6 pt-4">
                     {populateError && (
                         <Alert variant="destructive">
