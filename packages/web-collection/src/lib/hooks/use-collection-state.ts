@@ -1,6 +1,8 @@
 import { ColumnFiltersState, PaginationState, SortingState, VisibilityState } from '@tanstack/react-table';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router';
+
+const EMPTY_FILTERS: ColumnFiltersState = [];
 
 interface UseCollectionStateProps {
     useLocationAsState?: boolean;
@@ -13,7 +15,7 @@ export function useCollectionState({
     useLocationAsState = false,
     searchDebounceMs = 300,
     defaultPageSize = 10,
-    defaultColumnFilters = [],
+    defaultColumnFilters = EMPTY_FILTERS,
 }: UseCollectionStateProps = {}) {
     const [searchParams, setSearchParams] = useSearchParams();
     const { pathname } = useLocation();
