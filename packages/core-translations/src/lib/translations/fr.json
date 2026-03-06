@@ -183,6 +183,7 @@
     "field.dateFormat": "Format de date",
     "field.phone": "Téléphone",
     "field.refId": "Réf. ID",
+    "field.subscription": "Abonnement",
     "field.balance": "Solde",
     "field.created": "Créé le",
     "field.registeredDate": "Date d'inscription",

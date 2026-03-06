@@ -93,6 +93,23 @@ export function useCustomersListColumns(): ColumnDef<ReadCustomer>[] {
             enableSorting: false,
         },
         {
+            id: 'subscription',
+            accessorFn: (row) => row.subscription?.plan?.name ?? null,
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.subscription')} />,
+            cell: ({ row }) => {
+                const plan = row.original.subscription?.plan?.name;
+                const status = row.original.subscription?.status;
+                if (!plan) return <div className="text-muted-foreground">—</div>;
+                return (
+                    <div className="flex flex-col">
+                        <span className="text-nowrap">{plan}</span>
+                        {status && <span className="text-muted-foreground text-xs">{status}</span>}
+                    </div>
+                );
+            },
+            enableSorting: false,
+        },
+        {
             accessorKey: 'balance',
             header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.balance')} />,
             cell: ({ row }) => (

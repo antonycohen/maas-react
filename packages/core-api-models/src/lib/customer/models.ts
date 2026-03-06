@@ -1,5 +1,6 @@
 import * as z from 'zod';
 import { readOrganizationRefSchema } from '../organizations';
+import { subscriptionStatusEnum } from '../subscription';
 import { readUserRefSchema } from '../users';
 
 // Enums
@@ -54,6 +55,20 @@ export const readCustomerSchema = z.object({
     refId: z.string().nullable(),
     organization: readOrganizationRefSchema.nullable().optional(),
     user: readUserRefSchema.nullable().optional(),
+    subscription: z
+        .object({
+            id: z.string(),
+            status: subscriptionStatusEnum.nullable(),
+            plan: z
+                .object({
+                    id: z.string(),
+                    name: z.string().nullable(),
+                })
+                .nullable()
+                .optional(),
+        })
+        .nullable()
+        .optional(),
     preferredLocales: z.array(z.string()).nullable(),
     metadata: z.record(z.string(), z.unknown()).nullable(),
     createdAt: z.string().nullable(),

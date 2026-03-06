@@ -184,6 +184,7 @@
     "field.dateFormat": "Date format",
     "field.phone": "Phone",
     "field.refId": "Ref ID",
+    "field.subscription": "Subscription",
     "field.balance": "Balance",
     "field.created": "Created",
     "field.registeredDate": "Registered Date",

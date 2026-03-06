@@ -53,6 +53,14 @@ export function CustomersListManagerPage() {
                         refId: null,
                         balance: null,
                         currency: null,
+                        subscription: {
+                            fields: {
+                                status: null,
+                                plan: {
+                                    fields: { name: null },
+                                },
+                            },
+                        },
                         createdAt: null,
                     }}
                 />
