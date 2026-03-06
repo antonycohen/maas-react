@@ -10,7 +10,7 @@ export function Form<T extends FieldValues>(props: PropsWithChildren<FormProps<T
         defaultValues: defaultValues,
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     function onSubmit(_data: T) {}
 
     const id = useId();

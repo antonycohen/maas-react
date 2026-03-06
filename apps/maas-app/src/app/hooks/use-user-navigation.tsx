@@ -1,11 +1,8 @@
-import { CircleUserIcon, ContrastIcon, HandCoinsIcon, LogOutIcon, UserPlusIcon, ZapIcon } from 'lucide-react';
+import { LogOutIcon } from 'lucide-react';
 import { NavItem } from '@maas/web-components';
-import { useRoutes } from '@maas/core-workspace';
 import { PUBLIC_ROUTES } from '@maas/core-routes';
 
 export const useUserNavigation = (): NavItem[] => {
-    const routes = useRoutes();
-
     return [
         // {
         //     type: 'link',

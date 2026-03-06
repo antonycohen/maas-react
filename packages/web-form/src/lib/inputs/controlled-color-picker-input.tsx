@@ -106,91 +106,86 @@ export function ControlledColorPickerInput<TForm extends FieldValues>(props: Con
     );
 
     const colorPickerContent = (
-        <>
-            <div ref={containerRef} className="flex flex-wrap items-center gap-1">
-                <Popover open={isPickerOpen} onOpenChange={handleOpenChange}>
-                    <PopoverTrigger asChild>
-                        {currentColor ? (
-                            <button
-                                ref={triggerRef}
-                                type="button"
-                                onKeyDown={handleTriggerKeyDown}
-                                className={cn(
-                                    'bg-background flex h-8 items-center gap-1 rounded-full border px-2 text-sm transition-colors',
-                                    'focus:ring-ring focus:ring-2 focus:ring-offset-1 focus:outline-none',
-                                    'border-border hover:bg-accent/50'
-                                )}
-                                aria-label={`Color ${currentColor}. Click to modify, press Delete to clear.`}
-                            >
-                                <span
-                                    className="size-4 shrink-0 rounded-full"
-                                    style={{ backgroundColor: currentColor }}
-                                />
-                                <span className="px-1 text-sm">{currentColor}</span>
-                                <span
-                                    role="button"
-                                    tabIndex={-1}
-                                    onClick={(e) => {
+        <div ref={containerRef} className="flex flex-wrap items-center gap-1">
+            <Popover open={isPickerOpen} onOpenChange={handleOpenChange}>
+                <PopoverTrigger asChild>
+                    {currentColor ? (
+                        <button
+                            ref={triggerRef}
+                            type="button"
+                            onKeyDown={handleTriggerKeyDown}
+                            className={cn(
+                                'bg-background flex h-8 items-center gap-1 rounded-full border px-2 text-sm transition-colors',
+                                'focus:ring-ring focus:ring-2 focus:ring-offset-1 focus:outline-none',
+                                'border-border hover:bg-accent/50'
+                            )}
+                            aria-label={`Color ${currentColor}. Click to modify, press Delete to clear.`}
+                        >
+                            <span className="size-4 shrink-0 rounded-full" style={{ backgroundColor: currentColor }} />
+                            <span className="px-1 text-sm">{currentColor}</span>
+                            <span
+                                role="button"
+                                tabIndex={-1}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleClear();
+                                }}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
                                         e.stopPropagation();
                                         handleClear();
-                                    }}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter' || e.key === ' ') {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            handleClear();
-                                        }
-                                    }}
-                                    className="bg-input hover:bg-muted-foreground/30 flex size-4 items-center justify-center rounded-full"
-                                    aria-label="Clear color"
-                                >
-                                    <X className="text-muted-foreground size-3" />
-                                </span>
-                            </button>
-                        ) : (
-                            <Button
-                                ref={triggerRef}
-                                type="button"
-                                variant="secondary"
-                                size="sm"
-                                className="h-9 gap-2 rounded-md"
+                                    }
+                                }}
+                                className="bg-input hover:bg-muted-foreground/30 flex size-4 items-center justify-center rounded-full"
+                                aria-label="Clear color"
                             >
-                                <Plus className="size-4" />
-                                Select color
-                            </Button>
-                        )}
-                    </PopoverTrigger>
-                    <PopoverContent className="w-64 p-4" align="start" onKeyDown={handlePickerKeyDown}>
-                        <ColorPicker
-                            defaultValue={currentColor ?? '#000000'}
-                            onChange={handleColorChange}
-                            className="gap-3"
+                                <X className="text-muted-foreground size-3" />
+                            </span>
+                        </button>
+                    ) : (
+                        <Button
+                            ref={triggerRef}
+                            type="button"
+                            variant="secondary"
+                            size="sm"
+                            className="h-9 gap-2 rounded-md"
                         >
-                            <ColorPickerSelection className="h-32 rounded-md" />
-                            <ColorPickerHue />
-                            <div className="flex items-center gap-2">
-                                <ColorPickerEyeDropper />
-                                <ColorPickerFormat className="flex-1" />
-                            </div>
-                            <div className="flex gap-2 pt-2">
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    className="flex-1"
-                                    onClick={() => setIsPickerOpen(false)}
-                                >
-                                    Cancel
-                                </Button>
-                                <Button type="button" size="sm" className="flex-1" onClick={handleConfirmColor}>
-                                    {currentColor ? 'Update' : 'Select'}
-                                </Button>
-                            </div>
-                        </ColorPicker>
-                    </PopoverContent>
-                </Popover>
-            </div>
-        </>
+                            <Plus className="size-4" />
+                            Select color
+                        </Button>
+                    )}
+                </PopoverTrigger>
+                <PopoverContent className="w-64 p-4" align="start" onKeyDown={handlePickerKeyDown}>
+                    <ColorPicker
+                        defaultValue={currentColor ?? '#000000'}
+                        onChange={handleColorChange}
+                        className="gap-3"
+                    >
+                        <ColorPickerSelection className="h-32 rounded-md" />
+                        <ColorPickerHue />
+                        <div className="flex items-center gap-2">
+                            <ColorPickerEyeDropper />
+                            <ColorPickerFormat className="flex-1" />
+                        </div>
+                        <div className="flex gap-2 pt-2">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                className="flex-1"
+                                onClick={() => setIsPickerOpen(false)}
+                            >
+                                Cancel
+                            </Button>
+                            <Button type="button" size="sm" className="flex-1" onClick={handleConfirmColor}>
+                                {currentColor ? 'Update' : 'Select'}
+                            </Button>
+                        </div>
+                    </ColorPicker>
+                </PopoverContent>
+            </Popover>
+        </div>
     );
 
     return (
