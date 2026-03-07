@@ -260,6 +260,7 @@ function IssueSelect({
         limit: 200,
         fields: { id: null, title: null, issueNumber: null, cover: { fields: { resizedImages: null } } },
         filters: { brandId },
+        sort: { field: 'issueNumber', direction: 'desc' },
     });
 
     const issues = issuesData?.data ?? [];

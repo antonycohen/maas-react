@@ -970,7 +970,7 @@
     "diffusionLists.entryRefreshed": "Entry refreshed successfully",
     "diffusionLists.status.refreshing": "Refreshing",
     "diffusionLists.confirmDescription": "This action will lock the entries. You can still revert to draft later.",
-    "diffusionLists.confirmDescriptionWithWarning": "This action will lock the entries. You can still revert to draft later.\n\n⚠️ {count} entries with incomplete addresses will be excluded from the generated PDF.",
+    "diffusionLists.confirmDescriptionWithWarning": "This action will lock the entries. You can still revert to draft later.\n\n⚠️ {count} entries with incomplete addresses will be excluded from the generated file.",
     "diffusionLists.revertDescription": "This will return the diffusion list to draft status. Entries will be preserved.",
     "diffusionLists.generateDescription": "This will generate the CSV and deduct quotas. This action cannot be undone.",
     "diffusionLists.deleteDescription": "This will permanently delete the diffusion list and all its entries.",
