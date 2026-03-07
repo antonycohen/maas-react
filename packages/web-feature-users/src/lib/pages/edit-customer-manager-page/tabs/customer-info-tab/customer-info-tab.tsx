@@ -6,6 +6,7 @@ import { EditCustomerOutletContext } from '../../edit-customer-manager-page';
 import { CustomerFormValues, useCurrencyOptions, useCustomerTypeOptions } from '../../hooks';
 import { useTranslation } from '@maas/core-translations';
 import { CustomerSummarySidebar } from './components/customer-summary-sidebar';
+import { CustomerCommentsSection } from './components/customer-comments-section';
 
 const LegacySubscriptionMetadata = ({ metadata }: { metadata: Record<string, unknown> | null | undefined }) => {
     const legacySub = metadata?.['legacySubscription'] as Record<string, unknown> | undefined;
@@ -88,6 +89,9 @@ export const CustomerInfoTab = () => {
             {/* Main Content */}
             <div className="min-w-0 flex-1 overflow-y-auto">
                 <div className="mx-auto max-w-3xl space-y-6 p-6">
+                    {/* Summary inline */}
+                    {!isCreateMode && <CustomerSummarySidebar customer={customer} customerId={customerId} />}
+
                     <Card className="gap-0 rounded-2xl">
                         <CardHeader>
                             <CardTitle className="text-xl">{t('customers.info.title')}</CardTitle>
@@ -145,10 +149,12 @@ export const CustomerInfoTab = () => {
                 </div>
             </div>
 
-            {/* Summary Sidebar */}
-            <aside className="bg-muted/30 hidden w-72 shrink-0 overflow-y-auto border-l p-4 lg:block">
-                <CustomerSummarySidebar customer={customer} customerId={customerId} />
-            </aside>
+            {/* Comments Sidebar */}
+            {!isCreateMode && (
+                <aside className="bg-muted/30 hidden w-120 shrink-0 overflow-y-auto border-l p-4 lg:block">
+                    <CustomerCommentsSection customerId={customerId} />
+                </aside>
+            )}
         </div>
     );
 };

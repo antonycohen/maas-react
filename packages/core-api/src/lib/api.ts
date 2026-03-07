@@ -26,6 +26,7 @@ import { HomepageEndpoint } from './endpoints/homepage';
 import { SearchEndpoint } from './endpoints/search';
 import { SitemapEndpoint } from './endpoints/sitemap';
 import { PermissionsEndpoint } from './endpoints/permissions';
+import { CommentsEndpoint } from './endpoints/comments';
 
 class MaasApi {
     private readonly client: ApiClient;
@@ -56,6 +57,7 @@ class MaasApi {
     public readonly search: SearchEndpoint;
     public readonly sitemap: SitemapEndpoint;
     public readonly permissions: PermissionsEndpoint;
+    public readonly comments: CommentsEndpoint;
 
     setOrganizationId(organizationId: string | null) {
         this.client.setOrganizationId(organizationId);
@@ -90,6 +92,7 @@ class MaasApi {
         this.search = new SearchEndpoint(this.client);
         this.sitemap = new SitemapEndpoint(this.client);
         this.permissions = new PermissionsEndpoint(this.client);
+        this.comments = new CommentsEndpoint(this.client);
     }
 }
 
@@ -122,6 +125,7 @@ export * from './endpoints/homepage';
 export * from './endpoints/search';
 export * from './endpoints/sitemap';
 export * from './endpoints/permissions';
+export * from './endpoints/comments';
 
 export const maasApi = new MaasApi({
     baseUrl: `${import.meta.env['VITE_API_URL']}` || 'https://localhost:8080',

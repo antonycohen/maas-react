@@ -85,6 +85,15 @@ export const EntriesTable = ({ diffusionListId, isDraft, onAddEntry }: Props) =>
                                 { label: t('common.no'), value: 'false' },
                             ],
                         },
+                        {
+                            columnId: 'needsAttention',
+                            queryParamName: 'needs_attention',
+                            title: t('diffusionLists.needsAttention'),
+                            options: [
+                                { label: t('common.yes'), value: 'true' },
+                                { label: t('common.no'), value: 'false' },
+                            ],
+                        },
                     ],
                 }}
                 queryFields={{

@@ -21,6 +21,7 @@ export interface GetDiffusionListsStaticParams {
 export interface GetDiffusionListEntriesFilter {
     query?: string;
     isManual?: boolean;
+    needs_attention?: boolean;
 }
 
 export interface GetDiffusionListEntriesStaticParams {
