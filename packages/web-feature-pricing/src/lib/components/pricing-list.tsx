@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { PricingCard, type PricingCardProps } from '@maas/web-components';
 import { cn } from '@maas/core-utils';
 import { usePricingData, type BillingInterval, type PricingPlan } from '../hooks/use-pricing-data';
@@ -59,22 +59,25 @@ export function PricingList() {
         [pricingPlans, selectedPlanId]
     );
 
-    const handleSelectPlan = (plan: PricingPlan) => {
-        setSelectedPlanId(plan.planId);
-        setAutoRenew(true);
-        // Pre-toggle addons that have defaultChecked in their metadata
-        const defaults: Record<string, boolean> = {};
-        for (const addon of plan.addons) {
-            if (
-                addon.category === 'addon' &&
-                (addon.metadata?.defaultChecked === true || addon.metadata?.defaultChecked === '1')
-            ) {
-                defaults[addon.productId] = true;
+    const handleSelectPlan = useCallback(
+        (plan: PricingPlan) => {
+            setSelectedPlanId(plan.planId);
+            setAutoRenew(true);
+            // Pre-toggle addons that have defaultChecked in their metadata
+            const defaults: Record<string, boolean> = {};
+            for (const addon of plan.addons) {
+                if (
+                    addon.category === 'addon' &&
+                    (addon.metadata?.defaultChecked === true || addon.metadata?.defaultChecked === '1')
+                ) {
+                    defaults[addon.productId] = true;
+                }
             }
-        }
-        setAddonToggles(defaults);
-        setCurrentStep('configure');
-    };
+            setAddonToggles(defaults);
+            setCurrentStep('configure');
+        },
+        [setSelectedPlanId, setAutoRenew, setAddonToggles, setCurrentStep]
+    );
 
     const cards = useMemo((): PricingCardProps[] => {
         return pricingPlans.map((plan) => {
@@ -119,7 +122,7 @@ export function PricingList() {
                 onSelect: () => handleSelectPlan(plan),
             };
         });
-    }, [pricingPlans, selectedPlanId, setSelectedPlanId, setCurrentStep, setAddonToggles]);
+    }, [pricingPlans, selectedPlanId, handleSelectPlan]);
 
     return (
         <div className="container mx-auto flex w-full flex-col items-center gap-6 px-5 py-10 xl:px-0">

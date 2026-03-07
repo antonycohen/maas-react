@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { IconEdit } from '@tabler/icons-react';
@@ -135,9 +135,6 @@ export const AccountAddressesTab = () => {
         metadata: null,
     });
 
-    const [useDifferentBilling, setUseDifferentBilling] = useState(false);
-    const hasInitialized = useRef(false);
-
     const initialShipping = customer ? parseDeliveryAddress(customer.metadata) : undefined;
     const initialBilling = customer
         ? {
@@ -150,12 +147,11 @@ export const AccountAddressesTab = () => {
           }
         : undefined;
 
-    // Auto-detect different addresses once customer data loads
-    useEffect(() => {
-        if (hasInitialized.current || !customer) return;
-        hasInitialized.current = true;
+    const [useDifferentBilling, setUseDifferentBilling] = useState<boolean | null>(null);
+    if (useDifferentBilling === null && customer) {
         setUseDifferentBilling(areAddressesDifferent(initialShipping, initialBilling));
-    }, [customer]);  
+    }
+    const isDifferentBilling = useDifferentBilling ?? false;
 
     const form = useForm<AddressFormValues>({
         resolver: zodResolver(addressFormSchema),
@@ -204,7 +200,7 @@ export const AccountAddressesTab = () => {
     const onSubmit = (data: AddressFormValues) => {
         const shippingAddr = toShippingAddress(data.shippingAddress);
         // If billing is same as shipping, derive billing from shipping
-        const billingAddr = useDifferentBilling
+        const billingAddr = isDifferentBilling
             ? toBillingAddress(data.billingAddress)
             : shippingAddr
               ? {
@@ -312,7 +308,7 @@ export const AccountAddressesTab = () => {
                 {/* Different billing address toggle */}
                 <label className="flex cursor-pointer items-center gap-2 px-1">
                     <Checkbox
-                        checked={useDifferentBilling}
+                        checked={isDifferentBilling}
                         onCheckedChange={(checked) => setUseDifferentBilling(checked === true)}
                         disabled={!isEditable}
                     />
@@ -322,7 +318,7 @@ export const AccountAddressesTab = () => {
                 </label>
 
                 {/* Billing Address — only if different */}
-                {useDifferentBilling && (
+                {isDifferentBilling && (
                     <Card className="animate-in fade-in slide-in-from-top-2 gap-0 rounded-2xl duration-200">
                         <CardHeader>
                             <div className="flex flex-col gap-1.5">

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { useOutletContext } from 'react-router';
 import { IconEdit } from '@tabler/icons-react';
 import {
@@ -44,19 +44,14 @@ export const CustomerAddressesTab = () => {
     const { t } = useTranslation();
     const [isEditable, setIsEditable] = useState(false);
 
-    const [useDifferentBilling, setUseDifferentBilling] = useState(false);
-    const hasInitialized = useRef(false);
-
     const shippingValues = form.watch('shippingAddress');
     const billingValues = form.watch('billingAddress');
 
-    // Auto-detect different addresses once form is populated with customer data
-    useEffect(() => {
-        if (hasInitialized.current || isLoading) return;
-        if (!shippingValues?.line1 && !billingValues?.line1) return;
-        hasInitialized.current = true;
+    const [useDifferentBilling, setUseDifferentBilling] = useState<boolean | null>(null);
+    if (useDifferentBilling === null && !isLoading && (shippingValues?.line1 || billingValues?.line1)) {
         setUseDifferentBilling(areAddressesDifferent(shippingValues, billingValues));
-    }, [isLoading, shippingValues, billingValues]);
+    }
+    const isDifferentBilling = useDifferentBilling ?? false;
 
     const { ControlledTextInput, ControlledCountryInput } = createConnectedInputHelpers<CustomerFormValues>();
 
@@ -143,7 +138,7 @@ export const CustomerAddressesTab = () => {
                 {/* Different billing address toggle */}
                 <label className="flex cursor-pointer items-center gap-2 px-1">
                     <Checkbox
-                        checked={useDifferentBilling}
+                        checked={isDifferentBilling}
                         onCheckedChange={(checked) => setUseDifferentBilling(checked === true)}
                         disabled={!isEditable}
                     />
@@ -153,7 +148,7 @@ export const CustomerAddressesTab = () => {
                 </label>
 
                 {/* Billing Address — only if different */}
-                {useDifferentBilling && (
+                {isDifferentBilling && (
                     <Card className="animate-in fade-in slide-in-from-top-2 gap-0 rounded-2xl duration-200">
                         <CardHeader>
                             <div className="flex flex-col gap-1.5">
