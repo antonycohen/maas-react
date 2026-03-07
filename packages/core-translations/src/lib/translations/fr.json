@@ -575,6 +575,7 @@
     "customers.quotas.operationAdd": "Ajouter",
     "customers.quotas.operationConsume": "Enlever",
     "customers.quotas.description_field": "Description",
+    "customers.quotas.issueRange": "Plage de numéros",
     "customers.quotas.periodStart": "Début de période",
     "customers.quotas.periodEnd": "Fin de période",
     "customers.quotas.usageUpdated": "Quota mis à jour",

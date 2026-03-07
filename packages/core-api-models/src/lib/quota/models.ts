@@ -15,6 +15,7 @@ export const quotaSchema = z.object({
     periodEnd: z.string().nullable(),
     quotaLimit: z.number().nullable(),
     currentUsage: z.number().nullable(),
+    metadata: z.record(z.string(), z.unknown()).nullable().optional(),
     createdAt: z.string().nullable(),
 });
 

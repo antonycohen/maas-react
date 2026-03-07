@@ -555,6 +555,7 @@
     "customers.quotas.operationAdd": "Add",
     "customers.quotas.operationConsume": "Remove",
     "customers.quotas.description_field": "Description",
+    "customers.quotas.issueRange": "Issue range",
     "customers.quotas.periodStart": "Period start",
     "customers.quotas.periodEnd": "Period end",
     "customers.quotas.usageUpdated": "Quota updated",

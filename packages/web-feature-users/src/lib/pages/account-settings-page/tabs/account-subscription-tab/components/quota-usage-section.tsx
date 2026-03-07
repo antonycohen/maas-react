@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Quota, FEATURE_DIGITAL_ACCESS } from '@maas/core-api-models';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, Progress } from '@maas/web-components';
 import { useTranslation } from '@maas/core-translations';
@@ -12,7 +13,7 @@ const formatFeatureKey = (key: string): string => {
 
 export const QuotaUsageSection = ({ quotas }: Props) => {
     const { t } = useTranslation();
-    const activeQuotas = quotas?.filter((q) => q.status === 'active') ?? [];
+    const activeQuotas = useMemo(() => quotas?.filter((q) => q.status === 'active') ?? [], [quotas]);
 
     return (
         <Card className="rounded-2xl">
@@ -46,7 +47,11 @@ export const QuotaUsageSection = ({ quotas }: Props) => {
                                 );
                             }
 
+                            const meta = quota.metadata as Record<string, unknown> | null;
+                            const issueStart = meta?.issueNumberStart as number | undefined;
+                            const issueEnd = meta?.issueNumberEnd as number | undefined;
                             const percentage = limit > 0 ? Math.round((used / limit) * 100) : 0;
+
                             return (
                                 <div key={quota.id} className="flex flex-col gap-1.5">
                                     <div className="flex items-center justify-between">
@@ -55,6 +60,11 @@ export const QuotaUsageSection = ({ quotas }: Props) => {
                                         </span>
                                         <span className="text-xs text-gray-500">
                                             {used} / {limit}
+                                            {issueStart != null && issueEnd != null && (
+                                                <span className="ml-2">
+                                                    (N°{issueStart} → N°{issueEnd})
+                                                </span>
+                                            )}
                                         </span>
                                     </div>
                                     <Progress value={percentage} />

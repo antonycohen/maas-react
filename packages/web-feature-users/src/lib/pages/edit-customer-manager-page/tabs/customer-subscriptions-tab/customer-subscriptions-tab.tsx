@@ -141,6 +141,8 @@ export const CustomerSubscriptionsTab = () => {
     );
     const invoices = invoicesData?.data ?? [];
 
+    const activeQuotas = useMemo(() => (quotas ?? []).filter((q) => q.status === 'active'), [quotas]);
+
     const deliveryCountry = useMemo(() => {
         const meta = customer?.metadata as Record<string, unknown> | null;
         const delivery = meta?.deliveryAddress as Record<string, unknown> | null;
@@ -437,78 +439,85 @@ export const CustomerSubscriptionsTab = () => {
                                             <TableRow>
                                                 <TableHead>{t('customers.quotas.featureKey')}</TableHead>
                                                 <TableHead>{t('field.status')}</TableHead>
+                                                <TableHead>{t('customers.quotas.issueRange')}</TableHead>
                                                 <TableHead>{t('customers.quotas.periodStart')}</TableHead>
                                                 <TableHead>{t('customers.quotas.periodEnd')}</TableHead>
                                                 <TableHead className="text-right">{t('field.actions')}</TableHead>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-                                            {quotas
-                                                .filter((q) => q.status === 'active')
-                                                .map((quota) => {
-                                                    const isLast = quota.aggregationType === 'last';
-                                                    const limit = quota.quotaLimit ?? 0;
-                                                    const used = quota.currentUsage ?? 0;
-                                                    const percentage = limit > 0 ? Math.round((used / limit) * 100) : 0;
-                                                    return (
-                                                        <TableRow key={quota.id}>
-                                                            <TableCell>
-                                                                <div className="flex flex-col gap-1.5">
-                                                                    <span className="text-sm font-medium">
-                                                                        {quota.featureKey
-                                                                            ? formatFeatureKey(quota.featureKey)
-                                                                            : quota.id}
-                                                                    </span>
-                                                                    {!isLast && (
-                                                                        <div className="flex items-center gap-2">
-                                                                            <Progress
-                                                                                value={percentage}
-                                                                                className="h-2 w-24"
-                                                                            />
-                                                                            <span className="text-xs text-gray-500">
-                                                                                {used} / {limit}
-                                                                            </span>
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                {isLast ? (
-                                                                    <Badge
-                                                                        variant="outline"
-                                                                        className="border-emerald-200 bg-emerald-50 text-emerald-700"
-                                                                    >
-                                                                        {t('common.yes')}
-                                                                    </Badge>
-                                                                ) : (
-                                                                    <span className="text-sm text-gray-600">
-                                                                        {used} / {limit}
-                                                                    </span>
-                                                                )}
-                                                            </TableCell>
-                                                            <TableCell className="text-sm text-gray-600">
-                                                                {formatDate(quota.periodStart)}
-                                                            </TableCell>
-                                                            <TableCell className="text-sm text-gray-600">
-                                                                {formatDate(quota.periodEnd)}
-                                                            </TableCell>
-                                                            <TableCell className="text-right">
+                                            {activeQuotas.map((quota) => {
+                                                const isLast = quota.aggregationType === 'last';
+                                                const limit = quota.quotaLimit ?? 0;
+                                                const used = quota.currentUsage ?? 0;
+                                                const percentage = limit > 0 ? Math.round((used / limit) * 100) : 0;
+                                                const meta = quota.metadata as Record<string, unknown> | null;
+                                                const issueStart = meta?.issueNumberStart as number | undefined;
+                                                const issueEnd = meta?.issueNumberEnd as number | undefined;
+                                                return (
+                                                    <TableRow key={quota.id}>
+                                                        <TableCell>
+                                                            <div className="flex flex-col gap-1.5">
+                                                                <span className="text-sm font-medium">
+                                                                    {quota.featureKey
+                                                                        ? formatFeatureKey(quota.featureKey)
+                                                                        : quota.id}
+                                                                </span>
                                                                 {!isLast && (
-                                                                    <Button
-                                                                        type="button"
-                                                                        variant="ghost"
-                                                                        size="icon"
-                                                                        className="h-8 w-8"
-                                                                        onClick={() => setEditingQuota(quota)}
-                                                                        title={t('customers.quotas.updateUsage')}
-                                                                    >
-                                                                        <IconEdit className="h-3.5 w-3.5" />
-                                                                    </Button>
+                                                                    <div className="flex items-center gap-2">
+                                                                        <Progress
+                                                                            value={percentage}
+                                                                            className="h-2 w-24"
+                                                                        />
+                                                                        <span className="text-xs text-gray-500">
+                                                                            {used} / {limit}
+                                                                        </span>
+                                                                    </div>
                                                                 )}
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    );
-                                                })}
+                                                            </div>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {isLast ? (
+                                                                <Badge
+                                                                    variant="outline"
+                                                                    className="border-emerald-200 bg-emerald-50 text-emerald-700"
+                                                                >
+                                                                    {t('common.yes')}
+                                                                </Badge>
+                                                            ) : (
+                                                                <span className="text-sm text-gray-600">
+                                                                    {used} / {limit}
+                                                                </span>
+                                                            )}
+                                                        </TableCell>
+                                                        <TableCell className="text-sm text-gray-600">
+                                                            {issueStart != null && issueEnd != null
+                                                                ? `N°${issueStart} → N°${issueEnd}`
+                                                                : '—'}
+                                                        </TableCell>
+                                                        <TableCell className="text-sm text-gray-600">
+                                                            {formatDate(quota.periodStart)}
+                                                        </TableCell>
+                                                        <TableCell className="text-sm text-gray-600">
+                                                            {formatDate(quota.periodEnd)}
+                                                        </TableCell>
+                                                        <TableCell className="text-right">
+                                                            {!isLast && (
+                                                                <Button
+                                                                    type="button"
+                                                                    variant="ghost"
+                                                                    size="icon"
+                                                                    className="h-8 w-8"
+                                                                    onClick={() => setEditingQuota(quota)}
+                                                                    title={t('customers.quotas.updateUsage')}
+                                                                >
+                                                                    <IconEdit className="h-3.5 w-3.5" />
+                                                                </Button>
+                                                            )}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                );
+                                            })}
                                         </TableBody>
                                     </Table>
                                 )}
