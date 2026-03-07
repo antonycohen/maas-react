@@ -29,7 +29,7 @@ export type ReadDiffusionListRef = z.infer<typeof readDiffusionListRefSchema>;
 // Feature item schema (used in both read and write)
 export const diffusionListFeatureSchema = z.object({
     featureKey: z.string(),
-    issueNumber: z.number().int(),
+    issueNumber: z.number().int().min(1, 'Issue number is required'),
 });
 
 export type DiffusionListFeature = z.infer<typeof diffusionListFeatureSchema>;

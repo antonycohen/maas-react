@@ -263,14 +263,14 @@ function IssueSelect({
         sort: { field: 'issueNumber', direction: 'desc' },
     });
 
-    const issues = issuesData?.data ?? [];
+    const issues = (issuesData?.data ?? []).filter((i) => i.issueNumber != null && i.issueNumber !== '');
 
     return (
         <Controller
             control={form.control}
             name={`features.${fieldIndex}.issueNumber`}
             render={({ field }) => {
-                const selected = issues.find((i) => i.issueNumber && Number(i.issueNumber) === field.value);
+                const selected = issues.find((i) => Number(i.issueNumber) === field.value);
                 return (
                     <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
@@ -300,16 +300,14 @@ function IssueSelect({
                                     <CommandEmpty>{t('diffusionLists.noIssuesAvailable')}</CommandEmpty>
                                     <CommandGroup>
                                         {issues.map((issue) => {
-                                            const num = issue.issueNumber ? Number(issue.issueNumber) : null;
-                                            const isSelected = num !== null && num === field.value;
+                                            const num = Number(issue.issueNumber);
+                                            const isSelected = num === field.value;
                                             return (
                                                 <CommandItem
                                                     key={issue.id}
                                                     value={`${issue.title} ${issue.issueNumber ?? ''}`}
                                                     onSelect={() => {
-                                                        if (num !== null) {
-                                                            field.onChange(num);
-                                                        }
+                                                        field.onChange(num);
                                                         setOpen(false);
                                                     }}
                                                 >
@@ -321,8 +319,7 @@ function IssueSelect({
                                                     />
                                                     <IssueCover images={issue.cover?.resizedImages} />
                                                     <span className="truncate">
-                                                        {issue.title}{' '}
-                                                        {issue.issueNumber ? `(#${issue.issueNumber})` : ''}
+                                                        {issue.title} (#{issue.issueNumber})
                                                     </span>
                                                 </CommandItem>
                                             );

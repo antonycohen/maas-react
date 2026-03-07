@@ -22,6 +22,8 @@ export const dashboardRevenuePlanSchema = z.object({
     mrr: z.number().nullable(),
     currency: z.string().nullable(),
     subscriptionCount: z.number().nullable(),
+    recurringInterval: z.string().nullable(),
+    recurringIntervalCount: z.number().nullable(),
 });
 
 export type DashboardRevenuePlan = z.infer<typeof dashboardRevenuePlanSchema>;

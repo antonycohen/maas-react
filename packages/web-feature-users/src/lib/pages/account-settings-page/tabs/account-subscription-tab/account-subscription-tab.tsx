@@ -27,6 +27,7 @@ export const AccountSubscriptionTab = () => {
         cancelAt: null,
         canceledAt: null,
         startDate: null,
+        renewalTotalInCents: null,
         items: null,
     });
     const { data: quotas, isLoading: isLoadingQuotas } = useGetMyQuotas();

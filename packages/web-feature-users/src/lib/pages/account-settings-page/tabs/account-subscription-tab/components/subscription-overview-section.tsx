@@ -43,6 +43,12 @@ const formatDate = (dateStr: string | null): string => {
     });
 };
 
+const formatAmount = (amountInCents: number, currency: string | null): string => {
+    const amount = amountInCents / 100;
+    const currencyCode = currency?.toUpperCase() ?? 'EUR';
+    return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: currencyCode }).format(amount);
+};
+
 const CANCEL_REASONS = ['too_expensive', 'not_using', 'missing_features', 'switching_provider', 'other'] as const;
 
 type CancelStep = 'reason' | 'confirm';
@@ -108,6 +114,7 @@ export const SubscriptionOverviewSection = ({ subscription, onMutationSuccess }:
     const statusKey = SUBSCRIPTION_STATUS_TRANSLATION_KEYS[status];
     const statusLabel = statusKey ? t(statusKey) : status;
     const isCanceling = subscription.cancelAtPeriodEnd;
+    const currenPeriodEnd = subscription.currentPeriodEnd;
 
     return (
         <Card className="rounded-2xl">
@@ -163,12 +170,25 @@ export const SubscriptionOverviewSection = ({ subscription, onMutationSuccess }:
                     </div>
                 )}
 
+                {subscription.renewalTotalInCents != null && (
+                    <div className="mt-4">
+                        <p className="text-xs font-semibold tracking-wider text-gray-500 uppercase">
+                            {t('account.subscription.renewalTotal')}
+                        </p>
+                        <p className="mt-1 text-sm font-medium">
+                            {formatAmount(subscription.renewalTotalInCents, subscription.currency)}
+                        </p>
+                    </div>
+                )}
+
                 {isCanceling ? (
                     <div className="mt-4 flex flex-col gap-3">
                         <div className="rounded-lg border border-orange-200 bg-orange-50 p-3">
                             <p className="text-sm font-medium text-orange-700">
                                 {t('account.subscription.cancellationScheduled', {
-                                    date: formatDate(subscription.cancelAt),
+                                    date: subscription.cancelAt
+                                        ? formatDate(subscription.cancelAt)
+                                        : formatDate(currenPeriodEnd),
                                 })}
                             </p>
                         </div>

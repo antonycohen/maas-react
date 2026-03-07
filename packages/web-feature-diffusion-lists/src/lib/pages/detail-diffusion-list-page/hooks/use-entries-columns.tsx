@@ -71,7 +71,7 @@ export function useEntriesColumns(options?: {
                             const label = isKeyExist(tKey) ? t(tKey) : key;
                             return (
                                 <Badge key={key} variant="default" className="text-xs">
-                                    {label} {feat.issueNumber ? `#${feat.issueNumber}` : ''}
+                                    {label} {feat.issueNumber != null ? `#${feat.issueNumber}` : ''}
                                 </Badge>
                             );
                         })}

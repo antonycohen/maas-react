@@ -210,6 +210,17 @@ function RevenuePlanBreakdown({ plans, currency }: { plans: DashboardRevenuePlan
                                 <span className="text-sm font-medium">{plan.planName ?? plan.planId ?? '-'}</span>
                                 <span className="text-muted-foreground text-xs">
                                     {t('dashboard.subscriptions', { count: plan.subscriptionCount ?? 0 })}
+                                    {plan.recurringInterval && (
+                                        <>
+                                            {' · '}
+                                            {(plan.recurringIntervalCount ?? 1) > 1
+                                                ? t('dashboard.intervalEveryN', {
+                                                      count: plan.recurringIntervalCount,
+                                                      interval: t(`dashboard.interval.${plan.recurringInterval}`),
+                                                  })
+                                                : t(`dashboard.interval.${plan.recurringInterval}`)}
+                                        </>
+                                    )}
                                 </span>
                             </div>
                             <span className="text-sm font-semibold">{formatCurrency(plan.mrr, currency)}</span>

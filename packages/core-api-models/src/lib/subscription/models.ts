@@ -77,6 +77,7 @@ export const subscriptionSchema = z.object({
         })
         .nullable(),
     items: z.array(subscriptionItemSchema).nullable(),
+    renewalTotalInCents: z.number().nullable().optional(),
     refType: z.string().nullable(),
     refId: z.string().nullable(),
     metadata: z.record(z.string(), z.unknown()).nullable(),
