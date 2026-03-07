@@ -2,7 +2,7 @@ import { create } from 'zustand/react';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import type { BillingInterval } from '../hooks/use-pricing-data';
 
-export type PricingStep = 'plan' | 'configure' | 'auth' | 'paiement' | 'adresse';
+export type PricingStep = 'plan' | 'configure' | 'auth' | 'paiement';
 
 export interface AddressFormData {
     firstName: string;
@@ -30,6 +30,7 @@ export interface PricingState {
     selectedPlanId: string | null;
     addonToggles: Record<string, boolean>;
     shippingSelections: Record<string, string>;
+    autoRenew: boolean;
     deliveryAddress: AddressFormData;
     billingAddress: AddressFormData;
     useDifferentBillingAddress: boolean;
@@ -40,7 +41,9 @@ export interface PricingActions {
     setSelectedInterval: (interval: BillingInterval | null) => void;
     setSelectedPlanId: (planId: string | null) => void;
     toggleAddon: (productId: string, checked: boolean) => void;
+    setAddonToggles: (toggles: Record<string, boolean>) => void;
     setShipping: (planId: string, value: string) => void;
+    setAutoRenew: (value: boolean) => void;
     setDeliveryAddress: (address: Partial<AddressFormData>) => void;
     setBillingAddress: (address: Partial<AddressFormData>) => void;
     setUseDifferentBillingAddress: (value: boolean) => void;
@@ -53,6 +56,7 @@ const defaultState: PricingState = {
     selectedPlanId: null,
     addonToggles: {},
     shippingSelections: {},
+    autoRenew: true,
     deliveryAddress: DEFAULT_ADDRESS,
     billingAddress: DEFAULT_ADDRESS,
     useDifferentBillingAddress: false,
@@ -69,10 +73,12 @@ export const usePricingStore = create<PricingState & PricingActions>()(
                 set((state) => ({
                     addonToggles: { ...state.addonToggles, [productId]: checked },
                 })),
+            setAddonToggles: (addonToggles) => set({ addonToggles }),
             setShipping: (planId, value) =>
                 set((state) => ({
                     shippingSelections: { ...state.shippingSelections, [planId]: value },
                 })),
+            setAutoRenew: (autoRenew) => set({ autoRenew }),
             setDeliveryAddress: (address) =>
                 set((state) => ({
                     deliveryAddress: { ...state.deliveryAddress, ...address },

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { PricingCard, type PricingCardProps } from '@maas/web-components';
 import { cn } from '@maas/core-utils';
-import { usePricingData, type BillingInterval } from '../hooks/use-pricing-data';
+import { usePricingData, type BillingInterval, type PricingPlan } from '../hooks/use-pricing-data';
 import { usePricingStore } from '../store/pricing-store';
 import { PricingConfigurator } from './pricing-configurator';
 
@@ -50,13 +50,31 @@ export function PricingList() {
     const selectedPlanId = usePricingStore((s) => s.selectedPlanId);
     const setSelectedPlanId = usePricingStore((s) => s.setSelectedPlanId);
     const setCurrentStep = usePricingStore((s) => s.setCurrentStep);
-
+    const setAddonToggles = usePricingStore((s) => s.setAddonToggles);
+    const setAutoRenew = usePricingStore((s) => s.setAutoRenew);
     const { pricingPlans, isLoading, isError } = usePricingData();
 
     const selectedPlan = useMemo(
         () => pricingPlans.find((p) => p.planId === selectedPlanId) ?? null,
         [pricingPlans, selectedPlanId]
     );
+
+    const handleSelectPlan = (plan: PricingPlan) => {
+        setSelectedPlanId(plan.planId);
+        setAutoRenew(true);
+        // Pre-toggle addons that have defaultChecked in their metadata
+        const defaults: Record<string, boolean> = {};
+        for (const addon of plan.addons) {
+            if (
+                addon.category === 'addon' &&
+                (addon.metadata?.defaultChecked === true || addon.metadata?.defaultChecked === '1')
+            ) {
+                defaults[addon.productId] = true;
+            }
+        }
+        setAddonToggles(defaults);
+        setCurrentStep('configure');
+    };
 
     const cards = useMemo((): PricingCardProps[] => {
         return pricingPlans.map((plan) => {
@@ -98,13 +116,10 @@ export function PricingList() {
                 tags: tags.length > 0 ? tags : undefined,
                 isHighlighted: metadata?.highlighted === true,
                 isSelected: plan.planId === selectedPlanId,
-                onSelect: () => {
-                    setSelectedPlanId(plan.planId);
-                    setCurrentStep('configure');
-                },
+                onSelect: () => handleSelectPlan(plan),
             };
         });
-    }, [pricingPlans, selectedPlanId, setSelectedPlanId, setCurrentStep]);
+    }, [pricingPlans, selectedPlanId, setSelectedPlanId, setCurrentStep, setAddonToggles]);
 
     return (
         <div className="container mx-auto flex w-full flex-col items-center gap-6 px-5 py-10 xl:px-0">

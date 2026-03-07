@@ -1,11 +1,19 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { cn } from '@maas/core-utils';
-import { IconAlertTriangle, IconMapPin, IconWorld } from '@tabler/icons-react';
+import { IconAlertTriangle, IconInfoCircle, IconMapPin, IconWorld } from '@tabler/icons-react';
 import { useOAuthStore } from '@maas/core-store-oauth';
 import { usePublicRoutes } from '@maas/core-routes';
 import { useGetMyCustomer } from '@maas/core-api';
-import { Alert, AlertDescription, ConfirmActionDialog } from '@maas/web-components';
+import {
+    Alert,
+    AlertDescription,
+    Checkbox,
+    ConfirmActionDialog,
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@maas/web-components';
 import type { BillingInterval, PricingPlan } from '../hooks/use-pricing-data';
 import { usePricingStore } from '../store/pricing-store';
 import { PricingSummary } from './pricing-summary';
@@ -38,10 +46,10 @@ interface PricingConfiguratorProps {
 export function PricingConfigurator({ plan }: PricingConfiguratorProps) {
     const selectedInterval = usePricingStore((s) => s.selectedInterval);
     const setSelectedInterval = usePricingStore((s) => s.setSelectedInterval);
-    const addonToggles = usePricingStore((s) => s.addonToggles);
-    const toggleAddon = usePricingStore((s) => s.toggleAddon);
     const shippingSelections = usePricingStore((s) => s.shippingSelections);
     const setShipping = usePricingStore((s) => s.setShipping);
+    const autoRenew = usePricingStore((s) => s.autoRenew);
+    const setAutoRenew = usePricingStore((s) => s.setAutoRenew);
     const accessToken = useOAuthStore((s) => s.accessToken);
     const navigate = useNavigate();
     const publicRoutes = usePublicRoutes();
@@ -56,20 +64,6 @@ export function PricingConfigurator({ plan }: PricingConfiguratorProps) {
             }
         }
     }, [plan.planId, plan.prices, selectedInterval, setSelectedInterval]);
-
-    // Pre-toggle addons that have default_checked in their metadata
-    useEffect(() => {
-        for (const addon of plan.addons) {
-            if (
-                addon.category === 'addon' &&
-                (addon.metadata?.defaultChecked === true || addon.metadata?.defaultChecked === 'true') &&
-                !addonToggles[addon.productId]
-            ) {
-                toggleAddon(addon.productId, true);
-            }
-        }
-         
-    }, [plan.planId]);
 
     const [showShippingConfirm, setShowShippingConfirm] = useState(false);
 
@@ -175,6 +169,23 @@ export function PricingConfigurator({ plan }: PricingConfiguratorProps) {
                                 })}
                             </div>
                         </div>
+
+                        {/* Auto-renew checkbox */}
+                        <label className="flex cursor-pointer items-center gap-2.5">
+                            <Checkbox checked={autoRenew} onCheckedChange={(val) => setAutoRenew(val === true)} />
+                            <span className="text-foreground text-sm font-medium">Renouveler automatiquement</span>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <IconInfoCircle className="text-muted-foreground h-4 w-4" />
+                                </TooltipTrigger>
+                                <TooltipContent className="max-w-xs">
+                                    <p>
+                                        Si activé, votre abonnement sera automatiquement renouvelé à la fin de chaque
+                                        période. Sinon, il sera annulé à la fin de la période en cours.
+                                    </p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </label>
 
                         {/* Shipping: Two large side-by-side buttons */}
                         {!isDigitalPlan && shippingAddon && (

@@ -4,6 +4,7 @@ import { useOAuthStore, useOAuthHydrated } from '@maas/core-store-oauth';
 import { usePublicRoutes } from '@maas/core-routes';
 import { usePricingData } from '../../hooks/use-pricing-data';
 import { usePricingStore } from '../../store/pricing-store';
+import { usePrefillCustomerAddress } from '../../hooks/use-prefill-customer-address';
 import { PricingPaiementStep } from '../../components/pricing-paiement-step';
 import { PricingStepperLayout } from '../../components/pricing-stepper-layout';
 
@@ -14,6 +15,7 @@ export const PricingPaiementPage = () => {
     const accessToken = useOAuthStore((s) => s.accessToken);
     const isHydrated = useOAuthHydrated();
     const { pricingPlans, isLoading } = usePricingData();
+    const { isLoading: isPrefilling } = usePrefillCustomerAddress();
 
     const selectedPlan = useMemo(
         () => pricingPlans.find((p) => p.planId === selectedPlanId) ?? null,
@@ -39,8 +41,8 @@ export const PricingPaiementPage = () => {
     return (
         <PricingStepperLayout currentStepName="paiement">
             <div className="flex w-full flex-col items-center">
-                <div className="w-full max-w-xl">
-                    <PricingPaiementStep plan={selectedPlan} />
+                <div className="w-full max-w-5xl">
+                    <PricingPaiementStep plan={selectedPlan} isPrefilling={isPrefilling} />
                 </div>
             </div>
         </PricingStepperLayout>

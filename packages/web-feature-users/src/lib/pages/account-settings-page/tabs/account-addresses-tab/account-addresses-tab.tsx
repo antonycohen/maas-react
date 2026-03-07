@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { IconEdit } from '@tabler/icons-react';
@@ -12,6 +12,7 @@ import {
     CardDescription,
     CardHeader,
     CardTitle,
+    Checkbox,
     FieldGroup,
     Skeleton,
 } from '@maas/web-components';
@@ -99,10 +100,30 @@ const toShippingAddress = (address: AddressFormValues['shippingAddress']) => {
     };
 };
 
+/**
+ * Compares shipping and billing addresses to determine if they differ.
+ * Matches on common fields: line1, line2, city, postalCode, country.
+ */
+const areAddressesDifferent = (
+    shipping: AddressFormValues['shippingAddress'],
+    billing: AddressFormValues['billingAddress']
+): boolean => {
+    if (!shipping || !billing) return false;
+    if (!hasData(shipping) && !hasData(billing)) return false;
+    if (!hasData(billing)) return false;
+
+    return (
+        (shipping.line1 ?? '') !== (billing.line1 ?? '') ||
+        (shipping.line2 ?? '') !== (billing.line2 ?? '') ||
+        (shipping.city ?? '') !== (billing.city ?? '') ||
+        (shipping.postalCode ?? '') !== (billing.postalCode ?? '') ||
+        (shipping.country ?? '') !== (billing.country ?? '')
+    );
+};
+
 export const AccountAddressesTab = () => {
     const { t } = useTranslation();
-    const [isBillingEditable, setIsBillingEditable] = useState(false);
-    const [isDeliveryEditable, setIsDeliveryEditable] = useState(false);
+    const [isEditable, setIsEditable] = useState(false);
 
     const { data: customer, isLoading } = useGetMyCustomer({
         name: null,
@@ -113,6 +134,28 @@ export const AccountAddressesTab = () => {
         addressCountry: null,
         metadata: null,
     });
+
+    const [useDifferentBilling, setUseDifferentBilling] = useState(false);
+    const hasInitialized = useRef(false);
+
+    const initialShipping = customer ? parseDeliveryAddress(customer.metadata) : undefined;
+    const initialBilling = customer
+        ? {
+              name: customer.name ?? '',
+              line1: String(customer.addressLine1 ?? ''),
+              line2: String(customer.addressLine2 ?? ''),
+              city: customer.addressCity ?? '',
+              postalCode: String(customer.addressPostalCode ?? ''),
+              country: customer.addressCountry ?? '',
+          }
+        : undefined;
+
+    // Auto-detect different addresses once customer data loads
+    useEffect(() => {
+        if (hasInitialized.current || !customer) return;
+        hasInitialized.current = true;
+        setUseDifferentBilling(areAddressesDifferent(initialShipping, initialBilling));
+    }, [customer]);  
 
     const form = useForm<AddressFormValues>({
         resolver: zodResolver(addressFormSchema),
@@ -130,15 +173,8 @@ export const AccountAddressesTab = () => {
         },
         values: customer
             ? {
-                  billingAddress: {
-                      name: customer.name ?? '',
-                      line1: String(customer.addressLine1 ?? ''),
-                      line2: String(customer.addressLine2 ?? ''),
-                      city: customer.addressCity ?? '',
-                      postalCode: String(customer.addressPostalCode ?? ''),
-                      country: customer.addressCountry ?? '',
-                  },
-                  shippingAddress: parseDeliveryAddress(customer.metadata),
+                  billingAddress: initialBilling,
+                  shippingAddress: initialShipping,
               }
             : undefined,
     });
@@ -146,8 +182,7 @@ export const AccountAddressesTab = () => {
     const updateMutation = useUpdateMyCustomer({
         onSuccess: () => {
             toast.success(t('customers.saveSuccess'));
-            setIsBillingEditable(false);
-            setIsDeliveryEditable(false);
+            setIsEditable(false);
         },
         onError: (error: ApiError) => {
             if (error.code === 3000) {
@@ -167,9 +202,24 @@ export const AccountAddressesTab = () => {
     });
 
     const onSubmit = (data: AddressFormValues) => {
+        const shippingAddr = toShippingAddress(data.shippingAddress);
+        // If billing is same as shipping, derive billing from shipping
+        const billingAddr = useDifferentBilling
+            ? toBillingAddress(data.billingAddress)
+            : shippingAddr
+              ? {
+                    name: `${shippingAddr.firstName} ${shippingAddr.lastName}`.trim(),
+                    line1: shippingAddr.line1,
+                    line2: shippingAddr.line2,
+                    city: shippingAddr.city,
+                    postalCode: shippingAddr.postalCode,
+                    country: shippingAddr.country,
+                }
+              : undefined;
+
         updateMutation.mutate({
-            billingAddress: toBillingAddress(data.billingAddress),
-            shippingAddress: toShippingAddress(data.shippingAddress),
+            billingAddress: billingAddr,
+            shippingAddress: shippingAddr,
         });
     };
 
@@ -179,7 +229,6 @@ export const AccountAddressesTab = () => {
         return (
             <div className="flex flex-col gap-6">
                 <Skeleton className="h-100 w-full rounded-2xl" />
-                <Skeleton className="h-100 w-full rounded-2xl" />
             </div>
         );
     }
@@ -187,73 +236,7 @@ export const AccountAddressesTab = () => {
     return (
         <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
-                {/* Billing Address */}
-                <Card className="gap-0 rounded-2xl">
-                    <CardHeader>
-                        <div className="flex items-center justify-between">
-                            <div className="flex flex-col gap-1.5">
-                                <CardTitle className="text-xl">{t('customers.info.billingAddress')}</CardTitle>
-                                <CardDescription>{t('customers.info.billingAddressDescription')}</CardDescription>
-                            </div>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                type="button"
-                                onClick={() => setIsBillingEditable((prev) => !prev)}
-                            >
-                                <IconEdit className="size-4" />
-                            </Button>
-                        </div>
-                    </CardHeader>
-                    <CardContent className="px-6 pt-2">
-                        <FieldGroup className="divide-y">
-                            <ControlledTextInput
-                                name="billingAddress.name"
-                                label={t('field.name')}
-                                direction="responsive"
-                                className="py-3 md:py-6"
-                                readOnly={!isBillingEditable}
-                            />
-                            <ControlledTextInput
-                                name="billingAddress.line1"
-                                label={t('customers.info.addressLine1')}
-                                direction="responsive"
-                                className="py-3 md:py-6"
-                                readOnly={!isBillingEditable}
-                            />
-                            <ControlledTextInput
-                                name="billingAddress.line2"
-                                label={t('customers.info.addressLine2')}
-                                direction="responsive"
-                                className="py-3 md:py-6"
-                                readOnly={!isBillingEditable}
-                            />
-                            <ControlledTextInput
-                                name="billingAddress.city"
-                                label={t('customers.info.city')}
-                                direction="responsive"
-                                className="py-3 md:py-6"
-                                readOnly={!isBillingEditable}
-                            />
-                            <ControlledTextInput
-                                name="billingAddress.postalCode"
-                                label={t('customers.info.postalCode')}
-                                direction="responsive"
-                                className="py-3 md:py-6"
-                                readOnly={!isBillingEditable}
-                            />
-                            <ControlledCountryInput
-                                name="billingAddress.country"
-                                label={t('customers.info.country')}
-                                direction="responsive"
-                                className="py-3 md:py-6"
-                                disabled={!isBillingEditable}
-                            />
-                        </FieldGroup>
-                    </CardContent>
-                </Card>
-
-                {/* Delivery Address */}
+                {/* Shipping / Delivery Address — Primary */}
                 <Card className="gap-0 rounded-2xl">
                     <CardHeader>
                         <div className="flex items-center justify-between">
@@ -265,7 +248,7 @@ export const AccountAddressesTab = () => {
                                 variant="ghost"
                                 size="icon"
                                 type="button"
-                                onClick={() => setIsDeliveryEditable((prev) => !prev)}
+                                onClick={() => setIsEditable((prev) => !prev)}
                             >
                                 <IconEdit className="size-4" />
                             </Button>
@@ -278,55 +261,125 @@ export const AccountAddressesTab = () => {
                                 label={t('customers.info.firstName')}
                                 direction="responsive"
                                 className="py-3 md:py-6"
-                                readOnly={!isDeliveryEditable}
+                                readOnly={!isEditable}
                             />
                             <ControlledTextInput
                                 name="shippingAddress.lastName"
                                 label={t('customers.info.lastName')}
                                 direction="responsive"
                                 className="py-3 md:py-6"
-                                readOnly={!isDeliveryEditable}
+                                readOnly={!isEditable}
                             />
                             <ControlledTextInput
                                 name="shippingAddress.line1"
                                 label={t('customers.info.addressLine1')}
                                 direction="responsive"
                                 className="py-3 md:py-6"
-                                readOnly={!isDeliveryEditable}
+                                readOnly={!isEditable}
                             />
                             <ControlledTextInput
                                 name="shippingAddress.line2"
                                 label={t('customers.info.addressLine2')}
                                 direction="responsive"
                                 className="py-3 md:py-6"
-                                readOnly={!isDeliveryEditable}
+                                readOnly={!isEditable}
                             />
                             <ControlledTextInput
                                 name="shippingAddress.city"
                                 label={t('customers.info.city')}
                                 direction="responsive"
                                 className="py-3 md:py-6"
-                                readOnly={!isDeliveryEditable}
+                                readOnly={!isEditable}
                             />
                             <ControlledTextInput
                                 name="shippingAddress.postalCode"
                                 label={t('customers.info.postalCode')}
                                 direction="responsive"
                                 className="py-3 md:py-6"
-                                readOnly={!isDeliveryEditable}
+                                readOnly={!isEditable}
                             />
                             <ControlledCountryInput
                                 name="shippingAddress.country"
                                 label={t('customers.info.country')}
                                 direction="responsive"
                                 className="py-3 md:py-6"
-                                disabled={!isDeliveryEditable}
+                                disabled={!isEditable}
                             />
                         </FieldGroup>
                     </CardContent>
                 </Card>
 
-                {(isBillingEditable || isDeliveryEditable) && (
+                {/* Different billing address toggle */}
+                <label className="flex cursor-pointer items-center gap-2 px-1">
+                    <Checkbox
+                        checked={useDifferentBilling}
+                        onCheckedChange={(checked) => setUseDifferentBilling(checked === true)}
+                        disabled={!isEditable}
+                    />
+                    <span className="text-foreground text-sm font-medium">
+                        {t('customers.info.differentBillingAddress')}
+                    </span>
+                </label>
+
+                {/* Billing Address — only if different */}
+                {useDifferentBilling && (
+                    <Card className="animate-in fade-in slide-in-from-top-2 gap-0 rounded-2xl duration-200">
+                        <CardHeader>
+                            <div className="flex flex-col gap-1.5">
+                                <CardTitle className="text-xl">{t('customers.info.billingAddress')}</CardTitle>
+                                <CardDescription>{t('customers.info.billingAddressDescription')}</CardDescription>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="px-6 pt-2">
+                            <FieldGroup className="divide-y">
+                                <ControlledTextInput
+                                    name="billingAddress.name"
+                                    label={t('field.name')}
+                                    direction="responsive"
+                                    className="py-3 md:py-6"
+                                    readOnly={!isEditable}
+                                />
+                                <ControlledTextInput
+                                    name="billingAddress.line1"
+                                    label={t('customers.info.addressLine1')}
+                                    direction="responsive"
+                                    className="py-3 md:py-6"
+                                    readOnly={!isEditable}
+                                />
+                                <ControlledTextInput
+                                    name="billingAddress.line2"
+                                    label={t('customers.info.addressLine2')}
+                                    direction="responsive"
+                                    className="py-3 md:py-6"
+                                    readOnly={!isEditable}
+                                />
+                                <ControlledTextInput
+                                    name="billingAddress.city"
+                                    label={t('customers.info.city')}
+                                    direction="responsive"
+                                    className="py-3 md:py-6"
+                                    readOnly={!isEditable}
+                                />
+                                <ControlledTextInput
+                                    name="billingAddress.postalCode"
+                                    label={t('customers.info.postalCode')}
+                                    direction="responsive"
+                                    className="py-3 md:py-6"
+                                    readOnly={!isEditable}
+                                />
+                                <ControlledCountryInput
+                                    name="billingAddress.country"
+                                    label={t('customers.info.country')}
+                                    direction="responsive"
+                                    className="py-3 md:py-6"
+                                    disabled={!isEditable}
+                                />
+                            </FieldGroup>
+                        </CardContent>
+                    </Card>
+                )}
+
+                {isEditable && (
                     <div className="flex justify-end">
                         <Button type="submit" disabled={updateMutation.isPending}>
                             {updateMutation.isPending ? t('common.saving') : t('common.save')}

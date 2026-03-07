@@ -18,6 +18,7 @@ export interface CreateCheckoutSession {
     cancelUrl: string;
     shippingAddress?: CheckoutAddress;
     billingAddress?: CheckoutAddress;
+    metadata?: Record<string, string>;
 }
 
 export interface CheckoutSession {

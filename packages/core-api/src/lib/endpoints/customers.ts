@@ -46,6 +46,7 @@ export interface CreateCustomerSubscriptionData {
     priceIds: string[];
     paymentMethod?: 'card' | 'cheque' | 'virement' | 'prelevement' | 'bon';
     defaultComplete?: boolean;
+    oneTimeSubscription?: boolean;
     collectionMethod?: 'send_invoice' | 'charge_automatically';
     daysUntilDue?: number;
     metadata?: Record<string, unknown>;

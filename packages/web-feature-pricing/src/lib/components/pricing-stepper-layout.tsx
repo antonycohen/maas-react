@@ -11,35 +11,22 @@ import {
 
 const STEPS_NOT_LOGGED_IN = [
     { step: 1, label: 'Connexion' },
-    { step: 2, label: 'Paiement' },
-    { step: 3, label: 'Adresse de livraison' },
+    { step: 2, label: 'Récapitulatif & Paiement' },
 ];
 
-const STEPS_LOGGED_IN = [
-    { step: 1, label: 'Paiement' },
-    { step: 2, label: 'Adresse de livraison' },
-];
+const STEPS_LOGGED_IN = [{ step: 1, label: 'Récapitulatif & Paiement' }];
 
-export type PricingStepName = 'auth' | 'paiement' | 'adresse';
+export type PricingStepName = 'auth' | 'paiement';
 
 export function getStepNumber(stepName: PricingStepName, isLoggedIn: boolean): number {
     if (isLoggedIn) {
-        switch (stepName) {
-            case 'auth':
-                return 1;
-            case 'paiement':
-                return 1;
-            case 'adresse':
-                return 2;
-        }
+        return 1;
     }
     switch (stepName) {
         case 'auth':
             return 1;
         case 'paiement':
             return 2;
-        case 'adresse':
-            return 3;
     }
 }
 

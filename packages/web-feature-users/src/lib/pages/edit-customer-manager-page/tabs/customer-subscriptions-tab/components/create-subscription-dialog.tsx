@@ -295,7 +295,8 @@ export const CreateSubscriptionDialog = ({
     const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
     const [selectedInterval, setSelectedInterval] = useState<BillingInterval | null>(null);
     const [addonToggles, setAddonToggles] = useState<Record<string, boolean>>({});
-    const [defaultComplete, setDefaultComplete] = useState(false);
+    const [defaultComplete, setDefaultComplete] = useState(true);
+    const [oneTimeSubscription, setOneTimeSubscription] = useState(true);
 
     const selectedPlan = pricingPlans.find((p) => p.planId === selectedPlanId) ?? null;
 
@@ -328,7 +329,8 @@ export const CreateSubscriptionDialog = ({
         setSelectedPlanId(null);
         setSelectedInterval(null);
         setAddonToggles({});
-        setDefaultComplete(false);
+        setDefaultComplete(true);
+        setOneTimeSubscription(true);
     };
 
     const handleSelectPlan = (planId: string) => {
@@ -339,7 +341,19 @@ export const CreateSubscriptionDialog = ({
                 plan.prices.find((p) => p.interval === 'annual')?.interval ?? plan.prices[0]?.interval ?? null;
             setSelectedInterval(defaultInterval);
         }
-        setAddonToggles({});
+        // Pre-toggle addons that have defaultChecked in their metadata
+        const defaults: Record<string, boolean> = {};
+        if (plan) {
+            for (const addon of plan.addons) {
+                if (
+                    addon.category === 'addon' &&
+                    (addon.metadata?.defaultChecked === true || addon.metadata?.defaultChecked === 'true')
+                ) {
+                    defaults[addon.productId] = true;
+                }
+            }
+        }
+        setAddonToggles(defaults);
         setStep('configure');
     };
 
@@ -376,6 +390,7 @@ export const CreateSubscriptionDialog = ({
                 data: {
                     priceIds,
                     defaultComplete,
+                    oneTimeSubscription,
                     metadata: { manual: true },
                 },
             });
@@ -633,23 +648,44 @@ export const CreateSubscriptionDialog = ({
 
                         <Separator />
 
-                        {/* Activate Now (create mode only) */}
+                        {/* Options (create mode only) */}
                         {!isChangeMode && (
-                            <label className="flex items-center gap-3">
-                                <Checkbox
-                                    checked={defaultComplete}
-                                    onCheckedChange={(val) => setDefaultComplete(val === true)}
-                                />
-                                <span className="text-sm font-medium">{t('customers.subscriptions.activateNow')}</span>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <IconInfoCircle className="text-muted-foreground h-4 w-4" />
-                                    </TooltipTrigger>
-                                    <TooltipContent className="max-w-xs">
-                                        <p>{t('customers.subscriptions.activateNowHint')}</p>
-                                    </TooltipContent>
-                                </Tooltip>
-                            </label>
+                            <div className="flex flex-col gap-3">
+                                <label className="flex items-center gap-3">
+                                    <Checkbox
+                                        checked={defaultComplete}
+                                        onCheckedChange={(val) => setDefaultComplete(val === true)}
+                                    />
+                                    <span className="text-sm font-medium">
+                                        {t('customers.subscriptions.activateNow')}
+                                    </span>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <IconInfoCircle className="text-muted-foreground h-4 w-4" />
+                                        </TooltipTrigger>
+                                        <TooltipContent className="max-w-xs">
+                                            <p>{t('customers.subscriptions.activateNowHint')}</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </label>
+                                <label className="flex items-center gap-3">
+                                    <Checkbox
+                                        checked={oneTimeSubscription}
+                                        onCheckedChange={(val) => setOneTimeSubscription(val === true)}
+                                    />
+                                    <span className="text-sm font-medium">
+                                        {t('customers.subscriptions.oneTimeSubscription')}
+                                    </span>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <IconInfoCircle className="text-muted-foreground h-4 w-4" />
+                                        </TooltipTrigger>
+                                        <TooltipContent className="max-w-xs">
+                                            <p>{t('customers.subscriptions.oneTimeSubscriptionHint')}</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </label>
+                            </div>
                         )}
 
                         <Separator />
