@@ -20,7 +20,7 @@ export function useEntriesColumns(options?: {
     onPreview?: (entry: DiffusionListEntry) => void;
     isRemoving?: boolean;
 }): ColumnDef<DiffusionListEntry>[] {
-    const { t } = useTranslation();
+    const { t, isKeyExist } = useTranslation();
     const routes = useRoutes();
     const { isDraft = false, onRemove, onPreview, isRemoving } = options ?? {};
 
@@ -57,15 +57,25 @@ export function useEntriesColumns(options?: {
             enableSorting: false,
         },
         {
-            accessorKey: 'address',
-            header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.address')} />,
+            accessorKey: 'features',
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('diffusionLists.features')} />,
             cell: ({ row }) => {
-                const address = row.original.address;
-                if (!address) return '-';
+                const features = row.original.features;
+                if (!features) return '-';
+                const included = Object.entries(features).filter(([, feat]) => feat.hasQuota);
+                if (included.length === 0) return '-';
                 return (
-                    <span className="block max-w-[200px] truncate" title={address}>
-                        {address}
-                    </span>
+                    <div className="flex flex-wrap gap-1">
+                        {included.map(([key, feat]) => {
+                            const tKey = `diffusionLists.featureKey.${key}`;
+                            const label = isKeyExist(tKey) ? t(tKey) : key;
+                            return (
+                                <Badge key={key} variant="default" className="text-xs">
+                                    {label} {feat.issueNumber ? `#${feat.issueNumber}` : ''}
+                                </Badge>
+                            );
+                        })}
+                    </div>
                 );
             },
             enableSorting: false,

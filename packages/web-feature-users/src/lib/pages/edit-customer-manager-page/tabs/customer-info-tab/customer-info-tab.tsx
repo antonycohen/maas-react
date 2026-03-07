@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useOutletContext } from 'react-router';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@maas/web-components';
 import { createConnectedInputHelpers } from '@maas/web-form';
@@ -5,6 +6,69 @@ import { EditCustomerOutletContext } from '../../edit-customer-manager-page';
 import { CustomerFormValues, useCurrencyOptions, useCustomerTypeOptions } from '../../hooks';
 import { useTranslation } from '@maas/core-translations';
 import { CustomerSummarySidebar } from './components/customer-summary-sidebar';
+
+const LegacySubscriptionMetadata = ({ metadata }: { metadata: Record<string, unknown> | null | undefined }) => {
+    const legacySub = metadata?.['legacySubscription'] as Record<string, unknown> | undefined;
+    const legacyNumeroClient = metadata?.['legacyNumeroClient'] as number | undefined;
+
+    const entries = useMemo(() => {
+        const items: { label: string; value: string | number; highlight?: boolean }[] = [];
+        if (legacyNumeroClient != null) {
+            items.push({ label: 'Numéro Client', value: legacyNumeroClient });
+        }
+        if (legacySub) {
+            if (legacySub.debTg != null) items.push({ label: 'Deb TG', value: legacySub.debTg as number });
+            if (legacySub.finTg != null)
+                items.push({
+                    label: 'Fin TG',
+                    value: legacySub.finTg as number,
+                    highlight: legacySub.finTg === 999,
+                });
+            if (legacySub.debTh != null) items.push({ label: 'Deb TH', value: legacySub.debTh as number });
+            if (legacySub.finTh != null)
+                items.push({
+                    label: 'Fin TH',
+                    value: legacySub.finTh as number,
+                    highlight: legacySub.finTh === 999,
+                });
+            if (legacySub.debB != null) items.push({ label: 'Deb B', value: legacySub.debB as number });
+            if (legacySub.finB != null)
+                items.push({
+                    label: 'Fin B',
+                    value: legacySub.finB as number,
+                    highlight: legacySub.finB === 999,
+                });
+            if (legacySub.lastOrderDate != null)
+                items.push({ label: 'Dernière commande', value: legacySub.lastOrderDate as string });
+            if (legacySub.stripeInvoiceId != null)
+                items.push({ label: 'Stripe Invoice', value: legacySub.stripeInvoiceId as string });
+        }
+        return items;
+    }, [legacySub, legacyNumeroClient]);
+
+    if (entries.length === 0) return null;
+
+    return (
+        <Card className="gap-0 rounded-2xl">
+            <CardHeader>
+                <CardTitle className="text-xl">Legacy Subscription</CardTitle>
+                <CardDescription>Données importées depuis DBPOLE (lecture seule)</CardDescription>
+            </CardHeader>
+            <CardContent className="px-6 pt-2">
+                <div className="flex flex-col divide-y">
+                    {entries.map(({ label, value, highlight }) => (
+                        <div key={label} className="flex items-center justify-between py-3">
+                            <span className="text-muted-foreground text-sm">{label}</span>
+                            <span className="font-mono text-sm font-medium">
+                                {highlight ? <span className="text-amber-600">{value} (lifetime)</span> : value}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            </CardContent>
+        </Card>
+    );
+};
 
 export const CustomerInfoTab = () => {
     const { isLoading, isCreateMode, customer, customerId } = useOutletContext<EditCustomerOutletContext>();
@@ -76,6 +140,8 @@ export const CustomerInfoTab = () => {
                             </div>
                         </CardContent>
                     </Card>
+
+                    <LegacySubscriptionMetadata metadata={customer?.metadata} />
                 </div>
             </div>
 

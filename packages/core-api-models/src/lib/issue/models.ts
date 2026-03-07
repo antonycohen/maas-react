@@ -40,6 +40,7 @@ export const issueSchema = z.object({
     isPublished: z.boolean().nullable(),
     pdf: z.object(readDocumentSchema).nullable(),
     pageCount: z.number().int().min(0).nullable(),
+    summary: z.string().nullable(),
     folderCount: z.number().nullable(),
     articleCount: z.number().nullable(),
     folders: z.lazy(() => z.array(folderSchema).nullable()),
@@ -53,6 +54,7 @@ export const createIssueSchema = z.object({
     title: z.string().min(1).max(255),
     description: z.string().max(5000).nullable().optional(),
     issueNumber: z.string().max(50).nullable().optional(),
+    summary: z.string().nullable().optional(),
     cover: updateImageSchema.nullable().optional(),
     pdf: updateDocumentSchema.nullable().optional(),
     pageCount: z.number().int().min(0).optional(),
@@ -66,6 +68,7 @@ export const updateIssueSchema = z.object({
     title: z.string().max(255).optional(),
     description: z.string().max(5000).nullable().optional(),
     issueNumber: z.string().max(50).nullable().optional(),
+    summary: z.string().nullable().optional(),
     cover: updateImageSchema.nullable().optional(),
     publishedAt: z.string().nullable().optional(), // ISO date string
     isPublished: z.boolean().optional(),

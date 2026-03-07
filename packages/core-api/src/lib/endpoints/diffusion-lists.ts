@@ -11,7 +11,6 @@ import { ApiCollectionResponse, GetCollectionQueryParams, GetQueryByIdParams } f
 
 export interface GetDiffusionListsFilter {
     status?: string;
-    type?: string;
     query?: string;
 }
 

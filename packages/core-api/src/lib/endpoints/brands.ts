@@ -8,6 +8,7 @@ export interface GetBrandsFilter {
     is_active?: boolean;
     term?: string;
     name?: string;
+    lookupKey?: string;
 }
 
 export class BrandsEndpoint {

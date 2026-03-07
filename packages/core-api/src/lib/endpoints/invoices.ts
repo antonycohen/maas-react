@@ -46,10 +46,10 @@ export class InvoicesEndpoint {
 
     /**
      * Get Stripe payment URL for an unpaid invoice
-     * GET /api/v1/users/me/invoices/{invoiceId}/pay
+     * POST /api/v1/users/me/invoices/{invoiceId}/pay
      */
     async getInvoicePaymentUrl(invoiceId: string): Promise<InvoicePayResponse> {
-        return this.client.getById<InvoicePayResponse>(`${ME_PATH}/${invoiceId}/pay`);
+        return this.client.post<InvoicePayResponse>(`${ME_PATH}/${invoiceId}/pay`, {});
     }
 
     // ─── Admin ────────────────────────────────────────────

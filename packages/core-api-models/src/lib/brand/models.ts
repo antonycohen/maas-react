@@ -2,69 +2,72 @@ import * as z from 'zod';
 import { readImageSchema, updateImageSchema } from '../image';
 
 export const readBrandRefSchema = z.object({
-  id: z.string(),
-  name: z.string().optional().nullable(),
+    id: z.string(),
+    name: z.string().optional().nullable(),
 });
 
 export const brandRefSchema = z.object({
-  id: z.string(),
+    id: z.string(),
 });
 
 export type ReadBrandRef = z.infer<typeof readBrandRefSchema>;
 
 // Full brand schema for read operations
 const coverRatioSchema = z
-  .string()
-  .regex(/^\d+(\.\d+)?:\d+(\.\d+)?$/, 'Must be in x:y format (e.g., "16:9", "1:1.414")');
+    .string()
+    .regex(/^\d+(\.\d+)?:\d+(\.\d+)?$/, 'Must be in x:y format (e.g., "16:9", "1:1.414")');
 
 const hexColorSchema = z
-  .string()
-  .regex(/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/, 'Must be a valid hex color (e.g., "#FF0000", "#F00")');
+    .string()
+    .regex(/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/, 'Must be a valid hex color (e.g., "#FF0000", "#F00")');
 
 export const brandSchema = z.object({
-  id: z.string(),
-  name: z.string().max(255),
-  description: z.string().max(5000).nullable(),
-  logo: z.object(readImageSchema).nullable(),
-  isActive: z.boolean().nullable(),
-  issueCount: z.number().nullable(),
-  issueConfiguration: z
-    .object({
-      defaultFolders: z.array(z.string()).nullable(),
-      coverRatio: coverRatioSchema.nullable(),
-      color: hexColorSchema.nullable(),
-    })
-    .nullable(),
+    id: z.string(),
+    name: z.string().max(255),
+    description: z.string().max(5000).nullable(),
+    logo: z.object(readImageSchema).nullable(),
+    isActive: z.boolean().nullable(),
+    lookupKey: z.string().max(100).nullable().optional(),
+    issueCount: z.number().nullable(),
+    issueConfiguration: z
+        .object({
+            defaultFolders: z.array(z.string()).nullable(),
+            coverRatio: coverRatioSchema.nullable(),
+            color: hexColorSchema.nullable(),
+        })
+        .nullable(),
 });
 
 export type Brand = z.infer<typeof brandSchema>;
 
 // Schema for creating a brand
 export const createBrandSchema = z.object({
-  name: z.string().min(1).max(255),
-  description: z.string().max(5000).nullable().optional(),
-  logo: updateImageSchema.nullable().optional(),
-  isActive: z.boolean().nullable(),
-  issueConfiguration: z.object({
-    defaultFolders: z.array(z.string()).nullable(),
-    coverRatio: coverRatioSchema.nullable(),
-    color: hexColorSchema.nullable(),
-  }),
+    name: z.string().min(1).max(255),
+    description: z.string().max(5000).nullable().optional(),
+    logo: updateImageSchema.nullable().optional(),
+    isActive: z.boolean().nullable(),
+    lookupKey: z.string().max(100).nullable().optional(),
+    issueConfiguration: z.object({
+        defaultFolders: z.array(z.string()).nullable(),
+        coverRatio: coverRatioSchema.nullable(),
+        color: hexColorSchema.nullable(),
+    }),
 });
 
 export type CreateBrand = z.infer<typeof createBrandSchema>;
 
 // Schema for updating a brand
 export const updateBrandSchema = z.object({
-  name: z.string().max(255).optional(),
-  description: z.string().max(5000).nullable().optional(),
-  logo: updateImageSchema.nullable().optional(),
-  isActive: z.boolean().optional(),
-  issueConfiguration: z.object({
-    defaultFolders: z.array(z.string()).nullable(),
-    coverRatio: coverRatioSchema.nullable(),
-    color: hexColorSchema.nullable(),
-  }),
+    name: z.string().max(255).optional(),
+    description: z.string().max(5000).nullable().optional(),
+    logo: updateImageSchema.nullable().optional(),
+    isActive: z.boolean().optional(),
+    lookupKey: z.string().max(100).nullable().optional(),
+    issueConfiguration: z.object({
+        defaultFolders: z.array(z.string()).nullable(),
+        coverRatio: coverRatioSchema.nullable(),
+        color: hexColorSchema.nullable(),
+    }),
 });
 
 export type UpdateBrand = z.infer<typeof updateBrandSchema>;

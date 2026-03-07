@@ -26,14 +26,21 @@ export const readDiffusionListRefSchema = z.object({
 
 export type ReadDiffusionListRef = z.infer<typeof readDiffusionListRefSchema>;
 
+// Feature item schema (used in both read and write)
+export const diffusionListFeatureSchema = z.object({
+    featureKey: z.string(),
+    issueNumber: z.number().int(),
+});
+
+export type DiffusionListFeature = z.infer<typeof diffusionListFeatureSchema>;
+
 // Full read schema
 export const diffusionListSchema = z.object({
     id: z.string(),
     name: z.string().nullable(),
-    type: z.string().nullable(),
-    number: z.number().int().nullable(),
     comments: z.string().nullable(),
     status: diffusionListStatusEnum.nullable(),
+    features: z.array(diffusionListFeatureSchema).nullable().optional(),
     entryCount: z.number().int().nullable(),
     needsAttentionCount: z.number().int().nullable(),
     generatedAt: z.string().nullable(),
@@ -77,8 +84,7 @@ export type DiffusionList = z.infer<typeof diffusionListSchema>;
 // Create schema
 export const createDiffusionListSchema = z.object({
     name: z.string().min(1, 'Name is required').max(255),
-    type: z.string().min(1, 'Type is required'),
-    number: z.number().int().nullable().optional(),
+    features: z.array(diffusionListFeatureSchema).min(1, 'At least one feature is required'),
     comments: z.string().max(1000).optional(),
 });
 
@@ -87,12 +93,19 @@ export type CreateDiffusionList = z.infer<typeof createDiffusionListSchema>;
 // Update schema (draft only)
 export const updateDiffusionListSchema = z.object({
     name: z.string().min(1).max(255).optional(),
-    type: z.string().min(1).optional(),
-    number: z.number().int().nullable().optional(),
+    features: z.array(diffusionListFeatureSchema).min(1).optional(),
     comments: z.string().max(1000).optional(),
 });
 
 export type UpdateDiffusionList = z.infer<typeof updateDiffusionListSchema>;
+
+// Entry feature data (per-customer per-feature)
+export const diffusionListEntryFeatureSchema = z.object({
+    issueNumber: z.number().int().nullable(),
+    hasQuota: z.boolean(),
+});
+
+export type DiffusionListEntryFeature = z.infer<typeof diffusionListEntryFeatureSchema>;
 
 // Entry read schema
 export const diffusionListEntrySchema = z.object({
@@ -104,6 +117,7 @@ export const diffusionListEntrySchema = z.object({
     email: z.string().nullable(),
     phone: z.string().nullable(),
     isManual: z.boolean().nullable(),
+    features: z.record(z.string(), diffusionListEntryFeatureSchema).nullable().optional(),
     needsAttention: z.boolean().nullable(),
     attentionReason: z.string().nullable(),
 });

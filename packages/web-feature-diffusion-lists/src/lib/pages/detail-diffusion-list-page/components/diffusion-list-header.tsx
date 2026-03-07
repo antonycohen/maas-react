@@ -21,7 +21,7 @@ interface Props {
     onRevertToDraft?: () => void;
     onGenerate?: () => void;
     onDelete?: () => void;
-    onDownloadPdf?: () => void;
+    onDownloadCsv?: () => void;
     isActionPending: boolean;
 }
 
@@ -33,7 +33,7 @@ export const DiffusionListHeader = ({
     onRevertToDraft,
     onGenerate,
     onDelete,
-    onDownloadPdf,
+    onDownloadCsv,
     isActionPending,
 }: Props) => {
     const { t, isKeyExist } = useTranslation();
@@ -44,15 +44,18 @@ export const DiffusionListHeader = ({
                 <h1 className="max-w-md truncate text-xl font-semibold">
                     {diffusionList.name ?? t('diffusionLists.untitled')}
                 </h1>
-                {diffusionList.type && (
-                    <Badge variant="outline">
-                        {isKeyExist(`diffusionLists.type.${diffusionList.type}`)
-                            ? t(`diffusionLists.type.${diffusionList.type}`)
-                            : diffusionList.type}
-                    </Badge>
-                )}
-                {diffusionList.number != null && (
-                    <span className="text-muted-foreground text-sm">#{diffusionList.number}</span>
+                {diffusionList.features && diffusionList.features.length > 0 && (
+                    <div className="flex items-center gap-1">
+                        {diffusionList.features.map((f) => {
+                            const key = `diffusionLists.featureKey.${f.featureKey}`;
+                            const label = isKeyExist(key) ? t(key) : f.featureKey;
+                            return (
+                                <Badge key={f.featureKey} variant="outline">
+                                    {label} #{f.issueNumber}
+                                </Badge>
+                            );
+                        })}
+                    </div>
                 )}
                 {diffusionList.status && <DiffusionListStatusBadge status={diffusionList.status} />}
             </div>
@@ -101,16 +104,16 @@ export const DiffusionListHeader = ({
                     </Button>
                 )}
 
-                {onDownloadPdf && (
+                {onDownloadCsv && (
                     <Button
                         type="button"
                         variant="default"
                         size="sm"
-                        onClick={onDownloadPdf}
+                        onClick={onDownloadCsv}
                         disabled={isActionPending}
                     >
                         <IconDownload className="mr-1.5 h-4 w-4" />
-                        {t('diffusionLists.downloadPdf')}
+                        {t('diffusionLists.downloadCsv')}
                     </Button>
                 )}
 

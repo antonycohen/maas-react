@@ -29,8 +29,7 @@ export default function DetailDiffusionListPage() {
             fields: {
                 id: null,
                 name: null,
-                type: null,
-                number: null,
+                features: null,
                 status: null,
                 entryCount: null,
                 needsAttentionCount: null,
@@ -87,7 +86,7 @@ export default function DetailDiffusionListPage() {
                 onRevertToDraft={isConfirmed ? actions.handleRevert : undefined}
                 onGenerate={isConfirmed ? actions.handleGenerate : undefined}
                 onDelete={!isGenerated ? actions.handleDelete : undefined}
-                onDownloadPdf={isGenerated ? actions.handleDownloadPdf : undefined}
+                onDownloadCsv={isGenerated ? actions.handleDownloadCsv : undefined}
                 isActionPending={actions.isActionPending}
             />
 

@@ -57,13 +57,24 @@ export function useDiffusionListsColumns(): ColumnDef<DiffusionList>[] {
             meta: { className: 'w-64' },
         },
         {
-            accessorKey: 'type',
-            header: ({ column }) => <CollectionColumnHeader column={column} title={t('field.type')} />,
+            accessorKey: 'features',
+            header: ({ column }) => <CollectionColumnHeader column={column} title={t('diffusionLists.features')} />,
             cell: ({ row }) => {
-                const type = row.getValue('type') as string | null;
-                if (!type) return '-';
-                const key = `diffusionLists.type.${type}`;
-                return <Badge variant="outline">{isKeyExist(key) ? t(key) : type}</Badge>;
+                const features = row.original.features;
+                if (!features || features.length === 0) return <span className="text-muted-foreground">-</span>;
+                return (
+                    <div className="flex flex-wrap gap-1">
+                        {features.map((f) => {
+                            const key = `diffusionLists.featureKey.${f.featureKey}`;
+                            const label = isKeyExist(key) ? t(key) : f.featureKey;
+                            return (
+                                <Badge key={f.featureKey} variant="outline">
+                                    {label} #{f.issueNumber}
+                                </Badge>
+                            );
+                        })}
+                    </div>
+                );
             },
             enableSorting: false,
         },

@@ -38,6 +38,7 @@ export const IssueInfoTab = () => {
     const {
         ControlledTextInput,
         ControlledTextAreaInput,
+        ControlledRTEInput,
         ControlledImageInput,
         ControlledSwitchInput,
         ControlledDateInput,
@@ -85,6 +86,12 @@ export const IssueInfoTab = () => {
                         <ControlledTextAreaInput
                             name="description"
                             label={t('field.description')}
+                            direction="horizontal"
+                            className="py-6"
+                        />
+                        <ControlledRTEInput
+                            name="summary"
+                            label={t('field.summary')}
                             direction="horizontal"
                             className="py-6"
                         />

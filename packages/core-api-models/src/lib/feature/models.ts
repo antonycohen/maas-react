@@ -14,6 +14,7 @@ export const featureSchema = z.object({
     displayName: z.string().nullable(),
     withQuota: z.boolean().nullable(),
     quotaAggregationFormula: z.string().nullable(),
+    currentIssueNumber: z.number().int().nullable().optional(),
     createdAt: z.string().nullable(),
     updatedAt: z.string().nullable(),
 });

@@ -60,7 +60,7 @@ export default function DiffusionListsListPage() {
                     queryFields={{
                         id: null,
                         name: null,
-                        type: null,
+                        features: null,
                         status: null,
                         entryCount: null,
                         createdAt: null,

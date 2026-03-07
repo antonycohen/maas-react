@@ -111,11 +111,17 @@ export const useDiffusionListActions = (
         setConfirmAction({ open: true, action: 'delete' });
     };
 
-    const handleDownloadPdf = async () => {
+    const handleDownloadCsv = async () => {
         try {
             const blob = await maasApi.diffusionLists.downloadDiffusionList(diffusionListId);
             const url = URL.createObjectURL(blob);
-            window.open(url, '_blank');
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `diffusion-list-${diffusionListId}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         } catch (error) {
             toast.error(error instanceof Error ? error.message : t('common.errorLoading'));
         }
@@ -208,7 +214,7 @@ export const useDiffusionListActions = (
         handleRevert,
         handleGenerate,
         handleDelete,
-        handleDownloadPdf,
+        handleDownloadCsv,
         isActionPending,
         confirmAction,
         setConfirmAction,

@@ -23,7 +23,7 @@ interface Props {
 }
 
 export const EntriesTable = ({ diffusionListId, isDraft, onAddEntry }: Props) => {
-    const { t } = useTranslation();
+    const { t, isKeyExist } = useTranslation();
     const [removeDialog, setRemoveDialog] = useState<{ open: boolean; entryId?: string }>({ open: false });
     const [previewEntry, setPreviewEntry] = useState<DiffusionListEntry | null>(null);
 
@@ -96,6 +96,7 @@ export const EntriesTable = ({ diffusionListId, isDraft, onAddEntry }: Props) =>
                     email: null,
                     phone: null,
                     isManual: null,
+                    features: null,
                     needsAttention: null,
                     attentionReason: null,
                 }}
@@ -131,6 +132,32 @@ export const EntriesTable = ({ diffusionListId, isDraft, onAddEntry }: Props) =>
 
                             <span className="text-muted-foreground font-medium">{t('field.address')}</span>
                             <span className="whitespace-pre-wrap">{previewEntry.address || '-'}</span>
+
+                            {previewEntry.features &&
+                                (() => {
+                                    const included = Object.entries(previewEntry.features).filter(
+                                        ([, feat]) => feat.hasQuota
+                                    );
+                                    if (included.length === 0) return null;
+                                    return (
+                                        <>
+                                            <span className="text-muted-foreground font-medium">
+                                                {t('diffusionLists.features')}
+                                            </span>
+                                            <div className="flex flex-wrap gap-1">
+                                                {included.map(([key, feat]) => {
+                                                    const tKey = `diffusionLists.featureKey.${key}`;
+                                                    const label = isKeyExist(tKey) ? t(tKey) : key;
+                                                    return (
+                                                        <Badge key={key} variant="default">
+                                                            {label} {feat.issueNumber ? `#${feat.issueNumber}` : ''}
+                                                        </Badge>
+                                                    );
+                                                })}
+                                            </div>
+                                        </>
+                                    );
+                                })()}
 
                             {previewEntry.isManual && (
                                 <>

@@ -66,6 +66,7 @@ export function EditIssueManagerPage() {
                 slug: null,
                 title: null,
                 description: null,
+                summary: null,
                 issueNumber: null,
                 cover: null,
                 publishedAt: null,
